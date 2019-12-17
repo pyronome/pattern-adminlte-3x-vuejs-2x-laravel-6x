@@ -2,7 +2,7 @@
 
 **Vue** (pronounced /vjuː/, like view) is a progressive framework for building user interfaces. Unlike other monolithic frameworks, Vue is designed from the ground up to be incrementally adoptable. The core library is focused on the view layer only, and is easy to pick up and integrate with other libraries or existing projects. For further information about **Vue.js**, please visit https://vuejs.org/.
 
-This repository contains Pyronome **AdminLTE 3.x on Vue.js 1.x** pattern basic information, documentation and issue tracker. For further information about this pattern, please visit https://pyronome.com/pyronome/adminlte-3x-vuejs-2x. In order to generate source code using this pattern, please visit [Pyronome Sign Up Page](https://pyronome.com/builder/signup), and create an account.
+This repository contains Pyronome **AdminLTE 3.x on Vue.js 2.x** pattern basic information, documentation and issue tracker. For further information about this pattern, please visit https://pyronome.com/pyronome/adminlte-3x-vuejs-2x. In order to generate source code using this pattern, please visit [Pyronome Sign Up Page](https://pyronome.com/builder/signup), and create an account.
 
 ## Contributing
 
