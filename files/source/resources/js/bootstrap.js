@@ -1,3 +1,5 @@
+/* {{snippet:header}} */
+
 window._ = require('lodash');
 
 /**
@@ -11,6 +13,8 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
+    require('admin-lte');
+    /* {{snippet:libraries}} */
 } catch (e) {}
 
 /**
@@ -39,3 +43,5 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+/* {{snippet:footer}} */
