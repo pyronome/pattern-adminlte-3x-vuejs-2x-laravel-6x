@@ -1,6 +1,9 @@
-$(function(){
-    initializePage();
-});
-function initializePage() {
+var Page = {
+    "initialize": function() {
 
+    }
 }
+
+$(function(){
+    Page.initialize();
+});
