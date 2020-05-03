@@ -4,9 +4,13 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+/* {{@snippet:header}} */
+
 require('./bootstrap');
+/* {{@snippet:require}} */
 
 window.Vue = require('vue');
+/* {{@snippet:global_objects}} */
 
 /**
  * The following block of code may be used to automatically register your
@@ -30,3 +34,5 @@ window.Vue = require('vue');
 const app = new Vue({
     el: '#app',
 });
+
+/* {{@snippet:footer}} */

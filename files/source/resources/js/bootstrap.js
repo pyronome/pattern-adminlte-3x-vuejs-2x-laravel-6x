@@ -1,4 +1,4 @@
-/* {{snippet:header}} */
+/* {{@snippet:header}} */
 
 window._ = require('lodash');
 
@@ -14,7 +14,7 @@ try {
 
     require('bootstrap');
     require('admin-lte');
-    /* {{snippet:libraries}} */
+    /* {{@snippet:libraries}} */
 } catch (e) {}
 
 /**
@@ -44,4 +44,4 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     encrypted: true
 // });
 
-/* {{snippet:footer}} */
+/* {{@snippet:footer}} */
