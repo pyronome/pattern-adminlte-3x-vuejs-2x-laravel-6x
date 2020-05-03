@@ -1,0 +1,6 @@
+$(function(){
+    initializePage();
+});
+function initializePage() {
+
+}
