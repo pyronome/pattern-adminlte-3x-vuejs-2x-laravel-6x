@@ -1,3 +1,35 @@
 [
-
+    {
+        "base":"\/project",
+        "enabled":"1",
+        "source":"source202042017482035d3703f",
+        "destination":"\/source\/routes\/adminlte.php",
+        "temporary":"0",
+        "append":"0",
+        "glue":"",
+        "prepend_crlf":"0",
+        "append_crlf":"0"
+    },
+    {
+        "base":"\/project\/model_list\/model\/name",
+        "enabled":"1",
+        "source":"source202042211324520c52973",
+        "destination":"ADMINLTE_MODEL_ROUTES",
+        "temporary":"1",
+        "append":"1",
+        "glue":"",
+        "prepend_crlf":"1",
+        "append_crlf":"0"
+    },
+    {
+        "base":"\/project\/model_list\/model\/name",
+        "enabled":"1",
+        "source":"source20204201749169eddd8bd",
+        "destination":"ADMINLTE_MODEL_HTMLDB_ROUTES",
+        "temporary":"1",
+        "append":"1",
+        "glue":"",
+        "prepend_crlf":"1",
+        "append_crlf":"0"
+    }
 ]
