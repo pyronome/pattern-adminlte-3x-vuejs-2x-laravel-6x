@@ -9,7 +9,7 @@
                 <form id="formLogin"
                         name="formLogin"
                         class="form-horizontal"
-                        @submit.prevent="login" @keydown="form.onKeydown($event)">
+                        @submit.prevent="submitForm" @keydown="form.onKeydown($event)">
                     <div class="input-group mb-3">
                         <input type="text"
                             v-model="form.email"
@@ -79,10 +79,10 @@ export default {
         }
     },
     methods: {
-        login () {
-        // Submit the form via a POST request
-        this.form.post('api/login')
-            .then(({ data }) => { console.log(data) })
+        submitForm () {
+            // Submit the form via a POST request
+            this.form.post('api/login')
+                .then(({ data }) => { console.log(data) });
         }
     }
 }

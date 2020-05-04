@@ -6,39 +6,29 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <form id="formResetPassword"
-                    name="formResetPassword"
-                    method="post"
-                    class="form-horizontal htmldb-form"
-                    data-htmldb-table="ResetPasswordHTMLDB"
-                    onsubmit="return false;">
-                    <input type="hidden"
-                        id="formResetPassword-id"
-                        name="formResetPassword-id"
-                        class="htmldb-field"
-                        data-htmldb-field="id"
-                        value="1">
+                        name="formResetPassword"
+                        class="form-horizontal"
+                        @submit.prevent="submitForm" @keydown="form.onKeydown($event)">
                     <div class="input-group mb-3">
                         <input type="text"
+                            v-model="form.email"
                             id="formResetPassword-email"
                             name="formResetPassword-email"
-                            class="form-control htmldb-field"
-                            data-htmldb-field="email"
-                            placeholder="Email">
+                            class="form-control"
+                            placeholder="Email"
+                            :class="{ 'is-invalid': form.errors.has('email') }">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
+                        <has-error :form="form" field="email"></has-error>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <button type="button"
-                                id="buttonSubmit-formResetPassword"
-                                name="buttonSubmit-formResetPassword"
-                                class="btn btn-primary btn-block htmldb-button-save"
-                                data-htmldb-form="formResetPassword">
-                                {{ $t('Request new password') }}
-                            </button>
+                            <button :disabled="form.busy"
+                                    type="submit"
+                                    class="btn btn-primary btn-block">{{ $t('Request new password') }}</button>
                         </div>
                     </div>
                 </form>
@@ -55,6 +45,13 @@ export default {
     data() {
         return {
             form: new Form
+        }
+    },
+    methods: {
+        submitForm () {
+            // Submit the form via a POST request
+            this.form.post('api/login')
+                .then(({ data }) => { console.log(data) });
         }
     }
 }
