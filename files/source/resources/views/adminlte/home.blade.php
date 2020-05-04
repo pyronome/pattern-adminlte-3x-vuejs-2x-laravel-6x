@@ -21,10 +21,11 @@
                     <div id="widgetContainer" class="row">
                     </div>
                 </div>
-            </section> 
+            </section>
         </div>
     </div>
     @include('adminlte.widgets')
-    <script src="/assets/adminlte/js/home.js"></script>
+    <script src="/js/adminlte/app.js"></script>
+    <script src="/js/adminlte/home.js"></script>
 </body>
 </html>

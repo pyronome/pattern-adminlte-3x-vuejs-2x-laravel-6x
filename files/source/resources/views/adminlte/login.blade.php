@@ -93,18 +93,6 @@
             </div>
         </div>
     </div>
-
-    <div class="divDialogContent divLoader" id="divLoader" >
-        <img class="center-block" src="/assets/adminlte/img/loader.svg" width="70" height="70" />
-        <div id="divLoaderText" class="" data-default-text="{{ __('Loading...') }}"></div>
-    </div>
-    
-    <div id="loginHTMLDB"
-        class="htmldb-table"
-        data-htmldb-read-url="/{{ config('adminlte.main_folder') }}/htmldb/login/get?_token={{ csrf_token() }}"
-        data-htmldb-write-url="/{{ config('adminlte.main_folder') }}/htmldb/login/post?_token={{ csrf_token() }}"
-        data-htmldb-loader="divLoader">
-    </div>
     <script src="/js/adminlte/app.js"></script>
     <script src="/js/adminlte/login.js"></script>
 </body>

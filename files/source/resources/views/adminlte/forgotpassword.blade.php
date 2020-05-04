@@ -66,32 +66,8 @@
             </div>
         </div>
     </div>
-
-    <div class="divDialogContent divLoader" id="divLoader" >
-        <img class="center-block" src="/assets/adminlte/img/loader.svg" width="70" height="70" />
-        <div id="divLoaderText" class="" data-default-text="{{ __('Loading...') }}"></div>
-    </div>
-    
-    <div id="ResetPasswordHTMLDB"
-        class="htmldb-table"
-        data-htmldb-read-url="/{{ config('adminlte.main_folder') }}/htmldb/forgotpassword/get?_token={{ csrf_token() }}"
-        data-htmldb-write-url="/{{ config('adminlte.main_folder') }}/htmldb/forgotpassword/post?_token={{ csrf_token() }}"
-        data-htmldb-loader="divLoader">
-    </div>
-    
     <div id="divSaveMessage" class="d-none">{{ __('Your new password was sent to your email.') }}</div>
-    
-    <!-- jQuery -->
-    <script src="/assets/adminlte/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="/assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Toastr -->
-    <script src="/assets/adminlte/plugins/toastr/toastr.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="/assets/adminlte/js/adminlte.min.js"></script>
-    <script src="/assets/adminlte/js/global.js"></script>
-    <script src="/assets/adminlte/js/htmldb.js"></script>
-    <script src="/assets/adminlte/js/adminlte.htmldb.js"></script>
-    <script src="/assets/adminlte/js/forgotpassword.js"></script>
+    <script src="/js/adminlte/app.js"></script>
+    <script src="/js/adminlte/forgotpassword.js"></script>
 </body>
 </html>
