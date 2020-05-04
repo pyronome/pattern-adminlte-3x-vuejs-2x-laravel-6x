@@ -16,7 +16,7 @@ window.Vue = require('vue');
 /* vue-i18n Declaration BOF */
 import VueI18n from 'vue-i18n';
 Vue.use(VueI18n);
-windows.I18N = new VueI18n({
+window.I18N = new VueI18n({
     locale: 'en',
     messages: {}
 });
