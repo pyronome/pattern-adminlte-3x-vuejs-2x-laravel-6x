@@ -9,7 +9,26 @@
 require('./bootstrap');
 /* {{@snippet:require}} */
 
+/* vue Declaration BOF */
 window.Vue = require('vue');
+/* vue Declaration EOF */
+
+/* vue-i18n Declaration BOF */
+import VueI18n from 'vue-i18n';
+Vue.use(VueI18n);
+windows.I18N = new VueI18n({
+    locale: 'en',
+    messages: {}
+});
+/* vue-i18n Declaration EOF */
+
+/* vform Declaration BOF */
+import { Form, HasError, AlertError } from 'vform';
+window.form = Form;
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
+/* vform Declaration EOF */
+
 /* {{@snippet:global_objects}} */
 
 /**
@@ -24,6 +43,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('login-form', require('./components/LoginForm.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -32,6 +52,7 @@ window.Vue = require('vue');
  */
 
 const app = new Vue({
+    i18n,
     el: '#app',
 });
 
