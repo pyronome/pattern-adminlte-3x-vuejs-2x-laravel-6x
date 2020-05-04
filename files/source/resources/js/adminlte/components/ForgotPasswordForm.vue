@@ -8,7 +8,8 @@
                 <form id="formResetPassword"
                         name="formResetPassword"
                         class="form-horizontal"
-                        @submit.prevent="submitForm" @keydown="form.onKeydown($event)">
+                        @submit.prevent="submitForm"
+                        @keydown="form.onKeydown($event)">
                     <div class="input-group mb-3">
                         <input type="text"
                             v-model="form.email"

@@ -11,9 +11,14 @@ use App\AdminLTEUser;
 class LoginController extends Controller
 {
 
-    public function post(Request $request)
+    public function post(LoginFormRequest $request)
     {
+        $request->parameters['email']
 
+        $adminLTEUser = AdminLTEUser::where('email', $this->row['email'])
+                ->first();
+
+        auth()->guard('adminlteuser')->login($adminLTEUser);
     }
 
 }
