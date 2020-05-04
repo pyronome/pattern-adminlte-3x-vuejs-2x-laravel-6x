@@ -24,7 +24,7 @@ window.I18N = new VueI18n({
 
 /* vform Declaration BOF */
 import { Form, HasError, AlertError } from 'vform';
-window.form = Form;
+window.Form = Form;
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
 /* vform Declaration EOF */
