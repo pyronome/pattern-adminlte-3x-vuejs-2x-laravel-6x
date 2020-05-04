@@ -27,16 +27,8 @@ Route::namespace('API')
         ->group(function () {
 
     /* {{@snippet:begin_api_routes}} */
-
-    Route::prefix('login')->group(function () {
-	    Route::get('/get', 'LoginController@get');
-        Route::post('/post', 'LoginController@post');
-    });
-
-    Route::prefix('forgotpassword')->group(function () {
-	    Route::get('/get', 'ForgotPasswordController@get');
-        Route::post('/post', 'ForgotPasswordController@post');
-    });
+    Route::post('login', 'LoginController@post');
+    Route::post('forgotpassword', 'ForgotPasswordController@post');
 
     Route::prefix('profile')->group(function () {
 	    Route::get('/get', 'ProfileController@get');
