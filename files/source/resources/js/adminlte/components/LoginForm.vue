@@ -75,7 +75,7 @@ export default {
                 email: '',
                 password: '',
                 remember: false
-            });
+            })
         }
     },
     methods: {
