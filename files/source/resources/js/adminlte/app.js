@@ -52,7 +52,7 @@ Vue.component('login-form', require('./components/LoginForm.vue').default);
  */
 
 const app = new Vue({
-    i18n,
+    i18n: I18N,
     el: '#app',
 });
 
