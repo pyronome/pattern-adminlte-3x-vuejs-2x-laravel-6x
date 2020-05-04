@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\AdminLTE\HTMLDB;
+namespace App\Http\Controllers\AdminLTE\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use App\AdminLTE;
 use App\AdminLTEUser;
 use App\AdminLTEUserGroup;
-use App\HTMLDB;
 
 class AdminLTEUserController extends Controller
 {
