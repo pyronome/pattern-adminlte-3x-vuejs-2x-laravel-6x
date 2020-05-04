@@ -5,11 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use App\AdminLTE;
 use App\AdminLTEUser;
-use App\HTMLDB;
 
 /* {{snippet:begin_class}} */
 
-class AdminLTEHTMLDBMiddleware
+class AdminLTEAPIMiddleware
 {
 
 	/* {{snippet:begin_properties}} */
