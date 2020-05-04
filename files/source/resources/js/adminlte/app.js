@@ -43,7 +43,13 @@ Vue.component(AlertError.name, AlertError);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('login-form', require('./components/LoginForm.vue').default);
+
+/* {{@snippet:begin_components}} */
+
+Vue.component('loginform', require('./components/LoginForm.vue').default);
+Vue.component('forgotpasswordform', require('./components/ForgotPasswordForm.vue').default);
+
+/* {{@snippet:end_components}} */
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -51,9 +57,13 @@ Vue.component('login-form', require('./components/LoginForm.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+/* {{@snippet:begin_vue_app}} */
+
 const app = new Vue({
     i18n: I18N,
     el: '#app',
 });
+
+/* {{@snippet:end_vue_app}} */
 
 /* {{@snippet:footer}} */
