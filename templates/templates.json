@@ -13,19 +13,8 @@
     {
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
-        "source":"source/source202042211324520c52973",
-        "destination":"ADMINLTE_MODEL_ROUTES",
-        "temporary":"1",
-        "append":"1",
-        "glue":"",
-        "prepend_crlf":"1",
-        "append_crlf":"0"
-    },
-    {
-        "base":"\/project\/model_list\/model\/name",
-        "enabled":"1",
         "source":"source/source20204201749169eddd8bd",
-        "destination":"ADMINLTE_MODEL_HTMLDB_ROUTES",
+        "destination":"ADMINLTE_MODEL_API_ROUTES",
         "temporary":"1",
         "append":"1",
         "glue":"",

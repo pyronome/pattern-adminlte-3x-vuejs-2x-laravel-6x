@@ -18,54 +18,15 @@ Route::get('/home', 'HomeController@index');
 Route::get('/login', 'LoginController@index');
 Route::get('/logout', 'LogoutController@index');
 Route::get('/forgotpassword', 'ForgotPasswordController@index');
-Route::get('/email_server', 'EmailServerController@index');
-Route::get('/general_settings', 'GeneralSettingsController@index');
-Route::get('/languages', 'LanguagesController@index');
-Route::get('/media', 'MediaController@index');
-Route::get('/menu_configuration', 'MenuConfigurationController@index');
-Route::get('/profile', 'ProfileController@index');
-
-Route::prefix('profile')->group(function () {
-    Route::get('/', 'ProfileController@index');
-    Route::get('/detail', 'ProfileController@index');
-    Route::get('/edit', 'ProfileController@showEditPage');
-});
-
-Route::get('/root_settings', 'RootSettingsController@index');
-Route::get('/server_information', 'ServerInformationController@index');
-
-Route::prefix('adminlteuser')->group(function () {
-    Route::get('/', 'AdminLTEUserController@index');
-    Route::get('/list', 'AdminLTEUserController@index');
-    Route::get('/detail/{id}', 'AdminLTEUserController@showDetailPage');
-    Route::get('/edit/{id}', 'AdminLTEUserController@showEditPage');
-	Route::get('/last', 'AdminLTEUserController@showLastUpdated');
-});
-
-Route::prefix('adminlteusergroup')->group(function () {
-    Route::get('/', 'AdminLTEUserGroupController@index');
-    Route::get('/list', 'AdminLTEUserGroupController@index');
-    Route::get('/detail/{id}', 'AdminLTEUserGroupController@showDetailPage');
-    Route::get('/edit/{id}', 'AdminLTEUserGroupController@showEditPage');
-	Route::get('/last', 'AdminLTEUserGroupController@showLastUpdated');
-});
-
-{{ADMINLTE_MODEL_ROUTES}}
-
-Route::prefix('adminltemodeldisplaytext')->group(function () {
-    Route::get('/', 'AdminLTEModelDisplayTextController@index');
-});
-
-Route::get('/setup', 'SetupController@index');
 
 /* {{@snippet:end_routes}} */
 
-Route::namespace('HTMLDB')
-        ->middleware(\App\Http\Middleware\AdminLTEHTMLDBMiddleware::class)
-        ->prefix('htmldb')
+Route::namespace('API')
+        ->middleware(\App\Http\Middleware\AdminLTEAPIMiddleware::class)
+        ->prefix('api')
         ->group(function () {
 
-    /* {{@snippet:begin_htmldb_routes}} */
+    /* {{@snippet:begin_api_routes}} */
 
     Route::prefix('login')->group(function () {
 	    Route::get('/get', 'LoginController@get');
@@ -157,8 +118,8 @@ Route::namespace('HTMLDB')
         Route::get('/get_directories', 'AdminLTEServiceController@get_directories');
     });
 
-{{ADMINLTE_MODEL_HTMLDB_ROUTES}}
+{{ADMINLTE_MODEL_API_ROUTES}}
 
-    /* {{@snippet:end_htmldb_routes}} */
+    /* {{@snippet:end_api_routes}} */
 
 });
