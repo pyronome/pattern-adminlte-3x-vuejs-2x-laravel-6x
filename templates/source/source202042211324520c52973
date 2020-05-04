@@ -1,0 +1,7 @@
+Route::prefix('{{$ __value__/__lowercase_text__}}')->group(function () {
+    Route::get('/', '{{$ __value__}}Controller@index');
+    Route::get('/list', '{{$ __value__}}Controller@index');
+    Route::get('/detail/{id}', '{{$ __value__}}Controller@showDetailPage');
+    Route::get('/edit/{id}', '{{$ __value__}}Controller@showEditPage');
+	Route::get('/last', '{{$ __value__}}Controller@showLastUpdated');
+});
