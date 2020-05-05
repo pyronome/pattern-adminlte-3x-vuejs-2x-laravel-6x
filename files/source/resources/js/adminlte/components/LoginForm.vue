@@ -89,8 +89,13 @@ export default {
     methods: {
         submitForm () {
             // Submit the form via a POST request
+            this.$Progress.start();
             this.form.post('api/login')
-                .then(({ data }) => { console.log(data) });
+                .then(({ data }) => {
+                    this.$Progress.finish();
+                }).catch(({ data }) => {
+                    this.$Progress.fail();
+                });
         }
     }
 }
