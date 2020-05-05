@@ -33,6 +33,17 @@
         "append_crlf":"0"
     },
     {
+        "base":"\/project",
+        "enabled":"1",
+        "source":"source/source2020baaa4e1d6d5d32434",
+        "destination":"/source/resources/js/adminlte/components.js",
+        "temporary":"0",
+        "append":"0",
+        "glue":"",
+        "prepend_crlf":"0",
+        "append_crlf":"0"
+    },
+    {
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
         "source":"source/source20204201749169eddd8bd",
@@ -75,5 +86,18 @@
         "glue":",",
         "prepend_crlf":"1",
         "append_crlf":"0"
+    },
+    {
+        "base":"\/project\/model_list\/model\/name",
+        "enabled":"1",
+        "source":"source/source2020bccc4e1d6d5ee1221",
+        "destination":"VUE_MODEL_COMPONENT_DECLARATIONS",
+        "temporary":"1",
+        "append":"1",
+        "glue":"",
+        "prepend_crlf":"0",
+        "append_crlf":"0"
     }
+
+
 ]

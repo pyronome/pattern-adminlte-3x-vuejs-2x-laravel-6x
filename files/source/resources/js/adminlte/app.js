@@ -72,8 +72,7 @@ Vue.use(VueProgressBar, {
 
 /* {{@snippet:begin_components}} */
 
-Vue.component('login-form', require('./components/LoginForm.vue').default);
-Vue.component('forgot-password-form', require('./components/ForgotPasswordForm.vue').default);
+require('./components');
 
 /* {{@snippet:end_components}} */
 
