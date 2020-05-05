@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\AdminLTE;
 use App\AdminLTEUser;
-use App\Http\Requests\AdminLTE\API\LoginPOST
+use App\Http\Requests\AdminLTE\API\LoginPOSTRequest;
 
 class LoginController extends Controller
 {

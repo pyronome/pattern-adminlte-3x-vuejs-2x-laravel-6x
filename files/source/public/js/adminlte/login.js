@@ -4,6 +4,6 @@ var Page = {
     }
 }
 
-$(function(){
+document.addEventListener('DOMContentLoaded', function(event) {
     Page.initialize();
-});
+})
