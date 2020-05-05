@@ -27,7 +27,7 @@ class LoginPOSTRequest extends FormRequest
     {
         return [
             'email' => 'required|string|email',
-            'password' => 'required|required_with:password_confirmation|string|confirmed'
+            'password' => 'required|string'
         ];
     }
 
