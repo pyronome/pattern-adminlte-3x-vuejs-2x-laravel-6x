@@ -41,7 +41,7 @@ Vue.use(VueProgressBar, {
         termination: 300
     },
     autoRevert: true,
-    location: 'left',
+    location: 'top',
     inverse: false
 });
 /* vue-progressbar Declaration EOF */
