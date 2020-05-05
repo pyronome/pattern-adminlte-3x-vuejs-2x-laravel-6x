@@ -2,4 +2,5 @@
         "@fortawesome/fontawesome-free": "^5.13.0",
         "icheck-bootstrap": "^3.0.1",
         "vform": "^1.0.1",
-        "vue-i18n": "^8.17.4"
+        "vue-i18n": "^8.17.4",
+        "vue-progressbar": "^0.7.5"
