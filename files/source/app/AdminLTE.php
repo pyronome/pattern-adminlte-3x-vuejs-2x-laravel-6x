@@ -103,7 +103,7 @@ class AdminLTE
 			'menu_permission' => '',
 			'service_permission' => '',
 			'widget_permission' => '',
-			'image' => '/assets/adminlte/img/default-user-image.png'
+			'image' => '/img/adminlte/default-user-image.png'
 		];
 
 		if ($adminLTEUser != null) {
@@ -129,7 +129,7 @@ class AdminLTE
 				'menu_permission' => $this->getUserMenuPermission($adminLTEUser),
 				'service_permission' => $this->getUserServicePermission($adminLTEUser),
 				'widget_permission' => '',
-				'image' => '/assets/adminlte/img/default-user-image.png'
+				'image' => '/img/adminlte/default-user-image.png'
 			];
 
             $adminLTEUserGroup = AdminLTEUserGroup::find(
