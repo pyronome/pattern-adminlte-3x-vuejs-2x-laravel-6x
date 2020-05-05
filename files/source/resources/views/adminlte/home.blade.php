@@ -24,7 +24,6 @@
             </section>
         </div>
     </div>
-    @include('adminlte.widgets')
     <script src="/js/adminlte/app.js"></script>
     <script src="/js/adminlte/home.js"></script>
 </body>
