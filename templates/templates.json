@@ -11,6 +11,17 @@
         "append_crlf":"0"
     },
     {
+        "base":"\/project",
+        "enabled":"1",
+        "source":"source/source20204221048324e1d6d5d",
+        "destination":"/source/config/adminlte_menu_json.php",
+        "temporary":"0",
+        "append":"0",
+        "glue":"",
+        "prepend_crlf":"0",
+        "append_crlf":"0"
+    },
+    {
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
         "source":"source/source20204201749169eddd8bd",
@@ -20,5 +31,16 @@
         "glue":"",
         "prepend_crlf":"1",
         "append_crlf":"0"
-    }
+    },
+    {
+        "base":"\/project\/model_list\/model\/name",
+        "enabled":"1",
+        "source":"source/source202042210522520214f61",
+        "destination":"MODEL_MENU_DEFINITONS",
+        "temporary":"1",
+        "append":"1",
+        "glue":",",
+        "prepend_crlf":"0",
+        "append_crlf":"0"
+    },
 ]
