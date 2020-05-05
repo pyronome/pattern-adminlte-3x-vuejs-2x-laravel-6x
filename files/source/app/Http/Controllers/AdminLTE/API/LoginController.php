@@ -20,6 +20,17 @@ class LoginController extends Controller
                 ->first();
 
         auth()->guard('adminlteuser')->login($adminLTEUser);
+
+        $landingPage = config('adminlte.landing_page');
+
+        if ($landingPage === false)
+        {
+            $landingPage = 'home';
+        } // if ($landingPage === false)
+
+        return [
+            'landing_page' => $landingPage
+        ];
     }
 
 }
