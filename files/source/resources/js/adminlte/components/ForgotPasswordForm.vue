@@ -39,6 +39,7 @@
                 </p>
             </div>
         </div>
+        <vue-progress-bar></vue-progress-bar>
     </div>
 </template>
 <script>
