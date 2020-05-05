@@ -26,11 +26,10 @@
                 <img src="/img/adminlte/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">AdminLTE 3</span>
             </a>
-            <a href="/{{ config('adminlte.main_folder') }}/profile/detail" class="brand-link">
-                <img src="{{ $user['image'] }}" alt="User Image" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">{{ $user['name'] }}</span>
-            </a>
-
             <!-- Sidebar -->
             <div class="sidebar">
+                <a href="/{{ config('adminlte.main_folder') }}/profile/detail" class="brand-link">
+                    <img src="{{ $user['image'] }}" alt="User Image" class="brand-image img-circle elevation-3" style="opacity: .8">
+                    <span class="brand-text font-weight-light">{{ $user['name'] }}</span>
+                </a>
                 @include('adminlte.divmenulayer')
