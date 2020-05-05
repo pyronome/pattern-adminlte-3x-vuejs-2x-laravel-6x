@@ -70,6 +70,12 @@
 </template>
 <script>
 export default {
+    created() {
+        this.$Progress.start();
+    },
+    mounted() {
+        this.$Progress.finis();
+    },
     data() {
         return {
             form: new Form({
