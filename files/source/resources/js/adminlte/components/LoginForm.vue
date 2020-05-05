@@ -74,7 +74,7 @@ export default {
         this.$Progress.start();
     },
     mounted() {
-        this.$Progress.finis();
+        this.$Progress.finish();
     },
     data() {
         return {
