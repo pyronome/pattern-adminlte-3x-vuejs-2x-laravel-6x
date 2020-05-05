@@ -32,8 +32,8 @@ Vue.component(AlertError.name, AlertError);
 /* vue-progressbar Declaration BOF */
 import VueProgressBar from 'vue-progressbar';
 Vue.use(VueProgressBar, {
-    color: '#bffaf3',
-    failedColor: '#874b4b',
+    color: "#38c172",
+    failedColor: "#e3342f",
     thickness: '5px',
     transition: {
         speed: '0.2s',
