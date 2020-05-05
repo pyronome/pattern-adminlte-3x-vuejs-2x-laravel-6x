@@ -24,7 +24,7 @@
     {
         "base":"\/project",
         "enabled":"1",
-        "source":"source/source20204221048324e1d6d5d32434",
+        "source":"source/source2020b8324e1d6d5d32434",
         "destination":"/source/resources/js/adminlte/routes.js",
         "temporary":"0",
         "append":"0",
@@ -68,7 +68,7 @@
     {
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
-        "source":"source/source202042210522520214f61asdffd",
+        "source":"source/source2020422a20214f61asdffd",
         "destination":"VUE_ROUTER_MODEL_MENU_DEFINITONS",
         "temporary":"1",
         "append":"1",
