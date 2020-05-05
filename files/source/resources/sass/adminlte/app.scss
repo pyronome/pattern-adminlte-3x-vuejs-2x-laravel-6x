@@ -10,13 +10,13 @@
 @import '~bootstrap/scss/bootstrap';
 @import '~icheck-bootstrap/icheck-bootstrap.css';
 
-// AdminLTE
-@import '~admin-lte/dist/css/adminlte.css';
-
 // Font Awesome
 @import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
 @import '~@fortawesome/fontawesome-free/scss/solid.scss';
 @import '~@fortawesome/fontawesome-free/scss/brands.scss';
+
+// AdminLTE
+@import '~admin-lte/dist/css/adminlte.css';
 
 /* {{@snippet:import_styles}} */
 
