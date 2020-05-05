@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\AdminLTE;
 use App\AdminLTEUser;
+use App\Http\Requests\AdminLTE\API\LoginPOST
 
 class LoginController extends Controller
 {
 
-    public function post(LoginFormRequest $request)
+    public function post(LoginPOSTRequest $request)
     {
         $request->parameters['email']
 
