@@ -55,6 +55,17 @@
         "append_crlf":"0"
     },
     {
+        "base":"\/project\/model_list\/__is_not_count_0__",
+        "enabled":"1",
+        "source":"",
+        "destination":"VUE_ROUTER_MODEL_MENU_DEFINITONS",
+        "temporary":"1",
+        "append":"1",
+        "glue":"",
+        "prepend_crlf":"0",
+        "append_crlf":"0"
+    },
+    {
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
         "source":"source/source202042210522520214f61asdffd",
