@@ -13,6 +13,11 @@ require('./bootstrap');
 window.Vue = require('vue');
 /* vue Declaration EOF */
 
+/* vue-router Declaration BOF */
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+/* vue-router Declaration EOF */
+
 /* vue-i18n Declaration BOF */
 import VueI18n from 'vue-i18n';
 Vue.use(VueI18n);

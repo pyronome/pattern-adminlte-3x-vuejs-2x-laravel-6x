@@ -1,0 +1,3 @@
+var routes = [
+    {{VUE_ROUTER_MODEL_MENU_DEFINITONS}}
+];

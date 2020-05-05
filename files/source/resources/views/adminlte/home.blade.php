@@ -18,7 +18,7 @@
             </div>
             <section class="content">
                 <div class="container-fluid">
-                    <div id="widgetContainer" class="row">
+                    <div id="app">
                     </div>
                 </div>
             </section>
