@@ -93,8 +93,10 @@ export default {
             this.form.post('api/login')
                 .then(({ data }) => {
                     this.$Progress.finish();
-                    console.log(data);
-                    window.location = "home";
+                    if (!data.landing_page) {
+                        data.landing_page = "home";
+                    }
+                    window.location = data.landing_page;
                 }).catch(({ data }) => {
                     this.$Progress.fail();
                 });
