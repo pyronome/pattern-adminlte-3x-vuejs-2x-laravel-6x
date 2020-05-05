@@ -14,9 +14,9 @@ class LoginController extends Controller
 
     public function post(LoginPOSTRequest $request)
     {
-        $request->parameters['email']
-
-        $adminLTEUser = AdminLTEUser::where('email', $this->row['email'])
+        $adminLTEUser = AdminLTEUser::where(
+                'email',
+                $request->input('email'))
                 ->first();
 
         auth()->guard('adminlteuser')->login($adminLTEUser);
