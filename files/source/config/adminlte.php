@@ -11,4 +11,5 @@ return [
     'year_month_format' => env('ADMINLTE_YEAR_MONTH_FORMAT', 'Y-m'),
     'number_format' => env('ADMINLTE_NUMBER_FORMAT', ''),
     'google_maps_api_key' => env('ADMINLTE_GOOGLE_MAPS_API_KEY', ''),
+    'navbar_light_dark' => env('ADMINLTE_NAVBAR_LIGHT_DARK', 'light'),
 ];

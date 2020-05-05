@@ -1,7 +1,7 @@
 
 	<div class="wrapper">
     	<!-- Navbar -->
-        <nav class="main-header navbar navbar-expand">
+        <nav class="main-header navbar navbar-expand navbar-{{ config('adminlte.navbar_light_dark') }}">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
