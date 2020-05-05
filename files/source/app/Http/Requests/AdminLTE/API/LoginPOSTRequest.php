@@ -48,7 +48,7 @@ class LoginPOSTRequest extends FormRequest
             {
                 $validator->errors()->add(
                         'password',
-                        __('Your e-mail address or password is not correct. Please check and try again.'));
+                        'Your e-mail address or password is not correct. Please check and try again.');
                 sleep(2);
             } // if (!$confirmed)
         });

@@ -33,14 +33,13 @@ class ForgotPasswordPOSTRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $adminLTE = new AdminLTE();
             $adminLTEUser = AdminLTEUser::where('email', $this->email)
                     ->first();
             if (null == $adminLTEUser)
             {
                 $validator->errors()->add(
                         'email',
-                        __('Your email address is not recognized. Please check your email address and try again.'));
+                        'Your email address is not recognized. Please check your email address and try again.');
                 sleep(2);
             } // if (null == $adminLTEUser)
         });
