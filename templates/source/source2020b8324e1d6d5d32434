@@ -4,7 +4,7 @@ var routes = [
         "component": require("./components/HomePage.vue")
     },
     {
-        "path": "/home",
-        "component": require("./components/HomePage.vue")
+        "path": "/profile",
+        "component": require("./components/ProfilePage.vue")
     }{{VUE_ROUTER_MODEL_MENU_DEFINITONS}}
 ];

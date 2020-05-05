@@ -1,4 +1,13 @@
+
     {
         "path": "/{{$ __value__/__lowercase_text__}}list",
         "component": require("./components/{{$ __value__}}ListPage.vue")
+    },
+    {
+        "path": "/{{$ __value__/__lowercase_text__}}detail",
+        "component": require("./components/{{$ __value__}}DetailPage.vue")
+    },
+    {
+        "path": "/{{$ __value__/__lowercase_text__}}edit",
+        "component": require("./components/{{$ __value__}}EditPage.vue")
     }
