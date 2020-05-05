@@ -3,6 +3,8 @@
 namespace App\Http\Requests\AdminLTE\API;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\AdminLTE;
+use App\AdminLTEUser;
 
 class ForgotPasswordPOSTRequest extends FormRequest
 {
