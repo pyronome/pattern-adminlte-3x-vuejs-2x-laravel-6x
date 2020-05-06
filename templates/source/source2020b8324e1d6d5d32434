@@ -1,4 +1,4 @@
-export var routes = [
+export var Routes = [
     {
         "path": "/",
         "component": require("./components/HomePage.vue")
