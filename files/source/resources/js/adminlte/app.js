@@ -7,7 +7,7 @@
 /* {{@snippet:header}} */
 
 require('./bootstrap');
-require('./routes');
+
 /* {{@snippet:require}} */
 
 /* vue Declaration BOF */
@@ -16,9 +16,11 @@ window.Vue = require('vue');
 
 /* vue-router Declaration BOF */
 import VueRouter from 'vue-router';
+import { Routes } from './routes';
+
 Vue.use(VueRouter);
 window.Router = new VueRouter({
-    routes: routes
+    routes: Routes
 });
 /* vue-router Declaration EOF */
 
@@ -85,8 +87,9 @@ require('./components');
 /* {{@snippet:begin_vue_app}} */
 
 const app = new Vue({
-    i18n: I18N,
     el: '#app',
+    i18n: I18N,
+    router: window.Router
 });
 
 /* {{@snippet:end_vue_app}} */
