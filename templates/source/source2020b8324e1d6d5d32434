@@ -1,5 +1,9 @@
 export var routes = [
     {
+        "path": "/",
+        "component": require("./components/HomePage.vue")
+    },
+    {
         "path": "/home",
         "component": require("./components/HomePage.vue")
     },

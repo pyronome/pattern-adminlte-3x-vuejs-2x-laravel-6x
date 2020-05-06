@@ -19,6 +19,7 @@
             <section class="content">
                 <div class="container-fluid">
                     <div id="app">
+                        <router-view></router-view>
                     </div>
                 </div>
             </section>
