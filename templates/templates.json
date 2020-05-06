@@ -66,28 +66,6 @@
         "append_crlf":"0"
     },
     {
-        "base":"\/project\/model_list\/__is_not_count_0__",
-        "enabled":"1",
-        "source":"",
-        "destination":"VUE_ROUTER_MODEL_MENU_DEFINITONS",
-        "temporary":"1",
-        "append":"1",
-        "glue":"",
-        "prepend_crlf":"0",
-        "append_crlf":"0"
-    },
-    {
-        "base":"\/project\/model_list\/model\/name",
-        "enabled":"1",
-        "source":"source/source2020422a20214f61asdffd",
-        "destination":"VUE_ROUTER_MODEL_MENU_DEFINITONS",
-        "temporary":"1",
-        "append":"1",
-        "glue":",",
-        "prepend_crlf":"0",
-        "append_crlf":"1"
-    },
-    {
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
         "source":"source/source2020bccc4e1d6d5ee1221",

@@ -1,14 +1,22 @@
+import HomePage from "./components/HomePage.vue";
+import ProfilePage from "./components/ProfilePage.vue";
+
+var mainFolder = document.body.getAttribute("data-main-folder");
+if (!mainFolder) {
+    mainFolder = "adminlte";
+}
+
 export var Routes = [
     {
-        "path": "/",
-        "component": require("./components/HomePage.vue")
+        "path": ("/" + mainFolder + "/"),
+        "component": HomePage
     },
     {
-        "path": "/home",
-        "component": require("./components/HomePage.vue")
+        "path": ("/" + mainFolder + "/home"),
+        "component": HomePage
     },
     {
-        "path": "/profile",
-        "component": require("./components/ProfilePage.vue")
-    }{{VUE_ROUTER_MODEL_MENU_DEFINITONS}}
+        "path": ("/" + mainFolder + "/profile"),
+        "component": ProfilePage
+    }
 ];
