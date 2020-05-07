@@ -119,9 +119,6 @@ export default {
             "DB_header": "",
             "DB_detail": ""
         };
-    },
-    mounted() {
-        AdminLTEHelper.initializeSideMenu();
     }
 }
 </script>

@@ -22,8 +22,6 @@
 
 <script>
 export default {
-    mounted() {
-        AdminLTEHelper.initializeSideMenu();
-    }
+
 }
 </script>

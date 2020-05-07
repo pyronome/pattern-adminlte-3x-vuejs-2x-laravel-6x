@@ -1,5 +1,7 @@
-module.exports = {
+var AdminLTEHelper = {
     "initializeSideMenu": function () {
+        $(".main-sidebar .active").removeClass("active");
+
         var mainFolder = document.body.getAttribute("data-main-folder");
         var strPageURL = window.Router.currentRoute.path;
 
@@ -46,5 +48,10 @@ module.exports = {
         } else {
             return "";
         }
+    },
+    "doRouterLinkClick": function (sender) {
+        AdminLTEHelper.initializeSideMenu();
     }
 }
+
+module.exports = AdminLTEHelper;
