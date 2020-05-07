@@ -126,7 +126,7 @@ export default {
         loadData: function () {
             var mainFolder = AdminLTEHelper.getMainFolder();
             this.$Progress.start();
-            axios.get("/" + mainFolder + "/api/system_information")
+            axios.get("/" + mainFolder + "/api/server_information")
                 .then(({ data }) => {
                     this.$Progress.finish();
                     this.server_information = data;
