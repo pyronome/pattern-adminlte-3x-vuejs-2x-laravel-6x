@@ -90,7 +90,7 @@ export default {
         submitForm () {
             // Submit the form via a POST request
             this.$Progress.start();
-            this.form.post('api/login')
+            this.form.post(AdminLTEHelper.getAPIURL("login"))
                 .then(({ data }) => {
                     this.$Progress.finish();
                     if (!data.landing_page) {

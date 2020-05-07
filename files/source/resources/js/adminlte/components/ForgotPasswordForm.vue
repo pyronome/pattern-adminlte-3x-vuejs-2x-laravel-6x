@@ -59,7 +59,7 @@ export default {
         submitForm () {
             // Submit the form via a POST request
             this.$Progress.start();
-            this.form.post('api/forgotpassword')
+            this.form.post(AdminLTEHelper.getAPIURL("forgotpassword"))
                 .then(({ data }) => {
                     this.$Progress.finish();
                 }).catch(({ data }) => {
