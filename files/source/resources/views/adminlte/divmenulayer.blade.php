@@ -21,6 +21,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-compact" data-widget="treeview" role="menu" data-accordion="false">
             	<?php
 				$countMenuArray = count($menu);
+                $logoutMenu = null;
 
 				for ($i=0; $i < $countMenuArray; $i++) { 
                     $permission_token = $menu[$i]['permission_token'] . '/v';
@@ -31,6 +32,11 @@
                             $href = $menu[$i]['href'];
                             $title = $menu[$i]['title'];
                             $icon = $menu[$i]['icon'];
+
+                            if ($href == 'logout') {
+                                $logoutMenu = $menu[$i];
+                                continue;
+                            } // if ($href == 'logout') {
                             ?>
                             <li class="nav-item">
                                 <router-link id="pageurl<?php echo $url; ?>" 
@@ -94,6 +100,27 @@
 					<?php
 				} // for ($i=0; $i < $countMenuArray; $i++) { 
 				?>
+                <?php
+                if ($logoutMenu != null) {
+                    $url = $logoutMenu['url'];
+                    $href = $logoutMenu['href'];
+                    $title = $logoutMenu['title'];
+                    $icon = $logoutMenu['icon'];
+                ?>
+                <li class="nav-item">
+                    <a id="pageurl<?php echo $url; ?>" 
+                        class="nav-link"
+                        href="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >
+                        <i class="<?php echo $icon; ?> nav-icon"></i>
+                        <p>
+                            {{ __($title) }}
+                            <!-- <span class="badge badge-info right">2</span> -->
+                        </p>
+                    </a>
+                </li>
+                <?php
+                } // if ($logoutMenu != null) {
+                ?>
             </ul>
         </nav>
     	<!-- /.sidebar-menu -->
