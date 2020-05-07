@@ -1,6 +1,6 @@
 @include('adminlte.head')
 <body class="hold-transition login-page" data-url-prefix="" data-page-url="forgotpassword">
-    <div id="app">
+    <div id="mainVueApplication">
         <forgot-password-form></forgot-password-form>
     </div>
     <div id="divSaveMessage" class="d-none">{{ __('Your new password was sent to your email.') }}</div>

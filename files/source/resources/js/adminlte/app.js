@@ -93,11 +93,13 @@ const mainVueApplication = new Vue({
     router: window.Router
 });
 
-const mainMenuVueApplication = new Vue({
-    el: '#mainMenuVueApplication',
-    i18n: I18N,
-    router: window.Router
-});
+if (document.getElementById("mainMenuVueApplication")) {
+    const mainMenuVueApplication = new Vue({
+        el: '#mainMenuVueApplication',
+        i18n: I18N,
+        router: window.Router
+    });
+}
 
 /* {{@snippet:end_vue_app}} */
 
