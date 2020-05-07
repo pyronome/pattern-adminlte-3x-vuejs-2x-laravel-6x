@@ -121,6 +121,22 @@ export default {
                 "db_detail": ""
             }
         };
+    },
+    methods: {
+        loadData: function () {
+            var mainFolder = AdminLTEHelper.getMainFolder();
+            this.$Progress.start();
+            axios.get("/" + mainFolder + "/api/system_information")
+                .then(({ data }) => {
+                    this.$Progress.finish();
+                    this.server_information = data;
+                }).catch(({ data }) => {
+                    this.$Progress.fail();
+                });
+        }
+    },
+    mounted() {
+        this.loadData();
     }
 }
 </script>
