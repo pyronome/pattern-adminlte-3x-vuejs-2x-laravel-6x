@@ -20,8 +20,6 @@ Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index');
 Route::get('/server_information', 'ServerInformationController@index');
 
-Route::get('{path}', 'HomeController@index')->where('path', '([A-z\d-\/_.]+)?');
-
 /* {{@snippet:end_routes}} */
 
 Route::namespace('API')
@@ -118,3 +116,9 @@ Route::namespace('API')
 /* {{@snippet:end_api_routes}} */
 
 });
+
+Route::fallback(function() {
+    Route::get('/', 'HomeController@index');
+});
+
+// Route::get('{path}', 'HomeController@index')->where('path', '([A-z\d-\/_.]+)?');
