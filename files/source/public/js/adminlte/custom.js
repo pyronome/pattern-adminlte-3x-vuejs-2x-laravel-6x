@@ -1,4 +1,3 @@
 /* {{@snippet:begin}} */
 
-
 /* {{@snippet:end}} */
