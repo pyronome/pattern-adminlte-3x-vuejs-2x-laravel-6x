@@ -97,7 +97,12 @@ if (document.getElementById("mainMenuVueApplication")) {
     const mainMenuVueApplication = new Vue({
         el: '#mainMenuVueApplication',
         i18n: I18N,
-        router: window.Router
+        router: window.Router,
+        methods: {
+            doRouterLinkClick: function (sender) {
+                AdminLTEHelper.doRouterLinkClick(sender);
+            }
+        }
     });
 }
 
