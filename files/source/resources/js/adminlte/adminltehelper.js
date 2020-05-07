@@ -23,8 +23,8 @@ var AdminLTEHelper = {
         }
 
         var PageURL = document.getElementById("pageurl" + strPageURL);
-        if (null === PageURL) {
-            window.location.href = URLPrefix + "home";
+        if (PageURL == undefined) {
+            return;
         }
 
         if ($(PageURL).hasClass("child_menu")) {
