@@ -1,5 +1,6 @@
 import HomePage from "./components/HomePage.vue";
 import ProfilePage from "./components/ProfilePage.vue";
+import ServerInformationPage from "./components/ServerInformationPage.vue";
 
 var mainFolder = document.body.getAttribute("data-main-folder");
 if (!mainFolder) {
@@ -17,6 +18,10 @@ export var Routes = [
     },
     {
         "path": ("/" + mainFolder + "/profile"),
+        "component": ProfilePage
+    },
+    {
+        "path": ("/" + mainFolder + "/server_information"),
         "component": ProfilePage
     }
 ];
