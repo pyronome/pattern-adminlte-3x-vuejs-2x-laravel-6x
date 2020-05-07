@@ -5,6 +5,6 @@
         <router-view></router-view>
     </div>
     <script src="/js/adminlte/app.js"></script>
-    <script src="/js/adminlte/home.js"></script>
+    <script src="/js/adminlte/custom.js"></script>
 </body>
 </html>
