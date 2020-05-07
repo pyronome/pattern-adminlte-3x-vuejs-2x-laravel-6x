@@ -40,7 +40,6 @@ class ServerInformationController extends Controller
 		$data['os_detail'] = $OS_detail;
 		$data['os_icon_src'] = ('/img/'
 				. $adminLTE->getAdminLTEFolder()
-				. '/'
 				. $OS_icon_src);
 
 		// Web Server
@@ -60,7 +59,6 @@ class ServerInformationController extends Controller
 		$data['web_detail'] = $WEB_detail;
 		$data['web_icon_src'] = ('/img/'
 				. $adminLTE->getAdminLTEFolder()
-				. '/'
 				. $WEB_icon_src);
 
 		// Application
@@ -83,7 +81,6 @@ class ServerInformationController extends Controller
 		$data['db_detail'] = $DB_detail;
 		$data['db_icon_src'] = ('/img/'
 				. $adminLTE->getAdminLTEFolder()
-				. '/'
 				. $DB_icon_src);
 
         return $data;
