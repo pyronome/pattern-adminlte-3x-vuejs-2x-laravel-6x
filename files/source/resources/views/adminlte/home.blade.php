@@ -3,6 +3,7 @@
     @include('adminlte.header')
     <div id="mainVueApplication">
         <router-view></router-view>
+        <vue-progress-bar></vue-progress-bar>
     </div>
     <script src="/js/adminlte/app.js"></script>
     <script src="/js/adminlte/custom.js"></script>
