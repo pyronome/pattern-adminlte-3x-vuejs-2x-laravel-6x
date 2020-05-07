@@ -19,3 +19,11 @@
         </section>
     </div>
 </template>
+
+<script>
+export default {
+    mounted() {
+        AdminLTEHelper.initializeSideMenu();
+    }
+}
+</script>

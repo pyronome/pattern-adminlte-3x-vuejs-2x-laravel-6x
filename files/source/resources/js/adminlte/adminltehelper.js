@@ -1,11 +1,17 @@
 module.exports = {
     "initializeSideMenu": function () {
-        alert(window.Router.currentRoute.path);
+        var mainFolder = document.body.getAttribute("data-main-folder");
+        var strPageURL = window.Router.currentRoute.path;
 
-        var strPageURL = document.body.getAttribute("data-page-url");
-        if (null === strPageURL) {
-            throw(new Error("document.body needs \"data-page-url\" attribute."));
-            return false;
+        strPageURL = strPageURL.replace(("/" + mainFolder), "");
+
+        if ((strPageURL.length > 0)
+                && (strPageURL[0] == '/')) {
+            strPageURL = strPageURL.substr(1);
+        }
+
+        if ("" == strPageURL) {
+            return;
         }
 
         if (("login" == strPageURL)

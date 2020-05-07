@@ -1,5 +1,5 @@
 @include('adminlte.head')
-<body class="hold-transition sidebar-mini layout-fixed text-sm" data-main-folder="{{ config('adminlte.main_folder') }}" data-page-url="home">
+<body class="hold-transition sidebar-mini layout-fixed text-sm" data-main-folder="{{ config('adminlte.main_folder') }}">
     @include('adminlte.header')
     <div id="mainVueApplication">
         <router-view></router-view>
