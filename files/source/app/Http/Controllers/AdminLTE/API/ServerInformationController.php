@@ -64,7 +64,9 @@ class ServerInformationController extends Controller
 		// Application
 		$data['app_header'] = 'PHP';
 		$data['app_detail'] = 'PHP ' . PHP_VERSION;
-		$data['app_icon_src'] = 'php.png';
+		$data['app_icon_src'] = ('/img/'
+				. $adminLTE->getAdminLTEFolder()
+				. 'php.png');
 
 		$DB_icon_src = 'mysql.png';
 		$DB_header = 'MySQL';
