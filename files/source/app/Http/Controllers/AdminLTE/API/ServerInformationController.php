@@ -35,9 +35,9 @@ class ServerInformationController extends Controller
 			break;
 		} // switch (PHP_OS) {
 
-		$data['OS_header'] = $OS_header;
-		$data['OS_detail'] = $OS_detail;
-		$data['OS_icon_src'] = $OS_icon_src;
+		$data['os_header'] = $OS_header;
+		$data['os_detail'] = $OS_detail;
+		$data['os_icon_src'] = $OS_icon_src;
 
 		// Web Server
 		$WEB_detail = $_SERVER['SERVER_SOFTWARE'];
@@ -52,14 +52,14 @@ class ServerInformationController extends Controller
 			$WEB_header = 'Nginx Web Server';
 		} // if (strpos(strtolower($WEB_detail), 'apache') !== false) {
 
-		$data['WEB_header'] = $WEB_header;
-		$data['WEB_detail'] = $WEB_detail;
-		$data['WEB_icon_src'] = $WEB_icon_src;
+		$data['web_header'] = $WEB_header;
+		$data['web_detail'] = $WEB_detail;
+		$data['web_icon_src'] = $WEB_icon_src;
 
 		// Application
-		$data['APP_header'] = 'PHP';
-		$data['APP_detail'] = 'PHP ' . PHP_VERSION;
-		$data['APP_icon_src'] = 'php.png';
+		$data['app_header'] = 'PHP';
+		$data['app_detail'] = 'PHP ' . PHP_VERSION;
+		$data['app_icon_src'] = 'php.png';
 
 		$DB_icon_src = 'mysql.png';
 		$DB_header = 'MySQL';
@@ -72,9 +72,9 @@ class ServerInformationController extends Controller
 				. $DB_host);
 		*/
 
-		$data['DB_header'] = $DB_header;
-		$data['DB_detail'] = $DB_detail;
-		$data['DB_icon_src'] = $DB_icon_src;
+		$data['db_header'] = $DB_header;
+		$data['db_detail'] = $DB_detail;
+		$data['db_icon_src'] = $DB_icon_src;
 
         return $data;
     }

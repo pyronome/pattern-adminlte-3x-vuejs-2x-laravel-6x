@@ -32,8 +32,8 @@
                                             <div class="card-body pt-0">
                                                 <div class="row">
                                                     <div class="col-7">
-                                                        <h2 class="lead"><b v-bind="OS_header"></b></h2>
-                                                        <p class="text-muted text-sm" v-bind="OS_detail"></p>
+                                                        <h2 class="lead"><b v-bind="server_information.os_header"></b></h2>
+                                                        <p class="text-muted text-sm" v-bind="server_information.os_detail"></p>
                                                     </div>
                                                     <div class="col-5 text-right">
                                                         <img src="" alt="" class="img-fluid">
@@ -50,8 +50,8 @@
                                             <div class="card-body pt-0">
                                                 <div class="row">
                                                     <div class="col-7">
-                                                        <h2 class="lead"><b v-bind="WEB_header"></b></h2>
-                                                        <p class="text-muted text-sm" v-bind="WEB_detail"></p>
+                                                        <h2 class="lead"><b v-bind="server_information.web_header"></b></h2>
+                                                        <p class="text-muted text-sm" v-bind="server_information.web_detail"></p>
                                                     </div>
                                                     <div class="col-5 text-right">
                                                         <img src="" alt="" class="img-fluid">
@@ -68,8 +68,8 @@
                                             <div class="card-body pt-0">
                                                 <div class="row">
                                                     <div class="col-7">
-                                                        <h2 class="lead"><b v-bind="APP_header"></b></h2>
-                                                        <p class="text-muted text-sm" v-bind="APP_detail"></p>
+                                                        <h2 class="lead"><b v-bind="server_information.app_header"></b></h2>
+                                                        <p class="text-muted text-sm" v-bind="server_information.app_detail"></p>
                                                     </div>
                                                     <div class="col-5 text-right">
                                                         <img src="" alt="" class="img-fluid">
@@ -86,8 +86,8 @@
                                             <div class="card-body pt-0">
                                                 <div class="row">
                                                     <div class="col-7">
-                                                        <h2 class="lead"><b v-bind="DB_header"></b></h2>
-                                                        <p class="text-muted text-sm" v-bind="DB_detail"></p>
+                                                        <h2 class="lead"><b v-bind="server_information.db_header"></b></h2>
+                                                        <p class="text-muted text-sm" v-bind="server_information.db_detail"></p>
                                                     </div>
                                                     <div class="col-5 text-right">
                                                         <img alt="" class="img-fluid">
@@ -110,14 +110,16 @@
 export default {
     data() {
         return {
-            "OS_header": "",
-            "OS_detail": "",
-            "WEB_header": "",
-            "WEB_detail": "",
-            "APP_header": "",
-            "APP_detail": "",
-            "DB_header": "",
-            "DB_detail": ""
+            server_information: {
+                "os_header": "",
+                "os_detail": "",
+                "web_header": "",
+                "web_detail": "",
+                "app_header": "",
+                "app_detail": "",
+                "db_header": "",
+                "db_detail": ""
+            }
         };
     }
 }
