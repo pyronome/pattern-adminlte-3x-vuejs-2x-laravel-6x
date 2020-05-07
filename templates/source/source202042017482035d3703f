@@ -19,6 +19,8 @@ Route::get('/login', 'LoginController@index');
 Route::get('/logout', 'LogoutController@index');
 Route::get('/forgotpassword', 'ForgotPasswordController@index');
 
+Route::get('{path}', 'HomeController@index')->where('path', '([A-z\d-\/_.]+)?');
+
 /* {{@snippet:end_routes}} */
 
 Route::namespace('API')
@@ -111,8 +113,6 @@ Route::namespace('API')
     });
 
 {{ADMINLTE_MODEL_API_ROUTES}}
-
-Route::get('{path}', 'HomeController@index')->where('path', '([A-z\d-\/_.]+)?');
 
 /* {{@snippet:end_api_routes}} */
 
