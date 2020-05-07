@@ -14,6 +14,8 @@ try {
 
     require('bootstrap');
     require('admin-lte');
+
+    window.AdminLTEHelper = require('./adminltehelper');
     /* {{@snippet:libraries}} */
 } catch (e) {}
 

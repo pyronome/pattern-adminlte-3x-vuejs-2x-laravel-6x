@@ -6,7 +6,7 @@ if (!mainFolder) {
     mainFolder = "adminlte";
 }
 
-export var Routes = [
+module.exports = [
     {
         "path": ("/" + mainFolder + "/"),
         "component": HomePage
