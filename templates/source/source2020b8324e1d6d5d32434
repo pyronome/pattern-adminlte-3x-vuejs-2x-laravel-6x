@@ -22,6 +22,6 @@ export var Routes = [
     },
     {
         "path": ("/" + mainFolder + "/server_information"),
-        "component": ProfilePage
+        "component": ServerInformationPage
     }
 ];
