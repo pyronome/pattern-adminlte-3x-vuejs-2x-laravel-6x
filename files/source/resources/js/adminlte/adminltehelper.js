@@ -49,6 +49,12 @@ var AdminLTEHelper = {
             return "";
         }
     },
+    "getURL": function (url) {
+        return ("/" + AdminLTEHelper.getMainFolder() + "/" + url);
+    },
+    "getAPIURL": function (url) {
+        return ("/" + AdminLTEHelper.getMainFolder() + "/api/" + url);
+    },
     "doRouterLinkClick": function (sender) {
         AdminLTEHelper.initializeSideMenu();
     }
