@@ -36,7 +36,7 @@
                                                         <p class="text-muted text-sm" v-bind="server_information.os_detail"></p>
                                                     </div>
                                                     <div class="col-5 text-right">
-                                                        <img src="" alt="" class="img-fluid">
+                                                        <img v-bind:src="server_information.os_icon_src" alt="" class="img-fluid">
                                                     </div>
                                                 </div>
                                             </div>
@@ -113,12 +113,16 @@ export default {
             server_information: {
                 "os_header": "",
                 "os_detail": "",
+                "os_icon_src": "",
                 "web_header": "",
                 "web_detail": "",
+                "web_icon_src": "",
                 "app_header": "",
                 "app_detail": "",
+                "app_icon_src": "",
                 "db_header": "",
-                "db_detail": ""
+                "db_detail": "",
+                "db_icon_src": ""
             }
         };
     },
