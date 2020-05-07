@@ -87,14 +87,14 @@ require('./components');
 
 /* {{@snippet:begin_vue_app}} */
 
-const mainApp = new Vue({
-    el: '#mainApp',
+const mainVueApplication = new Vue({
+    el: '#mainVueApplication',
     i18n: I18N,
     router: window.Router
 });
 
-const mainMenuApp = new Vue({
-    el: '#mainMenuApp',
+const mainMenuVueApplication = new Vue({
+    el: '#mainMenuVueApplication',
     i18n: I18N,
     router: window.Router
 });
