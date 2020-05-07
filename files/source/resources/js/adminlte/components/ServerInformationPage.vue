@@ -127,12 +127,12 @@ export default {
             var mainFolder = AdminLTEHelper.getMainFolder();
             this.$Progress.start();
             axios.get("/" + mainFolder + "/api/server_information")
-                .then(({ data }) => {
-                    this.$Progress.finish();
-                    this.server_information = data;
-                }).catch(({ data }) => {
-                    this.$Progress.fail();
-                });
+                    .then(({ data }) => {
+                        this.$Progress.finish();
+                        this.server_information = data;
+                    }).catch(({ data }) => {
+                        this.$Progress.fail();
+                    });
         }
     },
     mounted() {
