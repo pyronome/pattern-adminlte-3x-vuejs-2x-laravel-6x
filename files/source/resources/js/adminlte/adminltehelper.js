@@ -39,5 +39,12 @@ module.exports = {
         }	
 
         $(PageURL).addClass("active");
+    },
+    "getMainFolder": function () {
+        if (element.getAttribute("data-main-folder")) {
+            return element.getAttribute("data-main-folder");
+        } else {
+            return "";
+        }
     }
 }
