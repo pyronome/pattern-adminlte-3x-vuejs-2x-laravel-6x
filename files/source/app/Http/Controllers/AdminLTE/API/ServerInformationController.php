@@ -11,6 +11,7 @@ class ServerInformationController extends Controller
 {
     public function get(Request $request)
     {
+		$adminLTE = new AdminLTE();
 		$data = array();
 
 		// Server OS
@@ -37,7 +38,10 @@ class ServerInformationController extends Controller
 
 		$data['os_header'] = $OS_header;
 		$data['os_detail'] = $OS_detail;
-		$data['os_icon_src'] = $OS_icon_src;
+		$data['os_icon_src'] = ('/img/'
+				. $adminLTE->getAdminLTEFolder()
+				. '/'
+				. $OS_icon_src);
 
 		// Web Server
 		$WEB_detail = $_SERVER['SERVER_SOFTWARE'];
@@ -54,7 +58,10 @@ class ServerInformationController extends Controller
 
 		$data['web_header'] = $WEB_header;
 		$data['web_detail'] = $WEB_detail;
-		$data['web_icon_src'] = $WEB_icon_src;
+		$data['web_icon_src'] = ('/img/'
+				. $adminLTE->getAdminLTEFolder()
+				. '/'
+				. $WEB_icon_src);
 
 		// Application
 		$data['app_header'] = 'PHP';
@@ -74,7 +81,10 @@ class ServerInformationController extends Controller
 
 		$data['db_header'] = $DB_header;
 		$data['db_detail'] = $DB_detail;
-		$data['db_icon_src'] = $DB_icon_src;
+		$data['db_icon_src'] = ('/img/'
+				. $adminLTE->getAdminLTEFolder()
+				. '/'
+				. $DB_icon_src);
 
         return $data;
     }
