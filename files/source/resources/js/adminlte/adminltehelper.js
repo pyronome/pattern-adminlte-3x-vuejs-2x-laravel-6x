@@ -43,8 +43,8 @@ var AdminLTEHelper = {
         $(PageURL).addClass("active");
     },
     "getMainFolder": function () {
-        if (element.getAttribute("data-main-folder")) {
-            return element.getAttribute("data-main-folder");
+        if (document.body.getAttribute("data-main-folder")) {
+            return document.body.getAttribute("data-main-folder");
         } else {
             return "";
         }
