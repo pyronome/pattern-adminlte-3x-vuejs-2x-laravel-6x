@@ -16,11 +16,12 @@ window.Vue = require('vue');
 
 /* vue-router Declaration BOF */
 import VueRouter from 'vue-router';
+import { Routes } from './routes';
 Vue.use(VueRouter);
 window.Router = new VueRouter({
     base: "",
     mode: 'history',
-    routes: require('./routes')
+    routes: Routes
 });
 /* vue-router Declaration EOF */
 
