@@ -33,15 +33,15 @@
                             $icon = $menu[$i]['icon'];
                             ?>
                             <li class="nav-item">
-                                <a id="pageurl<?php echo $url; ?>" 
+                                <router-link id="pageurl<?php echo $url; ?>" 
                                     class="nav-link"
-                                    href="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >
+                                    to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >
                                     <i class="<?php echo $icon; ?> nav-icon"></i>
                                     <p>
                                         {{ __($title) }}
                                         <!-- <span class="badge badge-info right">2</span> -->
                                     </p>
-                                </a>
+                                </router-link>
                             </li>
                             <?php
                         } else {
@@ -73,13 +73,13 @@
                                             $icon = $submenu[$j]['icon'];
                                 			?>
 		                                    <li class="nav-item">
-		                                        <a id="pageurl<?php echo $url; ?>"
+		                                        <router-link id="pageurl<?php echo $url; ?>"
                                                     class="child_menu nav-link"
-                                                    href="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>"
+                                                    to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>"
                                                     data-parent-url="<?php echo $parent_id; ?>">
 		                                            <i class="<?php echo $icon; ?> nav-icon"></i>
 		                                            <p>{{ __($title) }}</p>
-		                                        </a>
+		                                        </router-link>
 		                                    </li>
 		                                    <?php
                                         } // if (($is_admin) || (in_array($permission_token, $permissions))) {
