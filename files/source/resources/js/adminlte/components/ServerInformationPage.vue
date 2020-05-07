@@ -54,7 +54,7 @@
                                                         <p class="text-muted text-sm">{{ server_information.web_detail }}</p>
                                                     </div>
                                                     <div class="col-5 text-right">
-                                                        <img src="" alt="" class="img-fluid">
+                                                        <img v-bind:src="server_information.web_icon_src" alt="" class="img-fluid">
                                                     </div>
                                                 </div>
                                             </div>
@@ -72,7 +72,7 @@
                                                         <p class="text-muted text-sm">{{ server_information.app_detail }}</p>
                                                     </div>
                                                     <div class="col-5 text-right">
-                                                        <img src="" alt="" class="img-fluid">
+                                                        <img v-bind:src="server_information.app_icon_src" alt="" class="img-fluid">
                                                     </div>
                                                 </div>
                                             </div>
@@ -90,7 +90,7 @@
                                                         <p class="text-muted text-sm">{{ server_information.db_detail }}</p>
                                                     </div>
                                                     <div class="col-5 text-right">
-                                                        <img alt="" class="img-fluid">
+                                                        <img v-bind:src="server_information.db_icon_src" alt="" class="img-fluid">
                                                     </div>
                                                 </div>
                                             </div>
