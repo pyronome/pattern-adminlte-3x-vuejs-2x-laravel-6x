@@ -50,10 +50,10 @@ var AdminLTEHelper = {
         }
     },
     "getURL": function (url) {
-        return ("/" + AdminLTEHelper.getMainFolder() + "/" + url);
+        return (AdminLTEHelper.getMainFolder() + "/" + url);
     },
     "getAPIURL": function (url) {
-        return ("/" + AdminLTEHelper.getMainFolder() + "/api/" + url);
+        return (AdminLTEHelper.getMainFolder() + "/api/" + url);
     },
     "doRouterLinkClick": function (sender) {
         AdminLTEHelper.initializeSideMenu();
