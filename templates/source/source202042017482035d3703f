@@ -37,7 +37,7 @@ Route::namespace('API')
     });
 
     Route::prefix('server_information')->group(function () {
-        Route::get('/get', 'ServerInformationController@get');
+        Route::get('/', 'ServerInformationController@get');
     });
 
     Route::prefix('general_settings')->group(function () {
@@ -116,6 +116,4 @@ Route::namespace('API')
 
 });
 
-Route::fallback(function() {
-    Route::get('{path}', 'HomeController@index')->where('path', '([A-z\d-\/_.]+)?');
-});
+Route::get('{path}', 'HomeController@index')->where('path', '([A-z\d-\/_.]+)?');
