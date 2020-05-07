@@ -102,6 +102,9 @@ if (document.getElementById("mainMenuVueApplication")) {
             doRouterLinkClick: function (sender) {
                 AdminLTEHelper.doRouterLinkClick(sender);
             }
+        },
+        mounted() {
+            AdminLTEHelper.initializeSideMenu();
         }
     });
 }
