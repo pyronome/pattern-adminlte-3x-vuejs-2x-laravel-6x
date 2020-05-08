@@ -1,6 +1,7 @@
 import HomePage from "./components/HomePage.vue";
 import ProfilePage from "./components/ProfilePage.vue";
 import ServerInformationPage from "./components/ServerInformationPage.vue";
+import EmailServerPage from "./components/EmailServerPage.vue";
 
 var mainFolder = document.body.getAttribute("data-main-folder");
 if (!mainFolder) {
@@ -23,5 +24,9 @@ export var Routes = [
     {
         "path": ("/" + mainFolder + "/server_information"),
         "component": ServerInformationPage
+    },
+    {
+        "path": ("/" + mainFolder + "/email_server"),
+        "component": EmailServerPage
     }
 ];
