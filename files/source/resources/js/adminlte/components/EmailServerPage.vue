@@ -29,27 +29,27 @@
                                     class="">
                                 <div class="row">
                                     <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                                        <label for="email_type" class="detail-label">{{ __('Email Type') }}</label>
+                                        <label for="email_type" class="detail-label">{{ $t('Email Type') }}</label>
                                         <select data-placeholder=""
                                             id="email_type"
                                             name="email_type"
                                             class="form-control select-has-option"
                                             style="width: 100%;">
-                                            <option value="0">{{ __('Standart Mail') }}</option>
-                                            <option value="1">{{ __('SMTP') }}</option>
+                                            <option value="0">{{ $t('Standart Mail') }}</option>
+                                            <option value="1">{{ $t('SMTP') }}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                        <label for="email_from_name" class="detail-label">{{ __('Email From Name') }}</label>
+                                        <label for="email_from_name" class="detail-label">{{ $t('Email From Name') }}</label>
                                         <input type="text"
                                             class="form-control"
                                             id="email_from_name"
                                             name="email_from_name">
                                     </div>
                                     <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                        <label for="email_reply_to" class="detail-label">{{ __('Email Reply To') }}</label>
+                                        <label for="email_reply_to" class="detail-label">{{ $t('Email Reply To') }}</label>
                                         <input type="text"
                                             class="form-control"
                                             id="email_reply_to"
@@ -59,21 +59,21 @@
                                 <div v-show="(form.email_type==1)">
                                     <div class="row">
                                         <div class="form-group col-md-4 col-sm-4 col-xs-12">
-                                            <label for="email_smtp_host" class="detail-label">{{ __('SMTP Host') }}</label>
+                                            <label for="email_smtp_host" class="detail-label">{{ $t('SMTP Host') }}</label>
                                             <input type="text"
                                                 class="form-control"
                                                 id="email_smtp_host"
                                                 name="email_smtp_host">
                                         </div>
                                         <div class="form-group col-md-4 col-sm-4 col-xs-12">
-                                            <label for="email_smtp_user" class="detail-label">{{ __('SMTP User') }}</label>
+                                            <label for="email_smtp_user" class="detail-label">{{ $t('SMTP User') }}</label>
                                             <input type="text"
                                                 class="form-control"
                                                 id="email_smtp_user"
                                                 name="email_smtp_user">
                                         </div>
                                         <div class="form-group col-md-4 col-sm-4 col-xs-12">
-                                            <label for="email_smtp_password" class="detail-label">{{ __('SMTP Password') }}</label>
+                                            <label for="email_smtp_password" class="detail-label">{{ $t('SMTP Password') }}</label>
                                             <input type="password"
                                                 class="form-control"
                                                 id="email_smtp_password"
@@ -83,18 +83,18 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                            <label for="email_smtp_encryption" class="detail-label">{{ __('Encryption') }}</label>
+                                            <label for="email_smtp_encryption" class="detail-label">{{ $t('Encryption') }}</label>
                                             <select data-placeholder=""
                                                 id="email_smtp_encryption"
                                                 name="email_smtp_encryption"
                                                 class="form-control select-has-option"
                                                 style="width: 100%;">
-                                                <option value="0">{{ __('TLS') }}</option>
-                                                <option value="1">{{ __('SSL') }}</option>
+                                                <option value="0">{{ $t('TLS') }}</option>
+                                                <option value="1">{{ $t('SSL') }}</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                            <label for="email_smtp_port" class="detail-label">{{ __('Port') }}</label>
+                                            <label for="email_smtp_port" class="detail-label">{{ $t('Port') }}</label>
                                             <input type="text"
                                                 class="form-control"
                                                 id="email_smtp_port"
@@ -104,14 +104,14 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                                        <label for="email_format" class="detail-label">{{ __('Mail Format') }}</label>
+                                        <label for="email_format" class="detail-label">{{ $t('Mail Format') }}</label>
                                         <select data-placeholder=""
                                             id="email_format"
                                             name="email_format"
                                             class="form-control select-has-option"
                                             style="width: 100%;">
-                                            <option value="0">{{ __('HTML') }}</option>
-                                            <option value="1">{{ __('Text') }}</option>
+                                            <option value="0">{{ $t('HTML') }}</option>
+                                            <option value="1">{{ $t('Text') }}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -122,7 +122,7 @@
                                         id="buttonSave-formConfiguration"
                                         name="buttonSave-formConfiguration"
                                         class="btn btn-success btn-md btn-on-table float-right">
-                                        <i class="far fa-save" aria-hidden="true"></i> {{ __('Save') }}
+                                        <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
                                     </button>
                                 </div>
                             </div>
