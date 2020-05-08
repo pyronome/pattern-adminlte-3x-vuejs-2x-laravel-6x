@@ -90,7 +90,10 @@ require('./components');
 const mainVueApplication = new Vue({
     el: '#mainVueApplication',
     i18n: I18N,
-    router: window.Router
+    router: window.Router,
+    updated() {
+        AdminLTEHelper.initializeSideMenu();
+    }
 });
 
 if (document.getElementById("mainMenuVueApplication")) {
