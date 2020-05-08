@@ -92,7 +92,7 @@ const mainVueApplication = new Vue({
     i18n: I18N,
     router: window.Router,
     updated() {
-        AdminLTEHelper.initializeSideMenu();
+        AdminLTEHelper.doVueApplicationUpdate();
     }
 });
 
@@ -103,6 +103,9 @@ if (document.getElementById("mainMenuVueApplication")) {
         router: window.Router,
         mounted() {
             AdminLTEHelper.initializeSideMenu();
+        },
+        updated() {
+            AdminLTEHelper.doVueMenuApplicationUpdate();
         }
     });
 }
