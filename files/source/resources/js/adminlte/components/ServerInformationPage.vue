@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <section class="content">
+        <section class="content" v-show="page.ready">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-xs-12">
@@ -123,6 +123,9 @@ export default {
                 "db_header": "",
                 "db_detail": "",
                 "db_icon_src": ""
+            },
+            page: {
+                ready: false
             }
         };
     },
@@ -133,12 +136,15 @@ export default {
                     .then(({ data }) => {
                         this.$Progress.finish();
                         this.server_information = data;
+                        this.page.ready = true;
                     }).catch(({ data }) => {
                         this.$Progress.fail();
+                        this.page.ready = true;
                     });
         }
     },
     mounted() {
+        this.page.ready = false;
         this.loadData();
     }
 }
