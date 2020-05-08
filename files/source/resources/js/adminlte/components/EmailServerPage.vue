@@ -33,7 +33,7 @@
                                         <select data-placeholder=""
                                             id="email_type"
                                             name="email_type"
-                                            class="form-control select-has-option"
+                                            class="form-control select2 select-has-option"
                                             style="width: 100%;">
                                             <option value="0">{{ $t('Standart Mail') }}</option>
                                             <option value="1">{{ $t('SMTP') }}</option>
@@ -87,7 +87,7 @@
                                             <select data-placeholder=""
                                                 id="email_smtp_encryption"
                                                 name="email_smtp_encryption"
-                                                class="form-control select-has-option"
+                                                class="form-control select2 select-has-option"
                                                 style="width: 100%;">
                                                 <option value="0">{{ $t('TLS') }}</option>
                                                 <option value="1">{{ $t('SSL') }}</option>
@@ -108,7 +108,7 @@
                                         <select data-placeholder=""
                                             id="email_format"
                                             name="email_format"
-                                            class="form-control select-has-option"
+                                            class="form-control select2 select-has-option"
                                             style="width: 100%;">
                                             <option value="0">{{ $t('HTML') }}</option>
                                             <option value="1">{{ $t('Text') }}</option>

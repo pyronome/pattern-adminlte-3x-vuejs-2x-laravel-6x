@@ -42,6 +42,9 @@ var AdminLTEHelper = {
 
         $(PageURL).addClass("active");
     },
+    "initializeFormElements": function () {
+        $("select.select2").select2();
+    },
     "getMainFolder": function () {
         if (document.body.getAttribute("data-main-folder")) {
             return document.body.getAttribute("data-main-folder");
@@ -60,6 +63,7 @@ var AdminLTEHelper = {
     },
     "doVueApplicationUpdate": function () {
         AdminLTEHelper.initializeSideMenu();
+        AdminLTEHelper.initializeFormElements();
     },
     "doVueMenuApplicationMounted": function () {
 
