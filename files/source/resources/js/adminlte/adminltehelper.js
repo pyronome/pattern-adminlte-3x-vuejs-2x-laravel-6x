@@ -55,8 +55,14 @@ var AdminLTEHelper = {
     "getAPIURL": function (url) {
         return ("/" + AdminLTEHelper.getMainFolder() + "/api/" + url);
     },
+    "doVueApplicationMounted": function () {
+
+    },
     "doVueApplicationUpdate": function () {
         AdminLTEHelper.initializeSideMenu();
+    },
+    "doVueMenuApplicationMounted": function () {
+
     },
     "doVueMenuApplicationUpdate": function () {
 
