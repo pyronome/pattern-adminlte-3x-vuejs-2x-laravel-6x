@@ -40,7 +40,6 @@
                             ?>
                             <li class="nav-item">
                                 <router-link id="pageurl<?php echo $url; ?>"
-                                    v-on:click.native="doRouterLinkClick"
                                     class="nav-link"
                                     active-class="active"
                                     to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >
@@ -82,7 +81,6 @@
                                 			?>
 		                                    <li class="nav-item">
 		                                        <router-link id="pageurl<?php echo $url; ?>"
-                                                    v-on:click.native="doRouterLinkClick"
                                                     class="child_menu nav-link"
                                                     active-class="active"
                                                     to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>"
