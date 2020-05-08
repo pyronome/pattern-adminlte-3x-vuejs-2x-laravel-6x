@@ -10,7 +10,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><router-link to="home">{{ $t('Home') }}</router-link></li>
+                            <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
                             <li class="breadcrumb-item enabled">{{ $t('Server Information') }}</li>
                         </ol>
                     </div>
