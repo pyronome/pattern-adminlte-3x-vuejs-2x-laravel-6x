@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <section class="content" v-show="page.ready">
+        <section class="content" v-show="page.is_ready">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-xs-12">
@@ -178,7 +178,7 @@ export default {
                 'email_smtp_port': 0
             }),
             page: {
-                ready: false
+                is_ready: false
             }
         };
     },
@@ -189,10 +189,10 @@ export default {
                 .then(({ data }) => {
                     this.$Progress.finish();
                     this.form.fill(data);
-                    this.page.ready = true;
+                    this.page.is_ready = true;
                 }).catch(({ data }) => {
                     this.$Progress.fail();
-                    this.page.ready = true;
+                    this.page.is_ready = true;
                 });
         },
         submitForm: function () {
@@ -207,7 +207,7 @@ export default {
         }
     },
     mounted() {
-        this.page.ready = false;
+        this.page.is_ready = false;
         this.loadData();
     }
 }

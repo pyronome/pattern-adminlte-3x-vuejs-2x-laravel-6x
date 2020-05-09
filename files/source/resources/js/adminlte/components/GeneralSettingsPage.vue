@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-        <section class="content" v-show="page.ready">
+        <section class="content" v-show="page.is_ready">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-xs-12">
@@ -185,10 +185,13 @@ export default {
                 'google_maps_api_key': ''
             }),
             page: {
-                ready: false,
-                default_language_options_loaded: false,
-                timezone_options_loaded: false,
-                data_loaded: false
+                is_ready: false,
+                is_default_language_options_loading: false,
+                is_default_language_options_loaded: false,
+                is_timezone_options_loading: false,
+                is_timezone_options_loaded: false,
+                is_data_loading: false,
+                is_data_loaded: false
             }
         };
     },
@@ -212,44 +215,68 @@ export default {
                     && this.page.timezone_options_loaded) {
                 if (this.page.data_loaded) {
                     this.$Progress.finish();
-                    this.page.ready = true;
+                    this.page.is_ready = true;
                 } else {
                     this.loadData();
                 }
             }
         },
         loadDefaultLanguageOptions: function () {
+            if (this.page.is_default_language_options_loading) {
+                return;
+            }
+
+            this.page.is_default_language_options_loading = true;
+
             axios.get(AdminLTEHelper.getAPIURL("general_settings/get_languages"))
                 .then(({ data }) => {
-                    this.page.default_language_options_loaded = true;
+                    this.page.is_default_language_options_loaded = true;
+                    this.page.is_default_language_options_loading = false;
                     this.default_language_options = data;
                     this.processLoadQueue();
                 }).catch(({ data }) => {
-                    this.page.default_language_options_loaded = true;
+                    this.page.is_default_language_options_loaded = true;
+                    this.page.is_default_language_options_loading = false;
                     this.$Progress.fail();
                     this.processLoadQueue();
                 });
         },
         loadTimezoneOptions: function () {
+            if (this.page.is_timezone_options_loading) {
+                return;
+            }
+
+            this.page.is_timezone_options_loading = true;
+
             axios.get(AdminLTEHelper.getAPIURL("general_settings/get_timezones"))
                 .then(({ data }) => {
-                    this.page.timezone_options_loaded = true;
+                    this.page.is_timezone_options_loaded = true;
+                    this.page.is_timezone_options_loading = false;
                     this.timezone_options = data;
                     this.processLoadQueue();
                 }).catch(({ data }) => {
-                    this.page.timezone_options_loaded = true;
+                    this.page.is_timezone_options_loaded = true;
+                    this.page.is_timezone_options_loading = false;
                     this.$Progress.fail();
                     this.processLoadQueue();
                 });
         },
         loadData: function () {
+            if (this.page.is_data_loading) {
+                return;
+            }
+
+            this.page.is_data_loading = true;
+
             axios.get(AdminLTEHelper.getAPIURL("general_settings"))
                 .then(({ data }) => {
-                    this.page.data_loaded = true;
+                    this.page.is_data_loaded = true;
+                    this.page.is_data_loading = false;
                     this.form.fill(data);
                     this.processLoadQueue();
                 }).catch(({ data }) => {
-                    this.page.data_loaded = true;
+                    this.page.is_data_loaded = true;
+                    this.page.is_data_loading = false;
                     this.$Progress.fail();
                     this.processLoadQueue();
                 });
@@ -266,7 +293,7 @@ export default {
         }
     },
     mounted() {
-        this.page.ready = false;
+        this.page.is_ready = false;
         this.processLoadQueue();
     }
 }

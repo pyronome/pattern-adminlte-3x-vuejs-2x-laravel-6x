@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <section class="content" v-show="page.ready">
+        <section class="content" v-show="page.is_ready">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-xs-12">
@@ -125,7 +125,7 @@ export default {
                 "db_icon_src": ""
             },
             page: {
-                ready: false
+                is_ready: false
             }
         };
     },
@@ -136,15 +136,15 @@ export default {
                 .then(({ data }) => {
                     this.$Progress.finish();
                     this.server_information = data;
-                    this.page.ready = true;
+                    this.page.is_ready = true;
                 }).catch(({ data }) => {
                     this.$Progress.fail();
-                    this.page.ready = true;
+                    this.page.is_ready = true;
                 });
         }
     },
     mounted() {
-        this.page.ready = false;
+        this.page.is_ready = false;
         this.loadData();
     }
 }
