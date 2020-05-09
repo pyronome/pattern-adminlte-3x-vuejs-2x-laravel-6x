@@ -87,7 +87,7 @@ export default {
         }
     },
     methods: {
-        submitForm () {
+        submitForm: function () {
             // Submit the form via a POST request
             this.$Progress.start();
             this.form.post(AdminLTEHelper.getAPIURL("login"))
