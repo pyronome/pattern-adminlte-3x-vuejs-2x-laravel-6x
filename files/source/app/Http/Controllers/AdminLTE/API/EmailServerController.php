@@ -60,7 +60,7 @@ class EmailServerController extends Controller
                 $request->input('email_smtp_port'));
 
         return [
-            'message': __('Email server configuration saved.')
+            'message' => __('Email server configuration saved.')
         ];
 
     }
