@@ -3,6 +3,7 @@
 namespace App\Http\Requests\AdminLTE\API;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Rule;
 use App\AdminLTE;
 use App\AdminLTEUser;
 
