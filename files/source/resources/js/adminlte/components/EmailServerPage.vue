@@ -186,7 +186,7 @@ export default {
             axios.get(AdminLTEHelper.getAPIURL("email_server"))
                     .then(({ data }) => {
                         this.$Progress.finish();
-                        this.form = data;
+                        this.form.fill(data);
                         this.page.ready = true;
                     }).catch(({ data }) => {
                         this.$Progress.fail();

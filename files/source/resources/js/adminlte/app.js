@@ -87,6 +87,8 @@ require('./components');
 
 /* {{@snippet:begin_vue_app}} */
 
+AdminLTEHelper.initializeApplication();
+
 const mainVueApplication = new Vue({
     el: '#mainVueApplication',
     i18n: I18N,
