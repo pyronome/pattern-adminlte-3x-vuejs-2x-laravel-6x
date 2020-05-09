@@ -48,8 +48,8 @@ Route::namespace('API')
     });
 
     Route::prefix('email_server')->group(function () {
-        Route::get('/get', 'EmailServerController@get');
-        Route::post('/post', 'EmailServerController@post');
+        Route::get('/', 'EmailServerController@get');
+        Route::post('/', 'EmailServerController@post');
     });
 
 	Route::prefix('media')->group(function () {
