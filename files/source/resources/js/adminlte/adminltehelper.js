@@ -46,7 +46,7 @@ var AdminLTEHelper = {
         $(PageURL).addClass("active");
     },
     "initializeFormElements": function () {
-        $("select.select2").select2();
+
     },
     "getMainFolder": function () {
         if (document.body.getAttribute("data-main-folder")) {

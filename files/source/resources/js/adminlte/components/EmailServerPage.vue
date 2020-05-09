@@ -30,16 +30,10 @@
                                 <div class="row">
                                     <div class="form-group col-lg-12 col-md-12 col-xs-12">
                                         <label for="email_type" class="detail-label">{{ $t('Email Type') }}</label>
-                                        <select data-placeholder=""
+                                        <select2-element :options="email_type_options"
                                             v-model="form.email_type"
-                                            id="email_type"
-                                            name="email_type"
-                                            class="form-control select2 select-has-option"
-                                            :class="{ 'is-invalid': form.errors.has('email_type') }"
-                                            style="width: 100%;">
-                                            <option value="0">{{ $t('Standart Mail') }}</option>
-                                            <option value="1">{{ $t('SMTP') }}</option>
-                                        </select>
+                                            :class="{ 'is-invalid': form.errors.has('email_type') }">
+                                        </select2-element>
                                         <has-error :form="form" field="email_type"></has-error>
                                     </div>
                                 </div>
@@ -102,16 +96,10 @@
                                     <div class="row">
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                             <label for="email_smtp_encryption" class="detail-label">{{ $t('Encryption') }}</label>
-                                            <select data-placeholder=""
+                                            <select2-element :options="email_smtp_encryption_options"
                                                 v-model="form.email_smtp_encryption"
-                                                id="email_smtp_encryption"
-                                                name="email_smtp_encryption"
-                                                class="form-control select2 select-has-option"
-                                                :class="{ 'is-invalid': form.errors.has('email_smtp_encryption') }"
-                                                style="width: 100%;">
-                                                <option value="0">{{ $t('TLS') }}</option>
-                                                <option value="1">{{ $t('SSL') }}</option>
-                                            </select>
+                                                :class="{ 'is-invalid': form.errors.has('email_smtp_encryption') }">
+                                            </select2-element>
                                             <has-error :form="form" field="email_smtp_password"></has-error>
                                         </div>
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
@@ -129,16 +117,10 @@
                                 <div class="row">
                                     <div class="form-group col-lg-12 col-md-12 col-xs-12">
                                         <label for="email_format" class="detail-label">{{ $t('Mail Format') }}</label>
-                                        <select data-placeholder=""
+                                        <select2-element :options="email_format_options"
                                             v-model="form.email_format"
-                                            id="email_format"
-                                            name="email_format"
-                                            class="form-control select2 select-has-option"
-                                            :class="{ 'is-invalid': form.errors.has('email_format') }"
-                                            style="width: 100%;">
-                                            <option value="0">{{ $t('HTML') }}</option>
-                                            <option value="1">{{ $t('Text') }}</option>
-                                        </select>
+                                            :class="{ 'is-invalid': form.errors.has('email_format') }">
+                                        </select2-element>
                                         <has-error :form="form" field="email_format"></has-error>
                                     </div>
                                 </div>
@@ -164,6 +146,18 @@
 export default {
     data() {
         return {
+            email_type_options: [
+                {id: 0, text: this.$t('Standart Mail')},
+                {id: 1, text: this.$t('SMTP')}
+            ],
+            email_smtp_encryption_options: [
+                {id: 0, text: this.$t('TLS')},
+                {id: 1, text: this.$t('SSL')}
+            ],
+            email_format_options: [
+                {id: 0, text: this.$t('HTML')},
+                {id: 1, text: this.$t('Plain Text')}
+            ],
             form: new Form({
                 'email_type': 0 ,
                 'email_format': 0 ,
