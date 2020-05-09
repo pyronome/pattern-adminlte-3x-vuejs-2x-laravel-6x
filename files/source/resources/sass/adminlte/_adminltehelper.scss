@@ -4,4 +4,17 @@
     width: 100%;
 }
 
+.text-sm .select2-container--default .select2-selection--single {
+    height: calc(2.25rem + 2px);
+}
+
+.text-sm .select2-container--default .select2-selection--single .select2-selection__rendered {
+    margin-top: -3px;
+    font-size: 1rem;
+}
+
+.text-sm .select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 2px;
+}
+
 /* {{@snippet:end}} */
