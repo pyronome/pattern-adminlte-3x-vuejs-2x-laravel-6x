@@ -17,11 +17,13 @@ export default {
             .on('change', function () {
                 vm.$emit('input', this.value)
             });
+        $(this.$el).trigger("change");
     },
     watch: {
         value: function (value) {
             // update value
             $(this.$el).val(value);
+            $(this.$el).trigger("change");
         },
         options: function (options) {
             // update options
