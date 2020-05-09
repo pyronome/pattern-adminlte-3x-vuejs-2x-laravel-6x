@@ -133,14 +133,14 @@ export default {
         loadData: function () {
             this.$Progress.start();
             axios.get(AdminLTEHelper.getAPIURL("server_information"))
-                    .then(({ data }) => {
-                        this.$Progress.finish();
-                        this.server_information = data;
-                        this.page.ready = true;
-                    }).catch(({ data }) => {
-                        this.$Progress.fail();
-                        this.page.ready = true;
-                    });
+                .then(({ data }) => {
+                    this.$Progress.finish();
+                    this.server_information = data;
+                    this.page.ready = true;
+                }).catch(({ data }) => {
+                    this.$Progress.fail();
+                    this.page.ready = true;
+                });
         }
     },
     mounted() {

@@ -186,14 +186,14 @@ export default {
         loadData: function () {
             this.$Progress.start();
             axios.get(AdminLTEHelper.getAPIURL("email_server"))
-                    .then(({ data }) => {
-                        this.$Progress.finish();
-                        this.form.fill(data);
-                        this.page.ready = true;
-                    }).catch(({ data }) => {
-                        this.$Progress.fail();
-                        this.page.ready = true;
-                    });
+                .then(({ data }) => {
+                    this.$Progress.finish();
+                    this.form.fill(data);
+                    this.page.ready = true;
+                }).catch(({ data }) => {
+                    this.$Progress.fail();
+                    this.page.ready = true;
+                });
         },
         submitForm: function () {
             // Submit the form via a POST request

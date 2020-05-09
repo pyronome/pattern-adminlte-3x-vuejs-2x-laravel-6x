@@ -165,7 +165,14 @@
 export default {
     data() {
         return {
+            default_language_options: [],
+            timezone_options: [],
+            date_format_options: [],
+            year_month_format_options: [],
+            time_format_options: [],
+            number_format_options: [],
             form: new Form({
+                'debug_mode': false,
                 'project_title': '',
                 'main_folder': '',
                 'landing_page': '',
@@ -178,22 +185,74 @@ export default {
                 'google_maps_api_key': ''
             }),
             page: {
-                ready: false
+                ready: false,
+                default_language_options_loaded: false,
+                timezone_options_loaded: false,
+                data_loaded: false
             }
         };
     },
     methods: {
+        processLoadQueue: function () {
+            if (!this.page.default_language_options_loaded
+                    && !this.page.timezone_options_loaded
+                    && !this.page.data_loaded) {
+                this.$Progress.start();
+            }
+
+            if (!this.page.default_language_options_loaded) {
+                this.loadDefaultLanguageOptions();
+            }
+
+            if (!this.page.timezone_options_loaded) {
+                this.loadTimezoneOptions();
+            }
+
+            if (this.page.default_language_options_loaded
+                    && this.page.timezone_options_loaded) {
+                if (this.page.data_loaded) {
+                    this.$Progress.finish();
+                    this.page.ready = true;
+                } else {
+                    this.loadData();
+                }
+            }
+        },
+        loadDefaultLanguageOptions: function () {
+            axios.get(AdminLTEHelper.getAPIURL("general_settings/get_languages"))
+                .then(({ data }) => {
+                    this.page.default_language_options_loaded = true;
+                    this.default_language_options = data;
+                    this.processLoadQueue();
+                }).catch(({ data }) => {
+                    this.page.default_language_options_loaded = true;
+                    this.$Progress.fail();
+                    this.processLoadQueue();
+                });
+        },
+        loadTimezoneOptions: function () {
+            axios.get(AdminLTEHelper.getAPIURL("general_settings/get_timezones"))
+                .then(({ data }) => {
+                    this.page.timezone_options_loaded = true;
+                    this.timezone_options = data;
+                    this.processLoadQueue();
+                }).catch(({ data }) => {
+                    this.page.timezone_options_loaded = true;
+                    this.$Progress.fail();
+                    this.processLoadQueue();
+                });
+        },
         loadData: function () {
-            this.$Progress.start();
             axios.get(AdminLTEHelper.getAPIURL("general_settings"))
-                    .then(({ data }) => {
-                        this.$Progress.finish();
-                        this.form.fill(data);
-                        this.page.ready = true;
-                    }).catch(({ data }) => {
-                        this.$Progress.fail();
-                        this.page.ready = true;
-                    });
+                .then(({ data }) => {
+                    this.page.data_loaded = true;
+                    this.form.fill(data);
+                    this.processLoadQueue();
+                }).catch(({ data }) => {
+                    this.page.data_loaded = true;
+                    this.$Progress.fail();
+                    this.processLoadQueue();
+                });
         },
         submitForm: function () {
             // Submit the form via a POST request
@@ -208,7 +267,7 @@ export default {
     },
     mounted() {
         this.page.ready = false;
-        this.loadData();
+        this.processLoadQueue();
     }
 }
 </script>
