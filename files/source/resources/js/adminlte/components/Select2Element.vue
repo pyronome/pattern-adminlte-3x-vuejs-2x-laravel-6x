@@ -14,16 +14,17 @@ export default {
             // init select2
             .select2({ data: this.options })
             // emit event on change.
+            .trigger("change")
             .on('change', function () {
                 vm.$emit('input', this.value)
             });
-        $(this.$el).trigger("change");
     },
     watch: {
         value: function (value) {
             // update value
-            $(this.$el).val(value);
-            $(this.$el).trigger("change");
+            $(this.$el)
+                .val(value)
+                .trigger("change");
         },
         options: function (options) {
             // update options
