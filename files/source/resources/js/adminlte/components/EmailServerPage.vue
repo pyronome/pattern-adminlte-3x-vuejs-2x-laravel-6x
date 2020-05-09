@@ -165,9 +165,15 @@ export default {
     data() {
         return {
             form: new Form({
-                email: '',
-                password: '',
-                remember: false
+                'email_type': 0 ,
+                'email_format': 0 ,
+                'email_from_name': '' ,
+                'email_reply_to': '' ,
+                'email_smtp_host': '' ,
+                'email_smtp_user': '' ,
+                'email_smtp_password': '' ,
+                'email_smtp_encryption': '' ,
+                'email_smtp_port': 0
             }),
             page: {
                 ready: false
