@@ -197,23 +197,23 @@ export default {
     },
     methods: {
         processLoadQueue: function () {
-            if (!this.page.default_language_options_loaded
-                    && !this.page.timezone_options_loaded
-                    && !this.page.data_loaded) {
+            if (!this.page.is_default_language_options_loaded
+                    && !this.page.is_timezone_options_loaded
+                    && !this.page.is_data_loaded) {
                 this.$Progress.start();
             }
 
-            if (!this.page.default_language_options_loaded) {
+            if (!this.page.is_default_language_options_loaded) {
                 this.loadDefaultLanguageOptions();
             }
 
-            if (!this.page.timezone_options_loaded) {
+            if (!this.page.is_timezone_options_loaded) {
                 this.loadTimezoneOptions();
             }
 
-            if (this.page.default_language_options_loaded
-                    && this.page.timezone_options_loaded) {
-                if (this.page.data_loaded) {
+            if (this.page.is_default_language_options_loaded
+                    && this.page.is_timezone_options_loaded) {
+                if (this.page.is_data_loaded) {
                     this.$Progress.finish();
                     this.page.is_ready = true;
                 } else {
