@@ -156,90 +156,22 @@ export default {
     data() {
         return {
             form: new Form({
-                'debug_mode': false,
-                'project_title': '',
-                'main_folder': '',
-                'landing_page': '',
-                'default_language': '',
-                'timezone': '',
-                'date_format': '',
-                'year_month_format': '',
-                'time_format': '',
-                'number_format': '',
-                'google_maps_api_key': ''
+                'menu_json': ''
             }),
             page: {
-                is_ready: false
+                is_ready: false,
+                is_data_loading: false,
+                is_data_loaded: false
             }
         };
     },
     methods: {
         processLoadQueue: function () {
-            /*
-            if (!this.page.is_default_language_options_loaded
-                    && !this.page.is_timezone_options_loaded
-                    && !this.page.is_data_loaded) {
-                this.$Progress.start();
+            if (!this.page.is_data_loaded) {
+                this.loadData();
+            } else {
+                this.page.is_ready = true;
             }
-
-            if (!this.page.is_default_language_options_loaded) {
-                this.loadDefaultLanguageOptions();
-            }
-
-            if (!this.page.is_timezone_options_loaded) {
-                this.loadTimezoneOptions();
-            }
-
-            if (this.page.is_default_language_options_loaded
-                    && this.page.is_timezone_options_loaded) {
-                if (this.page.is_data_loaded) {
-                    this.$Progress.finish();
-                    this.page.is_ready = true;
-                } else {
-                    this.loadData();
-                }
-            }
-            */
-        },
-        loadDefaultLanguageOptions: function () {
-            if (this.page.is_default_language_options_loading) {
-                return;
-            }
-
-            this.page.is_default_language_options_loading = true;
-
-            axios.get(AdminLTEHelper.getAPIURL("general_settings/get_languages"))
-                .then(({ data }) => {
-                    this.page.is_default_language_options_loaded = true;
-                    this.page.is_default_language_options_loading = false;
-                    this.default_language_options = data;
-                    this.processLoadQueue();
-                }).catch(({ data }) => {
-                    this.page.is_default_language_options_loaded = true;
-                    this.page.is_default_language_options_loading = false;
-                    this.$Progress.fail();
-                    this.processLoadQueue();
-                });
-        },
-        loadTimezoneOptions: function () {
-            if (this.page.is_timezone_options_loading) {
-                return;
-            }
-
-            this.page.is_timezone_options_loading = true;
-
-            axios.get(AdminLTEHelper.getAPIURL("general_settings/get_timezones"))
-                .then(({ data }) => {
-                    this.page.is_timezone_options_loaded = true;
-                    this.page.is_timezone_options_loading = false;
-                    this.timezone_options = data;
-                    this.processLoadQueue();
-                }).catch(({ data }) => {
-                    this.page.is_timezone_options_loaded = true;
-                    this.page.is_timezone_options_loading = false;
-                    this.$Progress.fail();
-                    this.processLoadQueue();
-                });
         },
         loadData: function () {
             if (this.page.is_data_loading) {
@@ -248,7 +180,7 @@ export default {
 
             this.page.is_data_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("general_settings"))
+            axios.get(AdminLTEHelper.getAPIURL("menu_configuration"))
                 .then(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
@@ -264,7 +196,7 @@ export default {
         submitForm: function () {
             // Submit the form via a POST request
             this.$Progress.start();
-            this.form.post(AdminLTEHelper.getAPIURL("general_settings"))
+            this.form.post(AdminLTEHelper.getAPIURL("menu_configuration"))
                 .then(({ data }) => {
                     this.$Progress.finish();
                 }).catch(({ data }) => {

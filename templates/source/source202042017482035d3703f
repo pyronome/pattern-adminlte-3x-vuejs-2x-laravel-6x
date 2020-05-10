@@ -57,8 +57,8 @@ Route::namespace('API')
     });
 
     Route::prefix('menu_configuration')->group(function () {
-        Route::get('/get', 'MenuConfigurationController@get');
-        Route::post('/post', 'MenuConfigurationController@post');
+        Route::get('/', 'MenuConfigurationController@get');
+        Route::post('/', 'MenuConfigurationController@post');
     });
 
     Route::prefix('adminlteuser')->group(function () {
