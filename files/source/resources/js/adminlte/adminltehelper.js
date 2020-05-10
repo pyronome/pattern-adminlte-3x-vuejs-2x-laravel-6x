@@ -48,6 +48,35 @@ var AdminLTEHelper = {
     "initializeFormElements": function () {
 
     },
+	"loadCSS": function (url) {
+        if(document.createStyleSheet) {
+            document.createStyleSheet(url);
+        } else {
+            var c=document.createElement("link");
+            c.href = url;
+            c.rel = "stylesheet";
+            c.type = "text/css";
+            document.getElementsByTagName("head")[0].appendChild(c);
+        }
+    },
+	"loadJS": function (url, success) {
+        var s = document.createElement("script");
+        s.src = url;
+        var h = document.getElementsByTagName("head")[0], d=false;
+        s.onload = s.onreadystatechange = function () {
+            if (!d && (!this.readyState
+                    || this.readyState=="loaded"
+                    || this.readyState=="complete")) {
+                d = true;
+                if (success) {
+                    success();
+                }
+                s.onload = s.onreadystatechange = null;
+                h.removeChild(s);
+            }
+        }
+        h.appendChild(s);
+    },
     "getMainFolder": function () {
         if (document.body.getAttribute("data-main-folder")) {
             return document.body.getAttribute("data-main-folder");
