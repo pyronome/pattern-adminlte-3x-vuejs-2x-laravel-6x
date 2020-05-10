@@ -161,7 +161,9 @@ export default {
             page: {
                 is_ready: false,
                 is_data_loading: false,
-                is_data_loaded: false
+                is_data_loaded: false,
+                is_library_loading: false,
+                is_library_loaded: false
             }
         };
     },
@@ -169,8 +171,16 @@ export default {
         processLoadQueue: function () {
             if (!this.page.is_data_loaded) {
                 this.loadData();
-            } else {
+            }
+
+            if (!this.page.is_library_loaded) {
+                this.loadLibrary();
+            }
+
+            if (this.page.is_data_loaded
+                    && this.page.is_library_loaded) {
                 this.page.is_ready = true;
+                this.updateMenuEditor();
             }
         },
         loadData: function () {
@@ -193,6 +203,22 @@ export default {
                     this.processLoadQueue();
                 });
         },
+        loadLibrary: function () {
+            if (this.page.is_library_loading) {
+                return;
+            }
+
+            this.page.is_library_loading = true;
+
+            AdminLTEHelper.loadJS(("/js/"
+                    + AdminLTEHelper.getURL('menu_editor.js')),
+                    this.doLoadLibrary);
+        },
+        doLoadLibrary: function () {
+            this.page.is_library_loaded = true;
+            this.page.is_library_loading = false;
+            this.processLoadQueue();
+        },
         submitForm: function () {
             // Submit the form via a POST request
             this.$Progress.start();
@@ -202,7 +228,54 @@ export default {
                 }).catch(({ data }) => {
                     this.$Progress.fail();
                 });
-        }
+        },
+        updateMenuEditor: function () {
+            if (!this.page.is_ready) {
+                return;
+            }
+
+            var rawMenuJSON = decodeURIComponent(this.form.menu_json);
+            var menuJSON = JSON.parse(rawMenuJSON);
+            
+            //icon picker options
+            var iconPickerOptions = {
+                searchText: '...',
+                labelHeader: '{0} / {1}'
+            };
+
+            var sortableListOptions = {
+                placeholderCss: {"background-color": "#cccccc"}
+            };
+
+            var editor = new MenuEditor(
+                    "ulMenuEditor",
+                    {
+                        listOptions: sortableListOptions,
+                        iconPicker: iconPickerOptions
+                    }
+            );
+            editor.setForm($("#formMenuItem"));
+            editor.setUpdateButton($("#buttonUpdateMenuItem"));
+            editor.setData(menuJSON);
+
+            $("#buttonSave-formConfiguration").off("click").on("click", function () {
+                var str = editor.getString();
+                saveMenuConfiguration(str);
+            });
+
+            $("#buttonUpdateMenuItem").off("click").on("click", function(){
+                editor.update();
+                hideDialog("modalMenuItem");
+            });
+
+            $("#buttonAddMenuItem").off("click").on("click", function(){
+                editor.add();
+                hideDialog("modalMenuItem");
+            });
+
+            $( "#ulMenuEditor" ).sortable();
+            $( "#ulMenuEditor" ).disableSelection();
+        },
     },
     mounted() {
         this.page.is_ready = false;
