@@ -3,6 +3,7 @@ import ProfilePage from "./components/ProfilePage.vue";
 import ServerInformationPage from "./components/ServerInformationPage.vue";
 import EmailServerPage from "./components/EmailServerPage.vue";
 import GeneralSettingsPage from "./components/GeneralSettingsPage.vue";
+import MenuConfigurationPage from "./components/MenuConfigurationPage.vue";
 
 var mainFolder = document.body.getAttribute("data-main-folder");
 if (!mainFolder) {
@@ -33,5 +34,9 @@ export var Routes = [
     {
         "path": ("/" + mainFolder + "/general_settings"),
         "component": GeneralSettingsPage
+    },
+    {
+        "path": ("/" + mainFolder + "/menu_configuration"),
+        "component": MenuConfigurationPage
     }
 ];
