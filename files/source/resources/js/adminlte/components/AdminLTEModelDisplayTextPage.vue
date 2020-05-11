@@ -31,7 +31,9 @@
                                             </thead>
                                             <tbody id="tbodyModelList">
                                                 <tr v-for="model_display_text_item in model_display_text_list" v-bind:key="model_display_text_item.id">
-                                                    <td class="tdModelDisplayTextEditButton" :data-row-id="model_display_text_item.id">
+                                                    <td class="tdModelDisplayTextEditButton"
+                                                        @click="showModelDisplayTextList"
+                                                        :data-row-id="model_display_text_item.id">
                                                         <i class="fas fa-cog nav-icon"></i>&nbsp;&nbsp;{{model_display_text_item.model}}
                                                     </td>
                                                 </tr>
@@ -94,6 +96,7 @@
                                 <button type="button"
                                     id="buttonSave-formModelDisplayText"
                                     name="buttonSave-formModelDisplayText"
+                                    @click="saveFormModelDisplayText"
                                     class="btn btn-success float-right">
                                     {{ $t('Save') }}
                                 </button>
@@ -133,7 +136,10 @@
                         <div class="row">
                             <div class="form-group col-lg-12 col-md-12 col-xs-12">
                                 <label for="formEditDisplayText-display_text" class="label-with-btn">{{ $t('Display Text') }}</label>
-                                <button id="buttonSearchProperty" class="noborder-edit-btn text-primary float-right" style="width:auto;">
+                                <button id="buttonSearchProperty"
+                                    @click="$('#modal-ModelProportyList').modal();"
+                                    class="noborder-edit-btn text-primary float-right"
+                                    style="width:auto;">
                                     <i class="fa fa-search-plus"></i>&nbsp;{{ $t('Insert Class Property') }}
                                 </button>
                                 <textarea id="formEditDisplayText-display_text"
@@ -151,6 +157,7 @@
                                 <button type="button"
                                     id="buttonSave-formEditDisplayText"
                                     name="buttonSave-formEditDisplayText"
+                                    @click="saveFormEditDisplayText"
                                     class="btn btn-success float-right">
                                     {{ $t('Save') }}
                                 </button>
@@ -193,7 +200,9 @@
                                             v-for="model_property_item in model_property_list"
                                             v-bind:key="model_property_item.id"
                                             class="ulModelPropertyList">
-                                            <li class="liModelProperty" :data-display-text="model_property_item.model + '/' + model_property_item.property">
+                                            <li class="liModelProperty"
+                                                @click="addToDisplayText"
+                                                :data-display-text="model_property_item.model + '/' + model_property_item.property">
                                                 {{model_property_item.property}}
                                             </li>
                                         </ul>
@@ -301,40 +310,20 @@ export default {
             $("#buttonWidgetConfig").detach();
             $("#modal-WidgetList").detach();
 
-            this.initializeModelList();
             this.initializeModelAttributeList();
-
-            $("#buttonSave-formModelDisplayText").off("click").on("click", function () {
-                this.saveFormModelDisplayText(this);
-            });
-
-            $("#buttonSave-formEditDisplayText").off("click").on("click", function () {
-                this.saveFormEditDisplayText(this);
-            });
-
-            $("#buttonSearchProperty").off("click").on("click", function () {
-                $("#modal-ModelProportyList").modal();
-            });
         },
         initializeModelAttributeList: function () {
-            $(".liModelProperty").off("click").on("click", function () {
-                this.addToDisplayText(this);
-            });
-
             $("#ulModelList a:first-child").tab("show")
         },
-        addToDisplayText: function (sender) {
+        addToDisplayText: function (event) {
+            var sender = event.target;
             var append = "{{" + sender.getAttribute("data-display-text") + "}}";
             var old_text = $("#formEditDisplayText-display_text").summernote("code");
             $("#formEditDisplayText-display_text").summernote("code", (old_text + append));
             $("#modal-ModelProportyList").modal('hide');
         },
-        initializeModelList: function () {
-            $(".tdModelDisplayTextEditButton").off("click").on("click", function () {
-                this.showModelDisplayTextList(this);
-            });
-        },
-        showModelDisplayTextList: function (sender) {
+        showModelDisplayTextList: function (event) {
+            var sender = event.target;
             var objectId = parseInt(sender.getAttribute("data-row-id"));
             var object = this.model_display_text_list[objectId - 1];
             
@@ -405,8 +394,8 @@ export default {
                 index++;
             }
             
-            $(".trEditDisplayText").off("click").on("click", function () {
-                this.showEditDisplayTextModal(this);
+            $(".trEditDisplayText").off("click").on("click", function (event) {
+                mainVueApplication.showEditDisplayTextModal(event);
             });
         },
         get_type_sh_class: function (property) {
@@ -435,7 +424,8 @@ export default {
 
             return sh_class;
         },
-        showEditDisplayTextModal: function (sender) {
+        showEditDisplayTextModal: function (event) {
+            var sender = event.target;
             var index = sender.getAttribute("data-index");
             var property = $(sender).data("property");
             var display_text = $(sender).data("display_text");

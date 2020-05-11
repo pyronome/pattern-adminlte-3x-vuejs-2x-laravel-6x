@@ -89,7 +89,7 @@ require('./components');
 
 AdminLTEHelper.initializeApplication();
 
-const mainVueApplication = new Vue({
+window.mainVueApplication = new Vue({
     el: '#mainVueApplication',
     i18n: I18N,
     router: window.Router,
@@ -102,7 +102,7 @@ const mainVueApplication = new Vue({
 });
 
 if (document.getElementById("mainMenuVueApplication")) {
-    const mainMenuVueApplication = new Vue({
+    window.mainMenuVueApplication = new Vue({
         el: '#mainMenuVueApplication',
         i18n: I18N,
         router: window.Router,
