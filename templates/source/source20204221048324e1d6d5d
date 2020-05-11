@@ -59,7 +59,7 @@ return '[
             },
             {
                 "text": "Display Texts",
-                "href": "spritmodeldisplaytext",
+                "href": "laravelmodeldisplaytext",
                 "icon": "fas fa-sort-alpha-down",
                 "visibility": "1"
             },
