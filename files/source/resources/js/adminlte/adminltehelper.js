@@ -130,7 +130,10 @@ var AdminLTEHelper = {
     "doExternalFileLoad": function (file) {
         var fileIndex = AdminLTEHelper.__externalFiles.indexOf(file);
         if (fileIndex != -1) {
-            AdminLTEHelper.__externalFiles.splice(fileIndex, 1);
+            AdminLTEHelper.__externalFiles
+                    = AdminLTEHelper.__externalFiles.splice(
+                    fileIndex,
+                    1);
         }
 
         if (0 == AdminLTEHelper.__externalFiles.length) {
