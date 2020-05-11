@@ -1206,7 +1206,7 @@ function MenuEditor(idSelector, options) {
             $form.find("[name=" + p + "]").val(v);
         });
         $form.find(".item-menu").first().focus();
-        if (data.hasOwnProperty('icon')) {
+        if (data.icon !== undefined) {
             iconPicker.iconpicker('setIcon', data.icon);
         } else{
             iconPicker.iconpicker('setIcon', 'empty');
