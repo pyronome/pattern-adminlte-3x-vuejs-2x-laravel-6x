@@ -1121,7 +1121,7 @@ function MenuEditor(idSelector, options) {
         $("#buttonDeleteMenuItem").data("closestUL", $(this).closest('ul'));
         $("#buttonDeleteMenuItem").data("closestLI", $(this).closest('li'));
 
-        showDialog("modalMenuItemDelete");
+        $("#modalMenuItemDelete").modal();
     });
 
     $(document).on('click', '#buttonDeleteMenuItem', function (e) {
@@ -1150,7 +1150,7 @@ function MenuEditor(idSelector, options) {
 
         $("#buttonAddMenuItem").hide();
         $("#buttonUpdateMenuItem").show();
-        showDialog("modalMenuItem");
+        $("#modalMenuItem").show();
     });
 
     $main.on('click', '.btnUp', function (e) {
