@@ -33,7 +33,7 @@
                                                 <tr v-for="model_display_text_item in model_display_text_list" v-bind:key="model_display_text_item.id">
                                                     <td class="tdModelDisplayTextEditButton"
                                                         :id="'tdModelDisplayTextEditButton' + model_display_text_item.id"
-                                                        @click="showModelDisplayTextList(model_display_text_item.id)"
+                                                        @click="showModelDisplayTextList(model_display_text_item)"
                                                         :data-row-id="model_display_text_item.id">
                                                         <i class="fas fa-cog nav-icon"></i>&nbsp;&nbsp;{{model_display_text_item.model}}
                                                     </td>
@@ -325,17 +325,11 @@ export default {
             $("#formEditDisplayText-display_text").summernote("code", (old_text + append));
             $("#modal-ModelProportyList").modal('hide');
         },
-        showModelDisplayTextList: function (id) {
-            var sender = document.getElementById("tdModelDisplayTextEditButton" + id);
-            var objectId = parseInt(sender.getAttribute("data-row-id"));
-            var object = this.model_display_text_list[objectId - 1];
-            
+        showModelDisplayTextList: function (object) {
             document.getElementById("formModelDisplayText-id").value = object["id"];
             document.getElementById("formModelDisplayText-model").value = object["model"];
             document.getElementById("formModelDisplayText-display_text_json").value = object["display_text_json"];
-
             this.initializeModelPropertyDisplayTextList(object["display_text_json"]);
-
             $("#modal-ModelDisplayTextList").modal();
         },
         initializeModelPropertyDisplayTextList: function (display_text_json) {
