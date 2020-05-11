@@ -30,6 +30,11 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tbodyModelList">
+                                                <tr v-for="model_display_text_item in model_display_text_list" v-bind:key="model_display_text_item.id">
+                                                    <td class="tdModelDisplayTextEditButton" :data-row-id="model_display_text_item.id">
+                                                        <i class="fas fa-cog nav-icon"></i>&nbsp;&nbsp;{{model_display_text_item.model}}
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -167,11 +172,32 @@
                     <div class="modal-body" style="min-height:350px;">
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-3">
-                                <div id="ulModelList" class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                                <div id="ulModelList"
+                                    v-for="model_display_text_item in model_display_text_list"
+                                    v-bind:key="model_display_text_item.id"
+                                    class="nav flex-column nav-pills"
+                                    role="tablist"
+                                    aria-orientation="vertical">
+                                    <a class="nav-link" :id="model_display_text_item.model + 'tab'" data-toggle="pill" :href="'#' + model_display_text_item.model + 'Content'" role="tab" :aria-controls="model_display_text_item.model" aria-selected="false">
+                                        {{model_display_text_item.model}}
+                                    </a>
                                 </div>
                             </div>
-                            <div class="col-lg-9 col-md-9 col-sm-9 col-9 tab-content" id="ulModelContentList">
-                                
+                            <div
+                                id="ulModelContentList"
+                                v-for="model_display_text_item in model_display_text_list"
+                                v-bind:key="model_display_text_item.id"
+                                class="col-lg-9 col-md-9 col-sm-9 col-9 tab-content">
+                                    <div class="tab-pane fade" :id="model_display_text_item.model + 'Content'" role="tabpanel" :aria-labelledby="model_display_text_item.model + '-tab'">
+                                        <ul :id="'ul' + model_display_text_item.model + 'PropertyList'"
+                                            v-for="model_property_item in model_property_list"
+                                            v-bind:key="model_property_item.id"
+                                            class="ulModelPropertyList">
+                                            <li class="liModelProperty" :data-display-text="model_property_item.model + '/' + model_property_item.property">
+                                                {{model_property_item.property}}
+                                            </li>
+                                        </ul>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -185,6 +211,14 @@
                 </div>
             </div>
         </div>
+        <script type="text/html" id="trEditDisplayTextTemplate">
+            <td id="property___INDEX__">__PROPERTY__</td>
+            <td><span class="span-display_text" id="display_text___INDEX__">__DISPLAY_TEXT__</span></td>
+            <td class="text-center">
+                <i id="updated-icon-__INDEX__" class="fas fa-cog nav-icon __SH_CLASS__"></i>
+                <i class="fas fa-ban nav-icon text-red __ANTI_SH_CLASS__"></i>
+            </td>
+        </script>
     </div>
 </template>
 
@@ -193,7 +227,7 @@ export default {
     data() {
         return {
             model_property_list: [],
-            model_display_text: [],
+            model_display_text_list: [],
             form: new Form({
                 'menu_json': ''
             }),
@@ -201,14 +235,14 @@ export default {
                 is_ready: false,
                 is_model_property_list_loading: false,
                 is_model_property_list_loaded: false,
-                is_model_display_text_loading: false,
-                is_model_display_text_loaded: false
+                is_model_display_text_list_loading: false,
+                is_model_display_text_list_loaded: false
             }
         };
     },
     methods: {
         processLoadQueue: function () {
-            if (!this.page.is_model_display_text_loaded) {
+            if (!this.page.is_model_display_text_list_loaded) {
                 this.loadModelDisplayText();
             }
 
@@ -216,7 +250,7 @@ export default {
                 this.loadModelPropertyList();
             }
 
-            if (this.page.is_model_display_text_loaded
+            if (this.page.is_model_display_text_list_loaded
                     && this.page.is_model_property_list_loaded) {
                 this.page.is_ready = true;
                 this.$Progress.finish();
@@ -233,6 +267,7 @@ export default {
                 .then(({ data }) => {
                     this.page.is_model_property_list_loaded = true;
                     this.page.is_model_property_list_loading = false;
+                    this.model_property_list = data;
                     this.processLoadQueue();
                 }).catch(({ data }) => {
                     this.page.is_model_property_list_loaded = true;
@@ -242,20 +277,21 @@ export default {
                 });
         },
         loadModelDisplayText: function () {
-            if (this.page.is_model_display_text_loading) {
+            if (this.page.is_model_display_text_list_loading) {
                 return;
             }
 
-            this.page.is_model_display_text_loading = true;
+            this.page.is_model_display_text_list_loading = true;
 
             axios.get(AdminLTEHelper.getAPIURL("__modeldisplaytext"))
                 .then(({ data }) => {
-                    this.page.is_model_display_text_loaded = true;
+                    this.page.is_model_display_text_list_loaded = true;
                     this.page.is_model_display_text_loading = false;
+                    this.model_display_text_list = data;
                     this.processLoadQueue();
                 }).catch(({ data }) => {
-                    this.page.is_model_display_text_loaded = true;
-                    this.page.is_model_display_text_loading = false;
+                    this.page.is_model_display_text_list_loaded = true;
+                    this.page.is_model_display_text_list_loading = false;
                     this.$Progress.fail();
                     this.processLoadQueue();
                 });
@@ -274,7 +310,7 @@ export default {
     mounted() {
         this.$Progress.start();
         this.page.is_ready = false;
-        this.processLoadQueue
+        this.processLoadQueue();
     }
 }
 </script>

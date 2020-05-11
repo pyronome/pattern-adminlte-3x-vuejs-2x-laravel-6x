@@ -27,6 +27,7 @@ class AdminLTEModelDisplayTextController extends Controller
         for ($i=0; $i < $countModels; $i++) { 
             $model = $Models[$i];
 
+            $list[$index]['id'] = ($index + 1);
             $list[$index]['model'] = $model;
             $list[$index]['display_text_json'] = json_encode(
                     $displayTexts[$model],
@@ -63,6 +64,7 @@ class AdminLTEModelDisplayTextController extends Controller
 
             for ($j=0; $j < $countProperty; $j++)
             {
+                $list[$index]['id'] = ($index + 1);
                 $list[$index]['model'] = $model;
                 $list[$index]['property'] = $property_list[$j];
                 $list[$index]['type'] = 'text';
