@@ -32,7 +32,8 @@
                                             <tbody id="tbodyModelList">
                                                 <tr v-for="model_display_text_item in model_display_text_list" v-bind:key="model_display_text_item.id">
                                                     <td class="tdModelDisplayTextEditButton"
-                                                        @click="showModelDisplayTextList"
+                                                        :id="'tdModelDisplayTextEditButton' + model_display_text_item.id"
+                                                        @click="showModelDisplayTextList(model_display_text_item.id)"
                                                         :data-row-id="model_display_text_item.id">
                                                         <i class="fas fa-cog nav-icon"></i>&nbsp;&nbsp;{{model_display_text_item.model}}
                                                     </td>
@@ -201,7 +202,8 @@
                                             v-bind:key="model_property_item.id"
                                             class="ulModelPropertyList">
                                             <li class="liModelProperty"
-                                                @click="addToDisplayText"
+                                                @click="addToDisplayText(model_property_item.id)"
+                                                :id="'liModelProperty' + model_property_item.id"
                                                 :data-display-text="model_property_item.model + '/' + model_property_item.property">
                                                 {{model_property_item.property}}
                                             </li>
@@ -309,21 +311,22 @@ export default {
         initializePage: function () {
             $("#buttonWidgetConfig").detach();
             $("#modal-WidgetList").detach();
+            $("#mainVueApplication").data("adminLTEModelDisplayTextPage", this);
 
             this.initializeModelAttributeList();
         },
         initializeModelAttributeList: function () {
             $("#ulModelList a:first-child").tab("show")
         },
-        addToDisplayText: function (event) {
-            var sender = event.target;
+        addToDisplayText: function (id) {
+            var sender = document.getElementById("liModelProperty" + id);
             var append = "{{" + sender.getAttribute("data-display-text") + "}}";
             var old_text = $("#formEditDisplayText-display_text").summernote("code");
             $("#formEditDisplayText-display_text").summernote("code", (old_text + append));
             $("#modal-ModelProportyList").modal('hide');
         },
-        showModelDisplayTextList: function (event) {
-            var sender = event.target;
+        showModelDisplayTextList: function (id) {
+            var sender = document.getElementById("tdModelDisplayTextEditButton" + id);
             var objectId = parseInt(sender.getAttribute("data-row-id"));
             var object = this.model_display_text_list[objectId - 1];
             
@@ -394,8 +397,9 @@ export default {
                 index++;
             }
             
-            $(".trEditDisplayText").off("click").on("click", function (event) {
-                mainVueApplication.showEditDisplayTextModal(event);
+            $(".trEditDisplayText").off("click").on("click", function () {
+                var component = $("#mainVueApplication").data("adminLTEModelDisplayTextPage");
+                component.showEditDisplayTextModal(this);
             });
         },
         get_type_sh_class: function (property) {
@@ -424,8 +428,7 @@ export default {
 
             return sh_class;
         },
-        showEditDisplayTextModal: function (event) {
-            var sender = event.target;
+        showEditDisplayTextModal: function (sender) {
             var index = sender.getAttribute("data-index");
             var property = $(sender).data("property");
             var display_text = $(sender).data("display_text");
