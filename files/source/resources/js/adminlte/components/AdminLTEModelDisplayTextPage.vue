@@ -192,51 +192,70 @@
 export default {
     data() {
         return {
+            model_property_list: [],
+            model_display_text: [],
             form: new Form({
                 'menu_json': ''
             }),
             page: {
                 is_ready: false,
-                is_data_loading: false,
-                is_data_loaded: false,
-                external_files: [
-                    ("/js/" + AdminLTEHelper.getURL('menu_editor.js')),
-                    ("/js/" + AdminLTEHelper.getURL('/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css')),
-                    ("/js/" + AdminLTEHelper.getURL('/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js')),
-                    ("/js/" + AdminLTEHelper.getURL('/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js'))
-                ],
-                editor: null
+                is_model_property_list_loading: false,
+                is_model_property_list_loaded: false,
+                is_model_display_text_loading: false,
+                is_model_display_text_loaded: false
             }
         };
     },
     methods: {
         processLoadQueue: function () {
-            if (!this.page.is_data_loaded) {
-                this.loadData();
+            if (!this.page.is_model_display_text_loaded) {
+                this.loadModelDisplayText();
             }
 
-            if (this.page.is_data_loaded) {
+            if (!this.page.is_model_property_list_loaded) {
+                this.loadModelPropertyList();
+            }
+
+            if (this.page.is_model_display_text_loaded
+                    && this.page.is_model_property_list_loaded) {
                 this.page.is_ready = true;
                 this.$Progress.finish();
-                this.updateMenuEditor();
             }
         },
-        loadData: function () {
-            if (this.page.is_data_loading) {
+        loadModelPropertyList: function () {
+            if (this.page.is_model_property_list_loading) {
                 return;
             }
 
-            this.page.is_data_loading = true;
+            this.page.is_model_property_list_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("menu_configuration"))
+            axios.get(AdminLTEHelper.getAPIURL("__modeldisplaytext/get_model_property_list"))
                 .then(({ data }) => {
-                    this.page.is_data_loaded = true;
-                    this.page.is_data_loading = false;
-                    this.form.fill(data);
+                    this.page.is_model_property_list_loaded = true;
+                    this.page.is_model_property_list_loading = false;
                     this.processLoadQueue();
                 }).catch(({ data }) => {
-                    this.page.is_data_loaded = true;
-                    this.page.is_data_loading = false;
+                    this.page.is_model_property_list_loaded = true;
+                    this.page.is_model_property_list_loading = false;
+                    this.$Progress.fail();
+                    this.processLoadQueue();
+                });
+        },
+        loadModelDisplayText: function () {
+            if (this.page.is_model_display_text_loading) {
+                return;
+            }
+
+            this.page.is_model_display_text_loading = true;
+
+            axios.get(AdminLTEHelper.getAPIURL("__modeldisplaytext"))
+                .then(({ data }) => {
+                    this.page.is_model_display_text_loaded = true;
+                    this.page.is_model_display_text_loading = false;
+                    this.processLoadQueue();
+                }).catch(({ data }) => {
+                    this.page.is_model_display_text_loaded = true;
+                    this.page.is_model_display_text_loading = false;
                     this.$Progress.fail();
                     this.processLoadQueue();
                 });
@@ -244,67 +263,18 @@ export default {
         submitForm: function () {
             // Submit the form via a POST request
             this.$Progress.start();
-            this.form.post(AdminLTEHelper.getAPIURL("menu_configuration"))
+            this.form.post(AdminLTEHelper.getAPIURL("__modeldisplaytext"))
                 .then(({ data }) => {
                     this.$Progress.finish();
                 }).catch(({ data }) => {
                     this.$Progress.fail();
                 });
-        },
-        updateMenuEditor: function () {
-            if (!this.page.is_ready) {
-                return;
-            }
-
-            var rawMenuJSON = decodeURIComponent(this.form.menu_json);
-            var menuJSON = JSON.parse(rawMenuJSON);
-            
-            //icon picker options
-            var iconPickerOptions = {
-                searchText: '...',
-                labelHeader: '{0} / {1}'
-            };
-
-            var sortableListOptions = {
-                placeholderCss: {"background-color": "#cccccc"}
-            };
-
-            this.page.editor = new MenuEditor(
-                    "ulMenuEditor",
-                    {
-                        listOptions: sortableListOptions,
-                        iconPicker: iconPickerOptions
-                    }
-            );
-            this.page.editor.setForm($("#formMenuItem"));
-            this.page.editor.setUpdateButton($("#buttonUpdateMenuItem"));
-            this.page.editor.setData(menuJSON);
-
-            $("#buttonSave-formConfiguration").off("click").on("click", function () {
-                var str = this.page.editor.getString();
-                saveMenuConfiguration(str);
-            });
-
-            $("#buttonUpdateMenuItem").off("click").on("click", function(){
-                this.page.editor.update();
-                $("#modalMenuItem").modal('hide');
-            });
-
-            $("#buttonAddMenuItem").off("click").on("click", function(){
-                this.page.editor.add();
-                $("#modalMenuItem").modal('hide');
-            });
-
-            $( "#ulMenuEditor" ).sortable();
-            $( "#ulMenuEditor" ).disableSelection();
-        },
+        }
     },
     mounted() {
         this.$Progress.start();
         this.page.is_ready = false;
-        AdminLTEHelper.loadExternalFiles(
-                this.page.external_files,
-                this.processLoadQueue);
+        this.processLoadQueue
     }
 }
 </script>
