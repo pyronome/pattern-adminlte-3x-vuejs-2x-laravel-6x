@@ -162,8 +162,9 @@ export default {
                 is_ready: false,
                 is_data_loading: false,
                 is_data_loaded: false,
-                is_library_loading: false,
-                is_library_loaded: false
+                externalFiles: [
+                    ("/js/" + AdminLTEHelper.getURL('menu_editor.js')
+                ]
             }
         };
     },
@@ -173,12 +174,7 @@ export default {
                 this.loadData();
             }
 
-            if (!this.page.is_library_loaded) {
-                this.loadLibrary();
-            }
-
-            if (this.page.is_data_loaded
-                    && this.page.is_library_loaded) {
+            if (this.page.is_data_loaded) {
                 this.page.is_ready = true;
                 this.updateMenuEditor();
             }
@@ -202,22 +198,6 @@ export default {
                     this.$Progress.fail();
                     this.processLoadQueue();
                 });
-        },
-        loadLibrary: function () {
-            if (this.page.is_library_loading) {
-                return;
-            }
-
-            this.page.is_library_loading = true;
-
-            AdminLTEHelper.loadJS(("/js/"
-                    + AdminLTEHelper.getURL('menu_editor.js')),
-                    this.doLoadLibrary);
-        },
-        doLoadLibrary: function () {
-            this.page.is_library_loaded = true;
-            this.page.is_library_loading = false;
-            this.processLoadQueue();
         },
         submitForm: function () {
             // Submit the form via a POST request
@@ -279,7 +259,9 @@ export default {
     },
     mounted() {
         this.page.is_ready = false;
-        this.processLoadQueue();
+        AdminLTEHelper.loadExternalFiles(
+                this.page.externalFiles,
+                this.processLoadQueue);
     }
 }
 </script>

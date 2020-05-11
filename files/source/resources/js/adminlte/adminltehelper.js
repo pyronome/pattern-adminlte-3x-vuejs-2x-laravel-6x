@@ -1,4 +1,6 @@
 var AdminLTEHelper = {
+    "__externalFiles": [],
+    "__externalFilesCompletedCallback": null,
     "initializeApplication": function () {
 
     },
@@ -103,6 +105,40 @@ var AdminLTEHelper = {
     },
     "doVueMenuApplicationUpdate": function () {
 
+    },
+    "loadExternalFiles": function (files, completedCallback) {
+        var fileCount = files.length;
+        AdminLTEHelper.__externalFiles = files;
+        AdminLTEHelper.__externalFilesCompletedCallback = completedCallback;
+        var file = "";
+        var extension = "";
+
+        for (var i = 0; i < fileCount; i++) {
+            file = files[i];
+            extension = file.split('.').pop();
+            extension = extension.toLowerCase();
+
+            if ("css" == extension) {
+                AdminLTEHelper.loadCSS(file);
+                AdminLTEHelper.doExternalFileLoad(file);
+            } else {
+                AdminLTEHelper.loadJS(file, function () {
+                    AdminLTEHelper.doExternalFileLoad(file);
+                });
+            }
+        }
+    },
+    "doExternalFileLoad": function (file) {
+        var fileIndex = AdminLTEHelper.__externalFiles.indexOf(file);
+        if (fileIndex != -1) {
+            AdminLTEHelper.__externalFiles.splice(fileIndex, 1);
+        }
+
+        if (0 == AdminLTEHelper.__externalFiles.length) {
+            if (AdminLTEHelper.__externalFilesCompletedCallback) {
+                AdminLTEHelper.__externalFilesCompletedCallback();
+            }
+        }
     }
 }
 
