@@ -44,7 +44,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">{{ __('Model Display Texts') }}</h4>
+                        <h4 class="modal-title">{{ $t('Model Display Texts') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -85,12 +85,12 @@
                     <div class="modalfooter justify-content-between show_by_permission">
                         <div class="row">
                             <div class="col-md-12">
-                                <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ __('Cancel') }}</button>
+                                <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
                                 <button type="button"
                                     id="buttonSave-formModelDisplayText"
                                     name="buttonSave-formModelDisplayText"
                                     class="btn btn-success float-right">
-                                    {{ __('Save') }}
+                                    {{ $t('Save') }}
                                 </button>
                             </div>
                         </div>
@@ -102,7 +102,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">{{ __('Edit Display Text') }}</h4>
+                        <h4 class="modal-title">{{ $t('Edit Display Text') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -116,7 +116,7 @@
                         </form>
                         <div class="row">
                             <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                                <label for="formEditDisplayText-property" class="detail-label">{{ __('Property') }}</label>
+                                <label for="formEditDisplayText-property" class="detail-label">{{ $t('Property') }}</label>
                                 <input type="text"
                                     class="form-control"
                                     id="formEditDisplayText-property"
@@ -127,9 +127,9 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                                <label for="formEditDisplayText-display_text" class="label-with-btn">{{ __('Display Text') }}</label>
+                                <label for="formEditDisplayText-display_text" class="label-with-btn">{{ $t('Display Text') }}</label>
                                 <button id="buttonSearchProperty" class="noborder-edit-btn text-primary float-right" style="width:auto;">
-                                    <i class="fa fa-search-plus"></i>&nbsp;{{ __('Insert Class Property') }}
+                                    <i class="fa fa-search-plus"></i>&nbsp;{{ $t('Insert Class Property') }}
                                 </button>
                                 <textarea id="formEditDisplayText-display_text"
                                     name="formEditDisplayText-display_text"
@@ -142,12 +142,12 @@
                     <div class="modalfooter justify-content-between show_by_permission">
                         <div class="row">
                             <div class="col-md-12">
-                                <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ __('Cancel') }}</button>
+                                <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
                                 <button type="button"
                                     id="buttonSave-formEditDisplayText"
                                     name="buttonSave-formEditDisplayText"
                                     class="btn btn-success float-right">
-                                    {{ __('Save') }}
+                                    {{ $t('Save') }}
                                 </button>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">{{ __('Model Properties') }}</h4>
+                        <h4 class="modal-title">{{ $t('Model Properties') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -178,7 +178,7 @@
                     <div class="modalfooter justify-content-between show_by_permission">
                         <div class="row">
                             <div class="col-md-12">
-                                <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ __('Close') }}</button>
+                                <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Close') }}</button>
                             </div>
                         </div>
                     </div>
