@@ -163,7 +163,7 @@ export default {
                 is_data_loading: false,
                 is_data_loaded: false,
                 external_files: [
-                    ("/js/" + AdminLTEHelper.getURL('menu_editor.js')
+                    ("/js/" + AdminLTEHelper.getURL('menu_editor.js'))
                 ]
             }
         };
