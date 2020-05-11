@@ -167,7 +167,7 @@
                     <div class="modal-body" style="min-height:350px;">
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-3">
-                                <div id="ulModelList" class="nav flex-column nav-pills" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
+                                <div id="ulModelList" class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                                 </div>
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-9 col-9 tab-content" id="ulModelContentList">
