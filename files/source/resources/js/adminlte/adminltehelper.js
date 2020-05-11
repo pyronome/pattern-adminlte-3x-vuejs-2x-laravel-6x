@@ -71,7 +71,7 @@ var AdminLTEHelper = {
                     || this.readyState=="complete")) {
                 d = true;
                 if (success) {
-                    success();
+                    success(s.src);
                 }
                 s.onload = s.onreadystatechange = null;
                 h.removeChild(s);
@@ -122,9 +122,8 @@ var AdminLTEHelper = {
                 AdminLTEHelper.loadCSS(file);
                 AdminLTEHelper.doExternalFileLoad(file);
             } else {
-                AdminLTEHelper.loadJS(file, function () {
-                    AdminLTEHelper.doExternalFileLoad(file);
-                });
+                AdminLTEHelper.loadJS(file,
+                        AdminLTEHelper.doExternalFileLoad);
             }
         }
     },
