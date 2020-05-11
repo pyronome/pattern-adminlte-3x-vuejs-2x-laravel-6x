@@ -180,6 +180,7 @@ export default {
 
             if (this.page.is_data_loaded) {
                 this.page.is_ready = true;
+                this.$Progress.finish();
                 this.updateMenuEditor();
             }
         },
@@ -262,6 +263,7 @@ export default {
         },
     },
     mounted() {
+        this.$Progress.start();
         this.page.is_ready = false;
         AdminLTEHelper.loadExternalFiles(
                 this.page.external_files,

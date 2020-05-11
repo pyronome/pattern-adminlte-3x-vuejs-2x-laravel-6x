@@ -97,7 +97,7 @@ var AdminLTEHelper = {
     },
     "loadExternalFiles": function (files, completedCallback) {
         var fileCount = files.length;
-        AdminLTEHelper.__externalFiles = files;
+        AdminLTEHelper.__externalFiles = files.slice();
         AdminLTEHelper.__externalFilesCompletedCallback = completedCallback;
         var file = "";
         var extension = "";
