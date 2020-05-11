@@ -1150,7 +1150,7 @@ function MenuEditor(idSelector, options) {
 
         $("#buttonAddMenuItem").hide();
         $("#buttonUpdateMenuItem").show();
-        $("#modalMenuItem").show();
+        $("#modalMenuItem").modal();
     });
 
     $main.on('click', '.btnUp', function (e) {
