@@ -181,27 +181,35 @@
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-3">
                                 <div id="ulModelList"
-                                    v-for="model_display_text_item in model_display_text_list"
-                                    v-bind:key="model_display_text_item.id"
                                     class="nav flex-column nav-pills"
                                     role="tablist"
                                     aria-orientation="vertical">
-                                    <a class="nav-link" :id="model_display_text_item.model + 'tab'" data-toggle="pill" :href="'#' + model_display_text_item.model + 'Content'" role="tab" :aria-controls="model_display_text_item.model" aria-selected="false">
+                                    <a class="nav-link"
+                                        v-for="model_display_text_item in model_display_text_list"
+                                        v-bind:key="model_display_text_item.id"
+                                        :id="model_display_text_item.model + 'tab'"
+                                        data-toggle="pill"
+                                        :href="'#' + model_display_text_item.model + 'Content'"
+                                        role="tab"
+                                        :aria-controls="model_display_text_item.model"
+                                        aria-selected="false">
                                         {{model_display_text_item.model}}
                                     </a>
                                 </div>
                             </div>
                             <div
-                                id="ulModelContentList"
-                                v-for="model_display_text_item in model_display_text_list"
-                                v-bind:key="model_display_text_item.id"
-                                class="col-lg-9 col-md-9 col-sm-9 col-9 tab-content">
-                                    <div class="tab-pane fade" :id="model_display_text_item.model + 'Content'" role="tabpanel" :aria-labelledby="model_display_text_item.model + '-tab'">
+                                id="ulModelContentList" class="col-lg-9 col-md-9 col-sm-9 col-9 tab-content">
+                                    <div class="tab-pane fade"
+                                        v-for="model_display_text_item in model_display_text_list"
+                                        v-bind:key="model_display_text_item.id"
+                                        :id="model_display_text_item.model + 'Content'"
+                                        role="tabpanel"
+                                        :aria-labelledby="model_display_text_item.model + '-tab'">
                                         <ul :id="'ul' + model_display_text_item.model + 'PropertyList'"
-                                            v-for="model_property_item in model_property_list"
-                                            v-bind:key="model_property_item.id"
                                             class="ulModelPropertyList">
                                             <li class="liModelProperty"
+                                                v-for="model_property_item in model_property_list"
+                                                v-bind:key="model_property_item.id"
                                                 @click="addToDisplayText(model_property_item.id)"
                                                 :id="'liModelProperty' + model_property_item.id"
                                                 :data-display-text="model_property_item.model + '/' + model_property_item.property">
