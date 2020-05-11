@@ -162,7 +162,7 @@ export default {
                 is_ready: false,
                 is_data_loading: false,
                 is_data_loaded: false,
-                externalFiles: [
+                external_files: [
                     ("/js/" + AdminLTEHelper.getURL('menu_editor.js')
                 ]
             }
@@ -260,7 +260,7 @@ export default {
     mounted() {
         this.page.is_ready = false;
         AdminLTEHelper.loadExternalFiles(
-                this.page.externalFiles,
+                this.page.external_files,
                 this.processLoadQueue);
     }
 }
