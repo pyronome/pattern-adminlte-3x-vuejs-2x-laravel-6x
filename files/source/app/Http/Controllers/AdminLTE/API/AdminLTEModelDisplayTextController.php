@@ -12,7 +12,7 @@ use App\Http\Requests\AdminLTE\API\AdminLTEModelDisplayTextPOSTRequest;
 class AdminLTEModelDisplayTextController extends Controller
 {
 
-    public function get_model_display_texts(Request $request)
+    public function get(Request $request)
     {
 
         $adminLTE = new AdminLTE();
@@ -74,7 +74,7 @@ class AdminLTEModelDisplayTextController extends Controller
         return $list;
     }
 
-    public function post_model_display_texts(AdminLTEModelDisplayTextPOSTRequest $request)
+    public function post(AdminLTEModelDisplayTextPOSTRequest $request)
     {
         $adminLTE = new AdminLTE();
 
