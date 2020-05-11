@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\AdminLTE;
 use App\AdminLTEUser;
+use App\Http\Requests\AdminLTE\API\AdminLTEModelDisplayTextPOSTRequest;
 
 class AdminLTEModelDisplayTextController extends Controller
 {
@@ -26,7 +27,6 @@ class AdminLTEModelDisplayTextController extends Controller
         for ($i=0; $i < $countModels; $i++) { 
             $model = $Models[$i];
 
-            $list[$index]['id'] = ($index + 1);
             $list[$index]['model'] = $model;
             $list[$index]['display_text_json'] = json_encode(
                     $displayTexts[$model],
@@ -38,24 +38,14 @@ class AdminLTEModelDisplayTextController extends Controller
             $index++;
         } // for ($i=0; $i < $countModels; $i++) { 
 
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $this->columns;
-        $objectHTMLDB->printHTMLDBList();
-        return;
+        return $list;
     }
 
     public function get_model_property_list(Request $request)
     {
-        $this->columns = [
-            'id',
-            'model',
-            'property',
-            'type'
-        ];
 
         $adminLTE = new AdminLTE();
-        $list = array();
+        $list = [];
 
         $Models = $adminLTE->getModelList();
 
@@ -73,7 +63,6 @@ class AdminLTEModelDisplayTextController extends Controller
 
             for ($j=0; $j < $countProperty; $j++)
             {
-                $list[$index]['id'] = ($index + 1);
                 $list[$index]['model'] = $model;
                 $list[$index]['property'] = $property_list[$j];
                 $list[$index]['type'] = 'text';
@@ -82,30 +71,20 @@ class AdminLTEModelDisplayTextController extends Controller
             } // for ($j=0; $j < $countProperty; $j++) { 
         } // for ($i=0; $i < $countModels; $i++) { 
 
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $this->columns;
-        $objectHTMLDB->printHTMLDBList();
-        return;
+        return $list;
     }
 
-    public function post_model_display_texts(Request $request)
+    public function post_model_display_texts(AdminLTEModelDisplayTextPOSTRequest $request)
     {
-
-        $objectHTMLDB = new HTMLDB();
         $adminLTE = new AdminLTE();
 
-        $this->row = $objectHTMLDB->requestPOSTRow(
-                $request->all(),
-                ['model', 'display_text_json'],
-                $this->protectedColumns,
-                0,
-                true);
+        $display_text_json = '';
 
-        if ('' == $this->row['display_text_json'])
-        {
-            $this->row['display_text_json'] = '[]';
-        } // if ('' == $this->row['display_text_json'])
+        if ('' == $request->input('display_text_json')) {
+            $display_text_json = $request->input('display_text_json');
+        } else {
+            $display_text_json = '[]';
+        } // if ('' == $request->input('display_text_json')) {
 
         $display_texts = $adminLTE->base64Encode($display_text_json);
         
@@ -123,16 +102,7 @@ class AdminLTEModelDisplayTextController extends Controller
             $modelDisplayText->insert();
         } // if ($modelDisplayText != null) {
 
-        $result['messageCount'] = 1;
-        $result['lastMessage'] = 'UPDATED';
-
-        $objectHTMLDB->errorCount = $result['errorCount'];
-        $objectHTMLDB->messageCount = $result['messageCount'];
-        $objectHTMLDB->lastError = $result['lastError'];
-        $objectHTMLDB->lastMessage = $result['lastMessage'];
-        $objectHTMLDB->printResponseJSON();
-        return;
-
+        return ['message' => 'UPDATED'];
     }
 
 }
