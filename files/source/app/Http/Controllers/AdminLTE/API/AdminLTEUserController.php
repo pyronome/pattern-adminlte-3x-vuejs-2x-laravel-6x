@@ -12,43 +12,8 @@ use App\AdminLTEUserGroup;
 class AdminLTEUserController extends Controller
 {
 
-    public $columns = [];
-    public $protectedColumns = [];
-    public $row = [];
-
     public function get(Request $request)
     {
-        
-        $this->columns = [
-            'id',
-            'id/display_text',
-            'deleted',
-            'deleted/display_text',
-            'created_at',
-            'created_at/display_text',
-            'updated_at',
-            'updated_at/display_text',
-            'enabled',
-            'enabled/display_text',
-            'adminlteusergroup_id',
-            'adminlteusergroup_id/display_text',
-            'fullname',
-            'fullname/display_text',
-            'username',
-            'username/display_text',
-            'email',
-            'email/display_text',
-            'password',
-            'password/display_text',
-            'menu_permission',
-            'menu_permission/display_text',
-            'service_permission',
-            'service_permission/display_text',
-            'profile_img',
-            /*'profile_img/display_text',*/
-            'group_menu_permission',
-            'group_service_permission'
-        ];
 
         $list = [];
 
@@ -128,18 +93,13 @@ class AdminLTEUserController extends Controller
 
         } // foreach ($objectAdminLTEUsers as $objectAdminLTEUser)
 
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $this->columns;
-        $objectHTMLDB->printHTMLDBList();
-        return;
+        return $list;
 
     }
 
     public function get_session(Request $request)
     {
-        
-        $this->columns = [
+        $columns = [
             'id',
             'searchText',
             'sortingColumn',
@@ -152,7 +112,7 @@ class AdminLTEUserController extends Controller
         $adminLTE = new AdminLTE();
         $parameters = $request->route()->parameters();
 
-        $list = [];
+        $response = [];
 
         $sessionParameters = $adminLTE->getModelSessionParameters(
                 $request,
@@ -194,20 +154,16 @@ class AdminLTEUserController extends Controller
 
         $sessionParameters['id'] = 1;
 
-        $columnCount = count($this->columns);
+        $columnCount = count($columns);
 
         for ($i = 0; $i < $columnCount; $i++) {
-            $list[0][$this->columns[$i]]
-                    = isset($sessionParameters[$this->columns[$i]])
-                    ? $sessionParameters[$this->columns[$i]]
+            $response[$columns[$i]]
+                    = isset($sessionParameters[$columns[$i]])
+                    ? $sessionParameters[$columns[$i]]
                     : '';
         } // for ($i = 0; $i < $columnCount; $i++) {
-
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $this->columns;
-        $objectHTMLDB->printHTMLDBList();
-        return;
+        
+        return $response;
 
     }
 
@@ -449,23 +405,14 @@ class AdminLTEUserController extends Controller
             $index++;
         } // foreach ($objectAdminLTEUsers as $objectAdminLTEUser)
 
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $columns;
-        $objectHTMLDB->printHTMLDBList();
-        return;
+        return $list;
 
     }
 
     public function get_recordgraphdata(Request $request)
     {
 
-        $columns = [
-            'id',
-            'data'
-        ];
-
-        $list = [];
+        $response = [];
 
         $dateFormat = config('adminlte.date_format');
         $yearMonthFormat = config('adminlte.year_month_format');
@@ -541,103 +488,54 @@ class AdminLTEUserController extends Controller
         }
         $graphJSON = ('[' . $graphJSON . ']');
 
+        $response['data'] = rawurlencode($graphJSON);
 
-        $list[0]['id'] = 1;
-        $list[0]['data'] = rawurlencode($graphJSON);
-
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $columns;
-        $objectHTMLDB->printHTMLDBList();
-        return;
+        return $response;
     }
 
     public function get_infoboxvalue(Request $request)
     {
-        $columns = [
-            'id',
-            'model',
-            'value'
-        ];
 
-        $list = array();
-        $list[0]['id'] = 1;
-        $list[0]['model'] = 'AdminLTEUser';
-        
-        $list[0]['value'] = \App\AdminLTEUser::where('deleted', false)->count();
+        $response = [];
+        $response['model'] = 'AdminLTEUser';
+        $response['value'] = \App\AdminLTEUser::where('deleted', false)->count();
 
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $columns;
-        $objectHTMLDB->printHTMLDBList();
-        return;
-    }
+        return $response;
 
-    public function get_form_delete(Request $request)
-    {
-        $columns = [
-            'id',
-            'idcsv'
-        ];
-
-        $list = array();
-
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $columns;
-        $objectHTMLDB->printHTMLDBList();
-        return;
     }
 
     public function post_session(Request $request)
     {
 
         $adminLTE = new AdminLTE();
-        $objectHTMLDB = new HTMLDB();
 
         $sessionParameters = $adminLTE->getModelSessionParameters(
                 $request,
                 'AdminLTEUser');
 
-        $this->columns = [
-            'searchText',
-            'sortingColumn',
-            'sortingASC',
-            'page',
-            'bufferSize',
-            'pageCount'
-        ];
-
-        $this->row = $objectHTMLDB->requestPOSTRow(
-                $request->all(),
-                $this->columns,
-                $this->protectedColumns,
-                0,
-                true);
-
         $sessionParameters['searchText']
-                = isset($this->row['searchText'])
-                ? htmlspecialchars($this->row['searchText'])
+                = isset($request->input('searchText'))
+                ? htmlspecialchars($request->input('searchText'))
                 : $sessionParameters['searchText'];
 
         $sessionParameters['sortingColumn']
-                = isset($this->row['sortingColumn'])
-                ? htmlspecialchars($this->row['sortingColumn'])
+                = isset($request->input('sortingColumn'))
+                ? htmlspecialchars($request->input('sortingColumn'))
                 : $sessionParameters['sortingColumn'];
 
         $sessionParameters['sortingASC']
-                = isset($this->row['sortingASC'])
-                ? intval($this->row['sortingASC'])
+                = isset($request->input('sortingASC'))
+                ? intval($request->input('sortingASC'))
                 : $sessionParameters['sortingASC'];
 
         $sessionParameters['page']
-                = isset($this->row['page'])
-                ? intval($this->row['page'])
+                = isset($request->input('page'))
+                ? intval($request->input('page'))
                 : $sessionParameters['page'];
 
         $sessionParameters['bufferSize']
-                = isset($this->row['bufferSize'])
-                ? intval($this->row['bufferSize'])
+                = isset($request->input('bufferSize'))
+                ? intval($request->input('bufferSize'))
                 : $sessionParameters['bufferSize'];
         
         if (0 == $sessionParameters['bufferSize'])
@@ -655,7 +553,6 @@ class AdminLTEUserController extends Controller
                 'AdminLTEUser',
                 $sessionParameters);
 
-        $objectHTMLDB->printResponseJSON();
         return;
 
     }
@@ -823,9 +720,7 @@ class AdminLTEUserController extends Controller
 
     public function delete(Request $request)
     {
-        $idcsv = isset($_REQUEST['htmldb_row0_idcsv'])
-            ? htmlspecialchars($_REQUEST['htmldb_row0_idcsv'])
-            : '';
+        $idcsv = $request->input('idcsv');
 
         if ('' == $idcsv) {
 

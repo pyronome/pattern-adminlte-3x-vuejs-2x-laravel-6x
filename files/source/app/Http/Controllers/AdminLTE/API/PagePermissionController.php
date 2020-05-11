@@ -9,15 +9,6 @@ use App\AdminLTEUser;
 
 class PagePermissionController extends Controller
 {
-    public $columns = [
-        'id',
-        'input_id',
-        'edit_permission',
-        'widget_permission'
-    ];
-
-    public $protectedColumns = [];
-    public $row = [];
 
     public function get(Request $request)
     {
@@ -28,7 +19,7 @@ class PagePermissionController extends Controller
                 ? htmlspecialchars($parameters['pageName'])
                 : '';
 
-        $list = array();
+        $response = [];
 
         $adminLTE = new AdminLTE();
 
@@ -38,17 +29,11 @@ class PagePermissionController extends Controller
                 $pageName,
                 $userData);
         
-        $list[0]['id'] = 1;
-        $list[0]['input_id'] = 'page_edit_permission';
-        $list[0]['edit_permission'] = $edit_permission ? 1 : 0;
-        $list[0]['widget_permission'] = $userData['widget_permission'];
+        $response['input_id'] = 'page_edit_permission';
+        $response['edit_permission'] = $edit_permission ? 1 : 0;
+        $response['widget_permission'] = $userData['widget_permission'];
 
-        $objectHTMLDB = new HTMLDB();
-		$objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $this->columns;
-        $objectHTMLDB->printHTMLDBList();
-
-        return;
+        return $response;
 
     }
 

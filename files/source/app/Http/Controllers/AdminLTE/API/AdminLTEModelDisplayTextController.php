@@ -11,17 +11,8 @@ use App\AdminLTEUser;
 class AdminLTEModelDisplayTextController extends Controller
 {
 
-    public $columns = [];
-    public $protectedColumns = [];
-    public $row = [];
-
     public function get_model_display_texts(Request $request)
     {
-        $this->columns = [
-            'id',
-            'model',
-            'display_text_json'
-        ];
 
         $adminLTE = new AdminLTE();
         $list = array();

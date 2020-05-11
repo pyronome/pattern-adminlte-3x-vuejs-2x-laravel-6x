@@ -11,16 +11,6 @@ use App\AdminLTEUser;
 class AdminLTEServiceController extends Controller
 {
 
-    public $columns = [
-        'id',
-        'title',
-        'directory_name',
-        'file_name'
-    ];
-
-    public $protectedColumns = [];
-    public $row = [];
-
     public $exceptions = [
         'AdminLTELayoutController.php',
         'PagePermissionController.php',
@@ -39,7 +29,7 @@ class AdminLTEServiceController extends Controller
         $Services = array();
         $index = 0;
 
-        $path = (app_path() . '/Http/Controllers/AdminLTE/HTMLDB/');
+        $path = (app_path() . '/Http/Controllers/AdminLTE/API/');
         if (is_dir($path)) {
             $files = scandir($path);
             foreach ($files as $file) {
@@ -73,11 +63,7 @@ class AdminLTEServiceController extends Controller
             $index++;
         } // for ($i=0; $i < $countServices; $i++) { 
 
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $this->columns;
-        $objectHTMLDB->printHTMLDBList();
-        return;
+        return $list;
 
     }
 
@@ -97,11 +83,7 @@ class AdminLTEServiceController extends Controller
             $index++;
         } // for ($i=0; $i < $countDirectories; $i++) { 
 
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $this->columns;
-        $objectHTMLDB->printHTMLDBList();
-        return;
+        return $list;
 
     }
 

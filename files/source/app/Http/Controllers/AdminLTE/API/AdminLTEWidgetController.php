@@ -11,25 +11,6 @@ use App\AdminLTEUser;
 class AdminLTEWidgetController extends Controller
 {
 
-    public $columns = [
-        'id',
-        'type',
-        'model',
-        'text',
-        'href',
-        'size',
-        'visibility',
-        'order',
-        'icon',
-        'iconbackground',
-        'limit',
-        'onlylastrecord',
-        'columns',
-        'values'
-    ];
-    public $protectedColumns = [];
-    public $row = [];
-
     public function get(Request $request)
     {
         $list = [];
@@ -72,10 +53,7 @@ class AdminLTEWidgetController extends Controller
             $index++;
         } // for ($i=0; $i < $countWidgets; $i++) {
 
-        $objectHTMLDB = new HTMLDB();
-        $objectHTMLDB->list = $list;
-        $objectHTMLDB->columns = $this->columns;
-        $objectHTMLDB->printHTMLDBList();
+        return $list;
     }
 
 }
