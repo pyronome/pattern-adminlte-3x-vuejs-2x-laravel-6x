@@ -61,23 +61,12 @@ var AdminLTEHelper = {
             document.getElementsByTagName("head")[0].appendChild(c);
         }
     },
-	"loadJS": function (url, success) {
-        var s = document.createElement("script");
-        s.src = url;
-        var h = document.getElementsByTagName("head")[0], d=false;
-        s.onload = s.onreadystatechange = function () {
-            if (!d && (!this.readyState
-                    || this.readyState=="loaded"
-                    || this.readyState=="complete")) {
-                d = true;
-                if (success) {
-                    success(url);
-                }
-                s.onload = s.onreadystatechange = null;
-                h.removeChild(s);
+	"loadJS": function (url, callback) {
+        $.getScript(url, function() {
+            if (callback) {
+                callback(url);
             }
-        }
-        h.appendChild(s);
+        });
     },
     "getMainFolder": function () {
         if (document.body.getAttribute("data-main-folder")) {
@@ -129,9 +118,8 @@ var AdminLTEHelper = {
     },
     "doExternalFileLoad": function (file) {
         var fileIndex = AdminLTEHelper.__externalFiles.indexOf(file);
-        if (fileIndex != -1) {
-            AdminLTEHelper.__externalFiles
-                    = AdminLTEHelper.__externalFiles.splice(
+        if (fileIndex > -1) {
+            AdminLTEHelper.__externalFiles.splice(
                     fileIndex,
                     1);
         }

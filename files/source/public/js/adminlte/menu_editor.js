@@ -1120,7 +1120,8 @@ function MenuEditor(idSelector, options) {
         e.preventDefault();
         $("#buttonDeleteMenuItem").data("closestUL", $(this).closest('ul'));
         $("#buttonDeleteMenuItem").data("closestLI", $(this).closest('li'));
-        $("#modalMenuItemDelete").modal();
+
+        showDialog("modalMenuItemDelete");
     });
 
     $(document).on('click', '#buttonDeleteMenuItem', function (e) {
@@ -1149,7 +1150,7 @@ function MenuEditor(idSelector, options) {
 
         $("#buttonAddMenuItem").hide();
         $("#buttonUpdateMenuItem").show();
-        $("#modalMenuItem").modal();
+        showDialog("modalMenuItem");
     });
 
     $main.on('click', '.btnUp', function (e) {
@@ -1205,7 +1206,7 @@ function MenuEditor(idSelector, options) {
             $form.find("[name=" + p + "]").val(v);
         });
         $form.find(".item-menu").first().focus();
-        if (data.icon !== undefined) {
+        if (data.hasOwnProperty('icon')) {
             iconPicker.iconpicker('setIcon', data.icon);
         } else{
             iconPicker.iconpicker('setIcon', 'empty');
