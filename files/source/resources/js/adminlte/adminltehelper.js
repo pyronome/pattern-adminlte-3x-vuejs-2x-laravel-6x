@@ -71,7 +71,7 @@ var AdminLTEHelper = {
                     || this.readyState=="complete")) {
                 d = true;
                 if (success) {
-                    success(s.src);
+                    success(url);
                 }
                 s.onload = s.onreadystatechange = null;
                 h.removeChild(s);
