@@ -4,6 +4,7 @@ import ServerInformationPage from "./components/ServerInformationPage.vue";
 import EmailServerPage from "./components/EmailServerPage.vue";
 import GeneralSettingsPage from "./components/GeneralSettingsPage.vue";
 import MenuConfigurationPage from "./components/MenuConfigurationPage.vue";
+import AdminLTEModelDisplayTextPage from "./components/AdminLTEModelDisplayTextPage.vue";
 
 var mainFolder = document.body.getAttribute("data-main-folder");
 if (!mainFolder) {
@@ -38,5 +39,9 @@ export var Routes = [
     {
         "path": ("/" + mainFolder + "/menu_configuration"),
         "component": MenuConfigurationPage
+    },
+    {
+        "path": ("/" + mainFolder + "/laravelmodeldisplaytext"),
+        "component": AdminLTEModelDisplayTextPage
     }
 ];
