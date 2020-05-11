@@ -116,6 +116,35 @@ var AdminLTEHelper = {
             }
         }
     },
+    "decodeHTMLEntities": function (text) {
+        var element = document.createElement('div');
+
+        if(text && typeof text === 'string') {
+            // strip script/html tags
+            text = text.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, "");
+            text = text.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, "");
+            element.innerHTML = text;
+            text = element.textContent;
+            element.textContent = "";
+        }
+
+        return text;
+    },
+    "encodeHTMLEntities": function (text) {
+        text = String(text);
+
+        var map = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        };
+
+        return text.replace(/[&<>"']/g, function(m) {
+            return map[m];
+        });
+    },
     "doExternalFileLoad": function (file) {
         var fileIndex = AdminLTEHelper.__externalFiles.indexOf(file);
         if (fileIndex > -1) {
@@ -129,7 +158,7 @@ var AdminLTEHelper = {
                 AdminLTEHelper.__externalFilesCompletedCallback();
             }
         }
-    }
+    },
 }
 
 module.exports = AdminLTEHelper;

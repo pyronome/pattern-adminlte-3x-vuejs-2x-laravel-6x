@@ -253,6 +253,7 @@ export default {
             if (this.page.is_model_display_text_list_loaded
                     && this.page.is_model_property_list_loaded) {
                 this.page.is_ready = true;
+                this.initializePage();
                 this.$Progress.finish();
             }
         },
@@ -296,7 +297,206 @@ export default {
                     this.processLoadQueue();
                 });
         },
-        submitForm: function () {
+        initializePage: function () {
+            $("#buttonWidgetConfig").detach();
+            $("#modal-WidgetList").detach();
+
+            this.initializeModelList();
+            this.initializeModelAttributeList();
+
+            $("#buttonSave-formModelDisplayText").off("click").on("click", function () {
+                this.saveFormModelDisplayText(this);
+            });
+
+            $("#buttonSave-formEditDisplayText").off("click").on("click", function () {
+                this.saveFormEditDisplayText(this);
+            });
+
+            $("#buttonSearchProperty").off("click").on("click", function () {
+                $("#modal-ModelProportyList").modal();
+            });
+        },
+        initializeModelAttributeList: function () {
+            $(".liModelProperty").off("click").on("click", function () {
+                this.addToDisplayText(this);
+            });
+
+            $("#ulModelList a:first-child").tab("show")
+        },
+        addToDisplayText: function (sender) {
+            var append = "{{" + sender.getAttribute("data-display-text") + "}}";
+            var old_text = $("#formEditDisplayText-display_text").summernote("code");
+            $("#formEditDisplayText-display_text").summernote("code", (old_text + append));
+            $("#modal-ModelProportyList").modal('hide');
+        },
+        initializeModelList: function () {
+            $(".tdModelDisplayTextEditButton").off("click").on("click", function () {
+                this.showModelDisplayTextList(this);
+            });
+        },
+        showModelDisplayTextList: function (sender) {
+            var objectId = parseInt(sender.getAttribute("data-row-id"));
+            var object = this.model_display_text_list[objectId - 1];
+            
+            document.getElementById("formModelDisplayText-id").value = object["id"];
+            document.getElementById("formModelDisplayText-model").value = object["model"];
+            document.getElementById("formModelDisplayText-display_text_json").value = object["display_text_json"];
+
+            this.initializeModelPropertyDisplayTextList(object["display_text_json"]);
+
+            $("#modal-ModelDisplayTextList").modal();
+        },
+        initializeModelPropertyDisplayTextList: function (display_text_json) {
+            var tbodyElement = document.getElementById("tbodyModelDisplayText");
+            tbodyElement.innerHTML = "";
+
+            if ("" == display_text_json) {
+                return false;
+            }
+            
+            var templateHTML = document.getElementById("trEditDisplayTextTemplate").innerHTML;
+            var trHTML = "";
+            var tbodyHTML = "";
+            var display_text_jsonJSON = decodeURIComponent(display_text_json);
+            var display_texts = JSON.parse(display_text_jsonJSON);
+            var display_text = "";
+            var decoded_display_text = "";
+            var sh_class = "";
+            var anti_sh_class = "";
+            var tr_class = "";
+            var warning = "";
+            var index = 1;
+
+            var trElement = null;
+
+            for (var property in display_texts) {
+                display_text = display_texts[property];
+                decoded_display_text = AdminLTEHelper.decodeHTMLEntities(display_text);
+                sh_class = this.get_type_sh_class(property);
+                
+                if ("" == sh_class) {
+                    tr_class = "trEditDisplayText";
+                    warning = "";
+                    anti_sh_class = "d-none";
+                } else {
+                    tr_class = "";
+                    warning = "This type property display text not editable.";
+                    anti_sh_class = "";
+                }
+
+                trHTML = templateHTML;
+                trHTML = trHTML.replace(/__PROPERTY__/g, property)
+                        .replace(/__DISPLAY_TEXT__/g, decoded_display_text)
+                        .replace(/__INDEX__/g, index)
+                        .replace(/__SH_CLASS__/g, sh_class)
+                        .replace(/__ANTI_SH_CLASS__/g, anti_sh_class);
+                
+                trElement = document.createElement("TR");
+                trElement.id = "trEditDisplayText" + index;
+                trElement.className = tr_class;
+                trElement.setAttribute("data-index", index);
+                trElement.title = warning;
+
+                trElement.innerHTML = trHTML;
+                $(trElement).data("property", property);
+                $(trElement).data("display_text", display_text);
+                tbodyElement.appendChild(trElement);
+
+                index++;
+            }
+            
+            $(".trEditDisplayText").off("click").on("click", function () {
+                this.showEditDisplayTextModal(this);
+            });
+        },
+        get_type_sh_class: function (property) {
+            var sh_class = "";
+            var exceptions = ["image", "file", "dropdown", "radio", "location"];
+            var model = document.getElementById("formModelDisplayText-model").value;
+            var trList = this.model_property_list;
+            var trLength = trList.length;
+            var rowId = 0;
+            var result_found = false;
+
+            for (var i = 0; i < trLength; i++) {
+                if (result_found) {
+                    break;
+                }
+
+                rowId = trList[i]['id'];
+                result_found = (model == trList[i]['model']);
+                result_found = result_found && (property == trList[i]['property']);
+                if (result_found) {
+                    if (-1 != exceptions.indexOf(trList[i]['type'])) {
+                        sh_class = "d-none";
+                    }
+                }
+            }
+
+            return sh_class;
+        },
+        showEditDisplayTextModal: function (sender) {
+            var index = sender.getAttribute("data-index");
+            var property = $(sender).data("property");
+            var display_text = $(sender).data("display_text");
+
+            var decoded_display_text = AdminLTEHelper.decodeHTMLEntities(display_text);
+
+            document.getElementById("formEditDisplayText-index").value = index;
+            document.getElementById("formEditDisplayText-property").value = property;
+            
+            $("#formEditDisplayText-display_text").summernote({
+                "font-styles": false,
+                "height": 150,
+                codemirror: {
+                    theme: "monokai"
+                }
+            });
+
+            $("#formEditDisplayText-display_text").summernote("code", decoded_display_text);
+
+            $("#modal-EditDisplayText").modal();
+        },
+        saveFormEditDisplayText: function () {
+            var index = document.getElementById("formEditDisplayText-index").value;
+            var property = document.getElementById("formEditDisplayText-property").value;
+            var display_text = document.getElementById("formEditDisplayText-display_text").value;
+
+            document.getElementById("property_" + index).innerHTML = property;
+            document.getElementById("display_text_" + index).innerHTML = display_text;
+
+            var trEditDisplayText = document.getElementById("trEditDisplayText" + index);
+            
+            var encoded_display_text = AdminLTEHelper.encodeHTMLEntities(display_text);
+            $(trEditDisplayText).data("property", property);
+            $(trEditDisplayText).data("display_text", encoded_display_text);
+
+            document.getElementById("updated-icon-" + index).className = "fas fa-check icon-updated-item";
+
+            $("#modal-EditDisplayText").modal('hide');
+        },
+        saveFormModelDisplayText: function () {
+            var objectId = parseInt(document.getElementById("formModelDisplayText-id").value);
+            var object = this.model_display_text_list[objectId - 1];
+            
+            var trEditDisplayTextList = $(".trEditDisplayText");
+            var countTR = trEditDisplayTextList.length;
+            var displayTextList = [];
+            var objectDisplayText = {};
+            var property = "";
+            var display_text = "";
+
+            for (var i = 0; i < countTR; i++) {
+                property = $(trEditDisplayTextList[i]).data("property");
+                display_text = $(trEditDisplayTextList[i]).data("display_text");
+
+                objectDisplayText = {};
+                objectDisplayText[property] = AdminLTEHelper.encodeHTMLEntities(display_text);
+
+                displayTextList.push(objectDisplayText);
+            }
+
+            object["display_text_json"] = JSON.stringify(displayTextList);
             // Submit the form via a POST request
             this.$Progress.start();
             this.form.post(AdminLTEHelper.getAPIURL("__modeldisplaytext"))
