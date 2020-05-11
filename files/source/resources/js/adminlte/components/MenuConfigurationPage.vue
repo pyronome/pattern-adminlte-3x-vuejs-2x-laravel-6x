@@ -166,7 +166,8 @@ export default {
                     ("/js/" + AdminLTEHelper.getURL('menu_editor.js')),
                     ("/js/" + AdminLTEHelper.getURL('/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js')),
                     ("/js/" + AdminLTEHelper.getURL('/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js'))
-                ]
+                ],
+                editor: null
             }
         };
     },
@@ -229,30 +230,30 @@ export default {
                 placeholderCss: {"background-color": "#cccccc"}
             };
 
-            var editor = new MenuEditor(
+            this.page.editor = new MenuEditor(
                     "ulMenuEditor",
                     {
                         listOptions: sortableListOptions,
                         iconPicker: iconPickerOptions
                     }
             );
-            editor.setForm($("#formMenuItem"));
-            editor.setUpdateButton($("#buttonUpdateMenuItem"));
-            editor.setData(menuJSON);
+            this.page.editor.setForm($("#formMenuItem"));
+            this.page.editor.setUpdateButton($("#buttonUpdateMenuItem"));
+            this.page.editor.setData(menuJSON);
 
             $("#buttonSave-formConfiguration").off("click").on("click", function () {
-                var str = editor.getString();
+                var str = this.page.editor.getString();
                 saveMenuConfiguration(str);
             });
 
             $("#buttonUpdateMenuItem").off("click").on("click", function(){
-                editor.update();
-                hideDialog("modalMenuItem");
+                this.page.editor.update();
+                $("#modalMenuItem").modal('hide');
             });
 
             $("#buttonAddMenuItem").off("click").on("click", function(){
-                editor.add();
-                hideDialog("modalMenuItem");
+                this.page.editor.add();
+                $("#modalMenuItem").modal('hide');
             });
 
             $( "#ulMenuEditor" ).sortable();

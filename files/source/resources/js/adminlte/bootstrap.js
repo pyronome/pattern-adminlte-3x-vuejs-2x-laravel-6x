@@ -16,8 +16,6 @@ try {
     require('bootstrap');
     require('admin-lte');
     require('admin-lte/plugins/select2/js/select2.full');
-    require('bootstrap-iconpicker/bootstrap-iconpicker/js/bootstrap-iconpicker.min');
-    require('bootstrap-iconpicker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.7.0.min');
 
     window.AdminLTEHelper = require('./adminltehelper');
     /* {{@snippet:libraries}} */
