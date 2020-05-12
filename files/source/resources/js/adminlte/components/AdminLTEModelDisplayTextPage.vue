@@ -209,7 +209,7 @@
                                     <ul :id="'ul' + model_display_text_item.model + 'PropertyList'"
                                         class="ulModelPropertyList">
                                         <li class="liModelProperty"
-                                            v-for="model_property_item in model_property_list"
+                                            v-for="model_property_item in getModelPropertyList(model_display_text_item.model)"
                                             :key="model_property_item.id"
                                             @click="addToDisplayText(model_property_item.id)"
                                             :id="'liModelProperty' + model_property_item.id"
@@ -326,6 +326,16 @@ export default {
         },
         initializeModelAttributeList: function () {
             $("#ulModelList a:first-child").tab("show")
+        },
+        getModelPropertyList: function (model) {
+            var propertyCount = this.model_property_list.length;
+            var propertyList = [];
+            for (var i = 0; i < propertyCount; i++) {
+                if (model == this.model_property_list[i].model) {
+                    propertyList.push(this.model_property_list[i]);
+                }
+            }
+            return propertyList;
         },
         addToDisplayText: function (id) {
             var sender = document.getElementById("liModelProperty" + id);
