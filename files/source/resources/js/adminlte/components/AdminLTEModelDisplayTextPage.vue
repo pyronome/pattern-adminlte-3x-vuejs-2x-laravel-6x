@@ -30,12 +30,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tbodyModelList">
-                                                <tr v-for="model_display_text_item in model_display_text_list" v-bind:key="model_display_text_item.id">
+                                                <tr v-for="model_display_text_item in model_display_text_list"
+                                                    :key="model_display_text_item.id">
                                                     <td class="tdModelDisplayTextEditButton"
                                                         :id="'tdModelDisplayTextEditButton' + model_display_text_item.id"
                                                         @click="showModelDisplayTextList(model_display_text_item)"
                                                         :data-row-id="model_display_text_item.id">
-                                                        <i class="fas fa-cog nav-icon"></i>&nbsp;&nbsp;{{model_display_text_item.model}}
+                                                        <i class="fas fa-cog nav-icon"></i>&nbsp;&nbsp;{{ model_display_text_item.model }}
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -66,7 +67,7 @@
                             <input type="hidden"
                                 id="formModelDisplayText-model"
                                 name="formModelDisplayText-model"
-                                value=""/>   
+                                value=""/>
                             <input type="hidden"
                                 id="formModelDisplayText-display_text_json"
                                 name="formModelDisplayText-display_text_json"
@@ -186,37 +187,37 @@
                                     aria-orientation="vertical">
                                     <a class="nav-link"
                                         v-for="model_display_text_item in model_display_text_list"
-                                        v-bind:key="model_display_text_item.id"
+                                        :key="model_display_text_item.id"
                                         :id="model_display_text_item.model + 'tab'"
                                         data-toggle="pill"
                                         :href="'#' + model_display_text_item.model + 'Content'"
                                         role="tab"
                                         :aria-controls="model_display_text_item.model"
                                         aria-selected="false">
-                                        {{model_display_text_item.model}}
+                                        {{ model_display_text_item.model }}
                                     </a>
                                 </div>
                             </div>
-                            <div
-                                id="ulModelContentList" class="col-lg-9 col-md-9 col-sm-9 col-9 tab-content">
-                                    <div class="tab-pane fade"
-                                        v-for="model_display_text_item in model_display_text_list"
-                                        v-bind:key="model_display_text_item.id"
-                                        :id="model_display_text_item.model + 'Content'"
-                                        role="tabpanel"
-                                        :aria-labelledby="model_display_text_item.model + '-tab'">
-                                        <ul :id="'ul' + model_display_text_item.model + 'PropertyList'"
-                                            class="ulModelPropertyList">
-                                            <li class="liModelProperty"
-                                                v-for="model_property_item in model_property_list"
-                                                v-bind:key="model_property_item.id"
-                                                @click="addToDisplayText(model_property_item.id)"
-                                                :id="'liModelProperty' + model_property_item.id"
-                                                :data-display-text="model_property_item.model + '/' + model_property_item.property">
-                                                {{model_property_item.property}}
-                                            </li>
-                                        </ul>
-                                    </div>
+                            <div id="ulModelContentList"
+                                class="col-lg-9 col-md-9 col-sm-9 col-9 tab-content">
+                                <div class="tab-pane fade"
+                                    v-for="model_display_text_item in model_display_text_list"
+                                    :key="model_display_text_item.id"
+                                    :id="model_display_text_item.model + 'Content'"
+                                    role="tabpanel"
+                                    :aria-labelledby="model_display_text_item.model + '-tab'">
+                                    <ul :id="'ul' + model_display_text_item.model + 'PropertyList'"
+                                        class="ulModelPropertyList">
+                                        <li class="liModelProperty"
+                                            v-for="model_property_item in model_property_list"
+                                            :key="model_property_item.id"
+                                            @click="addToDisplayText(model_property_item.id)"
+                                            :id="'liModelProperty' + model_property_item.id"
+                                            :data-display-text="model_property_item.model + '/' + model_property_item.property">
+                                            {{ model_property_item.property }}
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
