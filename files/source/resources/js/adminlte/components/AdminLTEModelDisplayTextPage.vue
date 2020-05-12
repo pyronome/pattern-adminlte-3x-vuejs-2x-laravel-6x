@@ -139,7 +139,7 @@
                             <div class="form-group col-lg-12 col-md-12 col-xs-12">
                                 <label for="formEditDisplayText-display_text" class="label-with-btn">{{ $t('Display Text') }}</label>
                                 <button id="buttonSearchProperty"
-                                    @click="$('#modal-ModelProportyList').modal();"
+                                    @click="showModelPropertyListModal"
                                     class="noborder-edit-btn text-primary float-right"
                                     style="width:auto;">
                                     <i class="fa fa-search-plus"></i>&nbsp;{{ $t('Insert Class Property') }}
@@ -340,6 +340,9 @@ export default {
             document.getElementById("formModelDisplayText-display_text_json").value = object["display_text_json"];
             this.initializeModelPropertyDisplayTextList(object["display_text_json"]);
             $("#modal-ModelDisplayTextList").modal();
+        },
+        showModelPropertyListModal: function () {
+            $('#modal-ModelProportyList').modal();
         },
         initializeModelPropertyDisplayTextList: function (display_text_json) {
             var tbodyElement = document.getElementById("tbodyModelDisplayText");
