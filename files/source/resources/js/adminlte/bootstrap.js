@@ -16,6 +16,7 @@ try {
     require('bootstrap');
     require('admin-lte');
     require('admin-lte/plugins/select2/js/select2.full');
+    require('admin-lte/plugins/summernote/summernote-bs4.min.js');
 
     window.AdminLTEHelper = require('./adminltehelper');
     /* {{@snippet:libraries}} */
