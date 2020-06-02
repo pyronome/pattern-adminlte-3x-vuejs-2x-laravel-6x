@@ -10,6 +10,10 @@ This repository contains Pyronome **AdminLTE 3.x + Vue.js 2.x + Laravel 6.x** pa
 
 Please refer to the [Getting Started](https://github.com/pyronome/pattern-adminlte-3x-vuejs-2x-laravel-6x#getting-started) section for step by step instructions.
 
+## Status: Experimental
+
+Not available for production environments. The stable version is coming soon.
+
 ## Getting Started
 
 Please follow the steps below to generate source code using **AdminLTE 3.x + Vue.js 2.x + Laravel 6.x** pattern:
