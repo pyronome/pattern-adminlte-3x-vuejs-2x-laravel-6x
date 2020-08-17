@@ -50,6 +50,10 @@ php artisan key:generate
 php artisan migrate
 ```
 
+```console
+php artisan storage:link
+```
+
 Then, start the webserver.
 
 ```console
