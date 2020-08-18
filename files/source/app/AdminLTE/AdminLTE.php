@@ -1,13 +1,17 @@
 <?php
 
-namespace App;
+namespace App\AdminLTE;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use App\AdminLTEUser;
-use App\AdminLTELayout;
-use App\AdminLTEUserGroup;
-use App\AdminLTEModelDisplayText;
+use Illuminate\Support\Str;
+use App\AdminLTE\AdminLTEUser;
+use App\AdminLTE\AdminLTELayout;
+use App\AdminLTE\AdminLTEUserLayout;
+use App\AdminLTE\AdminLTEUserGroup;
+use App\AdminLTE\AdminLTEModelDisplayText;
+use App\AdminLTE\AdminLTEModelOption;
+use PDO;
 
 /* {{snippet:begin_class}} */
 
@@ -19,7 +23,72 @@ class AdminLTE
 	/* {{snippet:end_properties}} */
 
 	/* {{snippet:begin_methods}} */
+	
+	public function convertNameToFileName($strName) {
 
+	    $urlbrackets    = '\[\]\(\)';
+	    $urlspacebefore = ':;\'_\*%@&?!' . $urlbrackets;
+	    $urlspaceafter  = '\.,:;\'\-_\*@&\/\\\\\?!#' . $urlbrackets;
+	    $urlall         = '\.,:;\'\-_\*%@&\/\\\\\?!#' . $urlbrackets;
+	 
+	    $specialquotes  = '\'"\*<>';
+	 
+	    $fullstop       = '\x{002E}\x{FE52}\x{FF0E}';
+	    $comma          = '\x{002C}\x{FE50}\x{FF0C}';
+	    $arabsep        = '\x{066B}\x{066C}';
+	    $numseparators  = $fullstop . $comma . $arabsep;
+	 
+	    $numbersign     = '\x{0023}\x{FE5F}\x{FF03}';
+	    $percent        = '\x{066A}\x{0025}\x{066A}\x{FE6A}\x{FF05}\x{2030}\x{2031}';
+	    $prime          = '\x{2032}\x{2033}\x{2034}\x{2057}';
+	    $nummodifiers   = $numbersign . $percent . $prime;
+	 
+		$strReturnValue = $strName;
+
+		$strReturnValue = str_replace('<br>', '', $strReturnValue);
+		$strReturnValue = str_replace('<br/>', '', $strReturnValue);
+		$strReturnValue = str_replace('<BR/>', '', $strReturnValue);
+		$strReturnValue = str_replace('<BR>', '', $strReturnValue);
+		$strReturnValue = str_replace('Ç', 'c', $strReturnValue);
+		$strReturnValue = str_replace('ç', 'c', $strReturnValue);
+		$strReturnValue = str_replace('Ý', 'i', $strReturnValue);
+		$strReturnValue = str_replace('ý', 'i', $strReturnValue);
+		$strReturnValue = str_replace('I', 'i', $strReturnValue);
+		$strReturnValue = str_replace('İ', 'i', $strReturnValue);
+		$strReturnValue = str_replace('ı', 'i', $strReturnValue);
+		$strReturnValue = str_replace('Ð', 'g', $strReturnValue);
+		$strReturnValue = str_replace('ð', 'g', $strReturnValue);
+		$strReturnValue = str_replace('Ğ', 'g', $strReturnValue);
+		$strReturnValue = str_replace('ğ', 'g', $strReturnValue);
+		$strReturnValue = str_replace('Ö', 'o', $strReturnValue);
+		$strReturnValue = str_replace('ö', 'o', $strReturnValue);
+		$strReturnValue = str_replace('Þ', 's', $strReturnValue);
+		$strReturnValue = str_replace('þ', 's', $strReturnValue);
+		$strReturnValue = str_replace('ş', 's', $strReturnValue);
+		$strReturnValue = str_replace('Ş', 's', $strReturnValue);
+		$strReturnValue = str_replace('Ü', 'u', $strReturnValue);
+		$strReturnValue = str_replace('ü', 'u', $strReturnValue);
+		$strReturnValue = str_replace('"', '_', $strReturnValue);
+		$strReturnValue = str_replace('\'', '', $strReturnValue);
+		$strReturnValue = str_replace('?', '_', $strReturnValue);
+		$strReturnValue = str_replace(':', '_', $strReturnValue);
+		$strReturnValue = str_replace('/', '_', $strReturnValue);
+		$strReturnValue = str_replace('!', '_', $strReturnValue);
+		$strReturnValue = str_replace(',', '_', $strReturnValue);
+		$strReturnValue = str_replace('(', '_', $strReturnValue);
+		$strReturnValue = str_replace(')', '_', $strReturnValue);
+		$strReturnValue = str_replace('-', '_', $strReturnValue);
+		$strReturnValue = str_replace('.', '_', $strReturnValue);
+		$strReturnValue = str_replace('+', '_', $strReturnValue);
+		$strReturnValue = str_replace('*', '_', $strReturnValue);
+		$strReturnValue = str_replace('#', '_', $strReturnValue);
+		$strReturnValue = str_replace(' ', '_', $strReturnValue);
+		$strReturnValue = str_replace('__', '_', $strReturnValue);
+		$strReturnValue = strtolower($strReturnValue);
+	    
+	    return $strReturnValue;
+	}
+	
 	public function validateEmailAddress($email)
 	{
 
@@ -83,10 +152,197 @@ class AdminLTE
 		return $isValid;
 
 	}
+	
+	public function resetUserPassword($objectAdminLTEUser) {
+		$arrCities = array("shanghai",
+				"istanbul",
+				"karachi",
+				"mumbai",
+				"beijing",
+				"moscow",
+				"saopaulo",
+				"tianjin",
+				"guangzhou",
+				"delhi",
+				"seoul",
+				"shenzhen",
+				"jakarta",
+				"tokyo",
+				"mexicocity",
+				"kinshasa",
+				"tehran",
+				"bangalore",
+				"dongguan",
+				"newyorkcity",
+				"lagos",
+				"london",
+				"lima",
+				"bogota",
+				"hochiminhcity",
+				"hongkong",
+				"bangkok",
+				"dhaka",
+				"hyderabad",
+				"cairo",
+				"hanoi",
+				"wuhan",
+				"riodejaneiro",
+				"lahore",
+				"ahmedabad",
+				"baghdad",
+				"riyadh",
+				"singapore",
+				"santiago",
+				"saintpetersburg",
+				"chennai",
+				"chongqing",
+				"kolkata",
+				"surat",
+				"yangon",
+				"ankara",
+				"alexandria",
+				"shenyang",
+				"suzhou",
+				"newtaipei",
+				"johannesburg",
+				"losangeles",
+				"yokohama",
+				"abidjan",
+				"busan",
+				"berlin",
+				"capetown",
+				"durban",
+				"jeddah",
+				"pyongyang",
+				"madrid",
+				"nairobi",
+				"pune",
+				"jaipur",
+				"casablanca");
+
+		$strNewPassword = $arrCities[rand(0, 64)] . date('si');
+		$objectAdminLTEUser->password = bcrypt($strNewPassword);
+		$objectAdminLTEUser->save();
+
+		return $strNewPassword;
+	}
+
+	public function getUserPreferences() {
+		$currentUser = auth()->guard('adminlteuser')->user();
+
+		$preferences = [
+			'main-header_border-bottom-0' => 0,
+		    'body_text-sm' => 0,
+		    'main-header_text-sm' => 0,
+		    'nav-sidebar_text-sm' => 0,
+		    'main-footer_text-sm' => 0,
+		    'nav-sidebar_nav-flat' => 0,
+		    'nav-sidebar_nav-legacy' => 0,
+		    'nav-sidebar_nav-compact' => 0,
+		    'nav-sidebar_nav-child-indent' => 0,
+		    'main-sidebar_sidebar-no-expand' => 0,
+		    'brand-link_text-sm' => 0,
+		    'navbar_variants' => 'navbar-white navbar-light',
+		    'accent_variants' => '',
+		    'sidebar_variants' => 'sidebar-dark-primary',
+		    'logo_variants' => '',
+		];
+
+		if ($currentUser != null)
+		{
+			$layout = AdminLTEUserLayout::where('deleted', false)
+					->where('adminlteuser_id', $currentUser['id'])
+					->where('pagename', 'preferences')
+					->first();
+			
+			if (null != $layout)
+			{
+				$preferences = json_decode($this->base64decode($layout->widgets), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			} // if (null == $layout)			
+		} // if ($currentUser != null)
+
+		return $preferences;
+	}
+
+	public function getCustomization() {
+		$preferences = $this->getUserPreferences();
+
+		$values = array();
+		$values['main-header'] = '';
+		$values['body'] = '';
+		$values['nav-sidebar'] = '';
+		$values['main-sidebar'] = '';
+		$values['brand-link'] = '';
+		$values['main-footer'] = '';
+
+		if (1 == $preferences['main-header_border-bottom-0']) {
+			$values['main-header'] .= ' border-bottom-0 ';
+		}
+
+		if (1 == $preferences['main-header_text-sm']) {
+			$values['main-header'] .= ' text-sm ';
+		}
+
+		if ('' != $preferences['navbar_variants']) {
+			$values['main-header'] .= $preferences['navbar_variants'];
+		}
+
+		if (1 == $preferences['body_text-sm']) {
+			$values['body'] .= ' text-sm ';
+		}
+
+		if (1 == $preferences['nav-sidebar_text-sm']) {
+			$values['nav-sidebar'] .= ' text-sm ';
+		}
+
+		if (1 == $preferences['nav-sidebar_nav-flat']) {
+			$values['nav-sidebar'] .= ' nav-flat ';
+		}
+
+		if (1 == $preferences['nav-sidebar_nav-legacy']) {
+			$values['nav-sidebar'] .= ' nav-legacy ';
+		}
+
+		if (1 == $preferences['nav-sidebar_nav-compact']) {
+			$values['nav-sidebar'] .= ' nav-compact ';
+		}
+
+		if (1 == $preferences['nav-sidebar_nav-child-indent']) {
+			$values['nav-sidebar'] .= ' nav-child-indent ';
+		}
+
+		if (1 == $preferences['main-sidebar_sidebar-no-expand']) {
+			$values['main-sidebar'] .= ' sidebar-no-expand ';
+		}
+ 
+		if (1 == $preferences['brand-link_text-sm']) {
+			$values['brand-link'] .= ' text-sm ';
+		}
+
+		if ('' != $preferences['accent_variants']) {
+			$values['body'] .= $preferences['accent_variants'];
+		}
+
+		if ('' != $preferences['sidebar_variants']) {
+			$values['main-sidebar'] .= $preferences['sidebar_variants'];
+		}
+
+		if ('' != $preferences['logo_variants']) {
+			$values['brand-link'] .= $preferences['logo_variants'];
+		}
+
+		if (1 == $preferences['main-footer_text-sm']) {
+			$values['main-footer'] .= ' text-sm ';
+		}
+
+		return $values;
+	}
 
 	public function getUserData()
 	{
         $adminLTEUser = auth()->guard('adminlteuser')->user();
+
+		$image_path = '/assets/adminlte/img/default-user-image.png';
 
 		$userData = [
 			'id' => 0,
@@ -103,7 +359,7 @@ class AdminLTE
 			'menu_permission' => '',
 			'service_permission' => '',
 			'widget_permission' => '',
-			'image' => '/img/adminlte/default-user-image.png'
+			'image' => $image_path
 		];
 
 		if ($adminLTEUser != null) {
@@ -113,6 +369,14 @@ class AdminLTE
 			if (1 == $adminLTEUser->id) {
 				$userType = 'root';
 			} // if (1 == $adminLTEUser->id) {
+
+			
+			$arr_files = $this->get_model_files_by_property('AdminLTEUser', $adminLTEUser->id, 'profile_img');
+			
+			if (count($arr_files) > 0) {
+				$fileDetail = $arr_files[0];
+				$image_path = asset('storage/' . $fileDetail['path']);
+			}
 
 			$userData = [
 				'id' => $adminLTEUser->id,
@@ -129,7 +393,7 @@ class AdminLTE
 				'menu_permission' => $this->getUserMenuPermission($adminLTEUser),
 				'service_permission' => $this->getUserServicePermission($adminLTEUser),
 				'widget_permission' => '',
-				'image' => '/img/adminlte/default-user-image.png'
+				'image' => $image_path
 			];
 
             $adminLTEUserGroup = AdminLTEUserGroup::find(
@@ -457,8 +721,6 @@ class AdminLTE
 				'AdminLTE',
 				'AdminLTELayout',
 				'AdminLTEModelDisplayText',
-				'AdminLTEUser',
-				'AdminLTEUserGroup',
 				'AdminLTEUserLayout',
 				'AdminLTEVariable',
 				'HTMLDB',
@@ -469,7 +731,7 @@ class AdminLTE
 		$Models = array();
 		$index = 0;
 
-		$path = dirname(__FILE__);
+		$path = dirname(dirname(__FILE__));
 		if (is_dir($path))
 		{ 
 			$files = scandir($path);
@@ -643,7 +905,6 @@ class AdminLTE
 		$layout = AdminLTEUserLayout::where('deleted', false)
 				->where('adminlteuser_id', $currentUser['id'])
 				->where('pagename', $pageName)
-				->orderBy('id', 'DESC')
 				->first();
 		
 		if (null == $layout)
@@ -651,19 +912,15 @@ class AdminLTE
 			return $userWidgetsFormatted;
 		} // if (null == $layout)
 
-		$userwidgets = json_decode(
-				$layout->widgets,
-				(JSON_HEX_QUOT
-				| JSON_HEX_TAG
-				| JSON_HEX_AMP
-				| JSON_HEX_APOS));
 
-		$countWidgets = count($userwidgets);
+		$userWidgets = json_decode($this->base64decode($layout->widgets), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+
+		$countWidgets = count($userWidgets);
 		$emptyIndex = 0;
 
 		for ($i=0; $i < $countWidgets; $i++)
 		{ 
-			$widget = $userwidgets[$i];
+			$widget = $userWidgets[$i];
 			
 			$type = $widget['type'];
 			$model = $widget['model'];
@@ -795,16 +1052,21 @@ class AdminLTE
 	{
 		$displayTexts = [];
 		
-		$modelNameWithNamespace = ('\\App\\' . $model);
-		$objectTemp = new $modelNameWithNamespace;
-		$property_list = $this->getModelPropertyList($objectTemp);
+		$modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
+        
+        if (!class_exists($modelNameWithNamespace)) {
+        	$modelNameWithNamespace = ('\\App\\' . $model);
+        }
+
+		$property_list = $modelNameWithNamespace::$property_list;
+
 		$countProperty = count($property_list);
 
 		for ($j=0; $j < $countProperty; $j++) { 
 			$property = $property_list[$j];
 
-			$displayTexts[$property]['value'] = '{{' . $model . '/' . $property . '}}';
-			$displayTexts[$property]['type'] = 'text';
+			$displayTexts[$property['name']]['value'] = '{{' . $model . '/' . $property['name'] . '}}';
+			$displayTexts[$property['name']]['type'] = $property['type'];
 		} // for ($j=0; $j < $countProperty; $j++) {
 
 		$adminLTEModelDisplayText = AdminLTEModelDisplayText::where('deleted', false)
@@ -817,12 +1079,7 @@ class AdminLTE
 
 			if ('' != $display_texts)
 			{
-				$arrDisplayTexts = json_decode(
-						$this->base64decode($display_texts),
-						(JSON_HEX_QUOT
-						| JSON_HEX_TAG
-						| JSON_HEX_AMP
-						| JSON_HEX_APOS));
+				$arrDisplayTexts = json_decode($this->base64decode($display_texts), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 				$countDisplayText = count($arrDisplayTexts);
 
 				for ($j=0; $j < $countDisplayText; $j++)
@@ -843,15 +1100,8 @@ class AdminLTE
 		return $displayTexts;
 	}
 
-	public function getPropertyDisplayText(
-			$displayTextDefinitions,
-			$model,
-			$objectCurrent,
-			$property,
-			$display_text,
-			$type)
+	public function getPropertyDisplayText($displayTextDefinitions, $model, $objectCurrent, $property, $display_text, $type)
 	{
-
 		$parsed = $this->getStringBetween($display_text, '{{', '}}');
 
 		while (strlen($parsed) > 0) {
@@ -864,7 +1114,7 @@ class AdminLTE
 			if ('date' == $type) {
 				if ($textPart[0] == $model) { // current model
 					$display_text_Property = $textPart[1];
-					$time = $objectCurrent->$display_text_Property;
+					$time = strtotime($objectCurrent->$display_text_Property);
 				} else {
 					$time = time();
 				}
@@ -876,75 +1126,13 @@ class AdminLTE
 				}
 
 				$partResult = date($format, $time);
-			} else if ('radio' == $type) {
-				if ($textPart[0] == $model) { // current model
-					$display_text_Property = $textPart[1];
-					$value = $objectCurrent->$display_text_Property;
-
-					$optionTitles = $objectCurrent->getOptionTitles($display_text_Property);
-					$optionIndex = $objectCurrent->getOptionIndex($display_text_Property, $value);
-					
-					$partResult = $optionTitles[$optionIndex];
-				}
-			} else if ('dropdown' == $type) {
-				if ($textPart[0] == $model) { // current model
-					$display_text_Property = $textPart[1];
-					$value = $objectCurrent->$display_text_Property;
-					
-					$optionTitles = $objectCurrent->getOptionTitles($display_text_Property);
-					$selections = explode(',', $value);
-					$selectionCount = count($selections);
-
-					for ($i = 0; $i < $selectionCount; $i++) {
-
-						if ($partResult != '') {
-							$partResult .= ', ';
-						} // if ($partResult != '') {
-
-						$optionIndex = $objectCurrent->getOptionIndex(
-								$display_text_Property,
-								$selections[$i]);
-
-						$partResult .= $optionTitles[$optionIndex];
-
-					} // for ($i = 0; $i < $selectionCount; $i++) {
-				}
 			} else if ('image' == $type) {
 				if ($textPart[0] == $model) { // current model
-					$display_text_Property = $textPart[1];
-					$value = $objectCurrent->$display_text_Property;
-					
-					if (0 != intval($value)) {
+					$arr_files = $this->get_model_files_by_property($model, $objectCurrent->id, $property);
+					$fileCount = count($arr_files);
+
+					if ($fileCount > 0) {
 						$partResult = '';
-						$file_ids = explode(',', $value);
-						$fileCount = count($file_ids);
-
-						for ($i = 0; $i < $fileCount; $i++) {
-
-							/*if ($partResult != '') {
-								$partResult .= ', ';
-							} // if ($partResult != '') {*/
-							
-							$fileDetail = $this->getFileData($model, $file_ids[$i]);
-
-							$imageHTML = '<image class="showBigPhoto" src="../'
-									. $fileDetail['path']
-									. '">';
-
-							$partResult .= $imageHTML;
-
-						} // for ($i = 0; $i < $fileCount; $i++) {
-					}
-				}
-			}  else if ('file' == $type) {
-				if ($textPart[0] == $model) { // current model
-					$display_text_Property = $textPart[1];
-					$value = $objectCurrent->$display_text_Property;
-					
-					if (0 != intval($value)) {
-						$partResult = '';
-						$file_ids = explode(',', $value);
-						$fileCount = count($file_ids);
 
 						for ($i = 0; $i < $fileCount; $i++) {
 
@@ -952,53 +1140,116 @@ class AdminLTE
 								$partResult .= '<br>';
 							} // if ($partResult != '') {
 							
-							$fileDetail = $this->getFileData($model, $file_ids[$i]);
+							$fileDetail = $arr_files[$i];
 
-							$fileHTML = '<a class="btn-link text-secondary" target="_blank" href="../'
-								. $fileDetail['path']
+							$imageHTML = '<image class="showBigPhoto" src="'
+									. asset('storage/' . $fileDetail['path'])
+									. '">';
+
+							$partResult .= $imageHTML;
+						} // for ($i = 0; $i < $fileCount; $i++) {
+					}
+				}
+			} else if ('file' == $type) {
+				if ($textPart[0] == $model) { // current model
+					$arr_files = $this->get_model_files_by_property($model, $objectCurrent->id, $property);
+					$fileCount = count($arr_files);
+
+					if ($fileCount > 0) {
+						$partResult = '';
+
+						for ($i = 0; $i < $fileCount; $i++) {
+
+							if ($partResult != '') {
+								$partResult .= '<br>';
+							} // if ($partResult != '') {
+							
+							$fileDetail = $arr_files[$i];
+
+							$fileHTML = '<a class="btn-link text-secondary" target="_blank" href="'
+								. asset('storage/' . $fileDetail['path'])
 								. '">'
-								. '<img class="extension_icon" src="assets/img/'
-								. $fileDetail['extension']
+								. '<img class="extension_icon" src="'
+								. asset('assets/adminlte/img/' . $fileDetail['extension'])
 								. '.png">' 
 								. $fileDetail['file_name']
 								. '</a>';
 
 							$partResult .= $fileHTML;
-
 						} // for ($i = 0; $i < $fileCount; $i++) {
 					}
+				}
+			} else if ('class_selection_single' == $type) {
+				if ($textPart[0] == $model) { // current model
+					$display_text_Property = $textPart[1];
+					$partResult = $objectCurrent->$display_text_Property;
+				} else {
+					$id = $objectCurrent->$property;
+
+					$externalModel = $textPart[0];
+
+					$externalModelNameWithNamespace = ('\\App\\AdminLTE\\' . $externalModel);
+
+					if (!class_exists($externalModelNameWithNamespace)) {
+						$externalModelNameWithNamespace = ('\\App\\' . $externalModel);
+					}
+
+					$objectExternal = new $externalModelNameWithNamespace;
+					$objectExternal = $objectExternal::find($id);
+
+					$display_text_Property = $textPart[1];
+					$partResult = $objectExternal->$display_text_Property;
+				}
+			} else if ('class_selection_multiple' == $type) {
+				if ($textPart[0] == $model) { // current model
+					$display_text_Property = $textPart[1];
+
+					foreach ($objectCurrent->$property as $externalObject) {
+		                $arr_display_text_Property[] = $externalObject->id;
+		            }
+
+		            if(empty($arr_display_text_Property)){
+		                $current_display_text_Property = '';
+		            } else {
+		                $current_display_text_Property = implode(',', $arr_display_text_Property);
+		            }
+
+		            $partResult = $current_display_text_Property;
+		        } else {
+					$objectExternals = $objectCurrent->$property;
+					$display_text_Property = $textPart[1];
+
+					foreach ($objectExternals as $objectExternal) {
+						if ('' != $partResult) {
+							$partResult .= ', ';
+						}
+
+						$partResult .= $objectExternal->$display_text_Property;
+					}
+		        } // if ($textPart[0] == $model) { // current model
+			} else if ('selection_single' == $type) {
+				$id = $objectCurrent->$property;
+				if($id > 0) {
+					$objectExternal = AdminLTEModelOption::find($id);
+					$partResult = $objectExternal->title;
+				}
+			} else if ('selection_multiple' == $type) {
+				$objectExternals = $objectCurrent->$property;
+
+				foreach ($objectExternals as $objectExternal) {
+					if ('' != $partResult) {
+						$partResult .= ', ';
+					}
+
+					$partResult .= $objectExternal->title;
 				}
 			} else {
 				if ($textPart[0] == $model) { // current model
 					$display_text_Property = $textPart[1];
 					$partResult = $objectCurrent->$display_text_Property;
 				} else {
-					$externalModel = $textPart[0];
-					$externalModelNameWithNamespace = ('\\App\\' . $externalModel);
-					$objectExternal = new $externalModelNameWithNamespace;
-					$objectExternalInstance = null;
-
-					$idCSV = $objectCurrent->$property;
-					$ids = explode(',', $idCSV);
-					$count = count($ids);
-
-					for ($i=0; $i < $count; $i++)
-					{ 
-						$objectExternalInstance = $objectExternal->find($ids[$i]);
-
-						if (null == $objectExternalInstance)
-						{
-							continue;
-						} // if (null == $objectExternalInstance)
-
-						if ('' != $partResult) {
-							$partResult .= ', ';
-						}
-						
-						$display_text_Property = $textPart[1];
-						$partResult .= $objectExternalInstance->$display_text_property;
-					} // for ($i=0; $i < $count; $i++)
-				}
+					$partResult = '-';
+				} // if ($textPart[0] == $model) { // current model
 			} // if ('date' == $type) {
 
 			$display_text = str_replace($parsedWithMustache, $partResult, $display_text);
@@ -1182,7 +1433,12 @@ class AdminLTE
 			$sessionParameters['bufferSize'] = $limit;
 			$sessionParameters['page'] = 0;
 
-			$modelNameWithNamespace = ('\\App\\' . $modelName);
+			$modelNameWithNamespace = ('\\App\\AdminLTE\\' . $modelName);
+
+			if (!class_exists($modelNameWithNamespace)) {
+				$modelNameWithNamespace = ('\\App\\' . $modelName);
+			}
+
 			$listObject = new $modelNameWithNamespace();
 
 			$listCount = $listObject->where('deleted', false)->count();
@@ -1314,8 +1570,6 @@ class AdminLTE
 			'AdminLTE',
 			'AdminLTELayout',
 			'AdminLTEModelDisplayText',
-			'AdminLTEUser',
-			'AdminLTEUserGroup',
 			'AdminLTEUserLayout',
 			'AdminLTEVariable',
 			'HTMLDB',
@@ -1329,7 +1583,13 @@ class AdminLTE
 		// get default display texts
 		for ($i=0; $i < $countModels; $i++) {
 			$model = $Models[$i];
-			$modelNameWithNamespace = ('\\App\\' . $model);
+
+			$modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
+
+			if (!class_exists($modelNameWithNamespace)) {
+				$modelNameWithNamespace = ('\\App\\' . $model);
+			}
+
 			$object = new $modelNameWithNamespace;
 			$property_list = $this->getModelPropertyList($object);
 			$countProperty = count($property_list);
@@ -1341,7 +1601,7 @@ class AdminLTE
 		} // for ($i=0; $i < $countModels; $i++) {
 
 		$adminLTEModelDisplayText = null;
-		$adminLTEModelDisplayTexts = \App\AdminLTEModelDisplayText::where('deleted', false)
+		$adminLTEModelDisplayTexts = \App\AdminLTE\AdminLTEModelDisplayText::where('deleted', false)
 				->get();
 
 		foreach ($adminLTEModelDisplayTexts as $adminLTEModelDisplayText)
@@ -1351,12 +1611,15 @@ class AdminLTE
 
 			if ('' != $display_texts)
 			{
+
+				
 				$arrDisplayTexts = json_decode(
 						$this->base64Decode($display_texts),
 						(JSON_HEX_QUOT
 						| JSON_HEX_TAG
 						| JSON_HEX_AMP
 						| JSON_HEX_APOS));
+
 				$countDisplayText = count($arrDisplayTexts);
 
 				for ($j=0; $j < $countDisplayText; $j++)
@@ -1531,6 +1794,187 @@ class AdminLTE
 				$objPDO->execute();
 			}		
 		}
+	}
+	
+	public function insertModelPropertyFile($target, $media_type, $file_name, $path) {
+		// initialize connection
+		try {
+			$connection = DB::connection()->getPdo();
+		} catch (PDOException $e) {
+			print($e->getMessage());
+		}
+
+		$arrTemp = explode('/', $target);
+		$className = $arrTemp[0];
+		$tablename = strtolower($className) . "__filetable";
+
+		$object_property = $arrTemp[1];
+		$guid = Str::uuid();
+		$lastInsertId = 0;
+		
+		$SQLText = "INSERT INTO " . $tablename . " (`id`, `guid`, `object_property`, `file_name`, `path`, `media_type`)"
+			. " VALUES (0, :guid, :object_property, :file_name, :path, :media_type);";
+
+		$objPDO = $connection->prepare($SQLText);
+		$objPDO->bindParam(':guid', $guid, PDO::PARAM_STR);
+		$objPDO->bindParam(':object_property', $object_property, PDO::PARAM_STR);
+		$objPDO->bindParam(':file_name', $file_name, PDO::PARAM_STR);
+		$objPDO->bindParam(':path', $path, PDO::PARAM_STR);
+		$objPDO->bindParam(':media_type', $media_type, PDO::PARAM_INT);
+		$objPDO->execute();
+
+		$lastInsertId = intval($connection->lastInsertId());
+
+		return $lastInsertId;
+	}
+
+	public function get_model_files($model, $object_id) {
+		// initialize connection
+        try {
+            $connection = DB::connection()->getPdo();
+        } catch (PDOException $e) {
+            print($e->getMessage());
+        }
+
+        $tablename = strtolower($model) . "__filetable";
+        
+        $files = array();
+        $index = 0;
+        
+        $selectSQL = "SELECT * FROM `". $tablename . "` WHERE `object_id`=:object_id ORDER BY file_index;";
+        $objPDO = $connection->prepare($selectSQL);
+        $objPDO->bindParam(':object_id', $object_id, PDO::PARAM_INT);
+        
+        $objPDO->execute();
+        $data = $objPDO->fetchAll();
+
+        foreach($data as $row) {
+            $files[$index]["id"] = $row["id"];
+            $files[$index]["object_property"] = $row["object_property"];
+            $files[$index]["file_name"] = $row["file_name"];
+            $files[$index]["path"] = $row["path"];
+            $files[$index]["media_type"] = $row["media_type"];
+
+            $fileNameTokens = explode('.', $row["file_name"]);
+            $files[$index]["extension"] = strtolower(end($fileNameTokens));
+
+            $index++;
+        }
+
+        return $files;
+	}
+	
+	public function get_model_files_by_property($modelName, $object_id, $object_property) {
+        // initialize connection
+        try {
+            $connection = DB::connection()->getPdo();
+        } catch (PDOException $e) {
+            print($e->getMessage());
+        }
+        
+        $files = array();
+        $index = 0;
+        $tablename = strtolower($modelName) . '__filetable';
+        
+        $selectSQL = "SELECT * FROM `" . $tablename . "` WHERE `object_id`=:object_id and `object_property`=:object_property ORDER BY file_index;";
+        $objPDO = $connection->prepare($selectSQL);
+        $objPDO->bindParam(':object_id', $object_id, PDO::PARAM_INT);
+        $objPDO->bindParam(':object_property', $object_property, PDO::PARAM_STR);
+        
+        $objPDO->execute();
+        $data = $objPDO->fetchAll();
+
+        foreach($data as $row) {
+            $files[$index]["id"] = $row["id"];
+            $files[$index]["object_property"] = $row["object_property"];
+            $files[$index]["file_name"] = $row["file_name"];
+            $files[$index]["path"] = $row["path"];
+            $files[$index]["media_type"] = $row["media_type"];
+
+            $fileNameTokens = explode('.', $row["file_name"]);
+            $files[$index]["extension"] = strtolower(end($fileNameTokens));
+
+            $index++;
+        }
+
+        return $files;
+    }
+    
+	public function getModel_DisplayTexts($model) {
+		$displayTexts = array();
+	    
+	    $modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
+
+		if (!class_exists($modelNameWithNamespace)) {
+			$modelNameWithNamespace = ('\\App\\' . $model);
+		}
+
+	    $property_list = $modelNameWithNamespace::$property_list;
+	    $countProperty = count($property_list);
+
+	    for ($j=0; $j < $countProperty; $j++) { 
+	        $property = $property_list[$j]['property'];
+
+	        $displayTexts[$property]['value'] = '{{' . $model . '/' . $property . '}}';
+	        $displayTexts[$property]['type'] = $property_list[$j]['type'];
+	    } // for ($j=0; $j < $countProperty; $j++) {
+		
+		$adminLTEModelDisplayText = null;
+		$adminLTEModelDisplayTexts = \App\AdminLTE\AdminLTEModelDisplayText::where('deleted', false)->where('model', $model)->get();
+
+		foreach ($adminLTEModelDisplayTexts as $adminLTEModelDisplayText)
+		{
+
+			$display_texts = $adminLTEModelDisplayText->display_texts;
+
+			if ('' != $display_texts)
+			{
+				$arrDisplayTexts = json_decode(
+						$this->base64Decode($display_texts),
+						(JSON_HEX_QUOT
+						| JSON_HEX_TAG
+						| JSON_HEX_AMP
+						| JSON_HEX_APOS));
+				$countDisplayText = count($arrDisplayTexts);
+
+				for ($j=0; $j < $countDisplayText; $j++)
+				{
+					$item = $arrDisplayTexts[$j];
+					$keys = array_keys($item);
+					$countKey = count($keys);
+
+					for ($k=0; $k < $countKey; $k++)
+					{
+						$property = $keys[$k];
+						$displayTexts[$property]['value'] = $item[$property];
+					} // for ($k=0; $k < $countKey; $k++)
+				} // for ($j=0; $j < $countDisplayText; $j++)
+			} // if ('' != $display_texts)
+		} // foreach ($adminLTEModelDisplayTexts as $adminLTEModelDisplayText)
+	 
+	    return $displayTexts;
+	}
+
+	public function seedModelDropdownOptions($option_data_list)
+	{
+		foreach ($option_data_list as $option_data)
+		{
+
+			$search = $option_data['model'] . $option_data['property'] . $option_data['value'];
+			$title = $option_data['title'];
+			
+			$option = DB::table('adminltemodeloptiontable')
+                ->where(DB::raw("Concat(`model`,`property`,`value`)"), '=', $search)
+                ->first();
+
+			if (null !== $option) {
+				DB::table('adminltemodeloptiontable')
+					->where('id', $option->id)
+					->update(['title' => ($title . date('H:i:s'))]); 
+			} else {
+            	DB::table('adminltemodeloptiontable')->insert($option_data);
+        	} // if (null !== $option) {	                         
+		} // foreach ($option_data_list as $option_data)  
 	}
 
 	/* {{snippet:end_methods}} */

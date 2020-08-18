@@ -4,8 +4,8 @@ namespace App\Http\Controllers\AdminLTE;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\AdminLTE;
-use App\AdminLTEUser;
+use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTEUser;
 
 class HomeController extends Controller
 {
@@ -21,11 +21,12 @@ class HomeController extends Controller
             $viewName = 'adminlte.custom.' . $this->controllerName;
         } // if (view()->exists('adminlte.custom.' . $this->controllerName))
 
-        $adminLTE = new AdminLTE();
+        $objectAdminLTE = new AdminLTE();
 
         $viewData['controllerName'] = $this->controllerName;
-        $viewData['user'] = $adminLTE->getUserData();
-
+        $viewData['user'] = $objectAdminLTE->getUserData();
+        $viewData['customization'] = $objectAdminLTE->getCustomization();
+        
         return view($viewName, $viewData);
     }
 

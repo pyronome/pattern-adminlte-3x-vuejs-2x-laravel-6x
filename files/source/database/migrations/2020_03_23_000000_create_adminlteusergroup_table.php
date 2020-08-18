@@ -28,13 +28,35 @@ class CreateAdminLTEUserGroupTable extends Migration
         Schema::create('adminlteusergrouptable', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->boolean('deleted');
-            $table->boolean('enabled');
-            $table->string('title');
-			$table->text('menu_permission');
-			$table->text('service_permission');
-			$table->boolean('widget_permission');
+            $table->boolean('deleted')->default(0);
+            $table->boolean('enabled')->default(0);
+            $table->string('title')->nullable();
+            $table->boolean('widget_permission')->default(0);
         });
+
+        DB::table('adminlteusergrouptable')->insert(
+            array(
+                'id' => 1,
+                'deleted' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'title' => 'Administrators',
+                'enabled' => 1,
+                'widget_permission' => 1
+            )
+        );
+
+        DB::table('adminlteusergrouptable')->insert(
+            array(
+                'id' => 2,
+                'deleted' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'title' => 'Users',
+                'enabled' => 1,
+                'widget_permission' => 1
+            )
+        );
 
         /* {{snippet:end_up_method}} */
 

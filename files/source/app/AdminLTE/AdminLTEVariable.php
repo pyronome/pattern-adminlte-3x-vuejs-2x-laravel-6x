@@ -1,13 +1,14 @@
 <?php
 
-namespace App;
+namespace App\AdminLTE;
 
 use Illuminate\Database\Eloquent\Model;
 
 /* {{snippet:begin_class}} */
 
-class AdminLTELayout extends Model
+class AdminLTEVariable extends Model
 {
+
 	/* {{snippet:begin_properties}} */
 
     /**
@@ -15,11 +16,15 @@ class AdminLTELayout extends Model
      *
      * @var string
      */
-    protected $table = 'adminltelayouttable';
+    protected $table = 'adminltevariabletable';
 
 	protected $fillable = [
-		'pagename',
-		'widgets'
+		'title',
+		'group',
+		'value1',
+		'value2',
+		'value3',
+		'__order'
 	];
 
 	/* {{snippet:end_properties}} */
@@ -27,7 +32,6 @@ class AdminLTELayout extends Model
 	/* {{snippet:begin_methods}} */
 
 	/* {{snippet:end_methods}} */
-
 }
 
 /* {{snippet:end_class}} */

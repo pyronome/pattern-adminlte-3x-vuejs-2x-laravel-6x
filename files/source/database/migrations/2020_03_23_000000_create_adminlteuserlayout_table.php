@@ -28,10 +28,10 @@ class CreateAdminLTEUserLayoutTable extends Migration
         Schema::create('adminlteuserlayouttable', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->boolean('deleted');
+            $table->boolean('deleted')->default(0);
             $table->bigInteger('adminlteuser_id', false, true);
-            $table->string('pagename');
-            $table->text('widgets');
+            $table->string('pagename')->nullable();
+            $table->text('widgets')->nullable();
         });
 
         /* {{snippet:end_up_method}} */

@@ -5,11 +5,12 @@ namespace App\Http\Controllers\AdminLTE;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTEUser;
 
-class ForgotPasswordController extends Controller
+class ServerInformationController extends Controller
 {
 
-    public $controllerName = 'forgotpassword';
+    public $controllerName = 'server_information';
 
     public function index(Request $request)
     {
@@ -20,8 +21,12 @@ class ForgotPasswordController extends Controller
             $viewName = 'adminlte.custom.' . $this->controllerName;
         } // if (view()->exists('adminlte.custom.' . $this->controllerName))
 
-        $viewData['controllerName'] = $this->controllerName;
+        $objectAdminLTE = new AdminLTE();
 
+        $viewData['controllerName'] = $this->controllerName;
+        $viewData['user'] = $objectAdminLTE->getUserData();
+        $viewData['customization'] = $objectAdminLTE->getCustomization();
+        
         return view($viewName, $viewData);
     }
 

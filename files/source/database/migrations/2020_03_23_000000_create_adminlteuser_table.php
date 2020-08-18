@@ -28,35 +28,28 @@ class CreateAdminLTEUserTable extends Migration
         Schema::create('adminlteusertable', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->boolean('deleted');
-            $table->bigInteger('adminlteusergroup_id', false, true);
-            $table->text('profile_img');
-            $table->boolean('enabled');
-            $table->string('fullname');
+            $table->boolean('deleted')->default(0);
+            $table->boolean('enabled')->default(0);
+            $table->string('fullname')->nullable();
             $table->string('username')->unique();
             $table->string('email')->unique();
-            $table->string('password');
-            $table->text('menu_permission');
-            $table->text('service_permission');
+            $table->string('password')->nullable();
         });
 
-        DB::table('adminlteusertable')->insert(
-            array(
-                'id' => 1,
-                'deleted' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
-                'adminlteusergroup_id' => 0,
-                'profile_img' => '',
-                'enabled' => 1,
-                'fullname' => 'AdminLTE Root',
-                'username' => 'root',
-                'email' => 'root',
-                'password' => bcrypt('adminlte'),
-                'menu_permission' => '',
-                'service_permission' => ''
-            )
-        );
+        Schema::create('adminlteuser__filetable', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->timestamps();
+            $table->boolean('deleted')->default(0);
+            $table->smallInteger('enabled')->default(0);
+            $table->string('guid')->default(NULL);
+            $table->bigInteger('file_index')->default(0);
+            $table->bigInteger('object_id')->default(0);
+            $table->string('object_property')->default(NULL);
+            $table->string('file_name')->default(NULL);
+            $table->bigInteger('file_size')->default(0);
+            $table->smallInteger('media_type')->default(0);
+            $table->string('path')->default(NULL);
+        });
 
         /* {{snippet:end_up_method}} */
     }
@@ -81,4 +74,4 @@ class CreateAdminLTEUserTable extends Migration
 
 }
 
-    /* {{snippet:end_class}} */
+/* {{snippet:end_class}} */

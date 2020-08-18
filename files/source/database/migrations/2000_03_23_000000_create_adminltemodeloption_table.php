@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 /* {{snippet:begin_class}} */
 
-class CreateAdminLTEModelDisplayTextTable extends Migration
+class CreateAdminLTEModelOptionTable extends Migration
 {
 
     /* {{snippet:begin_properties}} */
@@ -25,14 +25,18 @@ class CreateAdminLTEModelDisplayTextTable extends Migration
 
         /* {{snippet:begin_up_method}} */
 
-        Schema::create('adminltemodeldisplaytexttable', function (Blueprint $table) {
+        Schema::create('adminltemodeloptiontable', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
             $table->boolean('deleted')->default(0);
             $table->string('model')->nullable();
-            $table->longText('display_texts')->nullable();
+            $table->string('property')->nullable();
+            $table->string('value')->nullable();
+            $table->string('title')->nullable();
         });
-
+        
+        Artisan::call('db:seed', ['--force' => true]);
+        
         /* {{snippet:end_up_method}} */
 
     }
@@ -47,7 +51,7 @@ class CreateAdminLTEModelDisplayTextTable extends Migration
 
         /* {{snippet:begin_down_method}} */
 
-        Schema::dropIfExists('adminltemodeldisplaytexttable');
+        Schema::dropIfExists('adminltemodeloptiontable');
 
         /* {{snippet:end_down_method}} */
 
