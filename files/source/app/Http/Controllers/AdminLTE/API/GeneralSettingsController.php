@@ -4,8 +4,8 @@ namespace App\Http\Controllers\AdminLTE\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\AdminLTE;
-use App\AdminLTEUser;
+use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTEUser;
 use App\Http\Requests\AdminLTE\API\GeneralSettingsPOSTRequest;
 
 class GeneralSettingsController extends Controller

@@ -4,8 +4,8 @@ namespace App\Http\Requests\AdminLTE\API;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\AdminLTE;
-use App\AdminLTEUser;
+use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTEUser;
 
 class EmailServerPOSTRequest extends FormRequest
 {

@@ -5,9 +5,9 @@ namespace App\Http\Controllers\AdminLTE\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\AdminLTE;
-use App\AdminLTEUser;
-use App\AdminLTEUserGroup;
+use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTEUser;
+use App\AdminLTE\AdminLTEUserGroup;
 
 class AdminLTEUserGroupController extends Controller
 {
@@ -53,7 +53,7 @@ class AdminLTEUserGroupController extends Controller
         $objectAdminLTEUserGroups = null;
         $objectAdminLTEUserGroup = null;
 
-        $objectAdminLTEUserGroups = \App\AdminLTEUserGroup::where('deleted', false)
+        $objectAdminLTEUserGroups = \App\AdminLTE\AdminLTEUserGroup::where('deleted', false)
                 ->where('id', $id)
                 ->get();
 
@@ -123,7 +123,7 @@ class AdminLTEUserGroupController extends Controller
                     'AdminLTEUserGroup');
 
             $pageCount = ceil(
-                    \App\AdminLTEUserGroup::where('deleted', false)->count()
+                    \App\AdminLTE\AdminLTEUserGroup::where('deleted', false)->count()
                     / $bufferSize);
 
             $adminLTE->setModelSessionParameters($request,
@@ -263,7 +263,7 @@ class AdminLTEUserGroupController extends Controller
             } // if (in_array($defaultColumn, $variables)) {
         } // for ($i=0; $i < $countDefaultColumns; $i++) {
 
-        $objectAdminLTEUserGroups = \App\AdminLTEUserGroup::where('deleted', false)
+        $objectAdminLTEUserGroups = \App\AdminLTE\AdminLTEUserGroup::where('deleted', false)
                 ->orderBy($sortingColumn, (($sortingAscending) ? 'asc' : 'desc'))
                 ->get();
         $objectAdminLTEUser = NULL;
@@ -383,7 +383,7 @@ class AdminLTEUserGroupController extends Controller
 
         $graphData = array();
 
-        $objectAdminLTEUserGroups = \App\AdminLTEUserGroup::where('deleted', false)
+        $objectAdminLTEUserGroups = \App\AdminLTE\AdminLTEUserGroup::where('deleted', false)
                 ->where('created_at', '>=', $fromDate)
                 ->orderBy('created_at', 'asc')
                 ->get();
@@ -443,7 +443,7 @@ class AdminLTEUserGroupController extends Controller
     {
         $response = [];
         $response['model'] = 'AdminLTEUserGroup';
-        $response['value'] = \App\AdminLTEUserGroup::where('deleted', false)->count();
+        $response['value'] = \App\AdminLTE\AdminLTEUserGroup::where('deleted', false)->count();
         return $response;
     }
 
@@ -488,7 +488,7 @@ class AdminLTEUserGroupController extends Controller
         else
         {
             $sessionParameters['pageCount'] = ceil(
-                    \App\AdminLTEUserGroup::where('deleted', false)->count()
+                    \App\AdminLTE\AdminLTEUserGroup::where('deleted', false)->count()
                     / $sessionParameters['bufferSize']);
         } // if (0 == $sessionParameters['bufferSize'])
 

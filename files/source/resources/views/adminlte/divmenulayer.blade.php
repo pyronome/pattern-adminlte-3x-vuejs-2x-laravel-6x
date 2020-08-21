@@ -1,6 +1,6 @@
         <?php
             // Menu
-            $adminLTE = new \App\AdminLTE();
+            $adminLTE = new \App\AdminLTE\AdminLTE();
 
             $menu = $adminLTE->getSideMenu();
             

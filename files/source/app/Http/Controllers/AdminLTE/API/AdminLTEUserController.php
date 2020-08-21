@@ -5,9 +5,9 @@ namespace App\Http\Controllers\AdminLTE\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\AdminLTE;
-use App\AdminLTEUser;
-use App\AdminLTEUserGroup;
+use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTEUser;
+use App\AdminLTE\AdminLTEUserGroup;
 
 class AdminLTEUserController extends Controller
 {
@@ -30,7 +30,7 @@ class AdminLTEUserController extends Controller
         $objectAdminLTEUsers = null;
         $objectAdminLTEUser = null;
 
-        $objectAdminLTEUsers = \App\AdminLTEUser::where('deleted', false)
+        $objectAdminLTEUsers = \App\AdminLTE\AdminLTEUser::where('deleted', false)
                 ->where('id', $id)
                 ->get();
 
@@ -437,7 +437,7 @@ class AdminLTEUserController extends Controller
 
         $graphData = array();
 
-        $objectAdminLTEUsers = \App\AdminLTEUser::where('deleted', false)
+        $objectAdminLTEUsers = \App\AdminLTE\AdminLTEUser::where('deleted', false)
                 ->where('created_at', '>=', $fromDate)
                 ->orderBy('created_at', 'asc')
                 ->get();
@@ -498,7 +498,7 @@ class AdminLTEUserController extends Controller
 
         $response = [];
         $response['model'] = 'AdminLTEUser';
-        $response['value'] = \App\AdminLTEUser::where('deleted', false)->count();
+        $response['value'] = \App\AdminLTE\AdminLTEUser::where('deleted', false)->count();
 
         return $response;
 
@@ -545,7 +545,7 @@ class AdminLTEUserController extends Controller
         else
         {
             $sessionParameters['pageCount'] = ceil(
-                    \App\AdminLTEUser::where('deleted', false)->count()
+                    \App\AdminLTE\AdminLTEUser::where('deleted', false)->count()
                     / $sessionParameters['bufferSize']);
         } // if (0 == $sessionParameters['bufferSize'])
 

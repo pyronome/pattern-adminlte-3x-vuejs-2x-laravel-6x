@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\AdminLTE\HTMLDB;
+namespace App\Http\Controllers\AdminLTE\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\AdminLTE;
-use App\AdminLTEUser;
-use App\AdminLTEUserGroup;
+use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTEUser;
+use App\AdminLTE\AdminLTEUserGroup;
 
 class ProfileController extends Controller
 {
@@ -22,7 +22,7 @@ class ProfileController extends Controller
 
         if ($userData['id'] > 0)
         {
-            $adminLTEUser = \App\AdminLTEUSer::find($userData['id']);
+            $adminLTEUser = \App\AdminLTE\AdminLTEUSer::find($userData['id']);
 
             if ($adminLTEUser != null)
             {
@@ -48,7 +48,7 @@ class ProfileController extends Controller
 
                 if ($userData['adminlteusergroup_id'] > 0)
                 {
-                    $adminLTEUserGroup = \App\AdminLTEUserGroup::find(
+                    $adminLTEUserGroup = \App\AdminLTE\AdminLTEUserGroup::find(
                             $userData['adminlteusergroup_id']);
 
                     if ($adminLTEUserGroup != null)
@@ -89,7 +89,7 @@ class ProfileController extends Controller
         $adminLTE = new AdminLTE();
         $userData = $adminLTE->getUserData();
 
-        $adminLTEUser = \App\AdminLTEUser::find($userData['id']);
+        $adminLTEUser = \App\AdminLTE\AdminLTEUser::find($userData['id']);
 
         if ($adminLTEUser != null)
         {

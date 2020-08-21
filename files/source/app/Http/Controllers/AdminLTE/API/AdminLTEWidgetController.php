@@ -5,8 +5,8 @@ namespace App\Http\Controllers\AdminLTE\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\AdminLTE;
-use App\AdminLTEUser;
+use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTEUser;
 
 class AdminLTEWidgetController extends Controller
 {
@@ -35,7 +35,7 @@ class AdminLTEWidgetController extends Controller
             $list[$index]['type'] = $Widget['type'];
             $list[$index]['model'] = $Widget['model'];
             $list[$index]['text'] = $Widget['text'];
-            $list[$index]['href'] = $Widget['href'];
+            $list[$index]['href'] = config('adminlte.main_folder') . '/' . $Widget['href'];
 
             $sizeCSV = $Widget['size'];
             $sizes = explode(',', $sizeCSV);

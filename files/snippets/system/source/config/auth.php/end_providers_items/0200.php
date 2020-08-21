@@ -1,5 +1,5 @@
 
 		'adminlteusers' => [
 			'driver' => 'eloquent',
-			'model' => App\AdminLTEUser::class,
+			'model' => App\AdminLTE\AdminLTEUser::class,
 		],

@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
 
-class AdminLTEModelDisplayTextPOSTRequest extends FormRequest
+class WidgetConfigPOSTRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,13 @@ class AdminLTEModelDisplayTextPOSTRequest extends FormRequest
     public function rules()
     {
         return [
-            'model' => 'required|string',
-            'display_text_json' => 'string'
+            /* 'email_type' => 'required|integer',
+            'email_from_name' => 'required|string',
+            'email_reply_to' => 'required|string',
+            'email_smtp_host' => Rule::requiredIf($this->email_type > 0),
+            'email_smtp_user' => Rule::requiredIf($this->email_type > 0),
+            'email_smtp_password' => Rule::requiredIf($this->email_type > 0),
+            'email_smtp_port' => Rule::requiredIf($this->email_type > 0) */
         ];
     }
 

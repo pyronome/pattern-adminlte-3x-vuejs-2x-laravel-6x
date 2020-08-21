@@ -6,28 +6,36 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
-use App\Http\Requests\AdminLTE\API\EmailServerPOSTRequest;
+use App\Http\Requests\AdminLTE\API\WidgetConfigPOSTRequest;
 
-class EmailServerController extends Controller
+class WidgetConfigController extends Controller
 {
     public function get(Request $request)
     {
+        /* $pagename = isset($parameters['pagename'])
+                ? htmlspecialchars($parameters['pagename'])
+                : ''; */
+
+        $pagename = 'color';
+
+        $objectAdminLTE = new AdminLTE();
+
+        $Widgets = $objectAdminLTE->getPageLayout($pagename);
+        
+        $widget_json = json_encode($Widgets,
+                JSON_HEX_QUOT |
+                JSON_HEX_TAG |
+                JSON_HEX_AMP |
+                JSON_HEX_APOS);
 
         return [
-            'email_type' => 1,
-            'email_format' => 0,
-            'email_from_name' => config('mail.from.name'),
-            'email_reply_to' => config('mail.from.address'),
-            'email_smtp_host' => config('mail.host'),
-            'email_smtp_user' => config('mail.username'),
-            'email_smtp_password' => config('mail.password'),
-            'email_smtp_encryption' => config('mail.encryption'),
-            'email_smtp_port' => config('mail.port')
+            'id' => 1,
+            'widget_json' => $widget_json
         ];
 
     }
 
-    public function post(EmailServerPOSTRequest $request)
+    public function post(WidgetConfigPOSTRequest $request)
     {
 
         $adminLTE = new AdminLTE();

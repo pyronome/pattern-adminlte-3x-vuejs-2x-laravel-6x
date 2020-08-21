@@ -5,8 +5,8 @@ namespace App\Http\Controllers\AdminLTE\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\AdminLTE;
-use App\AdminLTEUser;
+use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTEUser;
 use App\Http\Requests\AdminLTE\API\AdminLTEModelDisplayTextPOSTRequest;
 
 class AdminLTEModelDisplayTextController extends Controller
@@ -90,7 +90,7 @@ class AdminLTEModelDisplayTextController extends Controller
 
         $display_texts = $adminLTE->base64Encode($display_text_json);
         
-        $modelDisplayText = \App\AdminLTEModelDisplayText::where('deleted', false)
+        $modelDisplayText = \App\AdminLTE\AdminLTEModelDisplayText::where('deleted', false)
                 ->where('model', $model)
                 ->first();
 
@@ -98,7 +98,7 @@ class AdminLTEModelDisplayTextController extends Controller
             $modelDisplayText->display_texts = $display_texts;
             $modelDisplayText->update();
         } else {
-            $modelDisplayText = new \App\AdminLTEModelDisplayText;
+            $modelDisplayText = new \App\AdminLTE\AdminLTEModelDisplayText;
             $modelDisplayText->model = $model;
             $modelDisplayText->display_texts = $display_texts;
             $modelDisplayText->insert();

@@ -342,7 +342,7 @@ class AdminLTE
 	{
         $adminLTEUser = auth()->guard('adminlteuser')->user();
 
-		$image_path = '/assets/adminlte/img/default-user-image.png';
+		$image_path = '/img/adminlte/default-user-image.png';
 
 		$userData = [
 			'id' => 0,

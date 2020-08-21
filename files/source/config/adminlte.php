@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'project_title' => env('ADMINLTE_PROJECT_TITLE', env('APP_NAME', 'AdminLTE 3.x + HTMLDB.js 1.x + Laravel 6.x')),
+    'project_title' => env('ADMINLTE_PROJECT_TITLE', env('APP_NAME', 'AdminLTE 3.x + Vue.js 2.x + Laravel 6.x')),
     'main_folder' => env('ADMINLTE_MAIN_FOLDER', 'adminlte'),
     'landing_page' => env('ADMINLTE_LANDING_PAGE', 'home'),
     'default_language' => env('ADMINLTE_DEFAULT_LANGUAGE', 'en'),
