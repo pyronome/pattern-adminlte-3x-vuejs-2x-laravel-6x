@@ -44,7 +44,7 @@
         </script>
         <script type="text/html" id="modelRecordListTemplate">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover __TABLE_RECORD_LIST_CLASS__">
+                <table id="table__MODEL__RecordList" class="table table-striped table-bordered table-hover __TABLE_RECORD_LIST_CLASS__">
                     <thead>
                         <tr>__TH__</tr>
                     </thead>
