@@ -28,7 +28,7 @@ Please follow the steps below to generate source code using **AdminLTE 3.x + Vue
 
 After generating and downloading source code from the Pyronome platform, you can follow the steps below to install dependencies and run the local webserver.
 
-Firstly, install project and load dependencies.
+Firstly, go to the `source` folder, install the project, and load dependencies.
 
 ```console
 composer update
