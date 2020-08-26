@@ -54,6 +54,10 @@ php artisan migrate
 php artisan storage:link
 ```
 
+```console
+npm run dev
+```
+
 Then, start the webserver.
 
 ```console
