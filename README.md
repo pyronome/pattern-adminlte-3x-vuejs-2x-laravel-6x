@@ -50,6 +50,8 @@ php artisan key:generate
 php artisan migrate
 ```
 
+Also, run the following commands:
+
 ```console
 php artisan storage:link
 ```
