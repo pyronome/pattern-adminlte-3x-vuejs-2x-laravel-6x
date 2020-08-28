@@ -1393,6 +1393,69 @@ class AdminLTE
 
 	}
 
+	public function getRecordListLimit($request, $Widgets, $modelName)
+	{
+		$limit = 0;
+		$countWidgets = count($Widgets);
+		
+		for ($i=0; $i < $countWidgets; $i++) { 
+			$Widget = $Widgets[$i];
+			
+			if ('recordlist' != $Widget['type']) {
+				continue;
+			}
+			
+			if ($modelName == $Widget['model']) {
+				$limit = $Widget['limit'];
+				break;
+			}
+		} // for ($i=0; $i < $countWidgets; $i++) {
+
+		$sessionParameters = $this->getModelSessionParameters(
+				$request,
+				$modelName);
+
+		$listCount = 0;
+		$modelNameWithNamespace = '';
+
+		if (!isset($sessionParameters['bufferSize'])
+				|| ($limit != $sessionParameters['bufferSize']))
+		{
+			$searchText = '';
+
+			if (isset($sessionParameters['searchText']))
+			{
+				$searchText = $sessionParameters['searchText'];
+				$sessionParameters['sortingColumn'] = 'id';
+				$sessionParameters['sortingAscending'] = false;
+			} // if (isset($sessionParameters['searchText']))
+
+			$sessionParameters['bufferSize'] = $limit;
+			$sessionParameters['page'] = 0;
+
+			$modelNameWithNamespace = ('\\App\\AdminLTE\\' . $modelName);
+
+			if (!class_exists($modelNameWithNamespace)) {
+				$modelNameWithNamespace = ('\\App\\' . $modelName);
+			}
+
+			$listObject = new $modelNameWithNamespace();
+
+			$listCount = $listObject->where('deleted', false)->count();
+
+			$sessionParameters['pageCount'] = ceil(
+					$listCount
+					/ $sessionParameters['bufferSize']);
+			
+			$this->setModelSessionParameters($request,
+					$modelName,
+					$sessionParameters);
+
+		} // if (!isset($sessionParameters['bufferSize'])
+
+		return $limit;
+	}
+
 	public function getModelForeignSortColumn($model, $identifier)
 	{
 		$dictionary = array();
@@ -1415,10 +1478,10 @@ class AdminLTE
 	public function getRecordGraphProperties($Widgets, $modelName)
 	{
 		$result = array();
+		$result['text'] = 'Graph';
+		$result['sizeCSV'] = '12,12,12';
 		$result['type'] = 'daily';
 		$result['period'] = 1;
-		$result['text'] = 'Graph';
-		$result['size'] = '12,12,12';
 
 		$countWidgets = count($Widgets);
 		
@@ -1430,10 +1493,10 @@ class AdminLTE
 			}
 			
 			if ($modelName == $widget['model']) {
+				$result['text'] = $widget['text'];
+				$result['sizeCSV'] = $widget['size'];
 				$result['type'] = $widget['graphtype'];
 				$result['period'] = intval($widget['graphperiod']);
-				$result['text'] = $widget['text'];
-				$result['size'] = $widget['size'];
 				break;
 			}            
 		} // for ($i=0; $i < $countWidgets; $i++) {
