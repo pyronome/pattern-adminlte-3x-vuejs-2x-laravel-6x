@@ -11,7 +11,7 @@
                         class="form-horizontal"
                         @submit.prevent="submitForm"
                         @keydown="form.onKeydown($event)">
-                    /* {{@snippet:begin_login_form}} */
+                    <!-- {{@snippet:begin_login_form}} -->
                     <div class="input-group mb-3">
                         <input type="text"
                             v-model="form.email"
@@ -61,7 +61,7 @@
                                     class="btn btn-primary btn-block">{{ $t('Sign in') }}</button>
                         </div>
                     </div>
-                    /* {{@snippet:end_login_form}} */
+                    <!-- {{@snippet:end_login_form}} -->
                 </form>
                 <p class="mb-1 mt-2">
                     <a href="forgotpassword">{{ $t('I forgot my password') }}</a>
