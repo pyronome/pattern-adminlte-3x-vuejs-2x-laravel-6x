@@ -14,6 +14,7 @@ class LoginController extends Controller
 
     public function post(LoginPOSTRequest $request)
     {
+        /* {{@snippet:begin_login_post}} */
         $adminLTEUser = AdminLTEUser::where(
                 'email',
                 $request->input('email'))
@@ -31,6 +32,8 @@ class LoginController extends Controller
         return [
             'landing_page' => $landingPage
         ];
+        
+         /* {{@snippet:end_login_post}} */
     }
 
 }
