@@ -42,39 +42,23 @@
                 </div>
             </div>
         </script>
-
-        <script type="text/html" id="thButtonTemplate">
-            <th class="text-center th-btn-1">
-                <button type="button"
-                    id="buttonNew__MODEL__"
-                    data-href="/{{ config('adminlte.main_folder') }}/__MODEL_LOWERCASE__/edit/new"
-                    class="btn btn-primary btn-xs btn-on-table show_by_permission">
-                    <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ __('Add') }}</span>
-                </button>
-                <button type="button"
-                    id="buttonDelete__MODEL__"
-                    href="javascript:void(0);"
-                    class="btn btn-danger btn-xs btn-on-table button-model-delete show_by_permission"
-                    data-target-input="formDelete__MODEL__-idcsv"
-                    data-tbody-id="tbody__MODEL__RecordList"
-                    data-model="__MODEL__"
-                    style="display:none;">
-                    <i class="fa fa-trash"></i> <span class="hidden-xxs">{{ __('Delete') }}</span> <span class="selected-count"></span>
-                </button>
-            </th>
-        </script> 
         <script type="text/html" id="tdTemplate">
             <td>__VALUE__</td>
         </script>
         <script type="text/html" id="tdLastRecordTemplate">
             <td>__VALUE__</td>
         </script>
-        <script type="text/html" id="tdButtonTemplate">
-            <td class="text-center">
-                <a class="btn btn-outline-primary btn-xs btn-on-table" href="/{{ config('adminlte.main_folder') }}/__MODEL_LOWERCASE__detail/@{{__URL_KEY__}}">
-                    <i class="fa fa-info-circle"></i> <span class="hidden-xxs">{{ __('Detail') }}</span>
-                </a>
-            </td>
+        <script type="text/html" id="ulFileListTemplate">
+            <span class="grippy"></span>
+            <a href="" target="_blank" class="aFileListItemFileURL mediaImageContainer aMediaType__MEDIA_TYPE__">
+                <img width="64" src="" alt="" class="imgFileListItemFileURL">
+            </a>
+            <a href="" target="_blank" class="aFileListItemFileURL mediaFilenameContainer text-primary aMediaType__MEDIA_TYPE__">
+                <span class="title" class="spanFileListItemFileName">__FILE_NAME__</span>
+            </a>
+            <a href="JavaScript:void(0);" class="aDeleteFileListItem secondary-content text-primary float-right">
+                <i class="ion-android-close"></i>
+            </a>
         </script>
     </div>
     <script src="/js/adminlte/app.js"></script>

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
+use App\Http\Requests\AdminLTE\API\MediaPOSTRequest;
+use Storage;
 
 class MediaController extends Controller
 {
@@ -79,9 +81,9 @@ class MediaController extends Controller
         $index = 0;
     
         try {
-			$connection = DB::connection()->getPdo();
-		} catch (PDOException $e) {
-			print($e->getMessage());
+            $connection = DB::connection()->getPdo();
+        } catch (PDOException $e) {
+            print($e->getMessage());
         }
                 
         $selectSQL = "SELECT * FROM `". $tablename . "` WHERE `object_id`=:object_id ORDER BY file_index;";
@@ -109,5 +111,40 @@ class MediaController extends Controller
         $objectHTMLDB->columns = $this->columns;
         $objectHTMLDB->printHTMLDBList();
         return;
+    }
+
+    public function post(MediaPOSTRequest $request)
+    {   
+        /* ::must_update:: need validation */
+
+        $target = isset($request['target'])
+            ? htmlspecialchars($request['target'])
+            : '';
+
+        $target_path = 'public/' . strtolower($target);
+
+        $media_type = isset($request['media_type'])
+            ? intval($request['media_type'])
+            : 1;
+
+
+        $file = $request->file('file');
+        $fileOriginalName = $file->getClientOriginalName();
+        $extension = $file->extension();
+
+        $fileRealName = str_replace('.' . $extension, '', $fileOriginalName);
+
+        $objectAdminLTE = new AdminLTE();
+        $filename = $objectAdminLTE->convertNameToFileName($fileRealName) . '_' . time()  . '.' . $extension;
+        
+        $path = Storage::putFileAs($target_path, $file, $filename);
+
+        $real_path = str_replace('public/', '', $path);
+
+        $lastInsertedId = $objectAdminLTE->insertModelPropertyFile($target, $media_type, $filename, $real_path);
+
+        $lastMessage = $lastInsertedId . '#' . $filename . '#' . $real_path;
+
+        return response()->json(['lastMessage'=>$lastMessage, 'errorCount'=>0, 'lastError'=>'']);
     }
 }

@@ -19,6 +19,7 @@ try {
     require('admin-lte/plugins/summernote/summernote-bs4.min.js');
 
     window.AdminLTEHelper = require('./adminltehelper');
+    window.Dropzone = require('./dropzone');
     /* {{@snippet:libraries}} */
 } catch (e) {}
 
