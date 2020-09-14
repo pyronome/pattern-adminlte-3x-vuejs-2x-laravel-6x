@@ -437,7 +437,78 @@ var AdminLTEHelper = {
         var strToken1 = 'xxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);});
         var strToken2 = 'xxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);});  
         return strPrefix + strToken0 + strToken1 + strToken2;
-    }
+    },
+    "updateLocationPicker": function(sender) {
+        var senderId = sender.id;
+        var currentLatitude = 41.015;
+        var currentLongitude = 28.979;
+        var mapElement = document.getElementById(senderId + "-MapObject");
+
+        if (sender.value != "") {
+            coordinates = String(sender.value).split(",");
+            if (2 == coordinates.length) {
+                currentLatitude = parseFloat(coordinates[0]);
+                currentLongitude = parseFloat(coordinates[1]);
+            }
+        }
+
+        var tmRefreshTimer = $(mapElement).data("tmRefreshTimer");
+        clearTimeout(tmRefreshTimer);
+        tmRefreshTimer = setTimeout(function () {
+            google.maps.event.trigger(mapElement, "resize");
+
+            document.getElementById(senderId + "-Latitude").value = currentLatitude;
+            document.getElementById(senderId + "-Longitude").value = currentLongitude;
+
+            $(mapElement).locationpicker({
+                location: {
+                    latitude: currentLatitude,
+                    longitude: currentLongitude
+                },
+                locationName: "",
+                radius: 500,
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                styles: [],
+                mapOptions: {},
+                scrollwheel: true,
+                inputBinding: {
+                    latitudeInput: $(document.getElementById(senderId+ "-Latitude")),
+                    longitudeInput: $(document.getElementById(senderId+ "-Longitude")),
+                    radiusInput: null,
+                    locationNameInput: $(document.getElementById(senderId+ "-Address"))
+                },
+                enableAutocomplete: true,
+                enableAutocompleteBlur: false,
+                autocompleteOptions: null,
+                addressFormat: 'postal_code',
+                enableReverseGeocode: true,
+                draggable: true,
+                onchanged: function (currentLocation, radius, isMarkerDropped) {
+                    sender.value = currentLocation.latitude + "," + currentLocation.longitude;
+                },
+                onlocationnotfound: function(locationName) {},
+                oninitialized: function (component) {},
+                // must be undefined to use the default gMaps marker
+                markerIcon: undefined,
+                markerDraggable: true,
+                markerVisible : true
+            });
+        }, 100);
+
+        $(mapElement).data("tmRefreshTimer", tmRefreshTimer);
+    },
+    "showGoogleMap": function(sender) {
+        var lat = parseFloat(sender.getAttribute("data-lat"));
+        var lng = parseFloat(sender.getAttribute("data-lng"));
+        var place = {lat: lat, lng: lng};
+
+        // The map, centered at Uluru
+        var map = new google.maps.Map(sender, {zoom: 16, center: place});
+
+        // The marker, positioned at Uluru
+        var marker = new google.maps.Marker({position: place, map: map});
+    },
     
 }
 

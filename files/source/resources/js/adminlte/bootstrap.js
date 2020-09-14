@@ -20,6 +20,8 @@ try {
 
     window.AdminLTEHelper = require('./adminltehelper');
     window.Dropzone = require('./dropzone');
+    /* window.Map = require('./map'); */
+    window.LocationPicker = require('./locationpicker');
     /* {{@snippet:libraries}} */
 } catch (e) {}
 
