@@ -58,6 +58,13 @@ Vue.use(VueProgressBar, {
 });
 /* vue-progressbar Declaration EOF */
 
+import Inputmask from 'inputmask';
+Vue.directive('input-mask', {
+    bind: function(el) {
+        new Inputmask().mask(el);
+    },
+});
+
 /* {{@snippet:global_objects}} */
 
 /**
