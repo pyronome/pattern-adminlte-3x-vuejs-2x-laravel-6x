@@ -410,7 +410,7 @@ transform: scale(1, 1);
     height: 32px;
 }
 
-.htmldb-switch.htmldb-field {
+.vue-switch {
     display: none;
 }
 .switch-label {
@@ -423,7 +423,7 @@ transform: scale(1, 1);
 .itemeditpage-hide {
     display: none;
 }
-.textarea.htmldb-field {
+.textarea.vue-editor {
     width: 100%;
     height: 250px;
     border: 1px solid #dddddd;

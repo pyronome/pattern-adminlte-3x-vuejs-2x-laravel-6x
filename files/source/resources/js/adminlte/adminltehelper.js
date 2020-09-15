@@ -509,7 +509,30 @@ var AdminLTEHelper = {
         // The marker, positioned at Uluru
         var marker = new google.maps.Marker({position: place, map: map});
     },
-    
+    "initializeTextEditor": function() {
+        $(".textarea.vue-editor").summernote({
+            "font-styles": false,
+            "height": 150,
+            codemirror: {
+                theme: "monokai"
+            }
+        });
+        
+        // editor içeriği yenilenmiyorsa aşağıdaki denenebilir
+        /*$(sender).summernote({
+            "font-styles": false,
+            "height": 150,
+            codemirror: {
+                theme: "monokai"
+            }
+        });
+
+        $(sender).summernote("code", event.detail.value);*/
+    },
+    "updateSwitch": function(sender) {
+        $(sender).bootstrapSwitch("state", sender.checked);
+        $(".fake-switch-container").hide();
+    }
 }
 
 module.exports = AdminLTEHelper;
