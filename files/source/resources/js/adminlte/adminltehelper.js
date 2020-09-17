@@ -391,6 +391,7 @@ var AdminLTEHelper = {
         }
     
         targetFileListInput.value = fileListInputValue;
+        targetFileListInput.dispatchEvent(new Event('input'));
     },
     "doBrowseButtonClick": function(sender) {
         if (!sender) {
@@ -486,6 +487,7 @@ var AdminLTEHelper = {
                 draggable: true,
                 onchanged: function (currentLocation, radius, isMarkerDropped) {
                     sender.value = currentLocation.latitude + "," + currentLocation.longitude;
+                    sender.dispatchEvent(new Event('input'));
                 },
                 onlocationnotfound: function(locationName) {},
                 oninitialized: function (component) {},
@@ -515,6 +517,11 @@ var AdminLTEHelper = {
             "height": 150,
             codemirror: {
                 theme: "monokai"
+            },
+            callbacks: {
+                onBlur: function() {
+                    this.dispatchEvent(new Event('input'));
+                }
             }
         });
         
@@ -532,7 +539,11 @@ var AdminLTEHelper = {
     "updateSwitch": function(sender) {
         $(sender).bootstrapSwitch("state", sender.checked);
         $(".fake-switch-container").hide();
-    }
+
+        $(sender).on('switchChange.bootstrapSwitch', function (event, state) {
+            sender.dispatchEvent(new Event('change'));
+        });
+}
 }
 
 module.exports = AdminLTEHelper;
