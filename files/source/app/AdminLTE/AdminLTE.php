@@ -1170,7 +1170,7 @@ class AdminLTE
 								. asset('storage/' . $fileDetail['path'])
 								. '">'
 								. '<img class="extension_icon" src="'
-								. asset('assets/adminlte/img/' . $fileDetail['extension'])
+								. asset('img/adminlte/' . $fileDetail['extension'])
 								. '.png">' 
 								. $fileDetail['file_name']
 								. '</a>';
