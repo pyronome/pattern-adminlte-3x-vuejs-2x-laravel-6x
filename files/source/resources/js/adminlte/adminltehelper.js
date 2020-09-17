@@ -505,7 +505,7 @@ var AdminLTEHelper = {
             var lat = parseFloat(sender.getAttribute("data-lat"));
             var lng = parseFloat(sender.getAttribute("data-lng"));
             var place = {lat: lat, lng: lng};
-            console.log(place);
+            
             // The map, centered at Uluru
             var map = new google.maps.Map(sender, {zoom: 16, center: place});
         }, 1000);
