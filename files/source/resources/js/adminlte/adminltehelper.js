@@ -501,15 +501,14 @@ var AdminLTEHelper = {
         $(mapElement).data("tmRefreshTimer", tmRefreshTimer);
     },
     "showGoogleMap": function(sender) {
-        var lat = parseFloat(sender.getAttribute("data-lat"));
-        var lng = parseFloat(sender.getAttribute("data-lng"));
-        var place = {lat: lat, lng: lng};
-
-        // The map, centered at Uluru
-        var map = new google.maps.Map(sender, {zoom: 16, center: place});
-
-        // The marker, positioned at Uluru
-        var marker = new google.maps.Marker({position: place, map: map});
+        setTimeout(function(){
+            var lat = parseFloat(sender.getAttribute("data-lat"));
+            var lng = parseFloat(sender.getAttribute("data-lng"));
+            var place = {lat: lat, lng: lng};
+            console.log(place);
+            // The map, centered at Uluru
+            var map = new google.maps.Map(sender, {zoom: 16, center: place});
+        }, 1000);
     },
     "initializeTextEditor": function() {
         $(".textarea.vue-editor").summernote({
@@ -543,7 +542,19 @@ var AdminLTEHelper = {
         $(sender).on('switchChange.bootstrapSwitch', function (event, state) {
             sender.dispatchEvent(new Event('change'));
         });
-}
+    },
+    "initializeShowPhoto": function() {
+        $(".showBigPhoto").off("click").on("click", function() {
+            this.doShowBigPhotoClick(this);
+        });
+    },
+    "doShowBigPhotoClick": function(sender) {   
+        if (!sender) {  
+            return; 
+        }   
+        document.getElementById("popup-photo").src = sender.src;    
+        showDialog("galleryModal"); 
+    }
 }
 
 module.exports = AdminLTEHelper;
