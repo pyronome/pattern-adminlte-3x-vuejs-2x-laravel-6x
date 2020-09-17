@@ -500,9 +500,7 @@ var AdminLTEHelper = {
 
         $(mapElement).data("tmRefreshTimer", tmRefreshTimer);
     },
-    "showGoogleMap": function(sender) {
-        var lat = parseFloat(sender.getAttribute("data-lat"));
-        var lng = parseFloat(sender.getAttribute("data-lng"));
+    "showGoogleMap": function(sender, lat, lng) {
         var place = {lat: lat, lng: lng};
         
         // The map, centered at Uluru
