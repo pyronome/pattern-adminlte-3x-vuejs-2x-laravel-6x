@@ -501,14 +501,15 @@ var AdminLTEHelper = {
         $(mapElement).data("tmRefreshTimer", tmRefreshTimer);
     },
     "showGoogleMap": function(sender) {
-        setTimeout(function(){
-            var lat = parseFloat(sender.getAttribute("data-lat"));
-            var lng = parseFloat(sender.getAttribute("data-lng"));
-            var place = {lat: lat, lng: lng};
-            
-            // The map, centered at Uluru
-            var map = new google.maps.Map(sender, {zoom: 16, center: place});
-        }, 1000);
+        var lat = parseFloat(sender.getAttribute("data-lat"));
+        var lng = parseFloat(sender.getAttribute("data-lng"));
+        var place = {lat: lat, lng: lng};
+        
+        // The map, centered at Uluru
+        var map = new google.maps.Map(sender, {zoom: 16, center: place});
+
+        // The marker, positioned at Uluru
+        var marker = new google.maps.Marker({position: place, map: map});
     },
     "initializeTextEditor": function() {
         $(".textarea.vue-editor").summernote({
