@@ -1932,7 +1932,10 @@ class AdminLTE
         	} // if (null !== $option) {	                         
 		} // foreach ($option_data_list as $option_data)  
 	}
-
+	
+	public function getFormattedDatetime($date) {
+		return (date('Y-m-d', strtotime($date)) . 'T' . date('h:i:s', strtotime($date)));
+	}
 	/* {{snippet:end_methods}} */
 }
 
