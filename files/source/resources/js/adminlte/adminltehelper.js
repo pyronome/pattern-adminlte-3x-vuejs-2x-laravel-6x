@@ -544,7 +544,7 @@ var AdminLTEHelper = {
     },
     "initializeShowPhoto": function() {
         $(".showBigPhoto").off("click").on("click", function() {
-            this.doShowBigPhotoClick(this);
+            AdminLTEHelper.doShowBigPhotoClick(this);
         });
     },
     "doShowBigPhotoClick": function(sender) {   
@@ -552,7 +552,7 @@ var AdminLTEHelper = {
             return; 
         }   
         document.getElementById("popup-photo").src = sender.src;    
-        showDialog("galleryModal"); 
+        $("#galleryModal").modal();
     }
 }
 
