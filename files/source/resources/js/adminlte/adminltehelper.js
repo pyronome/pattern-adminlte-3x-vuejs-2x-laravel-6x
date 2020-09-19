@@ -412,6 +412,38 @@ var AdminLTEHelper = {
     
         $("#divDropzone").trigger("click");
     },
+    "initializePageFiles": function (files) {
+        files.forEach(file => {
+            AdminLTEHelper.initializeFile(file);
+        });
+    },
+    "initializeFile": function (file) {
+        var property = file["object_property"];
+        var fileId = file["id"];
+        var fileName = file["file_name"];
+        var filePath = file["path"];
+        var mediaType = file["media_type"];
+    
+        var targetFileList = document.getElementById("ul" + property + "FileList");
+    
+        var innerElement = document.createElement('li');
+        innerElement.id ="liFileListItem" + fileId;
+        innerElement.className ="collection-item liMediaType" + mediaType;
+        innerElement.setAttribute('data-object-id', fileId);
+        innerElement.setAttribute('data-file-name', fileName);
+        innerElement.setAttribute('data-file-path', filePath);
+        innerElement.setAttribute('data-media-type', mediaType);
+    
+        var templateHTML = document.getElementById("ulFileListTemplate").innerHTML;
+        templateHTML = templateHTML.replace(/__ID__/g, fileId);
+        templateHTML = templateHTML.replace(/__MEDIA_TYPE__/g, mediaType);
+        templateHTML = templateHTML.replace(/__FILE_NAME__/g, fileName);
+        innerElement.innerHTML = templateHTML;
+    
+        targetFileList.appendChild(innerElement);
+    
+        AdminLTEHelper.updateFileListUL(targetFileList);
+    },
     "humanFileSize": function(bytes, si) {
         var thresh = si ? 1000 : 1024;
         if(Math.abs(bytes) < thresh) {

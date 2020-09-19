@@ -57,7 +57,7 @@
                 <span class="title" class="spanFileListItemFileName">__FILE_NAME__</span>
             </a>
             <a href="JavaScript:void(0);" class="aDeleteFileListItem secondary-content text-primary float-right">
-                <i class="ion-android-close"></i>
+                <i class="fa fa-times"></i>
             </a>
         </script>
     </div>
