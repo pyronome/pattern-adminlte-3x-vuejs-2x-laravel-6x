@@ -5,4 +5,5 @@
         "vue-i18n": "^8.17.4",
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.1.6",
-        "jquery-ui": "^1.12.1"
+        "jquery-ui": "^1.12.1",
+        "laravel-vue-pagination": "2.3.1"
