@@ -996,5 +996,11 @@ td .showBigPhoto {
 .select2-element {
     width: 100%;
 }
-
+.page-item > .page-link {
+    outline: 0;
+    font-weight: bold;
+}
+.page-item > .page-link:focus {
+    box-shadow: none;
+}
 /* {{@snippet:end}} */

@@ -65,6 +65,8 @@ Vue.directive('input-mask', {
     },
 });
 
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 /* {{@snippet:global_objects}} */
 
 /**

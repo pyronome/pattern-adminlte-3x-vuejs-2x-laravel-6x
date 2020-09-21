@@ -585,6 +585,16 @@ var AdminLTEHelper = {
         }   
         document.getElementById("popup-photo").src = sender.src;    
         $("#galleryModal").modal();
+    },
+    "activateSearchLoader": function(search_input) {
+        var labelContainer = $(".labelSearchBar", search_input.parentNode)[0];
+        $("button > i", labelContainer).css("display", "none");
+        $("button > img", labelContainer).css("display", "block");
+    },
+    "deactivateSearchLoader": function(search_input) {
+        var labelContainer = $(".labelSearchBar", search_input.parentNode)[0];
+        $("button > img", labelContainer).css("display", "none");
+        $("button > i", labelContainer).css("display", "inline-block");
     }
 }
 
