@@ -853,6 +853,15 @@ class AdminLTE
 			usort($arrList, $this->build_sorter($property));
 		}
 
+		if (is_string($sortType)) {
+			if ('asc' == $sortType) {
+				$sortType = true;
+			} else if ('desc' == $sortType) {
+				$sortType = false;
+			} else {
+				$sortType = true;
+			}
+		}
 
 		if (!$sortType) {
 			$arrList = array_reverse($arrList);
@@ -1935,6 +1944,19 @@ class AdminLTE
 	
 	public function getFormattedDatetime($date) {
 		return (date('Y-m-d', strtotime($date)) . 'T' . date('h:i:s', strtotime($date)));
+	}
+
+	public function getSortVariable($model, $v) {
+		$property = str_replace('__displaytext__', '', $v);
+		$displayTextDefinitions = $this->getModelDisplayTexts($model);
+		$definition = $displayTextDefinitions[$property]['value'];
+		$sort_variable = str_replace(
+				($model . '/'),
+				'',
+				$this->getStringBetween($definition, '{{', '}}')
+			);
+
+		return $sort_variable;
 	}
 	/* {{snippet:end_methods}} */
 }

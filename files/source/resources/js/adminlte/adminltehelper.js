@@ -595,6 +595,66 @@ var AdminLTEHelper = {
         var labelContainer = $(".labelSearchBar", search_input.parentNode)[0];
         $("button > img", labelContainer).css("display", "none");
         $("button > i", labelContainer).css("display", "inline-block");
+    },
+    "cleanSortButtons": function(container) {
+        $(".button-table-sort", container).removeClass("sorted");
+        $(".button-table-sort > .sorting.active", container).removeClass("active");
+        $(".button-table-sort > .sorting.default", container).addClass("active");
+    },
+    "activateSortLoader": function(buttonId) {
+        var button = document.getElementById(buttonId);
+        var sortButtonsContainer = button.parentNode.parentNode;
+        AdminLTEHelper.cleanSortButtons(sortButtonsContainer);
+        
+        var query = "#" + buttonId;
+        $(query).addClass("sorted");
+
+        query = query + " > .sorting";
+        $(query).removeClass("active");
+        query = query + ".loading";
+        $(query).addClass("active");
+    },
+    "deactivateSortLoader": function(buttonId, direction) {
+        var query = "#" + buttonId + " > .sorting";
+        $(query).removeClass("active");
+
+        query = query + "." + direction;
+        $(query).addClass("active");
+    },
+    "setDefaultSortButton": function(buttonId) {
+        var query = "#" + buttonId;
+        $(query).addClass("sorted");
+
+        query = query + " > .sorting";
+        $(query).removeClass("active");
+
+        query = query + ".desc";
+        $(query).addClass("active");
+    },
+    "getURLQuery": function(sender) {
+        var query = "";
+
+        if ("" != sender["search_text"]) {
+            query = query + (("" == query) ? "?" : "&");
+            query = query + 's=' + sender["search_text"];
+        }
+        
+        if ("" != sender["current_page"]) {
+            query = query + (("" == query) ? "?" : "&");
+            query = query + 'p=' + sender["current_page"];
+        }
+
+        if ("" != sender["sort_variable"]) {
+            query = query + (("" == query) ? "?" : "&");
+            query = query + 'v=' + sender["sort_variable"];
+        }
+
+        if ("" != sender["sort_direction"]) {
+            query = query + (("" == query) ? "?" : "&");
+            query = query + 'd=' + sender["sort_direction"];
+        }
+
+        return query;
     }
 }
 

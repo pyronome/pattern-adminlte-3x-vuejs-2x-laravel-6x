@@ -80,12 +80,12 @@
 
 .divHTMLDBMessageContainer .htmldb-message,
 .divHTMLDBErrorContainer .htmldb-error {
-	display: none;
+    display: none;
 }
 
 .divHTMLDBMessageContainer .htmldb-message.message-visible,
 .divHTMLDBErrorContainer .htmldb-error.error-visible {
-	display: block;
+    display: block;
 }
 
 .divContentWrapper.level1 {
@@ -268,46 +268,36 @@ label.labelSearchBar.active {
     border-color: #007bff;
 }
 
-.buttonSortColumn .sorting {
+
+.button-table-sort {
+    background: none;
+    border: none;
+    padding: 0px;
+    margin: 0px;
+    font-weight: bold;
+    font-size: 1rem;
+    outline: none !important;
+    color: #000;
+}
+.button-table-sort.sorting {
+    color: #efefef;
+}
+.button-table-sort.sorted {
+    color: #007bff;
+}
+.button-table-sort > .sorting.loading img {
+    margin-bottom: 10px;
+}
+.button-table-sort > .sorting {
     width: 18px;
     height: 24px;
     vertical-align: top;
-}
-.buttonSortColumn .sorting.sorting-default {
-    display: inline-block;
-}
-.buttonSortColumn.htmldb-sorting-asc .sorting.sorting-default,
-.buttonSortColumn.htmldb-sorting-desc .sorting.sorting-default,
-.buttonSortColumn.htmldb-sorting-loading .sorting.sorting-default {
     display: none;
 }
-.buttonSortColumn.htmldb-sorting-asc .sorting.sorting-asc {
+.button-table-sort > .sorting.active {
     display: inline-block;
 }
-.buttonSortColumn.htmldb-sorting-desc .sorting.sorting-desc {
-    display: inline-block;
-}
-.buttonSortColumn.htmldb-loading .sorting,
-.buttonSortColumn.htmldb-loading.htmldb-sorting-asc .sorting, 
-.buttonSortColumn.htmldb-loading.htmldb-sorting-desc .sorting {
-    display: none;
-}
-.buttonSortColumn.htmldb-loading .sorting.sorting-loading {
-    display: inline-block;
-}
-.buttonSortColumn .sorting.sorting-loading img {
-    margin-bottom: 10px;
-}
-.buttonSortColumn {
-    color: #000;
-}
-.buttonSortColumn.htmldb-loading {
-    color: #efefef;
-}
-.buttonSortColumn.htmldb-sorting-asc,
-.buttonSortColumn.htmldb-sorting-desc {
-    color: #007bff;
-}
+
 .buffersize-form {
     display: inline-block;
     width: 200px;
