@@ -710,6 +710,17 @@ var AdminLTEHelper = {
         
         var checkAllElement = document.getElementById("select_" + model + "_rows");
         AdminLTEHelper.updateCheckboxStates(checkAllElement, model);
+    },
+    "getTableSelectedRowIds": function(model) {
+        var tbodyElement = document.getElementById("tbody" + model + "RecordList");
+        var selectedCheckboxes = $(".select_row:checked", tbodyElement);
+        var selectedCount = selectedCheckboxes.length;
+        var selectedIds = [];
+        for (var i = 0; i < selectedCount; i++) {
+            selectedIds.push(selectedCheckboxes[i].getAttribute("data-row-id"));
+        }
+
+        return selectedIds;
     }
 }
 

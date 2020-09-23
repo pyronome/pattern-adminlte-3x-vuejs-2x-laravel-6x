@@ -993,4 +993,11 @@ td .showBigPhoto {
 .page-item > .page-link:focus {
     box-shadow: none;
 }
+.swal2-styled:focus {
+    outline: 0;
+    box-shadow: none !important;
+}
+.swal2-title {
+    font-size: 1.4em !important;
+}
 /* {{@snippet:end}} */
