@@ -655,6 +655,61 @@ var AdminLTEHelper = {
         }
 
         return query;
+    },
+
+    "doCheckAllCheckboxClick": function(sender) {
+        if (!sender) {
+            return;
+        }
+        
+        var model = sender.getAttribute("data-model");
+        var tbodyElement = document.getElementById("tbody" + model + "RecordList");
+
+        $(".select_row", tbodyElement).prop("checked", sender.checked);
+
+        AdminLTEHelper.updateCheckboxStates(sender, model);
+    },
+    "doCheckboxClick": function(sender) {
+        if (!sender) {
+            return;
+        }
+        
+        var model = sender.getAttribute("data-model");
+        var checkAllElement = document.getElementById("select_" + model + "_rows");
+        AdminLTEHelper.updateCheckboxStates(checkAllElement, model);
+    },
+    "updateCheckboxStates": function(checkAllElement, model) {
+        var tbodyElement = document.getElementById("tbody" + model + "RecordList");
+        var buttonNew = document.getElementById("buttonNew" + model);
+        var buttonDelete = document.getElementById("buttonDelete" + model);
+
+        var checkboxCount = $(".select_row", tbodyElement).length;
+        var selectedCount = $(".select_row:checked", tbodyElement).length;
+        
+        if (0 == selectedCount) {
+            $(checkAllElement).prop("checked", false);
+            
+            $(buttonDelete).hide();
+            $(buttonNew).show();
+        } else {
+            $(".selected-count", buttonDelete).html(selectedCount);
+            
+            $(buttonNew).hide();
+            $(buttonDelete).show();
+
+            if (selectedCount == checkboxCount) {
+                $(checkAllElement).prop("checked", true);
+            } else {
+                $(checkAllElement).prop("checked", false);
+            }
+        }
+    },
+    "cleanCheckedBoxes": function(model) {
+        var tbodyElement = document.getElementById("tbody" + model + "RecordList");
+        $(".select_row", tbodyElement).prop("checked", false);
+        
+        var checkAllElement = document.getElementById("select_" + model + "_rows");
+        AdminLTEHelper.updateCheckboxStates(checkAllElement, model);
     }
 }
 
