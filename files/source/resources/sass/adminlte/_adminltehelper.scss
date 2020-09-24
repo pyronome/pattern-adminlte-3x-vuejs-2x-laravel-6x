@@ -1000,4 +1000,16 @@ td .showBigPhoto {
 .swal2-title {
     font-size: 1.4em !important;
 }
+.preferences-button {
+    width: 40px;
+    height: 20px;
+    border-radius: 25px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    opacity: 0.5;
+    cursor: pointer;
+}
+.preferences-button.active {
+    opacity:1;
+}
 /* {{@snippet:end}} */

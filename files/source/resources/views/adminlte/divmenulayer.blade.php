@@ -18,7 +18,7 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-compact" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column {{ $customization['nav-sidebar'] }}" data-widget="treeview" role="menu" data-accordion="false">
             	<?php
 				$countMenuArray = count($menu);
                 $logoutMenu = null;

@@ -257,7 +257,10 @@ class AdminLTE
 			
 			if (null != $layout)
 			{
-				$preferences = json_decode($this->base64decode($layout->widgets), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+				$user_preferences = json_decode($this->base64decode($layout->widgets), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+				if (!empty($user_preferences)) {
+					$preferences = $user_preferences;
+				}
 			} // if (null == $layout)			
 		} // if ($currentUser != null)
 
