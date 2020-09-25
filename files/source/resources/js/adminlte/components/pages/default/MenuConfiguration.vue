@@ -153,6 +153,7 @@ export default {
                 is_ready: false,
                 is_data_loading: false,
                 is_data_loaded: false,
+                is_post_success: false,
                 external_files: [
                     ("/js/" + AdminLTEHelper.getURL('menu_editor.js')),
                     ("/js/" + AdminLTEHelper.getURL('/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css')),
@@ -196,30 +197,34 @@ export default {
                 });
         },
         submitForm: function () {
-            // Submit the form via a POST request
-            this.$Progress.start();
-            var str = this.page.editor.getString();
-            this.form.menu_json = str;
-
-            this.form.post(AdminLTEHelper.getAPIURL("menu_configuration/post"))
+            var self = this;
+            self.$Progress.start();
+            var str = self.page.editor.getString();
+            self.form.menu_json = str;
+            
+            self.form.post(AdminLTEHelper.getAPIURL("menu_configuration/post"))
                 .then(({ data }) => {
-                    this.$Progress.finish();
+                    self.$Progress.finish();
+                    self.page.is_post_success = true;
                 }).catch(({ data }) => {
-                    this.$Progress.fail();
+                    self.$Progress.fail();
+                    self.page.is_post_success = false;
                 }).finally(function() {
-                    Vue.swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        title: '',
-                        text: 'Menu configuration have been saved!',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        timerProgressBar: true,
-                        onClose: () => {
-                            window.location.reload()
-                        }
-                    });
+                    if (self.page.is_post_success) {
+                        Vue.swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            title: '',
+                            text: 'Menu configuration have been saved!',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            onClose: () => {
+                                window.location.reload()
+                            }
+                        });
+                    }
                 });
         },
         updateMenuEditor: function () {

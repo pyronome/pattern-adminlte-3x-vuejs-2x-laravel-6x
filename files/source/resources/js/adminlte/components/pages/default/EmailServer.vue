@@ -143,7 +143,8 @@ export default {
                 'email_smtp_port': 0
             }),
             page: {
-                is_ready: false
+                is_ready: false,
+                is_post_success: false
             }
         };
     },
@@ -161,24 +162,29 @@ export default {
                 });
         },
         submitForm: function () {
-            // Submit the form via a POST request
-            this.$Progress.start();
-            this.form.post(AdminLTEHelper.getAPIURL("email_server/post"))
+            var self = this;
+            self.$Progress.start();
+            
+            self.form.post(AdminLTEHelper.getAPIURL("email_server/post"))
                 .then(({ data }) => {
-                    this.$Progress.finish();
+                    self.$Progress.finish();
+                    self.page.is_post_success = true;
                 }).catch(({ data }) => {
-                    this.$Progress.fail();
+                    self.$Progress.fail();
+                    self.page.is_post_success = false;
                 }).finally(function() {
-                    Vue.swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        title: '',
-                        text: 'Email configuration have been saved!',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        timerProgressBar: true,
-                    });
+                    if (self.page.is_post_success) {
+                        Vue.swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            title: '',
+                            text: 'Email configuration have been saved!',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                        });
+                    }
                 });
         }
     },

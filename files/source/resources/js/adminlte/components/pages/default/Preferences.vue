@@ -303,7 +303,8 @@ export default {
             page: {
                 is_ready: false,
                 is_data_loading: false,
-                is_data_loaded: false
+                is_data_loaded: false,
+                is_post_success: false
             }
         };
     },
@@ -342,25 +343,33 @@ export default {
                 });
         },
         submitForm: function () {
-            // Submit the form via a POST request
-            this.$Progress.start();
-            this.PreferencesForm.preferences = AdminLTEHelper.getPreferences();
-            this.PreferencesForm.post(AdminLTEHelper.getAPIURL("preferences/post"))
+            var self = this;
+            self.$Progress.start();
+            self.PreferencesForm.preferences = AdminLTEHelper.getPreferences();
+            
+            self.PreferencesForm.post(AdminLTEHelper.getAPIURL("preferences/post"))
                 .then(({ data }) => {
-                    this.$Progress.finish();
+                    self.$Progress.finish();
+                    self.page.is_post_success = true;
                 }).catch(({ data }) => {
-                    this.$Progress.fail();
+                    self.$Progress.fail();
+                    self.page.is_post_success = false;
                 }).finally(function() {
-                    Vue.swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        title: '',
-                        text: 'Preferences have been saved!',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        timerProgressBar: true,
-                    });
+                    if (self.page.is_post_success) {
+                        Vue.swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            title: '',
+                            text: 'Preferences have been saved!',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            onClose: () => {
+                                window.location.reload()
+                            }
+                        });
+                    }
                 });
         }
     },
