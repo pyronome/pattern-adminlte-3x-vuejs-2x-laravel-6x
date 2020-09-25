@@ -29,18 +29,6 @@
                                     @keydown="form.onKeydown($event)">
                                 <div class="card-body text-sm">
                                     <div class="row">
-                                        <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                                            <label for="email_type" class="detail-label">{{ $t('Email Type') }}</label>
-                                            <select2-element id="email_type"
-                                                name="email_type"
-                                                :options="email_type_options"
-                                                v-model="form.email_type"
-                                                :class="{ 'is-invalid': form.errors.has('email_type') }">
-                                            </select2-element>
-                                            <has-error :form="form" field="email_type"></has-error>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                             <label for="email_from_name" class="detail-label">{{ $t('Email From Name') }}</label>
                                             <input type="text"
@@ -62,7 +50,7 @@
                                             <has-error :form="form" field="email_reply_to"></has-error>
                                         </div>
                                     </div>
-                                    <div v-show="(form.email_type==1)">
+                                    <div>
                                         <div class="row">
                                             <div class="form-group col-md-4 col-sm-4 col-xs-12">
                                                 <label for="email_smtp_host" class="detail-label">{{ $t('SMTP Host') }}</label>
@@ -104,6 +92,8 @@
                                                     :options="email_smtp_encryption_options"
                                                     v-model="form.email_smtp_encryption"
                                                     :class="{ 'is-invalid': form.errors.has('email_smtp_encryption') }">
+                                                    <option value="tls">{{ $t('TLS') }}</option>
+                                                    <option value="ssl">{{ $t('SSL') }}</option>
                                                 </select2-element>
                                                 <has-error :form="form" field="email_smtp_password"></has-error>
                                             </div>
@@ -119,20 +109,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                                            <label for="email_format" class="detail-label">{{ $t('Mail Format') }}</label>
-                                            <select2-element id="email_format"
-                                                name="email_format"
-                                                :options="email_format_options"
-                                                v-model="form.email_format"
-                                                :class="{ 'is-invalid': form.errors.has('email_format') }">
-                                            </select2-element>
-                                            <has-error :form="form" field="email_format"></has-error>
-                                        </div>
-                                    </div>
                                 </div>
-                                <div class="card-footer show_by_permission">
+                                <div class="card-footer show_by_permission_must_update">
                                     <div class="col-lg-12 col-md-12 col-xs-12">
                                         <button :disabled="form.busy"
                                             type="submit"
@@ -154,21 +132,8 @@
 export default {
     data() {
         return {
-            email_type_options: [
-                {id: 0, text: this.$t('Standart Mail')},
-                {id: 1, text: this.$t('SMTP')}
-            ],
-            email_smtp_encryption_options: [
-                {id: 0, text: this.$t('TLS')},
-                {id: 1, text: this.$t('SSL')}
-            ],
-            email_format_options: [
-                {id: 0, text: this.$t('HTML')},
-                {id: 1, text: this.$t('Plain Text')}
-            ],
+            email_smtp_encryption_options: [],
             form: new Form({
-                'email_type': 0 ,
-                'email_format': 0 ,
                 'email_from_name': '' ,
                 'email_reply_to': '' ,
                 'email_smtp_host': '' ,
@@ -198,11 +163,22 @@ export default {
         submitForm: function () {
             // Submit the form via a POST request
             this.$Progress.start();
-            this.form.post(AdminLTEHelper.getAPIURL("email_server"))
+            this.form.post(AdminLTEHelper.getAPIURL("email_server/post"))
                 .then(({ data }) => {
                     this.$Progress.finish();
                 }).catch(({ data }) => {
                     this.$Progress.fail();
+                }).finally(function() {
+                    Vue.swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        title: '',
+                        text: 'Email configuration have been saved!',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                    });
                 });
         }
     },

@@ -29,40 +29,23 @@ class EmailServerController extends Controller
 
     public function post(EmailServerPOSTRequest $request)
     {
+        $variables = array();
+        $variables['MAIL_HOST'] = $request->input('email_smtp_host');
+        $variables['MAIL_PORT'] = $request->input('email_smtp_port');
+        $variables['MAIL_FROM_ADDRESS'] = $request->input('email_reply_to');
+        $variables['MAIL_FROM_NAME'] = $request->input('email_from_name');
+        $variables['MAIL_ENCRYPTION'] = $request->input('email_smtp_encryption');
+        $variables['MAIL_USERNAME'] = $request->input('email_smtp_user');
+        $variables['MAIL_PASSWORD'] = $request->input('email_smtp_password'); 
 
-        $adminLTE = new AdminLTE();
-        $adminLTE->updateDotEnv(
-                'MAIL_FROM_NAME',
-                $request->input('email_from_name'));
-
-        $adminLTE->updateDotEnv(
-                'MAIL_FROM_ADDRESS',
-                $request->input('email_reply_to'));
-
-        $adminLTE->updateDotEnv(
-                'MAIL_HOST',
-                $request->input('email_smtp_host'));
-
-        $adminLTE->updateDotEnv(
-                'MAIL_USERNAME',
-                $request->input('email_smtp_user'));
-
-        $adminLTE->updateDotEnv(
-                'MAIL_PASSWORD',
-                $request->input('email_smtp_password'));
-
-        $adminLTE->updateDotEnv(
-                'MAIL_ENCRYPTION',
-                $request->input('email_smtp_encryption'));
-
-        $adminLTE->updateDotEnv(
-                'MAIL_PORT',
-                $request->input('email_smtp_port'));
-
-        return [
-            'message' => __('Email server configuration saved.')
-        ];
-
+        
+        $root = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))));
+        $source_path = $root . '/config/mail.template.php';
+        $destination_path = $root . '/config/mail.php';
+       
+        $objectAdminLTE = new AdminLTE();
+        $objectAdminLTE->writeTemplateFileToTarget($source_path, $destination_path, $variables);
+  
+        return ['message' => "Success"];
     }
-
 }

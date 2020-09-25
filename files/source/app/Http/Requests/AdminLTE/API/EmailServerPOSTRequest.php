@@ -27,13 +27,12 @@ class EmailServerPOSTRequest extends FormRequest
     public function rules()
     {
         return [
-            'email_type' => 'required|integer',
             'email_from_name' => 'required|string',
             'email_reply_to' => 'required|string',
-            'email_smtp_host' => Rule::requiredIf($this->email_type > 0),
-            'email_smtp_user' => Rule::requiredIf($this->email_type > 0),
-            'email_smtp_password' => Rule::requiredIf($this->email_type > 0),
-            'email_smtp_port' => Rule::requiredIf($this->email_type > 0)
+            'email_smtp_host' => 'required',
+            'email_smtp_user' => 'required',
+            'email_smtp_password' => 'required',
+            'email_smtp_port' => 'required|integer'
         ];
     }
 
