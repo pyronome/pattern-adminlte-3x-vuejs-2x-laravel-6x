@@ -431,17 +431,13 @@ class AdminLTE
 	public function getSideMenu($forceDefault = false)
 	{
 
-		if (!$forceDefault
-				&& Storage::disk('local')->exists('adminlte_menu.json'))
-		{
-			$menuArray = json_decode(Storage::disk('local')->get('adminlte_menu.json'),
+		if (!$forceDefault && Storage::disk('local')->exists('config/adminlte_menu.json')) {
+			$menuArray = json_decode(Storage::disk('local')->get('config/adminlte_menu.json'),
 					(JSON_HEX_QUOT
 					| JSON_HEX_TAG
 					| JSON_HEX_AMP
 					| JSON_HEX_APOS));
-		}
-		else
-		{
+		} else {
 			$menuArray = json_decode(config('adminlte_menu_json'),
 					(JSON_HEX_QUOT
 					| JSON_HEX_TAG

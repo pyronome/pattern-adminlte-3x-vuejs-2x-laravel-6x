@@ -20,40 +20,31 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-xs-12">
-                            <div class="card card-primary">
-                                <form id="formConfiguration" name="formConfiguration" onsubmit="return false;">
-                                    <input type="hidden"
-                                        id="id"
-                                        name="id"
-                                        class="">
-                                    <input type="hidden"
-                                        id="menu_json"
-                                        name="menu_json"
-                                        class="">
+                            <div class="card">
+                                <form id="formConfiguration" @submit.prevent="submitForm" @keydown="form.onKeydown($event)">
+                                    <div class="card-body">
+                                        <div class="row mb-10 show_by_permission_must_update">
+                                            <div class="col-lg-12 col-md-12 col-xs-12">
+                                                <a id="buttonNewMenuItem" class="btn btn-primary btn-xs btn-on-table float-right" href="javascript:void(0);">
+                                                    <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ $t('New') }}</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-xs-12">
+                                                <ul id="ulMenuEditor" class="list-group">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer show_by_permission_must_update">
+                                        <button :disabled="form.busy"
+                                            type="submit"
+                                            class="btn btn-success btn-md btn-on-table float-right">
+                                            <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
+                                        </button>
+                                    </div>
                                 </form>
-                                <div class="card-body">
-                                    <div class="row mb-10 show_by_permission">
-                                        <div class="col-lg-12 col-md-12 col-xs-12">
-                                            <a id="buttonNewMenuItem" class="btn btn-primary btn-xs btn-on-table float-right" href="javascript:void(0);">
-                                                <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ $t('New') }}</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-12 col-md-12 col-xs-12">
-                                            <ul id="ulMenuEditor" class="list-group">
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer show_by_permission">
-                                    <button type="button"
-                                        id="buttonSave-formConfiguration"
-                                        name="buttonSave-formConfiguration"
-                                        class="btn btn-success btn-md btn-on-table float-right">
-                                        <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -93,7 +84,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="modalfooter justify-content-between show_by_permission">
+                        <div class="modalfooter justify-content-between show_by_permission_must_update">
                             <div class="row">
                                 <div class="col col-lg-12">
                                     <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
@@ -132,7 +123,7 @@
                             <p>{{ $t('Selected item will be deleted. Do you confirm?') }}</p>
                         </div>
                     </div>
-                    <div class="modalfooter justify-content-between show_by_permission">
+                    <div class="modalfooter justify-content-between show_by_permission_must_update">
                         <div class="row">
                             <div class="col col-lg-12">
                                 <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
@@ -207,11 +198,28 @@ export default {
         submitForm: function () {
             // Submit the form via a POST request
             this.$Progress.start();
-            this.form.post(AdminLTEHelper.getAPIURL("menu_configuration"))
+            var str = this.page.editor.getString();
+            this.form.menu_json = str;
+
+            this.form.post(AdminLTEHelper.getAPIURL("menu_configuration/post"))
                 .then(({ data }) => {
                     this.$Progress.finish();
                 }).catch(({ data }) => {
                     this.$Progress.fail();
+                }).finally(function() {
+                    Vue.swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        title: '',
+                        text: 'Menu configuration have been saved!',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        onClose: () => {
+                            window.location.reload()
+                        }
+                    });
                 });
         },
         updateMenuEditor: function () {
@@ -243,18 +251,15 @@ export default {
             this.page.editor.setUpdateButton($("#buttonUpdateMenuItem"));
             this.page.editor.setData(menuJSON);
 
-            $("#buttonSave-formConfiguration").off("click").on("click", function () {
-                var str = this.page.editor.getString();
-                saveMenuConfiguration(str);
-            });
+            var self = this;
 
             $("#buttonUpdateMenuItem").off("click").on("click", function(){
-                this.page.editor.update();
+                self.page.editor.update();
                 $("#modalMenuItem").modal('hide');
             });
 
             $("#buttonAddMenuItem").off("click").on("click", function(){
-                this.page.editor.add();
+                self.page.editor.add();
                 $("#modalMenuItem").modal('hide');
             });
 

@@ -17,14 +17,14 @@ class MenuConfigurationController extends Controller
 
         $response = [];
 
-        if (Storage::disk('local')->exists('adminlte_menu.json'))
-		{
-			$menu_json = Storage::disk('local')->get('adminlte_menu.json');
-		}
-		else
-		{
-			$menu_json = config('adminlte_menu_json');
-		} // if (!$forceDefault
+        if (Storage::disk('local')->exists('config/adminlte_menu.json'))
+        {
+            $menu_json = Storage::disk('local')->get('config/adminlte_menu.json');
+        }
+        else
+        {
+            $menu_json = config('adminlte_menu_json');
+        } // if (!$forceDefault
 
         $response['menu_json'] = json_encode($menu_json,
                 (JSON_HEX_QUOT
@@ -43,9 +43,7 @@ class MenuConfigurationController extends Controller
                 htmlspecialchars_decode(
                 $request->input('menu_json')));
 
-        Storage::disk('local')->put(
-                'adminlte_menu.json',
-                $menu_json);
+        Storage::disk('local')->put('config/adminlte_menu.json', $menu_json);
         
         return ['message' => 'UPDATED'];
 
