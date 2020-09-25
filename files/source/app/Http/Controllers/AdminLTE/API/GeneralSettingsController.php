@@ -34,7 +34,7 @@ class GeneralSettingsController extends Controller
     {
 
         return [
-            ['name' => 'English', 'iso' => 'en']
+            ['text' => 'English', 'id' => 'en']
         ];
 
     }
@@ -49,47 +49,27 @@ class GeneralSettingsController extends Controller
     public function post(GeneralSettingsPOSTRequest $request)
     {
 
-        $adminLTE = new AdminLTE();
-        $adminLTE->updateDotEnv(
-                'ADMINLTE_PROJECT_TITLE',
-                $request->input('project_title'));
+        $variables = array();
+        $variables['ADMINLTE_PROJECT_TITLE'] = $request->input('project_title');
+        $variables['ADMINLTE_MAIN_FOLDER'] = $request->input('main_folder');
+        $variables['ADMINLTE_LANDING_PAGE'] = $request->input('landing_page');
+        $variables['ADMINLTE_DEFAULT_LANGUAGE'] = $request->input('default_language');
+        $variables['ADMINLTE_TIMEZONE'] = $request->input('timezone');
+        $variables['ADMINLTE_DATE_FORMAT'] = $request->input('date_format');
+        $variables['ADMINLTE_TIME_FORMAT'] = $request->input('time_format');
+        $variables['ADMINLTE_YEAR_MONTH_FORMAT'] = $request->input('year_month_format');
+        $variables['ADMINLTE_NUMBER_FORMAT'] = $request->input('number_format');
+        $variables['ADMINLTE_GOOGLE_MAPS_API_KEY'] = $request->input('google_maps_api_key');
 
-        $adminLTE->updateDotEnv(
-                'ADMINLTE_MAIN_FOLDER',
-                $request->input('main_folder'));
-
-        $adminLTE->updateDotEnv(
-                'ADMINLTE_LANDING_PAGE',
-                $request->input('landing_page'));
-
-        $adminLTE->updateDotEnv(
-                'ADMINLTE_DEFAULT_LANGUAGE',
-                $request->input('default_language'));
-
-        $adminLTE->updateDotEnv(
-                'ADMINLTE_TIMEZONE',
-                $request->input('timezone'));
-
-        $adminLTE->updateDotEnv(
-                'ADMINLTE_DATE_FORMAT',
-                $request->input('date_format'));
-
-        $adminLTE->updateDotEnv(
-                'ADMINLTE_TIME_FORMAT',
-                $request->input('time_format'));
-
-        $adminLTE->updateDotEnv(
-                'ADMINLTE_YEAR_MONTH_FORMAT',
-                $request->input('year_month_format'));
-
-        $adminLTE->updateDotEnv(
-                'ADMINLTE_NUMBER_FORMAT',
-                $request->input('number_format'));
-
-        $adminLTE->updateDotEnv(
-                'ADMINLTE_GOOGLE_MAPS_API_KEY',
-                $request->input('google_maps_api_key'));
-
+        
+        $root = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))));
+        $source_path = $root . '/config/adminlte.template.php';
+        $destination_path = $root . '/config/adminlte.php';
+       
+        $objectAdminLTE = new AdminLTE();
+        $objectAdminLTE->writeTemplateFileToTarget($source_path, $destination_path, $variables);
+  
+        return ['message' => "Success"];
     }
 
 }

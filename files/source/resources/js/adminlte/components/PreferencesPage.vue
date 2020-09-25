@@ -355,7 +355,7 @@ export default {
                         toast: true,
                         position: 'top-end',
                         title: '',
-                        text: 'Your preferences saved!',
+                        text: 'Preferences have been saved!',
                         icon: 'success',
                         showConfirmButton: false,
                         timer: 2000,

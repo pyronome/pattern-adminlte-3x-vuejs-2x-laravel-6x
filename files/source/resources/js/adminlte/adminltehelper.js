@@ -413,6 +413,10 @@ var AdminLTEHelper = {
         $("#divDropzone").trigger("click");
     },
     "initializePageFiles": function (files) {
+        if (undefined === files || 0 == files.length) {
+            return;
+        }
+
         files.forEach(file => {
             AdminLTEHelper.initializeFile(file);
         });

@@ -1032,6 +1032,22 @@ class AdminLTE
 		} // if (file_exists($path))
 	}
 
+	public function writeTemplateFileToTarget($source_path, $destination_path, $variables) {
+		$strContent = file_get_contents($source_path);
+		$strFind = '';
+		$strReplace = '';
+		$arrKeys = array_keys($variables);
+		$lCountKeys = count($arrKeys);
+
+		for ($i=0; $i < $lCountKeys; $i++) {
+			$strFind = '{{' . $arrKeys[$i] . '}}';        
+			$strReplace = $variables[$arrKeys[$i]];
+			$strContent = str_replace($strFind, $strReplace, $strContent);
+		} // for ($i=0; $i < $lCountKeys; $i++) {
+
+		file_put_contents($destination_path, $strContent);
+	}
+	
 	public function getObjectDisplayTexts($model, $objectCurrent)
 	{
 		$solvedDisplayTexts = array();

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'project_title' => env('ADMINLTE_PROJECT_TITLE', env('APP_NAME', 'AdminLTE 3.x + Vue.js 2.x + Laravel 6.x')),
+    'project_title' => env('ADMINLTE_PROJECT_TITLE', 'AdminLTE 3.x + Vue.js 2.x + Laravel 6.x'),
     'main_folder' => env('ADMINLTE_MAIN_FOLDER', 'adminlte'),
     'landing_page' => env('ADMINLTE_LANDING_PAGE', 'home'),
     'default_language' => env('ADMINLTE_DEFAULT_LANGUAGE', 'en'),
@@ -11,6 +11,4 @@ return [
     'year_month_format' => env('ADMINLTE_YEAR_MONTH_FORMAT', 'Y-m'),
     'number_format' => env('ADMINLTE_NUMBER_FORMAT', ''),
     'google_maps_api_key' => env('ADMINLTE_GOOGLE_MAPS_API_KEY', ''),
-    'navbar_light_dark' => env('ADMINLTE_NAVBAR_LIGHT_DARK', 'light'),
-    'navbar_background_color' => env('ADMINLTE_NAVBAR_BACKGROUND_COLOR', 'white'),
 ];

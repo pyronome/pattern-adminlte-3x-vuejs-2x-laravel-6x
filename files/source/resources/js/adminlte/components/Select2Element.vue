@@ -19,12 +19,20 @@ export default {
     },
     watch: {
         value: function (value) {
-            if ([...value].sort().join(",") !== [...$(this.$el).val()].sort().join(",")) {
-                $(this.$el).val(value).trigger('change');
+            if (!Array.isArray(value)) {
+                if (value !== $(this.$el).val()) {
+                    $(this.$el).val(value).trigger('change');
+                }
+            } else {
+                if ([...value].sort().join(",") !== [...$(this.$el).val()].sort().join(",")) {
+                    $(this.$el).val(value).trigger('change');
+                }
             }
         },
         options: function (options) {
-            $(this.$el).select2({ data: options });
+            if (undefined !== options && 0 != options.length) {
+                $(this.$el).select2({ data: options });
+            }
         }
     },
     destroyed() {

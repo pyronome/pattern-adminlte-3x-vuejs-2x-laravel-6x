@@ -93,6 +93,50 @@
                                                 :options="date_format_options"
                                                 v-model="form.date_format"
                                                 :class="{ 'is-invalid': form.errors.has('date_format') }">
+                                                <option value="d/m/Y">15/06/1981</option>
+                                                <option value="j/n/Y">15/6/1981</option>
+                                                <option value="d/m/y">15/06/81</option>
+                                                <option value="j/n/y">15/6/81</option>
+                                                <option value="d-m-Y">15-06-1981</option>
+                                                <option value="j-n-Y">15-6-1981</option>
+                                                <option value="d-m-y">15-06-81</option>
+                                                <option value="j-n-y">15-6-81</option>
+                                                <option value="d.m.Y">15.06.1981</option>
+                                                <option value="j.n.Y">15.6.1981</option>
+                                                <option value="d.m.y">15.06.81</option>
+                                                <option value="j.n.y">15.6.81</option>
+                                                <option value="m/d/Y">06/15/1981</option>
+                                                <option value="n/j/Y">6/15/1981</option>
+                                                <option value="m/d/y">06/15/81</option>
+                                                <option value="n/j/y">6/15/81</option>
+                                                <option value="m-d-Y">06-15-1981</option>
+                                                <option value="n-j-Y">6-15-1981</option>
+                                                <option value="m-d-y">06-15-81</option>
+                                                <option value="n-j-y">6-15-81</option>
+                                                <option value="m.d.Y">06.15.1981</option>
+                                                <option value="n.j.Y">6.15.1981</option>
+                                                <option value="m.d.y">06.15.81</option>
+                                                <option value="n.j.y">6.15.81</option>
+                                                <option value="Y/m/d">1981/06/15</option>
+                                                <option value="Y/n/j">1981/6/15</option>
+                                                <option value="y/m/d">81/06/15</option>
+                                                <option value="y/n/j">81/6/15</option>
+                                                <option value="Y-m-d">1981-06-15</option>
+                                                <option value="Y-n-j">1981-6-15</option>
+                                                <option value="y-m-d">81-06-15</option>
+                                                <option value="y-n-j">81-6-15</option>
+                                                <option value="Y.m.d">1981.06.15</option>
+                                                <option value="Y.n.j">1981.6.15</option>
+                                                <option value="y.m.d">81.06.15</option>
+                                                <option value="y.n.j">81.6.15</option>
+                                                <option value="j F Y">{{ $t('15 June 1981') }}</option>
+                                                <option value="j F y">{{ $t('15 June 81') }}</option>
+                                                <option value="j M Y">{{ $t('15 Jun 1981') }}</option>
+                                                <option value="j M y">{{ $t('15 Jun 81') }}</option>
+                                                <option value="F j, Y">{{ $t('June 15, 1981') }}</option>
+                                                <option value="F j, y">{{ $t('June 15, 81') }}</option>
+                                                <option value="F j, Y">{{ $t('Jun 15, 1981') }}</option>
+                                                <option value="M j, y">{{ $t('Jun 15, 81') }}</option>
                                             </select2-element>
                                             <has-error :form="form" field="date_format"></has-error>
                                         </div>
@@ -103,6 +147,34 @@
                                                 :options="year_month_format_options"
                                                 v-model="form.year_month_format"
                                                 :class="{ 'is-invalid': form.errors.has('year_month_format') }">
+                                                <option value="m/Y">06/1981</option>
+                                                <option value="n/Y">6/1981</option>
+                                                <option value="m/y">06/81</option>
+                                                <option value="n/y">6/81</option>
+                                                <option value="m-Y">06-1981</option>
+                                                <option value="n-Y">6-1981</option>
+                                                <option value="m-y">06-81</option>
+                                                <option value="n-y">6-81</option>
+                                                <option value="m.Y">06.1981</option>
+                                                <option value="n.Y">6.1981</option>
+                                                <option value="m.y">06.81</option>
+                                                <option value="n.y">6.81</option>
+                                                <option value="Y/m">1981/06</option>
+                                                <option value="Y/n">1981/6</option>
+                                                <option value="y/m">81/06</option>
+                                                <option value="y/n">81/6</option>
+                                                <option value="Y-m">1981-06</option>
+                                                <option value="Y-n">1981-6</option>
+                                                <option value="y-m">81-06</option>
+                                                <option value="y-n">81-6</option>
+                                                <option value="Y.m">1981.06</option>
+                                                <option value="Y.n">1981.6</option>
+                                                <option value="y.m">81.06</option>
+                                                <option value="y.n">81.6</option>
+                                                <option value="F Y">{{ $t('June 1981') }}</option>
+                                                <option value="F y">{{ $t('June 81') }}</option>
+                                                <option value="M Y">{{ $t('Jun 1981') }}</option>
+                                                <option value="M y">{{ $t('Jun 81') }}</option>
                                             </select2-element>
                                             <has-error :form="form" field="year_month_format"></has-error>
                                         </div>
@@ -115,6 +187,10 @@
                                                 :options="time_format_options"
                                                 v-model="form.time_format"
                                                 :class="{ 'is-invalid': form.errors.has('time_format') }">
+                                                <option value="H:i">17:00</option>
+                                                <option value="h:i a">05:00 pm</option>
+                                                <option value="H:i:s">17:00:00</option>
+                                                <option value="h:i:s a">05:00:00 pm</option>
                                             </select2-element>
                                             <has-error :form="form" field="time_format"></has-error>
                                         </div>
@@ -127,6 +203,8 @@
                                                 :options="number_format_options"
                                                 v-model="form.number_format"
                                                 :class="{ 'is-invalid': form.errors.has('number_format') }">
+                                                <option value="tr">1.000.000,00</option>
+                                                <option value="en">1,000,000.00</option>
                                             </select2-element>
                                             <has-error :form="form" field="number_format"></has-error>
                                         </div>
@@ -144,7 +222,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer show_by_permission">
+                                <div class="card-footer show_by_permission_must_update">
                                     <div class="col-lg-12 col-md-12 col-xs-12">
                                         <button type="submit"
                                             class="btn btn-success btn-md btn-on-table float-right">
@@ -284,11 +362,22 @@ export default {
         submitForm: function () {
             // Submit the form via a POST request
             this.$Progress.start();
-            this.form.post(AdminLTEHelper.getAPIURL("general_settings"))
+            this.form.post(AdminLTEHelper.getAPIURL("general_settings/post"))
                 .then(({ data }) => {
                     this.$Progress.finish();
                 }).catch(({ data }) => {
                     this.$Progress.fail();
+                }).finally(function() {
+                    Vue.swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        title: '',
+                        text: 'General settings have been saved!',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                    });
                 });
         }
     },
