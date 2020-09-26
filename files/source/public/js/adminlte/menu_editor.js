@@ -1140,7 +1140,7 @@ function MenuEditor(idSelector, options) {
             list.remove();
         }
         MenuEditor.updateButtons($main);
-        hideDialog("modalMenuItemDelete");
+        $("#modalMenuItemDelete").modal('hide');
     });
 
     $(document).on('click', '.btnEdit', function (e) {
