@@ -12,7 +12,7 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Widget Configuration -->
                 <li class="nav-item dropdown">
-                    <a id="buttonWidgetConfig" class="nav-link" href="javascript:void(0);" style="display:none;">
+                    <a id="buttonWidgetConfig" class="nav-link show_by_permission_must_update" href="javascript:void(0);">
                         <i class="fas fa-palette nav-icon"></i>
                     </a>
                 </li>

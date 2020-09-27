@@ -1116,15 +1116,15 @@ function WidgetEditor(idSelector, options) {
         $("#buttonDeleteWidgetItem").data("closestUL", $(this).closest('ul'));
         $("#buttonDeleteWidgetItem").data("closestLI", $(this).closest('li'));
 
-        showDialog("modalWidgetItemDelete");
+        $("#modalWidgetItemDelete").modal();
     });
 
     $(document).on('click', '#buttonDeleteWidgetItem', function (e) {
         e.preventDefault();
-		
-		var list = $(this).data("closestUL");
-		var li = $(this).data("closestLI");
-		$(li).remove();
+        
+        var list = $(this).data("closestUL");
+        var li = $(this).data("closestLI");
+        $(li).remove();
 
         var isMainContainer = false;
         if (typeof list.attr('id') !== 'undefined') {
@@ -1135,7 +1135,7 @@ function WidgetEditor(idSelector, options) {
             list.remove();
         }
         WidgetEditor.updateButtons($main);
-        hideDialog("modalWidgetItemDelete");
+        $("#modalWidgetItemDelete").modal("hide");
     });
 
     $(document).on('click', '.btnEdit', function (e) {
@@ -1143,7 +1143,7 @@ function WidgetEditor(idSelector, options) {
         itemEditing = $(this).closest('li');
         editItem(itemEditing);
         
-        showDialog("modalWidgetItem");
+        $("#modalWidgetItem").modal();
     });
 
     $main.on('click', '.btnUp', function (e) {
@@ -1324,7 +1324,7 @@ function WidgetEditor(idSelector, options) {
         $("#__widgetconfig-values").val(valueCSV);
 
         updateRecordListColumnTable(columnCSV, valueCSV);
-        hideDialog("modal-RecordListColumns")
+        $("#modal-RecordListColumns".modal("hide"))
     }
 
     function updateRecordListColumnTable(columnCSV, valueCSV) {
@@ -1372,7 +1372,7 @@ function WidgetEditor(idSelector, options) {
         var model = $("#__widgetconfig-model").val();
         updateRecordListValueSelect(model);
 
-        showDialog("modal-RecordListColumns");
+        $("#modal-RecordListColumns").modal();
     }
     function editRecordListColumn(sender) {
         var column = sender.getAttribute("data-column");
@@ -1386,7 +1386,7 @@ function WidgetEditor(idSelector, options) {
         var model = $("#__widgetconfig-model").val();
         updateRecordListValueSelect(model);
 
-        showDialog("modal-RecordListColumns");
+        $("#modal-RecordListColumns").modal();
     }
 
     function removeRecordListColumn(sender) {
@@ -1536,7 +1536,7 @@ function WidgetEditor(idSelector, options) {
             var opacity_class = "";
             var li_class = "list-group-item";
             if (0 == itemObject.visibility) {
-            	opacity_class = "menu_item_invisible";
+                opacity_class = "menu_item_invisible";
                 li_class = "list-group-item li_invisible";
             }
             
@@ -1672,10 +1672,10 @@ function WidgetEditor(idSelector, options) {
         }
 
         if (0 == data["visibility"]) {
-        	$cEl.find('span.txt').first().addClass("menu_item_invisible").text($cEl.data('text'));
+            $cEl.find('span.txt').first().addClass("menu_item_invisible").text($cEl.data('text'));
             $cEl.addClass("li_invisible");
         } else {
-        	$cEl.find('span.txt').first().removeClass("menu_item_invisible").text($cEl.data('text'));
+            $cEl.find('span.txt').first().removeClass("menu_item_invisible").text($cEl.data('text'));
             $cEl.removeClass("li_invisible");
         }
 

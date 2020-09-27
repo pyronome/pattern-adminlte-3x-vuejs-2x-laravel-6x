@@ -2,7 +2,9 @@ var AdminLTEHelper = {
     "__externalFiles": [],
     "__externalFilesCompletedCallback": null,
     "initializeApplication": function () {
-
+        $("#buttonWidgetConfig").off("click").on("click", function () {
+            $("#modal-WidgetList").modal();
+        });
     },
     "initializeSideMenu": function () {
         $(".main-sidebar .active").removeClass("active");
@@ -1137,6 +1139,29 @@ var AdminLTEHelper = {
         preferences["logo_variants"] = document.getElementById("formPreferences-logo_variants").value;
     
         return preferences;
+    },
+    "doSearchWidget": function(sender) {
+        if (!sender) {
+            return;
+        }
+
+        var searchText = sender.value;
+
+        $("#ulWidgetEditor > li").css("display", "none");
+
+        var arrLI = $("#ulWidgetEditor > li");
+        var countLI = arrLI.length;
+        var searchedElement = null;
+        var searchedText = "";
+
+        for (var i = 0; i < countLI; i++) {
+            searchedElement = $(".widget-search", arrLI[i])[0];
+            searchedText = searchedElement.innerHTML;
+
+            if (searchedText.search(new RegExp(searchText, "i")) != -1) {
+                searchedElement.parentNode.parentNode.style.display = "block";
+            }
+        }
     }
 }
 
