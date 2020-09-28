@@ -1324,7 +1324,7 @@ function WidgetEditor(idSelector, options) {
         $("#__widgetconfig-values").val(valueCSV);
 
         updateRecordListColumnTable(columnCSV, valueCSV);
-        $("#modal-RecordListColumns".modal("hide"))
+        $("#modal-RecordListColumns").modal("hide");
     }
 
     function updateRecordListColumnTable(columnCSV, valueCSV) {

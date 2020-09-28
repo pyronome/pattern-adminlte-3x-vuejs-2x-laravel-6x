@@ -279,7 +279,14 @@
                         </div>
                         <div class="col-md-12">
                             <label for="recordlistValue">{{ $t('Value') }}</label>
-                            <select id="recordlistValue" name="recordlistValue"  class="form-control">
+                            <select id="recordlistValue"
+                                name="recordlistValue"
+                                class="form-control">
+                                <option></option>
+                                <option v-for="option in attributes"
+                                    :key="option.id"
+                                    :class="'columnOption' + option.model"
+                                    :value="option.attribute">{{option.attribute}}</option>
                             </select>
                         </div>
                     </div>
@@ -338,6 +345,7 @@ export default {
     props: ['pagename'],
     data() {
         return {
+            attributes: [],
             form: new Form({
                 'pagename': '',
                 'widgetJSON': '',
@@ -346,6 +354,8 @@ export default {
                 is_ready: false,
                 is_data_loading: false,
                 is_data_loaded: false,
+                is_attributes_loading: false,
+                is_attributes_loaded: false,
                 is_post_success: false,
                 external_files: [
                     ("/js/" + AdminLTEHelper.getURL('widget_editor.js')),
@@ -361,14 +371,40 @@ export default {
     },
     methods: {
         processLoadQueue: function () {
-            if (!this.page.is_data_loaded) {
-                this.loadData();
+            if (!this.page.is_data_loaded && !this.page.is_attributes_loaded) {
+                this.$Progress.start();
+            }
+            
+            if (!this.page.is_attributes_loaded) {
+                this.loadAttributes();
             }
 
             if (this.page.is_data_loaded) {
-                this.page.is_ready = true;
                 this.$Progress.finish();
+                this.page.is_ready = true;
+            } else {
+                this.loadData();
             }
+        },
+        loadAttributes: function() {
+            if (this.page.is_attributes_loading) {
+                return;
+            }
+
+            this.page.is_attributes_loading = true;
+
+            axios.get(AdminLTEHelper.getAPIURL("__layout/get_attributes"))
+                .then(({ data }) => {
+                    this.page.is_attributes_loaded = true;
+                    this.page.is_attributes_loading = false;
+                    this.attributes = data.attributes;
+                    this.processLoadQueue();
+                }).catch(({ data }) => {
+                    this.page.is_attributes_loaded = true;
+                    this.page.is_attributes_loading = false;
+                    this.$Progress.fail();
+                    this.processLoadQueue();
+                });
         },
         loadData: function () {
             if (this.page.is_data_loading) {

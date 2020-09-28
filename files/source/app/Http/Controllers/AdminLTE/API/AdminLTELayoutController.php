@@ -27,9 +27,15 @@ class AdminLTELayoutController extends Controller
 
         for ($i=0; $i < $countModels; $i++)
         {
-            $model = ('\\App\\' . $Models[$i]);
+            $model = $Models[$i];
             
-            $object = new $model;
+            $modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
+
+            if (!class_exists($modelNameWithNamespace)) {
+                $modelNameWithNamespace = ('\\App\\' . $model);
+            }
+
+            $object = new $modelNameWithNamespace;
             $property_list = $adminLTE->getModelPropertyList($object);
             $countProperty = count($property_list);
 
@@ -44,14 +50,16 @@ class AdminLTELayoutController extends Controller
 
                 $list[$index]['id'] = ($index + 1);
                 $list[$index]['model'] = $model;
-                $list[$index]['attribute'] = $property . '/display_text';
+                $list[$index]['attribute'] = $property . '__displaytext__';
 
                 $index++;
 
             } // for ($j=0; $j < $countProperty; $j++) { 
         } // for ($i=0; $i < $countModels; $i++) {
 
-        return $list;
+        return [
+            'attributes' => $list
+        ];
 
     }
 
@@ -396,6 +404,12 @@ class AdminLTELayoutController extends Controller
             $limit = $Widget['limit'];
             $onlylastrecord = (1 == intval($Widget['onlylastrecord']));
         }
+
+        $show_pagination = true;
+        if ($onlylastrecord) {
+            $page = 1;
+            $show_pagination = false;
+        }
         
         $sizes = explode(',', $sizeCSV);
         $size = 'col-lg-' . $sizes[0] . ' col-md-' . $sizes[1] . ' col-xs-' . $sizes[2];
@@ -430,7 +444,7 @@ class AdminLTELayoutController extends Controller
             $list[$index]['id'] = $object->id;
             $list[$index]['displaytexts'] = array();
 
-            foreach ($variables as $variable) {
+            foreach ($widget_table_header['variables'] as $variable) {
                 $displayVariable = str_replace('__displaytext__', '', $variable);
                 if (isset($displayTexts[$displayVariable])) {
                     $list[$index]['displaytexts'][] = $displayTexts[$displayVariable];
@@ -461,6 +475,7 @@ class AdminLTELayoutController extends Controller
             'total' => $total,
             'next_page_url' => $next_page_url,
             'prev_page_url' => $prev_page_url,
+            'show_pagination' => $show_pagination,
             'data' => $data
         ];
     }

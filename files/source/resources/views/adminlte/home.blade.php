@@ -60,6 +60,22 @@
                 <i class="fa fa-times"></i>
             </a>
         </script>
+        <script type="text/html" id="recordlistColumnTemplate">
+            <tr id="__column____VALUE__">
+                <td>__COLUMN__</td>
+                <td>__VALUE__</td>
+                <td class="text-center">
+                    <a data-column="__COLUMN__" data-value="__VALUE__" data-index="__INDEX__" class="table-icon-primary buttonEditColumn" href="javascript:void(0);">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a data-column="__COLUMN__" data-value="__VALUE__" data-index="__INDEX__" class="table-icon-danger buttonRemoveColumn" href="javascript:void(0);">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </td>
+            </tr>
+        </script>
     </div>
     <script src="/js/adminlte/app.js"></script>
     <script src="/js/adminlte/custom.js"></script>
