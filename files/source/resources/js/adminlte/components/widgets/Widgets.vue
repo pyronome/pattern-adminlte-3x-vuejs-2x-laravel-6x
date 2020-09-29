@@ -1,6 +1,6 @@
 <template>
     <div id="widgetsContainer" class="row">
-        <component v-for="widget in activeWidgets" v-bind:is="widget.type" :key="widget.id" :pagename="pagename" :model="widget.model">
+        <component v-for="widget in widgets" v-bind:is="widget.type" :key="widget.id" :pagename="pagename" :model="widget.model">
         </component>
     </div>
 </template>
@@ -17,11 +17,6 @@
         props: ['widgets', 'pagename'],
         mounted() {
             console.log("Widgets.vue mounted")
-        },
-        computed: {
-            activeWidgets: function () {
-                return this.widgets.filter(widget => widget.visibility === "1")
-            }
         },
         methods: {
         },
