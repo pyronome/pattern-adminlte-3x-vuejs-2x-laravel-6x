@@ -15,19 +15,16 @@
         data() {
             return {
                 model: this.$attrs.model,
-                data: []
+                data: [],
+                infoboxURL: "",
             };
-        },
-        computed: {
-            infoboxURL: function () {
-                return this.data.href
-            }
         },
         methods: {
             loadData: function () {
                 axios.get(AdminLTEHelper.getAPIURL("__layout/get_infoboxvalue/" + this.$attrs.pagename + "/" + this.model))
                     .then(({ data }) => {
                         this.data = data;
+                        this.infoboxURL = data.href;
                     }).catch(({ data }) => {
                         this.$Progress.fail();
                     });

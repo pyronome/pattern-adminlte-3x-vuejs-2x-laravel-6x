@@ -764,7 +764,7 @@ class AdminLTE
 		return $Models;
 	}
 
-	public function getPageLayout($pageName)
+	public function getPageWidgetConfig($pageName)
 	{
 
 		$Widgets = array();
@@ -815,6 +815,88 @@ class AdminLTE
 				/*if ('empty' != $type) {*/
 					$Widgets[] = $userWidgetsFormatted[$userWidgetIndex];
 				/*}*/
+			}
+		} // for ($i=0; $i < $countWidgets; $i++) {
+
+		// Add User Empty Widgets
+		$keys = array_keys($userWidgetsFormatted);
+		$countKeys = count($keys);
+
+		for ($i=0; $i < $countKeys; $i++) { 
+			$key = $keys[$i];
+
+			if (false === strpos($key, 'empty'))
+			{
+				continue;
+			}
+			
+			if (in_array($key, $emptyIndexHistory))
+			{
+				continue;
+			}
+
+			$Widgets[] = $userWidgetsFormatted[$key];
+		}
+
+		$Widgets = $this->sortListByKey($Widgets, true, 'order');
+
+		return $Widgets;
+
+	}
+
+	public function getPageLayout($pageName)
+	{
+
+		$Widgets = array();
+
+		$layout = AdminLTELayout::where('deleted', false)
+				->where('pagename', $pageName)
+				->orderBy('id', 'DESC')
+				->first();
+		
+		if (null == $layout)
+		{
+			echo __LINE__;
+			die();
+			return $Widgets;
+		} // if (null == $layout)
+
+		$defaultWidgets = json_decode(
+				$this->base64decode($layout->widgets),
+				(JSON_HEX_QUOT
+				| JSON_HEX_TAG
+				| JSON_HEX_AMP
+				| JSON_HEX_APOS));
+
+		$userWidgetsFormatted = $this->getUserWidgetsFormatted($pageName);
+
+		$countWidgets = count($defaultWidgets);
+		$emptyIndex = 0;
+		$emptyIndexHistory = array();
+
+		for ($i=0; $i < $countWidgets; $i++) { 
+			$defaultWidget = $defaultWidgets[$i];
+
+			$type = $defaultWidget['type'];
+			$model = $defaultWidget['model'];
+
+			if ('empty' == $type) {
+				$userWidgetIndex = $type.$emptyIndex;
+				$emptyIndex++;
+
+				$emptyIndexHistory[] = $userWidgetIndex;
+			} else {
+				$userWidgetIndex = $type.$model;
+			}
+			
+			if (!isset($userWidgetsFormatted[$userWidgetIndex])) {
+				if ('1' == $defaultWidget['visibility']) {
+					$Widgets[] = $defaultWidget;
+				}
+			} else {
+				if ('1' == $userWidgetsFormatted[$userWidgetIndex]['visibility']) {
+					$Widgets[] = $userWidgetsFormatted[$userWidgetIndex];
+				}
 			}
 		} // for ($i=0; $i < $countWidgets; $i++) {
 

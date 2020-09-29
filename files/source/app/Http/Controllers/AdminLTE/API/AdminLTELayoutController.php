@@ -76,7 +76,7 @@ class AdminLTELayoutController extends Controller
 
         $adminLTE = new AdminLTE();
 
-        $Widgets = $adminLTE->getPageLayout($pageName);
+        $Widgets = $adminLTE->getPageWidgetConfig($pageName);
 
         $widgetJson = json_encode($Widgets,
                 JSON_HEX_QUOT |
