@@ -1,6 +1,6 @@
 <template>
     <div :class="data.size" >
-        <router-link class="info-box clickable-infobox" tag="div" to="data.href">
+        <router-link class="info-box clickable-infobox" tag="div" :to="infoboxURL">
             <span class="info-box-icon elevation-1" v-bind:style="{backgroundColor: data.iconbackground}"><i :class="data.icon"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text">{{data.text}}</span>
@@ -17,6 +17,11 @@
                 model: this.$attrs.model,
                 data: []
             };
+        },
+        computed: {
+            infoboxURL: function () {
+                return this.data.href
+            }
         },
         methods: {
             loadData: function () {
