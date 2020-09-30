@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class AdminLTEUserGroup extends Model
 {
 
-	/* {{snippet:begin_properties}} */
+    /* {{snippet:begin_properties}} */
 
     /**
      * The table associated with the model.
@@ -18,14 +18,18 @@ class AdminLTEUserGroup extends Model
      */
     protected $table = 'adminlteusergrouptable';
 
-	protected $fillable = [
-		'enabled',
-		'title',
-		'widget_permission'
-	];
+    protected $fillable = [
+        'enabled',
+        'title',
+        'widget_permission'
+    ];
+    
+    public static $searchable = [
+        'title'
+    ];
 
-	public static $property_list = [
-		[
+    public static $property_list = [
+        [
             'name' => 'id',
             'type' => 'integer'
         ],
@@ -41,7 +45,7 @@ class AdminLTEUserGroup extends Model
             'name' => 'updated_at',
             'type' => 'date'
         ],
-		[
+        [
             'name' => 'enabled',
             'type' => 'checkbox'
         ],
@@ -55,16 +59,16 @@ class AdminLTEUserGroup extends Model
         ]
     ];
 
-	/* {{snippet:end_properties}} */
+    /* {{snippet:end_properties}} */
 
-	/* {{snippet:begin_methods}} */
-	
-	public function AdminLTEUser_adminlteusergroup_id()
+    /* {{snippet:begin_methods}} */
+    
+    public function AdminLTEUser_adminlteusergroup_id()
     {
         return $this->hasMany(AdminLTEUser::class);
     }
-	
-	/* {{snippet:end_methods}} */
+    
+    /* {{snippet:end_methods}} */
 }
 
 /* {{snippet:end_class}} */

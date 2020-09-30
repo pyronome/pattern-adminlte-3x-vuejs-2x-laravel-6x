@@ -1026,4 +1026,10 @@ td .showBigPhoto {
     color: white;
     padding-top: 40vh;
 }
+.widgetcomponent {
+    margin-bottom: 15px;
+}
+.widgetcomponent > div.card {
+    min-height: 100%;
+}
 /* {{@snippet:end}} */

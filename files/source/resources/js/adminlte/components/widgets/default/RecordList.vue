@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="card-body" style="display:none;">
-				<div class="recordlist-search-container">
+                <div class="recordlist-search-container">
                     <div class="input-group input-group-sm divSearchBar float-right" style="margin-bottom:1rem;">
                         <input type="text"
                             id="searchText" name="searchText"
@@ -100,7 +100,7 @@
                     </tbody>
                 </table>
             </div>
-			<div class="card-footer">
+            <div class="card-footer" style="min-height:60px;">
                 <pagination v-if="show_pagination" :data="data" :limit="1" align="right" :show-disabled="false" @pagination-change-page="paginate">
                     <span slot="prev-nav">&lt;</span>
                     <span slot="next-nav">&gt;</span>

@@ -18,10 +18,9 @@ class AdminLTELayoutController extends Controller
 
         $list = array();
 
-        $adminLTE = new AdminLTE();
+        $objectAdminLTE = new AdminLTE();
 
-        $Models = $adminLTE->getModelList();
-
+        $Models = $objectAdminLTE->getModelList();
         $countModels = count($Models);
         $index = 0;
 
@@ -36,7 +35,7 @@ class AdminLTELayoutController extends Controller
             }
 
             $object = new $modelNameWithNamespace;
-            $property_list = $adminLTE->getModelPropertyList($object);
+            $property_list = $objectAdminLTE->getModelPropertyList($object);
             $countProperty = count($property_list);
 
             for ($j=0; $j < $countProperty; $j++) { 
@@ -74,9 +73,9 @@ class AdminLTELayoutController extends Controller
                 ? htmlspecialchars($parameters['pageName'])
                 : '';
 
-        $adminLTE = new AdminLTE();
+        $objectAdminLTE = new AdminLTE();
 
-        $Widgets = $adminLTE->getPageWidgetConfig($pageName);
+        $Widgets = $objectAdminLTE->getPageWidgetConfig($pageName);
 
         $widgetJson = json_encode($Widgets,
                 JSON_HEX_QUOT |
@@ -134,9 +133,9 @@ class AdminLTELayoutController extends Controller
                 ? htmlspecialchars($parameters['pageName'])
                 : '';
 
-        $adminLTE = new AdminLTE();
+        $objectAdminLTE = new AdminLTE();
 
-        $Widgets = $adminLTE->getPageLayout($pageName);
+        $Widgets = $objectAdminLTE->getPageLayout($pageName);
 
         $countWidgets = count($Widgets);
         $index = 0;

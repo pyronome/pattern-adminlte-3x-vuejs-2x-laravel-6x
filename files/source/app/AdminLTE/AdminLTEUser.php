@@ -29,6 +29,13 @@ class AdminLTEUser extends Authenticatable
         'passwordHash'
     ];
 
+    public static $searchable = [
+        'adminlteusergroup_id.title',
+        'fullname',
+        'username',
+        'email'
+    ];
+    
     public static $property_list = [
         [
             'name' => 'id',

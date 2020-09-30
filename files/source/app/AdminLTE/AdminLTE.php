@@ -720,6 +720,7 @@ class AdminLTE
 				'AdminLTE',
 				'AdminLTELayout',
 				'AdminLTEModelDisplayText',
+				'AdminLTEModelOption',
 				'AdminLTEUserLayout',
 				'AdminLTEVariable',
 				'User'
@@ -728,6 +729,37 @@ class AdminLTE
 		
 		$Models = array();
 		$index = 0;
+
+		$path = (dirname(__FILE__));
+		if (is_dir($path))
+		{ 
+			$files = scandir($path);
+
+			foreach ($files as $file)
+			{ 
+				if (($file != ".") && ($file != ".."))
+				{
+					$current_path = ($path . "/" . $file);
+
+					if (is_dir($current_path))
+					{
+						continue;
+					} // if (is_dir($current_path))
+
+					$file_name = basename($current_path);
+
+					$extension = pathinfo($file_name, PATHINFO_EXTENSION);
+					$extension = '.' . $extension;
+
+					$file_name = str_replace($extension, '', $file_name);
+					
+					if (!in_array($file_name, $exceptions))
+					{
+						$Models[] = $file_name;
+					} // if (!in_array($file_name, $exceptions))
+				} // if (($file != ".") && ($file != "..")) {
+			} // foreach ($files as $file) {
+		} // if (is_dir($path))
 
 		$path = dirname(dirname(__FILE__));
 		if (is_dir($path))
@@ -1612,16 +1644,15 @@ class AdminLTE
 		return $result;
 	}
 
-	public function getModelPropertyList($object)
+	public function getModelPropertyList($model)
 	{
-		$propertyList = $object->getFillable();
+		$modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
 
-		array_unshift($propertyList,
-				'id',
-				'deleted',
-				'created_at',
-				'updated_at');
+		if (!class_exists($modelNameWithNamespace)) {
+			$modelNameWithNamespace = ('\\App\\' . $model);
+		}
 
+		$propertyList = $modelNameWithNamespace::$property_list;
 		return $propertyList;
 	}
 
@@ -1634,6 +1665,7 @@ class AdminLTE
 			'AdminLTE',
 			'AdminLTELayout',
 			'AdminLTEModelDisplayText',
+			'AdminLTEModelOption',
 			'AdminLTEUserLayout',
 			'AdminLTEVariable',
 			'User'
@@ -1646,19 +1678,11 @@ class AdminLTE
 		// get default display texts
 		for ($i=0; $i < $countModels; $i++) {
 			$model = $Models[$i];
-
-			$modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
-
-			if (!class_exists($modelNameWithNamespace)) {
-				$modelNameWithNamespace = ('\\App\\' . $model);
-			}
-
-			$object = new $modelNameWithNamespace;
-			$property_list = $this->getModelPropertyList($object);
+			$property_list = $this->getModelPropertyList($model);
 			$countProperty = count($property_list);
 
 			for ($j=0; $j < $countProperty; $j++) { 
-				$property = $property_list[$j];
+				$property = $property_list[$j]['name'];
 				$displayTexts[$model][$property] = '{{' . $model . '/' . $property . '}}';
 			} // for ($j=0; $j < $countProperty; $j++) { 
 		} // for ($i=0; $i < $countModels; $i++) {
