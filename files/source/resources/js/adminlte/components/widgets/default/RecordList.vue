@@ -1,5 +1,5 @@
 <template>
-    <div :class="widget_options.size">
+    <div class="widgetcomponent" :class="widget_options.size">
         <div class="card collapsed-card">
             <div class="card-header">
                 <h3 class="card-title" v-html="widget_options.title"></h3>
@@ -262,9 +262,13 @@
             this.main_folder = AdminLTEHelper.getMainFolder();
 
             var self = this;
-
             this.loadData(function(){
                 AdminLTEHelper.setDefaultSortButton("button_sort_" + self.$attrs.model + "_id");
+            });
+        },
+        updated() {
+            this.$nextTick(() => {
+                this.$root.$emit("widgetComponentRendered");
             });
         }
     }

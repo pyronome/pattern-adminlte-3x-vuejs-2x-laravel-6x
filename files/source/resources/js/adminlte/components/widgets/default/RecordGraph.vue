@@ -1,5 +1,5 @@
 <template>
-    <div :class="data.size">
+    <div class="widgetcomponent" :class="data.size">
         <div class="card collapsed-card">
             <div class="card-header">
                 <h3 class="card-title">{{data.text}}</h3>
@@ -58,9 +58,13 @@
             this.loadData();
             
             var eventName = "refresh" + this.model + "Data";
-
             this.$root.$on(eventName, () => {
                 this.loadData();
+            });
+        },
+        updated() {
+            this.$nextTick(() => {
+                this.$root.$emit("widgetComponentRendered");
             });
         }
     }

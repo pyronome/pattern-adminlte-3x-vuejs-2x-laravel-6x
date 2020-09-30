@@ -1,5 +1,5 @@
 <template>
-    <div :class="data.size" >
+    <div class="widgetcomponent" :class="data.size" >
         <router-link class="info-box clickable-infobox" tag="div" :to="infoboxURL">
             <span class="info-box-icon elevation-1" v-bind:style="{backgroundColor: data.iconbackground}"><i :class="data.icon"></i></span>
             <div class="info-box-content">
@@ -34,9 +34,13 @@
             this.loadData();
 
             var eventName = "refresh" + this.model + "Data";
-
             this.$root.$on(eventName, () => {
                 this.loadData();
+            });            
+        },
+        updated() {
+            this.$nextTick(() => {
+                this.$root.$emit("widgetComponentRendered");
             });
         }
     }
