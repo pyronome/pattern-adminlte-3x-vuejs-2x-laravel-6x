@@ -88,8 +88,7 @@
                                     <label :for="'select_' + model + '_row' + row.id"></label>
                                 </div>
                             </td>
-                            <td v-for="(displaytext, index) in row.displaytexts" :key="index">
-                                {{displaytext}}
+                            <td v-for="(displaytext, index) in row.displaytexts" :key="index" v-html="displaytext">
                             </td>
                             <td class="text-center">
                                 <router-link class="btn btn-outline-primary btn-xs btn-on-table"

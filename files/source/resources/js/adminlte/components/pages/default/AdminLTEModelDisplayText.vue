@@ -91,7 +91,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modalfooter justify-content-between show_by_permission">
+                    <div class="modalfooter justify-content-between show_by_permission_must_update">
                         <div class="row">
                             <div class="col-md-12">
                                 <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
@@ -152,7 +152,7 @@
                         </div>
 
                     </div>
-                    <div class="modalfooter justify-content-between show_by_permission">
+                    <div class="modalfooter justify-content-between show_by_permission_must_update">
                         <div class="row">
                             <div class="col-md-12">
                                 <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
@@ -221,7 +221,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modalfooter justify-content-between show_by_permission">
+                    <div class="modalfooter justify-content-between show_by_permission_must_update">
                         <div class="row">
                             <div class="col-md-12">
                                 <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Close') }}</button>
@@ -249,14 +249,16 @@ export default {
             model_property_list: [],
             model_display_text_list: [],
             form: new Form({
-                'menu_json': ''
+                'model': '',
+                'display_text_json': ''
             }),
             page: {
                 is_ready: false,
                 is_model_property_list_loading: false,
                 is_model_property_list_loaded: false,
                 is_model_display_text_list_loading: false,
-                is_model_display_text_list_loaded: false
+                is_model_display_text_list_loaded: false,
+                is_post_success: false
             }
         };
     },
@@ -304,7 +306,7 @@ export default {
 
             this.page.is_model_display_text_list_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("__modeldisplaytext"))
+            axios.get(AdminLTEHelper.getAPIURL("__modeldisplaytext/get"))
                 .then(({ data }) => {
                     this.page.is_model_display_text_list_loaded = true;
                     this.page.is_model_display_text_loading = false;
@@ -485,9 +487,11 @@ export default {
             $("#modal-EditDisplayText").modal('hide');
         },
         saveFormModelDisplayText: function () {
+            var self = this;
             var objectId = parseInt(document.getElementById("formModelDisplayText-id").value);
-            var object = this.model_display_text_list[objectId - 1];
-            
+            var object = self.model_display_text_list[objectId - 1];
+            var model = object.model;
+          
             var trEditDisplayTextList = $(".trEditDisplayText");
             var countTR = trEditDisplayTextList.length;
             var displayTextList = [];
@@ -505,14 +509,31 @@ export default {
                 displayTextList.push(objectDisplayText);
             }
 
-            object["display_text_json"] = JSON.stringify(displayTextList);
+            self.form.model = model;
+            self.form.display_text_json = JSON.stringify(displayTextList);
+            
             // Submit the form via a POST request
-            this.$Progress.start();
-            this.form.post(AdminLTEHelper.getAPIURL("__modeldisplaytext"))
+            self.$Progress.start();
+            self.form.post(AdminLTEHelper.getAPIURL("__modeldisplaytext/post"))
                 .then(({ data }) => {
-                    this.$Progress.finish();
+                    self.$Progress.finish();
+                    self.page.is_post_success = true;
                 }).catch(({ data }) => {
-                    this.$Progress.fail();
+                    self.$Progress.fail();
+                    self.page.is_post_success = false;
+                }).finally(function() {
+                    if (self.page.is_post_success) {
+                        Vue.swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            title: '',
+                            text: 'Display texts have been saved!',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                        });
+                    }
                 });
         }
     },

@@ -722,7 +722,6 @@ class AdminLTE
 				'AdminLTEModelDisplayText',
 				'AdminLTEUserLayout',
 				'AdminLTEVariable',
-				'HTMLDB',
 				'User'
 			];
 		} // if (0 == count($exceptions))
@@ -1291,20 +1290,23 @@ class AdminLTE
 					$partResult = $objectCurrent->$display_text_Property;
 				} else {
 					$id = $objectCurrent->$property;
+					if ($id > 0) {
+						$externalModel = $textPart[0];
 
-					$externalModel = $textPart[0];
+						$externalModelNameWithNamespace = ('\\App\\AdminLTE\\' . $externalModel);
 
-					$externalModelNameWithNamespace = ('\\App\\AdminLTE\\' . $externalModel);
+						if (!class_exists($externalModelNameWithNamespace)) {
+							$externalModelNameWithNamespace = ('\\App\\' . $externalModel);
+						}
 
-					if (!class_exists($externalModelNameWithNamespace)) {
-						$externalModelNameWithNamespace = ('\\App\\' . $externalModel);
+						$objectExternal = new $externalModelNameWithNamespace;
+						$objectExternal = $objectExternal::find($id);
+						
+						if (null != $objectExternal) {
+							$display_text_Property = $textPart[1];
+							$partResult = $objectExternal->$display_text_Property;
+						}
 					}
-
-					$objectExternal = new $externalModelNameWithNamespace;
-					$objectExternal = $objectExternal::find($id);
-
-					$display_text_Property = $textPart[1];
-					$partResult = $objectExternal->$display_text_Property;
 				}
 			} else if ('class_selection_multiple' == $type) {
 				if ($textPart[0] == $model) { // current model
@@ -1634,7 +1636,6 @@ class AdminLTE
 			'AdminLTEModelDisplayText',
 			'AdminLTEUserLayout',
 			'AdminLTEVariable',
-			'HTMLDB',
 			'User'
 		];
 
@@ -1768,7 +1769,6 @@ class AdminLTE
 			'AdminLTEUserGroup',
 			'AdminLTEUserLayout',
 			'AdminLTEVariable',
-			'HTMLDB',
 			'User'
 		];
 

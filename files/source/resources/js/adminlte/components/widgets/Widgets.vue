@@ -20,7 +20,7 @@
             return {
                 total_widget: 0,
                 widget_counter: 0,
-                widget_loader_active: false,
+                widget_loader_active: false
             };
         },
         watch: {
@@ -44,9 +44,6 @@
             });            
         },
         methods: {
-            getPageWidgetsLength() {
-                return this.widgets.length;
-            }
         },
         destroyed() {
             console.log("Widgets.vue destroyed");
