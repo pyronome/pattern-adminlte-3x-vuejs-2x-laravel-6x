@@ -27,19 +27,11 @@ class AdminLTELayoutController extends Controller
         for ($i=0; $i < $countModels; $i++)
         {
             $model = $Models[$i];
-            
-            $modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
-
-            if (!class_exists($modelNameWithNamespace)) {
-                $modelNameWithNamespace = ('\\App\\' . $model);
-            }
-
-            $object = new $modelNameWithNamespace;
-            $property_list = $objectAdminLTE->getModelPropertyList($object);
+            $property_list = $objectAdminLTE->getModelPropertyList($model);
             $countProperty = count($property_list);
 
             for ($j=0; $j < $countProperty; $j++) { 
-                $property = $property_list[$j];
+                $property = $property_list[$j]['name'];
 
                 $list[$index]['id'] = ($index + 1);
                 $list[$index]['model'] = $model;

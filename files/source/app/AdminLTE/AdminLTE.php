@@ -1397,7 +1397,7 @@ class AdminLTE
 			$parsed = $this->getStringBetween($temp_text, '{{', '}}');
 		} // while (strlen($parsed) > 0) {
 		
-		return $display_text;
+		return htmlspecialchars_decode($display_text);
 	}
 
 	private function getStringBetween($string, $start, $end)
