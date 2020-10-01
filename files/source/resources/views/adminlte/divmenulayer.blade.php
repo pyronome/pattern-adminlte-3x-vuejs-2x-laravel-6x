@@ -5,7 +5,7 @@
             $menu = $adminLTE->getSideMenu();
             
             // Current User
-            $user_data = $adminLTE->getUserData();
+            /* $user_data = $adminLTE->getUserData();
             $is_admin = false;
             $permissions = array();
 
@@ -13,7 +13,10 @@
                 $is_admin = true;
             } else {
                 $permissions = $user_data['menu_permission'];
-            }
+            } */
+
+            $permissions = array();
+            $is_admin = true;
         ?>
 
         <!-- Sidebar Menu -->

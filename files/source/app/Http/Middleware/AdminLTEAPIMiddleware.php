@@ -45,11 +45,7 @@ class AdminLTEAPIMiddleware
 
         if ($permissionResult['error'])
         {
-            $objectHTMLDB = new HTMLDB();
-            $objectHTMLDB->errorCount = 1;
-            $objectHTMLDB->lastError = $permissionResult['error_msg'];
-            $objectHTMLDB->printResponseJSON();
-            return;
+            return ['message' => "Error"];
         } // if ($permissionResult['error'])
 
         return $next($request);
@@ -59,6 +55,9 @@ class AdminLTEAPIMiddleware
 
     public function checkUserGetPermission($request)
     {
+        $result['error'] = false;
+        $result['error_msg'] = '';
+        return $result;
 
         $adminLTE = new AdminLTE();
 
@@ -117,6 +116,9 @@ class AdminLTEAPIMiddleware
 
     public function checkUserPostPermission($request)
     {
+        $result['error'] = false;
+        $result['error_msg'] = '';
+        return $result;
 
         $adminLTE = new AdminLTE();
 
@@ -175,6 +177,10 @@ class AdminLTEAPIMiddleware
 
     public function checkUserDeletePermission($request)
     {
+
+        $result['error'] = false;
+        $result['error_msg'] = '';
+        return $result;
 
         $adminLTE = new AdminLTE();
 

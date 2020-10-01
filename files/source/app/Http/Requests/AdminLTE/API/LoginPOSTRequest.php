@@ -37,18 +37,31 @@ class LoginPOSTRequest extends FormRequest
             $adminLTEUser = AdminLTEUser::where('email', $this->email)
                     ->first();
             $confirmed = false;
+            $enabled = true;
             if ($adminLTEUser != null)
             {
-                if (password_verify($this->password, $adminLTEUser->password))
-                {
-                    $confirmed = true;
-                } // if (password_verify($this->password, $adminLTEUser->password))
+                if(1 == $adminLTEUser->enabled) {
+                    if (password_verify($this->password, $adminLTEUser->password))
+                    {
+                        $confirmed = true;
+                    } // if (password_verify($this->password, $adminLTEUser->password))
+                } else {
+                    $enabled = false;
+                }
             } // if (null == $adminLTEUser)
+
             if (!$confirmed)
             {
-                $validator->errors()->add(
+                if(!$enabled) {
+                    $validator->errors()->add(
+                        'enabled',
+                        'Your account has been deactivated. Please connect with your administor.');
+                } else {
+                    $validator->errors()->add(
                         'password',
                         'Your e-mail address or password is not correct. Please check and try again.');
+                }
+                
                 sleep(2);
             } // if (!$confirmed)
         });

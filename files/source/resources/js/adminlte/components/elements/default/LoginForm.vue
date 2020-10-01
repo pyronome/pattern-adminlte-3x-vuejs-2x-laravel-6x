@@ -40,6 +40,8 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
+                        <input type="hidden" v-model="form.enabled" :class="{ 'is-invalid': form.errors.has('enabled') }">
+                        <has-error :form="form" field="enabled"></has-error>
                         <has-error :form="form" field="password"></has-error>
                     </div>
                     <div class="row">
@@ -84,6 +86,7 @@ export default {
             form: new Form({
                 email: '',
                 password: '',
+                enabled: 0,
                 remember: false
             })
         }
