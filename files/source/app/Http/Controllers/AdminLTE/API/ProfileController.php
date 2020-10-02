@@ -8,83 +8,99 @@ use Illuminate\Support\Facades\Hash;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
 use App\AdminLTE\AdminLTEUserGroup;
+use App\Http\Requests\AdminLTE\API\ProfilePOSTRequest;
 
 class ProfileController extends Controller
 {
 
     public function get(Request $request)
     {
-
-        $adminLTE = new AdminLTE();
-        $userData = $adminLTE->getUserData();
+        $objectAdminLTE = new AdminLTE();
+        $userData = $objectAdminLTE->getUserData();
 
         $response = [];
 
         if ($userData['id'] > 0)
         {
-            $adminLTEUser = \App\AdminLTE\AdminLTEUSer::find($userData['id']);
+            $objectAdminLTEUser = AdminLTEUSer::find($userData['id']);
 
-            if ($adminLTEUser != null)
+            if ($objectAdminLTEUser != null)
             {
-                $response['id'] = $userData['id'];
-                $response['deleted'] = $userData['deleted'];
-                $response['created_at'] = $userData['created_at'];
-                $response['updated_at'] = $userData['updated_at'];
-                $response['enabled'] = $userData['enabled'];
-                $response['adminlteusergroup_id'] = $userData['adminlteusergroup_id'];
-                $response['adminlteusergroup_idDisplayText'] = '';
-                $response['fullname'] = $userData['fullname'];
-                $response['username'] = $userData['username'];
-                $response['email'] = $userData['email'];
+                $displayTexts = $objectAdminLTE->getObjectDisplayTexts('AdminLTEUser', $objectAdminLTEUser);
+
+                $response['id'] = $objectAdminLTEUser->id;
+                $response['id__displaytext__'] = $displayTexts['id'];
+                $response['deleted'] = $objectAdminLTEUser->deleted;
+                $response['deleted__displaytext__'] = $displayTexts['deleted'];
+                $response['created_at'] = $objectAdminLTEUser->created_at;
+                $response['created_at__displaytext__'] = $displayTexts['created_at'];
+                $response['updated_at'] = $objectAdminLTEUser->updated_at;
+                $response['updated_at__displaytext__'] = $displayTexts['updated_at'];
+                $response['enabled'] = $objectAdminLTEUser->enabled;
+                $response['enabled__displaytext__'] = $displayTexts['enabled'];
+                $response['adminlteusergroup_id'] = array($objectAdminLTEUser->adminlteusergroup_id);
+                $response['adminlteusergroup_id__displaytext__'] = $displayTexts['adminlteusergroup_id'];
+                $response['fullname'] = $objectAdminLTEUser->fullname;
+                $response['fullname__displaytext__'] = $displayTexts['fullname'];
+                $response['username'] = $objectAdminLTEUser->username;
+                $response['username__displaytext__'] = $displayTexts['username'];
+                $response['email'] = $objectAdminLTEUser->email;
+                $response['email__displaytext__'] = $displayTexts['email'];
                 $response['password'] = '';
-                $response['profile_img'] = $userData['image'];
-                $response['menu_permission'] = $adminLTE->base64Decode(
-                        $adminLTEUser->menu_permission);
-                $response['service_permission'] = $adminLTE->base64Decode(
-                        $adminLTEUser->service_permission);
+                $response['password__displaytext__'] = '******';
 
-                $response['group_menu_permission'] = '';
-                $response['group_service_permission'] = '';
+                $external_ids = array();
+                foreach ($objectAdminLTE->get_model_files_by_property('AdminLTEUser', $objectAdminLTEUser->id, 'profile_img') as $fileData) {
+                    $external_ids[] = $fileData['id'];
+                }
 
-                if ($userData['adminlteusergroup_id'] > 0)
-                {
-                    $adminLTEUserGroup = \App\AdminLTE\AdminLTEUserGroup::find(
-                            $userData['adminlteusergroup_id']);
+                if(empty($external_ids)){
+                    $current_external_value = '';
+                } else {
+                    $current_external_value = implode(',', $external_ids);
+                }
 
-                    if ($adminLTEUserGroup != null)
-                    {
-                        $response['group_menu_permission'] = $adminLTE->base64Decode(
-                                $adminLTEUserGroup->menu_permission);
-                        $response['group_service_permission'] = $adminLTE->base64Decode(
-                                $adminLTEUserGroup->menu_permission);
-                    } // if ($adminLTEUserGroup != null)
-                } // if ($userData['adminlteusergroup_id'] > 0)
+                $response['profile_img'] = $current_external_value;
+                $response['profile_img__displaytext__'] = $displayTexts['profile_img'];
             } // if ($adminLTEUser != null)
         } // if ($userData['id'] > 0)
 
         return $response;
     }
 
-    public function get_form_values(Request $request)
-    {
-        $adminLTE = new AdminLTE();
-        $userData = $adminLTE->getUserData();
+    public function get_files(Request $request) {
+        $list = [];
+        
+        $objectAdminLTE = new AdminLTE();
+        $userData = $objectAdminLTE->getUserData();
 
         $response = [];
 
-        $response['id'] = $userData['id'];
-        $response['fullname'] = $userData['fullname'];
-        $response['username'] = $userData['username'];
-        $response['email'] = $userData['email'];
-        $response['profile_img'] = $userData['image'];
-        $response['password0'] = '';
-        $response['password1'] = '';
-        $response['password2'] = '';
+        if ($userData['id'] > 0)
+        { 
+            $files = $objectAdminLTE->get_model_files('AdminLTEUser', $userData['id']);
+            $index = 0;
 
-        return $response;
+            foreach ($files as $fileData) {
+                $list[$index]["id"] = $fileData["id"];
+                $list[$index]["object_property"] = $fileData["object_property"];
+                $list[$index]["file_name"] = $fileData["file_name"];
+                $list[$index]["path"] = $fileData["path"];
+                $list[$index]["media_type"] = $fileData["media_type"];
+
+                $fileNameTokens = explode('.', $fileData["file_name"]);
+                $list[$index]["extension"] = strtolower(end($fileNameTokens));
+
+                $index++;
+            }
+        }
+
+        return [
+            'list' => $list
+        ];
     }
 
-    public function post(ProfilePOSTRequest $request)
+    /* public function post(ProfilePOSTRequest $request)
     {
         $adminLTE = new AdminLTE();
         $userData = $adminLTE->getUserData();
@@ -110,6 +126,35 @@ class ProfileController extends Controller
         $result['message'] = 'UPDATED';
 
         return $result;
+    } */
+
+    public function post(ProfilePOSTRequest $request)
+    {
+        $adminLTE = new AdminLTE();
+        $userData = $adminLTE->getUserData();
+        $objectAdminLTEUser = AdminLTEUser::find($userData['id']);
+
+        if ($objectAdminLTEUser != null)
+        {
+            $objectAdminLTEUser->fullname = $request->input('fullname');
+            
+            $objectAdminLTEUser->username = $request->input('username');
+
+            $objectAdminLTEUser->email = $request->input('email');
+            
+            if ('' != $request->input('password')) {
+                $objectAdminLTEUser->password = bcrypt($request->input('password'));
+            } 
+
+            $profile_img = $request->input('profile_img');
+
+            $objectAdminLTEUser->save();
+            
+            $objectAdminLTE = new AdminLTE();
+            $objectAdminLTE->updateModelFileObject('AdminLTEUser', $objectAdminLTEUser->id, 'profile_img', $profile_img);
+        }
+
+        return ['message' => "Success"];
     }
 
 }

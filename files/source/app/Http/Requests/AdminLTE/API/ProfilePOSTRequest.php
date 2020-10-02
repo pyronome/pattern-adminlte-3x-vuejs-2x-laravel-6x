@@ -39,7 +39,7 @@ class ProfilePOSTRequest extends FormRequest
             $adminLTE = new AdminLTE;
             $userData = $adminLTE->getUserData();
 
-            $otherUser = \App\AdminLTEUser::where('deleted', false)
+            $otherUser = AdminLTEUser::where('deleted', false)
                     ->where('username', $this->username)
                     ->where('id', '!=', $userData['id'])
                     ->first();
@@ -52,7 +52,7 @@ class ProfilePOSTRequest extends FormRequest
                 sleep(1);
             } // if ($otherUser != null)
 
-            $otherUser = \App\AdminLTEUser::where('deleted', false)
+            $otherUser = AdminLTEUser::where('deleted', false)
                     ->where('email', $this->email)
                     ->where('id', '!=', $userData['id'])
                     ->first();
@@ -73,7 +73,7 @@ class ProfilePOSTRequest extends FormRequest
                                 'password0',
                                 'Please specify your current password.');
                     } else {
-                        $currentUser = \App\AdminLTEUser::find($userData['id']);
+                        $currentUser = AdminLTEUser::find($userData['id']);
                         if (!password_verify($this->password0,
                                 $currentUser->password)) {
                             $validator->errors()->add(

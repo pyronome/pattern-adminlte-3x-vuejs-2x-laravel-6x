@@ -55,7 +55,7 @@ class LoginPOSTRequest extends FormRequest
                 if(!$enabled) {
                     $validator->errors()->add(
                         'enabled',
-                        'Your account has been deactivated. Please connect with your administor.');
+                        'Account has been disabled. Please contact with system administrator.');
                 } else {
                     $validator->errors()->add(
                         'password',

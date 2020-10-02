@@ -399,7 +399,6 @@ transform: scale(1, 1);
 .detail-container > ul > li > a > img {
     height: 32px;
 }
-
 .vue-switch {
     display: none;
 }
@@ -947,6 +946,11 @@ table p {
 .detail-container .showBigPhoto {
     height: 100px;
     margin-right: 5px;
+}
+
+.detail-container.profile-image-container .showBigPhoto{
+    max-height: 250px;
+    height: auto;
 }
 
 td .showBigPhoto {
