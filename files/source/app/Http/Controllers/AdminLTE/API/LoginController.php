@@ -12,6 +12,11 @@ use App\Http\Requests\AdminLTE\API\LoginPOSTRequest;
 class LoginController extends Controller
 {
 
+    public function get_brand_data() {
+        $objectAdminLTE = new AdminLTE();
+        return $objectAdminLTE->getBrandData();
+    }
+
     public function post(LoginPOSTRequest $request)
     {
         /* {{@snippet:begin_login_post}} */

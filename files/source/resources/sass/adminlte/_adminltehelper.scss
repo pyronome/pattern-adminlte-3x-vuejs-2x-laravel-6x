@@ -1015,7 +1015,7 @@ td .showBigPhoto {
 .preferences-button.active {
     opacity:1;
 }
-.widgetLoader {
+.bodyLoader {
     display: none;
     float: none;
     height: 100%;
@@ -1035,5 +1035,13 @@ td .showBigPhoto {
 }
 .widgetcomponent > div.recordlist-card {
     min-height: 100%;
+}
+.brand-login-logo {
+    width: 40px;
+    vertical-align: middle;
+}
+.brand-login-name {
+    font-size: 1.7rem;
+    vertical-align: middle;
 }
 /* {{@snippet:end}} */

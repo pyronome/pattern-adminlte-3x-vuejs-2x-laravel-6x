@@ -100,34 +100,6 @@ class ProfileController extends Controller
         ];
     }
 
-    /* public function post(ProfilePOSTRequest $request)
-    {
-        $adminLTE = new AdminLTE();
-        $userData = $adminLTE->getUserData();
-
-        $adminLTEUser = \App\AdminLTE\AdminLTEUser::find($userData['id']);
-
-        if ($adminLTEUser != null)
-        {
-            $adminLTEUser->fullname = $request->input('fullname');
-            $adminLTEUser->username = $request->input('username');
-            $adminLTEUser->email = $request->input('email');
-
-            if (($request->input('password0') != '')
-                    && ($request->input('password1') != '')
-                    && ($request->input('password2') != ''))
-            {
-                $adminLTEUser->password = bcrypt($request->input('password2'));
-            } // if (($request->input('password0') != '')
-
-            $adminLTEUser->update();
-        } // if ($adminLTEUser != null)
-
-        $result['message'] = 'UPDATED';
-
-        return $result;
-    } */
-
     public function post(ProfilePOSTRequest $request)
     {
         $adminLTE = new AdminLTE();

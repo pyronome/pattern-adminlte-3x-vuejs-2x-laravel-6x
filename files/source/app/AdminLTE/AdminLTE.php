@@ -413,6 +413,20 @@ class AdminLTE
 		return $userData;
 	}
 
+	public function getBrandData()
+	{
+		if (Storage::disk('local')->exists('config/brand_json.php')) {
+			$brand_json = Storage::disk('local')->get('config/brand_json.php');
+			$brand_data = json_decode($brand_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			$brand_data['logo'] = asset('storage/' . $brand_data['logo']);
+		} else {
+			$brand_json = config('brand_json');
+			$brand_data = json_decode($brand_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+		}
+		
+		return $brand_data;
+	}
+
 	public function getAdminLTEFolder()
 	{
         $adminLTEFolder = config('adminlte.main_folder');

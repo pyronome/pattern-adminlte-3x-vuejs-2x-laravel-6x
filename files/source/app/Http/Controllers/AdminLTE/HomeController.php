@@ -26,6 +26,7 @@ class HomeController extends Controller
         $viewData['controllerName'] = $this->controllerName;
         $viewData['user'] = $objectAdminLTE->getUserData();
         $viewData['customization'] = $objectAdminLTE->getCustomization();
+        $viewData['brand'] = $objectAdminLTE->getBrandData();
         
         return view($viewName, $viewData);
     }

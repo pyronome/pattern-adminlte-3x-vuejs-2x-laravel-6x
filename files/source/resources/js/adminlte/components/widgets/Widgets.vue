@@ -2,7 +2,7 @@
     <div id="widgetsContainer" class="row">
         <component v-for="widget in widgets" v-bind:is="widget.type" :key="widget.id" :pagename="pagename" :model="widget.model">
         </component>
-        <widget-loader :widget_loader_active="widget_loader_active"></widget-loader>
+        <body-loader :body_loader_active="body_loader_active"></body-loader>
     </div>
 </template>
 
@@ -20,7 +20,7 @@
             return {
                 total_widget: 0,
                 widget_counter: 0,
-                widget_loader_active: false
+                body_loader_active: false
             };
         },
         watch: {
@@ -30,7 +30,7 @@
             }
         },
         mounted() {
-            this.widget_loader_active = true;
+            this.body_loader_active = true;
             
             this.$root.$on('widgetComponentRendered', () => {
                 this.widget_counter++;
@@ -38,7 +38,7 @@
                 if (this.total_widget == this.widget_counter) {
                     let self = this;
                     setTimeout(function() {
-                        self.widget_loader_active = false;
+                        self.body_loader_active = false;
                     }, 700);
                 }
             });            
