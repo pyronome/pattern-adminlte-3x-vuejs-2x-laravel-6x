@@ -2,7 +2,7 @@
     <div id="widgetsContainer" class="row">
         <component v-for="widget in widgets" v-bind:is="widget.type" :key="widget.id" :pagename="pagename" :model="widget.model">
         </component>
-        <body-loader :body_loader_active="body_loader_active"></body-loader>
+        <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
 </template>
 

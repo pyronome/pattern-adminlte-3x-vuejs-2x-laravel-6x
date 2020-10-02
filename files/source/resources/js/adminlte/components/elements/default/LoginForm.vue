@@ -1,7 +1,8 @@
 <template>
     <div class="login-box">
         <div class="login-logo">
-            <b>Admin</b>LTE
+            <img :src="brand_data.logo" alt="AdminLTE Logo" class="brand-login-logo img-circle elevation-3" style="opacity: .8">
+            <span class="brand-login-name font-weight-light" v-html="brand_data.name"></span>
         </div>
         <div class="card">
             <div class="card-body login-card-body">
@@ -71,39 +72,88 @@
             </div>
         </div>
         <vue-progress-bar></vue-progress-bar>
+        <body-loader :body_loader_active="body_loader_active" class="bodyLoader"></body-loader>
     </div>
 </template>
 <script>
 export default {
-    created() {
-        this.$Progress.start();
-    },
-    mounted() {
-        this.$Progress.finish();
-    },
     data() {
         return {
+            landing_page: "home",
+            brand_data: [],
             form: new Form({
                 email: '',
                 password: '',
                 enabled: 0,
                 remember: false
-            })
+            }),
+            page: {
+                is_ready: false,
+                is_data_loading: false,
+                is_data_loaded: false,
+                is_post_success: false
+            },
+            body_loader_active: false
         }
     },
+    created() {
+        this.$Progress.start();
+    },
+    mounted() {
+        this.page.is_ready = false;
+        this.body_loader_active = true;
+        this.processLoadQueue();
+    },
     methods: {
-        submitForm: function () {
-            // Submit the form via a POST request
-            this.$Progress.start();
-            this.form.post(AdminLTEHelper.getAPIURL("login"))
+        processLoadQueue: function () {
+            if (!this.page.is_data_loaded) {
+                this.$Progress.start();
+                this.loadData();
+            } else {
+                this.$Progress.finish();
+                this.page.is_ready = true;
+            }
+        },
+        loadData: function () {
+            var self = this;
+
+            if (self.page.is_data_loading) {
+                return;
+            }
+
+            self.page.is_data_loading = true;
+
+            axios.get(AdminLTEHelper.getAPIURL("login/get_brand_data"))
                 .then(({ data }) => {
-                    this.$Progress.finish();
-                    if (!data.landing_page) {
-                        data.landing_page = "home";
-                    }
-                    window.location = data.landing_page;
+                    self.page.is_data_loaded = true;
+                    self.page.is_data_loading = false;
+                    self.brand_data = data;
+                    self.processLoadQueue();
                 }).catch(({ data }) => {
-                    this.$Progress.fail();
+                    self.page.is_data_loaded = true;
+                    self.page.is_data_loading = false;
+                    self.$Progress.fail();
+                    self.processLoadQueue();
+                }).finally(function() {
+                    setTimeout(function() {
+                        self.body_loader_active = false;
+                    }, 1000);
+                });
+        },
+        submitForm: function () {
+            var self = this;
+            self.$Progress.start();
+            self.form.post(AdminLTEHelper.getAPIURL("login/post"))
+                .then(({ data }) => {
+                    self.$Progress.finish();
+                    self.page.is_post_success = true;
+                }).catch(({ data }) => {
+                    self.$Progress.fail();
+                    self.page.is_post_success = false;
+                }).finally(function() {
+                    if (self.page.is_post_success) {
+                        window.location = self.landing_page;
+                    }
                 });
         }
     }
