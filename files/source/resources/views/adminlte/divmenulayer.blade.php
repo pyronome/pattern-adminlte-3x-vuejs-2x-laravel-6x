@@ -44,7 +44,6 @@
                             <li class="nav-item">
                                 <router-link id="pageurl<?php echo $url; ?>"
                                     class="nav-link"
-                                    active-class="active"
                                     to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >
                                     <i class="<?php echo $icon; ?> nav-icon"></i>
                                     <p>
@@ -85,7 +84,6 @@
 		                                    <li class="nav-item">
 		                                        <router-link id="pageurl<?php echo $url; ?>"
                                                     class="child_menu nav-link"
-                                                    active-class="active"
                                                     to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>"
                                                     data-parent-url="<?php echo $parent_id; ?>">
 		                                            <i class="<?php echo $icon; ?> nav-icon"></i>
