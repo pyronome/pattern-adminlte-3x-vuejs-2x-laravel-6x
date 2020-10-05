@@ -422,6 +422,7 @@ class AdminLTE
 		} else {
 			$brand_json = config('brand_json');
 			$brand_data = json_decode($brand_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			$brand_data['logo'] = asset('storage/' . $brand_data['logo']);
 		}
 		
 		return $brand_data;

@@ -33,6 +33,9 @@ class BrandingController extends Controller
         $file_name = $request->input('file_name');
 
         if ('logo_not_changed' != $file_name) {
+            $temp = explode('.', $file_name);
+            $file_name = $objectAdminLTE->convertNameToFileName($temp[0]) . '.' . $temp[1];
+
             $logo_path = 'adminltebrand/logo/' . $file_name;
 
             if ($old_logo_path != $logo_path) {
