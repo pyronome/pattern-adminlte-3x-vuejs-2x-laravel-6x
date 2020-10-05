@@ -24,38 +24,52 @@ class BrandingController extends Controller
     public function post(BrandingPOSTRequest $request)
     {
         $objectAdminLTE = new AdminLTE();
-        $brand_data = $objectAdminLTE->getBrandData();
-        $temp = explode('storage/', $brand_data['logo']);
-        $old_logo_path = $temp[1];
 
         $brand_name = $request->input('name');
         $logo = $request->input('logo');
         $file_name = $request->input('file_name');
+        $old_logo_path = '';
+        $new_logo_path = '';
 
-        if ('logo_not_changed' != $file_name) {
-            $temp = explode('.', $file_name);
-            $file_name = $objectAdminLTE->convertNameToFileName($temp[0]) . '.' . $temp[1];
+        if (Storage::disk('local')->exists('config/brand_json.php')) {
+            $brand_json = Storage::disk('local')->get('config/brand_json.php');
+            $brand_data = json_decode($brand_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+            $old_logo_path = $brand_data['logo'];
+            
+            if ('logo_not_changed' != $file_name) {
+                $temp = explode('.', $file_name);
+                $file_name = $objectAdminLTE->convertNameToFileName($temp[0]) . '.' . $temp[1];
+                $new_logo_path = 'adminltebrand/logo/' . $file_name;
+    
+                if ($old_logo_path != $new_logo_path) {
+                    $content = $objectAdminLTE->getContentFromURI($logo);
+                    Storage::disk('local')->put('public/' . $new_logo_path, $content);
 
-            $logo_path = 'adminltebrand/logo/' . $file_name;
+                    Storage::disk('local')->delete('public/' .$old_logo_path);
+                } 
+            } else {
+                $new_logo_path = $old_logo_path;
+            }
 
-            if ($old_logo_path != $logo_path) {
-                
-                $photoURI = $logo;
-                
-                $dataPosition = strpos($photoURI, 'base64,', 11);
-                
-                $photoURI = substr($photoURI, ($dataPosition + 7));
-                $photoURI = str_replace(' ', '+', $photoURI);
-                $photoData = base64_decode($photoURI);
-                            
-                Storage::disk('local')->put('public/' . $logo_path, $photoData);
-                Storage::disk('local')->delete('public/' .$old_logo_path);
-            } 
         } else {
-            $logo_path = $old_logo_path;
-        }
-        
-        $brand_json = '{"name": "' . $brand_name . '", "logo": "' . $logo_path . '"}';
+            $brand_json = config('brand_json');
+            $brand_data = json_decode($brand_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+            
+            if ('logo_not_changed' != $file_name) {
+                $temp = explode('.', $file_name);
+                $file_name = $objectAdminLTE->convertNameToFileName($temp[0]) . '.' . $temp[1];
+                $new_logo_path = 'adminltebrand/logo/' . $file_name;
+                $content = $objectAdminLTE->getContentFromURI($logo);
+                           
+                Storage::disk('local')->put('public/' . $new_logo_path, $content);
+            } else {
+                $content = file_get_contents(base_path('public/img/adminlte/AdminLTELogo.png'));
+                Storage::disk('local')->put('public/adminltebrand/logo/AdminLTELogo.png', $content);
+                $new_logo_path = 'adminltebrand/logo/AdminLTELogo.png';
+            }
+        } 
+
+        $brand_json = '{"name": "' . $brand_name . '", "logo": "' . $new_logo_path . '"}';
         
         Storage::disk('local')->put('config/brand_json.php', $brand_json);
         
