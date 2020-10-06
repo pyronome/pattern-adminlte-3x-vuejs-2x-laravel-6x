@@ -183,6 +183,9 @@ export default {
                             showConfirmButton: false,
                             timer: 2000,
                             timerProgressBar: true,
+                            onClose: () => {
+                                window.location.reload()
+                            }
                         });
                     }
                 });

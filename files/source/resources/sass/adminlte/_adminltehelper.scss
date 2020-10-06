@@ -949,8 +949,10 @@ table p {
 }
 
 .detail-container.profile-image-container .showBigPhoto{
-    max-height: 250px;
+    max-height: 240px;
     height: auto;
+    width: auto;
+    max-width: 240px;
 }
 
 td .showBigPhoto {

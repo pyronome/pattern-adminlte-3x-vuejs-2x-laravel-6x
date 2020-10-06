@@ -1,0 +1,9 @@
+{
+    "mail.from.name": "{{mail.from.name}}",
+    "mail.from.address": "{{mail.from.address}}",
+    "mail.host": "{{mail.host}}",
+    "mail.username": "{{mail.username}}",
+    "mail.password": "{{mail.password}}",
+    "mail.encryption": "{{mail.encryption}}",
+    "mail.port": "{{mail.port}}"
+}

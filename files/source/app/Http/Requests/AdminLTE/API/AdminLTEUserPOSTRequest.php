@@ -37,8 +37,7 @@ class AdminLTEUserPOSTRequest extends FormRequest
 
         return [
             'username' => 'required|' . $username_unique,
-            'email' => 'required|email|' . $email_unique,
-            'profile_img' => 'required'
+            'email' => 'required|email|' . $email_unique
         ];
     }
 

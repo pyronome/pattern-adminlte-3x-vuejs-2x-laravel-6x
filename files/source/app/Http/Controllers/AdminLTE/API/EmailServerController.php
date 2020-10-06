@@ -30,22 +30,21 @@ class EmailServerController extends Controller
     public function post(EmailServerPOSTRequest $request)
     {
         $variables = array();
-        $variables['MAIL_HOST'] = $request->input('email_smtp_host');
-        $variables['MAIL_PORT'] = $request->input('email_smtp_port');
-        $variables['MAIL_FROM_ADDRESS'] = $request->input('email_reply_to');
-        $variables['MAIL_FROM_NAME'] = $request->input('email_from_name');
-        $variables['MAIL_ENCRYPTION'] = $request->input('email_smtp_encryption');
-        $variables['MAIL_USERNAME'] = $request->input('email_smtp_user');
-        $variables['MAIL_PASSWORD'] = $request->input('email_smtp_password'); 
+        $variables['mail.from.name'] = $request->input('email_from_name');
+        $variables['mail.from.address'] = $request->input('email_reply_to');
+        $variables['mail.host'] = $request->input('email_smtp_host');
+        $variables['mail.username'] = $request->input('email_smtp_user');
+        $variables['mail.password'] = $request->input('email_smtp_password'); 
+        $variables['mail.encryption'] = $request->input('email_smtp_encryption');
+        $variables['mail.port'] = $request->input('email_smtp_port');
 
-        
         $root = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))));
-        $source_path = $root . '/config/mail.template.php';
-        $destination_path = $root . '/config/mail.php';
+        $source_path = $root . '/config/mail.template.json';
+        $destination_path = 'config/mail.json';
        
         $objectAdminLTE = new AdminLTE();
         $objectAdminLTE->writeTemplateFileToTarget($source_path, $destination_path, $variables);
-  
+
         return ['message' => "Success"];
     }
 }

@@ -1,6 +1,6 @@
 <template>
-    <div id="dropzone-data" data-target-file-list="" data-media-type="" :data-action="'../../api/media/post'">
-        <form method="post" id="formDropzoneUpload" name="formDropzoneUpload" :action="'../../api/media/post'" onsubmit="return false;" enctype="multipart/form-data">
+    <div id="dropzone-data" data-target-file-list="" data-media-type="">
+        <form method="post" id="formDropzoneUpload" name="formDropzoneUpload" onsubmit="return false;" enctype="multipart/form-data">
             <div id="divDropzone" class="divDropzone row dz-clickable" style="min-height: 400px;">
                 <div class="col s12">
                     <ul id="ulDropzoneUploadedFiles" class="ulDropzoneUploadedFiles"></ul>
@@ -17,7 +17,7 @@
 <script>
 export default {
     mounted() {
-            AdminLTEHelper.initializeMediaJS();
+        AdminLTEHelper.initializeMediaJS();       
     }
 }
 </script>

@@ -32,8 +32,8 @@ class BrandingController extends Controller
         $new_logo_path = '';
 
         if (Storage::disk('local')->exists('config/brand_json.php')) {
-            $brand_json = Storage::disk('local')->get('config/brand_json.php');
-            $brand_data = json_decode($brand_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+            $brandJSON = Storage::disk('local')->get('config/brand_json.php');
+            $brand_data = json_decode($brandJSON, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
             $old_logo_path = $brand_data['logo'];
             
             if ('logo_not_changed' != $file_name) {
@@ -52,8 +52,8 @@ class BrandingController extends Controller
             }
 
         } else {
-            $brand_json = config('brand_json');
-            $brand_data = json_decode($brand_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+            $brandJSON = config('brand_json');
+            $brand_data = json_decode($brandJSON, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
             
             if ('logo_not_changed' != $file_name) {
                 $temp = explode('.', $file_name);
@@ -69,9 +69,9 @@ class BrandingController extends Controller
             }
         } 
 
-        $brand_json = '{"name": "' . $brand_name . '", "logo": "' . $new_logo_path . '"}';
+        $brandJSON = '{"name": "' . $brand_name . '", "logo": "' . $new_logo_path . '"}';
         
-        Storage::disk('local')->put('config/brand_json.php', $brand_json);
+        Storage::disk('local')->put('config/brand.json', $brandJSON);
         
         return ['message' => "Success"];
     }

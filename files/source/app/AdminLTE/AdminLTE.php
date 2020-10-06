@@ -422,13 +422,13 @@ class AdminLTE
 
 	public function getBrandData()
 	{
-		if (Storage::disk('local')->exists('config/brand_json.php')) {
-			$brand_json = Storage::disk('local')->get('config/brand_json.php');
-			$brand_data = json_decode($brand_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+		if (Storage::disk('local')->exists('config/brand.json')) {
+			$brandJSON = Storage::disk('local')->get('config/brand.json');
+			$brand_data = json_decode($brandJSON, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 			$brand_data['logo'] = asset('storage/' . $brand_data['logo']);
 		} else {
-			$brand_json = config('brand_json');
-			$brand_data = json_decode($brand_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			$brandJSON = config('brand_json');
+			$brand_data = json_decode($brandJSON, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 		}
 		
 		return $brand_data;
@@ -1174,8 +1174,8 @@ class AdminLTE
 			$strReplace = $variables[$arrKeys[$i]];
 			$strContent = str_replace($strFind, $strReplace, $strContent);
 		} // for ($i=0; $i < $lCountKeys; $i++) {
-
-		file_put_contents($destination_path, $strContent);
+		
+		Storage::disk('local')->put($destination_path, $strContent);
 	}
 	
 	public function getObjectDisplayTexts($model, $objectCurrent)
@@ -2104,6 +2104,25 @@ class AdminLTE
 		}
 		
 		return $sort_variable;
+	}
+
+	public function initConfig() {
+
+		if (Storage::disk('local')->exists('config/adminlte.json')) {
+			$contentJSON = Storage::disk('local')->get('config/adminlte.json');
+			$data = json_decode($contentJSON, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			foreach ($data as $key => $value) {
+				config([$key => $value]);
+			}
+		}
+
+		if (Storage::disk('local')->exists('config/mail.json')) {
+			$contentJSON = Storage::disk('local')->get('config/mail.json');
+			$data = json_decode($contentJSON, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			foreach ($data as $key => $value) {
+				config([$key => $value]);
+			}
+		}
 	}
 	/* {{snippet:end_methods}} */
 }

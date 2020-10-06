@@ -20,18 +20,18 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-xs-12">
-						<form id="AdminLTEUserForm"
+                        <form id="AdminLTEUserForm"
                             class=""
                             @submit.prevent="submitForm"
                             @keydown="AdminLTEUserForm.onKeydown($event)">
                             <div class="card">
                                 <div class="card-header show_by_permission_must_update">
                                     <div class="card-tools">
-        								<router-link tag="a"
-        									class="btn btn-danger btn-xs btn-on-table float-right"
-        									:to="backbuttonURL">
-        									<i class="fas fa-times" aria-hidden="true"></i> <span>{{ $t('Cancel') }}</span>
-        								</router-link>
+                                        <router-link tag="a"
+                                            class="btn btn-danger btn-xs btn-on-table float-right"
+                                            :to="backbuttonURL">
+                                            <i class="fas fa-times" aria-hidden="true"></i> <span>{{ $t('Cancel') }}</span>
+                                        </router-link>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -57,8 +57,8 @@
                                                 name="AdminLTEUserForm_adminlteusergroup_id"
                                                 :options="adminlteusergroup_id_options"
                                                 v-model="AdminLTEUserForm.adminlteusergroup_id"
-    											class="select2-element">
-												<option></option>
+                                                class="select2-element">
+                                                <option></option>
                                             </select2-element>
                                         </div>
                                         <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
@@ -126,7 +126,7 @@
                                 <div class="card-footer show_by_permission_must_update">
                                     <div class="col-lg-12 col-md-12 col-xs-12">
                                         <button :disabled="AdminLTEUserForm.busy"
-    										type="submit"
+                                            type="submit"
                                             class="btn btn-success btn-xs btn-on-table float-right">
                                             <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
                                         </button>
@@ -139,7 +139,7 @@
             </div>
         </section>
         <input type="hidden" id="controller" value="adminlteuser">
-		<dropzone style="display:none;"></dropzone>
+        <dropzone upload-url="/api/media/post" style="display:none;"></dropzone>
     </div>
 </template>
 
@@ -152,10 +152,10 @@ export default {
             id: 0,
             adminlteusergroup_id_options: [],
             files: [],
-			AdminLTEUserForm: new Form({
+            AdminLTEUserForm: new Form({
                 'debug_mode': false,
                 'id': this.id,
-				'enabled': false,
+                'enabled': false,
                 'adminlteusergroup_id': [],
                 'fullname': '',
                 'username': '',
@@ -184,34 +184,34 @@ export default {
             if (!this.page.is_data_loaded && !this.page.is_adminlteusergroup_id_options_loaded && !this.page.is_files_loaded) {
                 this.$Progress.start();
             }
-			
-			if (!this.page.is_adminlteusergroup_id_options_loaded) {
+            
+            if (!this.page.is_adminlteusergroup_id_options_loaded) {
                 this.load_adminlteusergroup_id_options();
             } 
 
-			if (!this.page.is_files_loaded) {
+            if (!this.page.is_files_loaded) {
                 this.load_files();
             }
 
- 			if (this.page.is_data_loaded) {
-				this.$nextTick(function () {
+            if (this.page.is_data_loaded) {
+                this.$nextTick(function () {
                     this.initializePage();
                 });
 
-				this.$Progress.finish();
-				this.page.is_ready = true;
-			} else {
-				this.loadData();
-			}
+                this.$Progress.finish();
+                this.page.is_ready = true;
+            } else {
+                this.loadData();
+            }
         },
-		load_adminlteusergroup_id_options: function () {
+        load_adminlteusergroup_id_options: function () {
             if (this.page.is_adminlteusergroup_id_options_loading) {
                 return;
             }
 
             this.page.is_adminlteusergroup_id_options_loading = true;
-			
-			axios.get(AdminLTEHelper.getAPIURL("adminltemodeloption/get_model_option_list/AdminLTEUserGroup/title"))
+            
+            axios.get(AdminLTEHelper.getAPIURL("adminltemodeloption/get_model_option_list/AdminLTEUserGroup/title"))
                 .then(({ data }) => {
                     this.page.is_adminlteusergroup_id_options_loaded = true;
                     this.page.is_adminlteusergroup_id_options_loading = false;
@@ -224,7 +224,7 @@ export default {
                     this.processLoadQueue();
                 });
         },
-		load_files: function () {
+        load_files: function () {
             if (this.page.is_files_loading) {
                 return;
             }
@@ -266,9 +266,9 @@ export default {
                     this.processLoadQueue();
                 });
         },
-		initializePage: function () {
-			AdminLTEHelper.initializePageFiles(this.files);
-		},
+        initializePage: function () {
+            AdminLTEHelper.initializePageFiles(this.files);
+        },
         submitForm: function () {
             // Submit the form via a POST request
             this.$Progress.start();

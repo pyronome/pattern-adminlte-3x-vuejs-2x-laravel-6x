@@ -20,18 +20,18 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-xs-12">
-						<form id="ProfileForm"
+                        <form id="ProfileForm"
                             class=""
                             @submit.prevent="submitForm"
                             @keydown="ProfileForm.onKeydown($event)">
                             <div class="card">
                                 <div class="card-header show_by_permission_must_update">
                                     <div class="card-tools">
-        								<router-link tag="a"
-        									class="btn btn-danger btn-xs btn-on-table float-right"
-        									:to="'/' + this.main_folder + '/profile/detail'">
-        									<i class="fas fa-times" aria-hidden="true"></i> <span>{{ $t('Cancel') }}</span>
-        								</router-link>
+                                        <router-link tag="a"
+                                            class="btn btn-danger btn-xs btn-on-table float-right"
+                                            :to="'/' + this.main_folder + '/profile/detail'">
+                                            <i class="fas fa-times" aria-hidden="true"></i> <span>{{ $t('Cancel') }}</span>
+                                        </router-link>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -46,7 +46,7 @@
                                                     name="ProfileForm_profile_img"
                                                     v-model="ProfileForm.profile_img"
                                                     :class="{ 'is-invalid': ProfileForm.errors.has('profile_img') }"
-                                                    data-target-field="Profile/profile_img"
+                                                    data-target-field="AdminLTEUser/profile_img"
                                                     data-media-type="2"
                                                     data-max-file-count="1"/>
                                                 <button type="button"
@@ -102,7 +102,7 @@
                                 <div class="card-footer show_by_permission_must_update">
                                     <div class="col-lg-12 col-md-12 col-xs-12">
                                         <button :disabled="ProfileForm.busy"
-    										type="submit"
+                                            type="submit"
                                             class="btn btn-success btn-xs btn-on-table float-right">
                                             <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
                                         </button>
@@ -115,7 +115,7 @@
             </div>
         </section>
         <input type="hidden" id="controller" value="profile">
-		<dropzone style="display:none;"></dropzone>
+        <dropzone upload-url="/api/media/post" style="display:none;"></dropzone>
     </div>
 </template>
 
@@ -126,7 +126,7 @@ export default {
         return {
             main_folder: '',
             files: [],
-			ProfileForm: new Form({
+            ProfileForm: new Form({
                 'debug_mode': false,
                 'id': 0,
                 'fullname': '',
@@ -158,22 +158,22 @@ export default {
                 this.$Progress.start();
             }
 
-			if (!this.page.is_files_loaded) {
+            if (!this.page.is_files_loaded) {
                 this.load_files();
             }
 
- 			if (this.page.is_data_loaded) {
-				this.$nextTick(function () {
+            if (this.page.is_data_loaded) {
+                this.$nextTick(function () {
                     this.initializePage();
                 });
 
-				this.$Progress.finish();
-				this.page.is_ready = true;
-			} else {
-				this.loadData();
-			}
+                this.$Progress.finish();
+                this.page.is_ready = true;
+            } else {
+                this.loadData();
+            }
         },
-		load_files: function () {
+        load_files: function () {
             if (this.page.is_files_loading) {
                 return;
             }
@@ -213,9 +213,9 @@ export default {
                     this.processLoadQueue();
                 });
         },
-		initializePage: function () {
-			AdminLTEHelper.initializePageFiles(this.files);
-		},
+        initializePage: function () {
+            AdminLTEHelper.initializePageFiles(this.files);
+        },
         submitForm: function () {
             var self = this;
             self.$Progress.start();
@@ -238,7 +238,7 @@ export default {
                             timer: 2000,
                             timerProgressBar: true,
                             onClose: () => {
-                                self.$router.push('/adminlte/profile/detail');
+                               window.location = "detail";
                             }
                         });
                     }

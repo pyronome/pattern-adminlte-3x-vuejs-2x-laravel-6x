@@ -184,8 +184,10 @@ var AdminLTEHelper = {
             return;
         }
         
-        var uploadURL = document.getElementById("dropzone-data").getAttribute("data-action");
-        uploadURL = (uploadURL + "?_token=" + AdminLTEHelper.getCSRFToken());
+        var origin = window.location.origin;
+        var mainFolder = AdminLTEHelper.getMainFolder();
+        var uploadURL = document.getElementById("dropzone-data").getAttribute("upload-url");
+        uploadURL = (origin + "/" + mainFolder + uploadURL + "?_token=" + AdminLTEHelper.getCSRFToken());
         
         var dropzoneElements = $("div.divDropzone");
         var dropzoneElement = null;
@@ -212,7 +214,7 @@ var AdminLTEHelper = {
             });
         }
     },    
-     "doFileTemplateRende": function(sender, event) {
+     "doFileTemplateRender": function(sender, event) {
         var targets = event.detail.targets;
         var target = null;
         var targetCount = targets.length;

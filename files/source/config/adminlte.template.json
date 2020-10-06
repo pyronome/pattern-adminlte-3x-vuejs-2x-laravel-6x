@@ -1,0 +1,12 @@
+{
+    "adminlte.project_title": "{{adminlte.project_title}}",
+    "adminlte.main_folder": "{{adminlte.main_folder}}",
+    "adminlte.landing_page": "{{adminlte.landing_page}}",
+    "adminlte.default_language": "{{adminlte.default_language}}",
+    "adminlte.timezone": "{{adminlte.timezone}}",
+    "adminlte.date_format": "{{adminlte.date_format}}",
+    "adminlte.time_format": "{{adminlte.time_format}}",
+    "adminlte.year_month_format": "{{adminlte.year_month_format}}",
+    "adminlte.number_format": "{{adminlte.number_format}}",
+    "adminlte.google_maps_api_key": "{{adminlte.google_maps_api_key}}"
+}
