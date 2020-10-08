@@ -1113,10 +1113,10 @@ function MenuEditor(idSelector, options) {
 
     $main.sortableLists(settings.listOptions);
     /* EVENTS */
-    iconPicker.on('change', function (e) {
+    iconPicker.off("change").on('change', function (e) {
         $form.find("[name=icon]").val(e.icon);
     });
-    $(document).on('click', '.btnRemove', function (e) {
+    $(document).off("click").on('click', '#ulMenuEditor .btnRemove', function (e) {
         e.preventDefault();
         $("#buttonDeleteMenuItem").data("closestUL", $(this).closest('ul'));
         $("#buttonDeleteMenuItem").data("closestLI", $(this).closest('li'));
@@ -1124,12 +1124,12 @@ function MenuEditor(idSelector, options) {
         $("#modalMenuItemDelete").modal();
     });
 
-    $(document).on('click', '#buttonDeleteMenuItem', function (e) {
+    $(document).off("click").on('click', '#buttonDeleteMenuItem', function (e) {
         e.preventDefault();
-		
-		var list = $(this).data("closestUL");
-		var li = $(this).data("closestLI");
-		$(li).remove();
+        
+        var list = $(this).data("closestUL");
+        var li = $(this).data("closestLI");
+        $(li).remove();
 
         var isMainContainer = false;
         if (typeof list.attr('id') !== 'undefined') {
@@ -1143,7 +1143,7 @@ function MenuEditor(idSelector, options) {
         $("#modalMenuItemDelete").modal('hide');
     });
 
-    $(document).on('click', '.btnEdit', function (e) {
+    $(document).off("click").on('click', '#ulMenuEditor .btnEdit', function (e) {
         e.preventDefault();
         itemEditing = $(this).closest('li');
         editItem(itemEditing);
@@ -1153,19 +1153,19 @@ function MenuEditor(idSelector, options) {
         $("#modalMenuItem").modal();
     });
 
-    $main.on('click', '.btnUp', function (e) {
+    $main.off("click").on('click', '#ulMenuEditor .btnUp', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         $li.prev('li').before($li);
         MenuEditor.updateButtons($main);
     });
-    $main.on('click', '.btnDown', function (e) {
+    $main.off("click").on('click', '#ulMenuEditor .btnDown', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         $li.next('li').after($li);
         MenuEditor.updateButtons($main);
     });
-    $main.on('click', '.btnOut', function (e) {
+    $main.off("click").on('click', '#ulMenuEditor .btnOut', function (e) {
         e.preventDefault();
         var list = $(this).closest('ul');
         var $li = $(this).closest('li');
@@ -1177,7 +1177,7 @@ function MenuEditor(idSelector, options) {
         }
         MenuEditor.updateButtons($main);
     });
-    $main.on('click', '.btnIn', function (e) {
+    $main.off("click").on('click', '#ulMenuEditor .btnIn', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         var $prev = $li.prev('li');
@@ -1201,6 +1201,7 @@ function MenuEditor(idSelector, options) {
 
     /* PRIVATE METHODS */
     function editItem($item) {
+        console.log("menu")
         var data = $item.data();
         $.each(data, function (p, v) {
             $form.find("[name=" + p + "]").val(v);
@@ -1267,7 +1268,7 @@ function MenuEditor(idSelector, options) {
             
             var opacity_class = "";
             if (0 == itemObject.visibility) {
-            	opacity_class = "menu_item_unvisible";
+                opacity_class = "menu_item_unvisible";
             }
 
             var $li = $('<li>').addClass('list-group-item');
@@ -1353,9 +1354,9 @@ function MenuEditor(idSelector, options) {
         });
 
         if (0 == data["visibility"]) {
-        	$cEl.find('span.txt').first().addClass("menu_item_unvisible").text($cEl.data('text'));
+            $cEl.find('span.txt').first().addClass("menu_item_unvisible").text($cEl.data('text'));
         } else {
-        	$cEl.find('span.txt').first().removeClass("menu_item_unvisible").text($cEl.data('text'));
+            $cEl.find('span.txt').first().removeClass("menu_item_unvisible").text($cEl.data('text'));
         }
 
         $cEl.children().children('i').removeClass(oldIcon).addClass($cEl.data('icon'));
@@ -1371,7 +1372,7 @@ function MenuEditor(idSelector, options) {
 
         var opacity_class = "";
         if (0 == data["visibility"]) {
-        	opacity_class = "menu_item_unvisible";
+            opacity_class = "menu_item_unvisible";
         }
 
         var btnGroup = TButtonGroup();
