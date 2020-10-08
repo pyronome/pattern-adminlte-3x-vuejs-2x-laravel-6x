@@ -1113,10 +1113,10 @@ function MenuEditor(idSelector, options) {
 
     $main.sortableLists(settings.listOptions);
     /* EVENTS */
-    iconPicker.off("change").on('change', function (e) {
+    iconPicker.on('change', function (e) {
         $form.find("[name=icon]").val(e.icon);
     });
-    $(document).off("click").on('click', '#ulMenuEditor .btnRemove', function (e) {
+    $(document).on('click', '#ulMenuEditor .btnRemove', function (e) {
         e.preventDefault();
         $("#buttonDeleteMenuItem").data("closestUL", $(this).closest('ul'));
         $("#buttonDeleteMenuItem").data("closestLI", $(this).closest('li'));
@@ -1124,7 +1124,7 @@ function MenuEditor(idSelector, options) {
         $("#modalMenuItemDelete").modal();
     });
 
-    $(document).off("click").on('click', '#buttonDeleteMenuItem', function (e) {
+    $(document).on('click', '#buttonDeleteMenuItem', function (e) {
         e.preventDefault();
         
         var list = $(this).data("closestUL");
@@ -1143,7 +1143,7 @@ function MenuEditor(idSelector, options) {
         $("#modalMenuItemDelete").modal('hide');
     });
 
-    $(document).off("click").on('click', '#ulMenuEditor .btnEdit', function (e) {
+    $(document).on('click', '#ulMenuEditor .btnEdit', function (e) {
         e.preventDefault();
         itemEditing = $(this).closest('li');
         editItem(itemEditing);
@@ -1153,19 +1153,19 @@ function MenuEditor(idSelector, options) {
         $("#modalMenuItem").modal();
     });
 
-    $main.off("click").on('click', '#ulMenuEditor .btnUp', function (e) {
+    $main.on('click', '#ulMenuEditor .btnUp', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         $li.prev('li').before($li);
         MenuEditor.updateButtons($main);
     });
-    $main.off("click").on('click', '#ulMenuEditor .btnDown', function (e) {
+    $main.on('click', '#ulMenuEditor .btnDown', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         $li.next('li').after($li);
         MenuEditor.updateButtons($main);
     });
-    $main.off("click").on('click', '#ulMenuEditor .btnOut', function (e) {
+    $main.on('click', '#ulMenuEditor .btnOut', function (e) {
         e.preventDefault();
         var list = $(this).closest('ul');
         var $li = $(this).closest('li');
@@ -1177,7 +1177,7 @@ function MenuEditor(idSelector, options) {
         }
         MenuEditor.updateButtons($main);
     });
-    $main.off("click").on('click', '#ulMenuEditor .btnIn', function (e) {
+    $main.on('click', '#ulMenuEditor .btnIn', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         var $prev = $li.prev('li');
@@ -1201,7 +1201,6 @@ function MenuEditor(idSelector, options) {
 
     /* PRIVATE METHODS */
     function editItem($item) {
-        console.log("menu")
         var data = $item.data();
         $.each(data, function (p, v) {
             $form.find("[name=" + p + "]").val(v);

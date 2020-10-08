@@ -1108,10 +1108,10 @@ function WidgetEditor(idSelector, options) {
 
     $main.sortableLists(settings.listOptions);
     /* EVENTS */
-    iconPicker.off("change").on('change', function (e) {
+    iconPicker.on('change', function (e) {
         $form.find("[name=__widgetconfig-icon]").val(e.icon);
     });
-    $(document).off("click").on('click', '#ulWidgetEditor .btnRemove', function (e) {
+    $(document).on('click', '#ulWidgetEditor .btnRemove', function (e) {
         e.preventDefault();
         $("#buttonDeleteWidgetItem").data("closestUL", $(this).closest('ul'));
         $("#buttonDeleteWidgetItem").data("closestLI", $(this).closest('li'));
@@ -1119,7 +1119,7 @@ function WidgetEditor(idSelector, options) {
         $("#modalWidgetItemDelete").modal();
     });
 
-    $(document).off("click").on('click', '#ulWidgetEditor #buttonDeleteWidgetItem', function (e) {
+    $(document).on('click', '#ulWidgetEditor #buttonDeleteWidgetItem', function (e) {
         e.preventDefault();
         
         var list = $(this).data("closestUL");
@@ -1138,7 +1138,7 @@ function WidgetEditor(idSelector, options) {
         $("#modalWidgetItemDelete").modal("hide");
     });
 
-    $(document).off("click").on('click', '#ulWidgetEditor .btnEdit', function (e) {
+    $(document).on('click', '#ulWidgetEditor .btnEdit', function (e) {
         e.preventDefault();
         itemEditing = $(this).closest('li');
         editItem(itemEditing);
@@ -1146,19 +1146,19 @@ function WidgetEditor(idSelector, options) {
         $("#modalWidgetItem").modal();
     });
 
-    $main.off("click").on('click', '#ulWidgetEditor .btnUp', function (e) {
+    $main.on('click', '#ulWidgetEditor .btnUp', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         $li.prev('li').before($li);
         WidgetEditor.updateButtons($main);
     });
-    $main.off("click").on('click', '#ulWidgetEditor .btnDown', function (e) {
+    $main.on('click', '#ulWidgetEditor .btnDown', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         $li.next('li').after($li);
         WidgetEditor.updateButtons($main);
     });
-    $main.off("click").on('click', '#ulWidgetEditor .btnOut', function (e) {
+    $main.on('click', '#ulWidgetEditor .btnOut', function (e) {
         e.preventDefault();
         var list = $(this).closest('ul');
         var $li = $(this).closest('li');
@@ -1170,7 +1170,7 @@ function WidgetEditor(idSelector, options) {
         }
         WidgetEditor.updateButtons($main);
     });
-    $main.off("click").on('click', '#ulWidgetEditor .btnIn', function (e) {
+    $main.on('click', '#ulWidgetEditor .btnIn', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         var $prev = $li.prev('li');
@@ -1204,7 +1204,6 @@ function WidgetEditor(idSelector, options) {
     }
 
     function editItem($item) {
-        console.log("widget")
         var data = $item.data();
         $.each(data, function (p, v) {
             $form.find("[name=__widgetconfig-" + p + "]").val(v);

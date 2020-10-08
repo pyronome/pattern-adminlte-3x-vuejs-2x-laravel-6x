@@ -155,10 +155,10 @@ export default {
                 is_data_loaded: false,
                 is_post_success: false,
                 external_files: [
-                    ("/js/" + AdminLTEHelper.getURL('menu_editor.js')),
-                    ("/js/" + AdminLTEHelper.getURL('/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css')),
-                    ("/js/" + AdminLTEHelper.getURL('/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js')),
-                    ("/js/" + AdminLTEHelper.getURL('/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js'))
+                    ("/js" + AdminLTEHelper.getURL('bootstrap-iconpicker/css/bootstrap-iconpicker.min.css')),
+                    ("/js" + AdminLTEHelper.getURL('bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js')),
+                    ("/js" + AdminLTEHelper.getURL('bootstrap-iconpicker/js/bootstrap-iconpicker.min.js')),
+                    ("/js" + AdminLTEHelper.getURL('menu_editor.js'))
                 ],
                 editor: null
             }
