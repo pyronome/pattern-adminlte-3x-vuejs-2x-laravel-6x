@@ -1,5 +1,5 @@
 <template>
-    <div class="widgetcomponent" :class="data.size">
+    <div class="widgetcomponent">
         <div class="card collapsed-card">
             <div class="card-header">
                 <h3 class="card-title">{{data.text}}</h3>

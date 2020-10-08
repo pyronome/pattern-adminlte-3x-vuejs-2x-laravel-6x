@@ -1,5 +1,5 @@
 <template>
-    <div class="widgetcomponent" :class="widget_options.size">
+    <div class="widgetcomponent">
         <div class="card collapsed-card recordlist-card">
             <div class="card-header">
                 <h3 class="card-title" v-html="widget_options.title"></h3>

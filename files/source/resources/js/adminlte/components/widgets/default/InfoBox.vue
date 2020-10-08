@@ -1,5 +1,5 @@
 <template>
-    <div class="widgetcomponent" :class="data.size" >
+    <div class="widgetcomponent">
         <router-link class="info-box clickable-infobox" tag="div" :to="infoboxURL">
             <span class="info-box-icon elevation-1" v-bind:style="{backgroundColor: data.iconbackground}"><i :class="data.icon"></i></span>
             <div class="info-box-content">
