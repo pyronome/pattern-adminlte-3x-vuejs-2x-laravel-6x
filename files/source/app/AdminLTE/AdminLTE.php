@@ -24,6 +24,11 @@ class AdminLTE
 
 	/* {{snippet:begin_methods}} */
 	
+	public function __construct()
+    {
+		$this->initConfig();              
+	}
+	
 	public function convertNameToFileName($strName) {
 
 	    $urlbrackets    = '\[\]\(\)';
