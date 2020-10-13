@@ -76,17 +76,12 @@ class AdminLTEModelOptionController extends Controller
             return;
         } // if ('' == $display_property) {
         
-        $modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
-
-        if (!class_exists($modelNameWithNamespace)) {
-            $modelNameWithNamespace = ('\\App\\' . $model);
-        }
-
+        $objectAdminLTE = new AdminLTE();
+        $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
         $objectList = $modelNameWithNamespace::where('deleted', false)
             ->orderBy($display_property, 'asc')
             ->get();
 
-        $objectAdminLTE = new AdminLTE();
         $object = NULL;
         $index = 0;
 

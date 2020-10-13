@@ -422,7 +422,7 @@ export default {
         },
         get_type_sh_class: function (property) {
             var sh_class = "";
-            var exceptions = ["image", "file", "dropdown", "radio", "location"];
+            var exceptions = ["image", "file", "selection_single", "selection_multiple", "radio", "location"];
             var model = document.getElementById("formModelDisplayText-model").value;
             var trList = this.model_property_list;
             var trLength = trList.length;

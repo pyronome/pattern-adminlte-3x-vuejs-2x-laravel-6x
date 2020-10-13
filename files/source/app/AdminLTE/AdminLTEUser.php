@@ -3,6 +3,7 @@
 namespace App\AdminLTE;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\AdminLTE\AdminLTE;
 
 /* {{snippet:begin_class}} */
 
@@ -28,58 +29,73 @@ class AdminLTEUser extends Authenticatable
         'password',
         'passwordHash'
     ];
-
-    public static $searchable = [
-        'adminlteusergroup_id.title',
-        'fullname',
-        'username',
-        'email'
-    ];
     
     public static $property_list = [
         [
             'name' => 'id',
-            'type' => 'integer'
+            'type' => 'integer',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'id'
         ],
         [
             'name' => 'deleted',
-            'type' => 'checkbox'
+            'type' => 'checkbox',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'deleted'
         ],
         [
             'name' => 'created_at',
-            'type' => 'date'
+            'type' => 'date',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'created_at'
         ],
         [
             'name' => 'updated_at',
-            'type' => 'date'
+            'type' => 'date',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'updated_at'
         ],
         [
             'name' => 'profile_img',
-            'type' => 'image'
+            'type' => 'image',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'profile_img'
         ],
         [
             'name' => 'adminlteusergroup_id',
-            'type' => 'class_selection_single'
+            'type' => 'class_selection_single',
+            'belongs_to' => 'AdminLTEUserGroup',
+            'display_property' => 'title'
         ],
         [
             'name' => 'enabled',
-            'type' => 'checkbox'
+            'type' => 'checkbox',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'enabled'
         ],
         [
             'name' => 'fullname',
-            'type' => 'text'
+            'type' => 'text',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'fullname'
         ],
         [
             'name' => 'username',
-            'type' => 'text'
+            'type' => 'text',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'username'
         ],
         [
             'name' => 'email',
-            'type' => 'text'
+            'type' => 'text',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'email'
         ],
         [
             'name' => 'password',
-            'type' => 'text'
+            'type' => 'text',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'password'
         ]
     ];
 
@@ -95,6 +111,12 @@ class AdminLTEUser extends Authenticatable
     /* {{snippet:end_properties}} */
 
     /* {{snippet:begin_methods}} */
+    
+    public function scopeDefaultQuery($query, $search_text, $sort_variable, $sort_direction) {
+        $objectAdminLTE = new AdminLTE();
+        $query = $objectAdminLTE->getQuery($query, 'AdminLTEUser', $this::$searchable, $this::$property_list, $search_text, $sort_variable, $sort_direction);
+        return $query;
+    }
 
     public function adminlteusergroup_id()
     {

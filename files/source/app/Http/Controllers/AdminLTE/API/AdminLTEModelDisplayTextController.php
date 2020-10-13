@@ -56,11 +56,7 @@ class AdminLTEModelDisplayTextController extends Controller
         for ($i=0; $i < $countModels; $i++) { 
             $model = $Models[$i];
             
-            $modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
-
-            if (!class_exists($modelNameWithNamespace)) {
-                $modelNameWithNamespace = ('\\App\\' . $model);
-            }
+            $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
             
             $property_list = $modelNameWithNamespace::$property_list;
             $countProperty = count($property_list);

@@ -1119,7 +1119,7 @@ function WidgetEditor(idSelector, options) {
         $("#modalWidgetItemDelete").modal();
     });
 
-    $(document).on('click', '#ulWidgetEditor #buttonDeleteWidgetItem', function (e) {
+    $(document).on('click', '#buttonDeleteWidgetItem', function (e) {
         e.preventDefault();
         
         var list = $(this).data("closestUL");

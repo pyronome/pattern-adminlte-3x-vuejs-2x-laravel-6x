@@ -1215,11 +1215,7 @@ class AdminLTE
 	{
 		$displayTexts = [];
 		
-		$modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
-        
-        if (!class_exists($modelNameWithNamespace)) {
-        	$modelNameWithNamespace = ('\\App\\' . $model);
-        }
+		$modelNameWithNamespace = $this->getModelNameWithNamespace($model);
 
 		$property_list = $modelNameWithNamespace::$property_list;
 
@@ -1230,6 +1226,8 @@ class AdminLTE
 
 			$displayTexts[$property['name']]['value'] = '{{' . $model . '/' . $property['name'] . '}}';
 			$displayTexts[$property['name']]['type'] = $property['type'];
+			$displayTexts[$property['name']]['belongs_to'] = $property['belongs_to'];
+			$displayTexts[$property['name']]['display_property'] = $property['display_property'];
 		} // for ($j=0; $j < $countProperty; $j++) {
 
 		$adminLTEModelDisplayText = AdminLTEModelDisplayText::where('deleted', false)
@@ -1351,12 +1349,7 @@ class AdminLTE
 					if ($id > 0) {
 						$externalModel = $textPart[0];
 
-						$externalModelNameWithNamespace = ('\\App\\AdminLTE\\' . $externalModel);
-
-						if (!class_exists($externalModelNameWithNamespace)) {
-							$externalModelNameWithNamespace = ('\\App\\' . $externalModel);
-						}
-
+						$externalModelNameWithNamespace = $this->getModelNameWithNamespace($externalModel);
 						$objectExternal = new $externalModelNameWithNamespace;
 						$objectExternal = $objectExternal::find($id);
 						
@@ -1599,12 +1592,7 @@ class AdminLTE
 			$sessionParameters['bufferSize'] = $limit;
 			$sessionParameters['page'] = 0;
 
-			$modelNameWithNamespace = ('\\App\\AdminLTE\\' . $modelName);
-
-			if (!class_exists($modelNameWithNamespace)) {
-				$modelNameWithNamespace = ('\\App\\' . $modelName);
-			}
-
+			$modelNameWithNamespace = $this->getModelNameWithNamespace($modelName);
 			$listObject = new $modelNameWithNamespace();
 
 			$listCount = $listObject->where('deleted', false)->count();
@@ -1672,12 +1660,7 @@ class AdminLTE
 
 	public function getModelPropertyList($model)
 	{
-		$modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
-
-		if (!class_exists($modelNameWithNamespace)) {
-			$modelNameWithNamespace = ('\\App\\' . $model);
-		}
-
+		$modelNameWithNamespace = $this->getModelNameWithNamespace($model);
 		$propertyList = $modelNameWithNamespace::$property_list;
 		return $propertyList;
 	}
@@ -1699,7 +1682,6 @@ class AdminLTE
 
 		$Models = $this->getModelList($exceptions);
 		$countModels = count($Models);
-		$modelNameWithNamespace = '';
 
 		// get default display texts
 		for ($i=0; $i < $countModels; $i++) {
@@ -1709,7 +1691,9 @@ class AdminLTE
 
 			for ($j=0; $j < $countProperty; $j++) { 
 				$property = $property_list[$j]['name'];
-				$displayTexts[$model][$property] = '{{' . $model . '/' . $property . '}}';
+				$belongs_to = $property_list[$j]['belongs_to'];
+				$display_property = $property_list[$j]['display_property'];
+				$displayTexts[$model][$property] = '{{' . $belongs_to . '/' . $display_property . '}}';
 			} // for ($j=0; $j < $countProperty; $j++) { 
 		} // for ($i=0; $i < $countModels; $i++) {
 
@@ -2014,20 +1998,14 @@ class AdminLTE
     
 	public function getModel_DisplayTexts($model) {
 		$displayTexts = array();
-	    
-	    $modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
-
-		if (!class_exists($modelNameWithNamespace)) {
-			$modelNameWithNamespace = ('\\App\\' . $model);
-		}
-
-	    $property_list = $modelNameWithNamespace::$property_list;
+	    $property_list = getModelPropertyList($model);
 	    $countProperty = count($property_list);
 
 	    for ($j=0; $j < $countProperty; $j++) { 
 	        $property = $property_list[$j]['property'];
-
-	        $displayTexts[$property]['value'] = '{{' . $model . '/' . $property . '}}';
+			$belongs_to = $property_list[$j]['belongs_to'];
+			$display_property = $property_list[$j]['display_property'];
+	        $displayTexts[$property]['value'] = '{{' . $belongs_to . '/' . $display_property . '}}';
 	        $displayTexts[$property]['type'] = $property_list[$j]['type'];
 	    } // for ($j=0; $j < $countProperty; $j++) {
 		
@@ -2093,22 +2071,13 @@ class AdminLTE
 		return (date('Y-m-d', strtotime($date)) . 'T' . date('h:i:s', strtotime($date)));
 	}
 
-	public function getSortVariable($model, $v) {
-		$property = str_replace('__displaytext__', '', $v);
-		$displayTextDefinitions = $this->getModelDisplayTexts($model);
-		$definition = $displayTextDefinitions[$property]['value'];
-		$sort_variable = str_replace(
-				($model . '/'),
-				'',
-				$this->getStringBetween($definition, '{{', '}}')
-			);
-		
-		if(false !== strpos($sort_variable, '/')) {
-			// class selection
-			$sort_variable = $property;
+	public function getModelNameWithNamespace($model) {
+		$modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
+        if (!class_exists($modelNameWithNamespace)) {
+        	$modelNameWithNamespace = ('\\App\\' . $model);
 		}
-		
-		return $sort_variable;
+
+		return $modelNameWithNamespace;
 	}
 
 	public function initConfig() {
@@ -2128,6 +2097,227 @@ class AdminLTE
 				config([$key => $value]);
 			}
 		}
+	}
+
+	public function getSplittedDisplayText($display_text) {
+		$variableIndex = 1;
+		$parsed = $this->getStringBetween($display_text, '{{', '}}');
+		while (strlen($parsed) > 0) {
+			$parsedWithMustache = '{{' . $parsed . '}}';
+			$display_text = str_replace($parsedWithMustache, '#_displaytextvariable_' . $variableIndex . '#', $display_text);
+			$variableIndex++;
+			$temp_text = $display_text;
+			$parsed = $this->getStringBetween($temp_text, '{{', '}}');
+		}
+
+		$arrSplittedDisplayText = preg_split('#', $display_text, -1, PREG_SPLIT_NO_EMPTY);
+		return $arrSplittedDisplayText;
+	}
+	public function getPropertyDisplayTextSQL($baseModel, $aliasIndex, $baseProperty, $display_text, $type)
+	{
+		$SQLText = '';
+		if (('file' == $type) || ('image' == $type) || ('location' == $type)) {
+			return $SQLText;
+		}
+
+		$baseModelAlias = strtolower($baseModel) . '__table__';
+
+		$parsed = $this->getStringBetween($display_text, '{{', '}}');
+		if ('' == $parsed) {
+			$SQLText = $display_text . ' as ' . $baseProperty . '__displaytext__';
+		} else if ($display_text == ('{{' . $parsed . '}}')) {
+			// not need concat
+			[$model, $property] = explode('/', $parsed);
+			$modelTableAlias = strtolower($model) . '__table__' . $aliasIndex;
+
+			$SQLPart = "";
+			if ($baseModel == $model) { // current model
+				$SQLPart = $baseModelAlias . "." . $property;
+			} else {
+				$SQLPart = $modelTableAlias . "." . $property;
+			}
+
+			$SQLText = $SQLPart . ' as ' . $baseProperty . '__displaytext__';
+		} else {
+			// with concat
+			$variablesConverted = [];
+			$variableIndex = 1;
+			while (strlen($parsed) > 0) {
+				$parsedWithMustache = '{{' . $parsed . '}}';
+
+				[$model, $property] = explode('/', $parsed);
+				$modelTableAlias = strtolower($model) . '__table__' . $aliasIndex;
+
+				$SQLPart = "";
+				if ($baseModel == $model) { // current model
+					$SQLPart = $baseModelAlias . "." . $property;
+				} else {
+					$SQLPart = $modelTableAlias . "." . $property;
+				}
+
+				$variablesConverted['_displaytextvariable_' . $variableIndex] = $SQLPart;
+
+				$display_text = str_replace($parsedWithMustache, '', $display_text);
+				$temp_text = $display_text;
+				$parsed = $this->getStringBetween($temp_text, '{{', '}}');
+			} // while (strlen($parsed) > 0) {
+			
+			$SQLText = '';
+			$arrSplittedDisplayText = $this->getSplittedDisplayText($display_text);
+			foreach ($arrSplittedDisplayText as $splittedText) {
+				if (false !== strpos($splittedText, '_displaytextvariable_')) {
+					$SQLPart = $variablesConverted[$splittedText];
+				} else {
+					$SQLPart = "'" . $splittedText . "'";
+				}
+
+				if("" != $SQLText) {
+					$SQLText .= ',';
+				}
+
+				$SQLText .= $SQLPart;
+			}
+			
+			if('' != $SQLText) {
+				$SQLText = 'concat(' . $SQLText . ') as ' . $baseProperty . '__displaytext__';
+			}
+		}
+
+		return $SQLText;
+	}
+
+	public function getQuery($query, $model, $propertyList, $search_text, $sort_variable, $sort_direction) {
+		$modelNameWithNamespace = $this->getModelNameWithNamespace($model);
+		$modelTableName = strtolower($model).'table';
+		$modelTableNameAlias = strtolower($model).'__table__';
+
+		$subquery = DB::table($modelTableName . ' as ' . $modelTableNameAlias);
+
+		// Selections
+		$selections = [];
+		$searchables = [];
+		$sortables = [];
+		
+		$displayTextDefinitions = $this->getModelDisplayTexts($model);
+		$propertyList = array_keys($displayTextDefinitions);
+		$countProperty = count($propertyList);
+		$aliasIndex = 1;
+
+		for ($i=0; $i < $countProperty; $i++) { 
+			$property = $propertyList[$i];
+			$display_text = $displayTextDefinitions[$property]['value'];
+			$type = $displayTextDefinitions[$property]['type'];
+			$belongsTo = $displayTextDefinitions[$property]['belongs_to'];
+
+			if (('file' != $type) && ('image' != $type) && ('location' != $type)) {
+				$selection = $this->getPropertyDisplayTextSQL($model, $aliasIndex, $property, $display_text, $type);
+				$selections[] = $selection;
+				$searchables[$property . '__displaytext__'] = $selection;
+				$sortables[$property . '__displaytext__'] = $selection;
+				$aliasIndex++;
+			}
+
+			if (('file' != $type) && ('image' != $type) && ('location' != $type) && ('class_selection_multiple' != $type) && ('selection_multiple' != $type)) {
+				$selection = $modelTableNameAlias . '.' . $property;
+				$selections[] = $selection;
+				$sortables[$property] = $selection;
+			}
+		} // for ($i=0; $i < $countProperty; $i++)
+
+		$subquery = $subquery->select($selections)->distinct()->where($modelTableNameAlias.'.deleted', false);
+
+		// Joins
+		$aliasIndex = 1;
+		for ($i=0; $i < $countProperty; $i++) { 
+			$property = $propertyList[$i];
+			$display_text = $displayTextDefinitions[$property]['value'];
+			$type = $displayTextDefinitions[$property]['type'];
+			$external_model = $displayTextDefinitions[$property]['belongs_to'];
+
+			if ('class_selection_single' == $type) {
+				$external_modelTableName = strtolower($external_model).'table';
+				$external_modelTableNameAlias = strtolower($external_model).'__table__'.$aliasIndex;
+				$subquery = $subquery->leftJoin(
+					($external_modelTableName . ' as ' . $external_modelTableNameAlias), 
+					($modelTableNameAlias . '.' . $property), 
+					'=', 
+					($external_modelTableNameAlias . '.id')
+				);
+			} else if ('class_selection_multiple' == $type) {
+				$external_modelTableName = strtolower($external_model).'table';
+				$external_modelTableNameAlias = strtolower($external_model).'__table__'.$aliasIndex;
+				$relationTableName = strtolower($model) . '_' . $property;
+				$subquery = $subquery
+					->leftJoin(
+						$relationTableName,
+						($modelTableNameAlias . '.id'),
+						'=',
+						($relationTableName . '.' . strtolower($model) . '_id')
+					)
+					->leftJoin(
+						($external_modelTableName . ' as ' . $external_modelTableNameAlias), 
+						($relationTableName . '.' . $property),
+						'=',
+						($external_modelTableNameAlias . '.id')
+					);
+			} else if ('selection_single' == $type) {
+				$external_modelTableName = 'adminltemodeloptiontable';
+				$external_modelTableNameAlias = 'adminltemodeloption__table__'.$aliasIndex;
+
+				$subquery = $subquery->leftJoin(
+					($external_modelTableName . ' as ' . $external_modelTableNameAlias), 
+					($modelTableNameAlias . '.' . $property), 
+					'=', 
+					($external_modelTableNameAlias . '.id')
+				);
+			} else if ('selection_multiple' == $type) {
+				$external_modelTableName = 'adminltemodeloptiontable';
+				$external_modelTableNameAlias = 'adminltemodeloption__table__'.$aliasIndex;
+				$relationTableName = strtolower($model) . '_' . $property;
+				$subquery = $subquery
+					->leftJoin(
+						$relationTableName,
+						($modelTableNameAlias . '.id'),
+						'=',
+						($relationTableName . '.' . strtolower($model) . '_id')
+					)
+					->leftJoin(
+						($external_modelTableName . ' as ' . $external_modelTableNameAlias), 
+						($relationTableName . '.' . $property),
+						'=',
+						($external_modelTableNameAlias . '.id')
+					);
+			}
+
+			if (('file' != $type) && ('image' != $type) && ('location' != $type)){
+				$aliasIndex++;
+			}
+		} // for ($i=0; $i < $countProperty; $i++)
+		
+		// Search
+		if ('' != $search_text) {
+			foreach ($searchables as $key => $value) {
+				$query = $query->orWhere($key, 'like', "%$search_text%");
+			}
+		}
+
+		// Sort
+		if ('' != $sort_variable) {
+			$query = $query->orderBy($sort_variable, $sort_direction);
+		}
+
+		// multiple sort_variable olursa
+		/* if (empty($sort_variables)) {
+			foreach ($sortables as $key => $value) {
+				if (in_array($key, $sort_variables)) {
+					$query = $query->orderBy($key, $sort_direction);
+				}
+			}
+		} */
+
+		$query = $query->from($subquery)->groupBy('id');
+
+		return $query;
 	}
 	/* {{snippet:end_methods}} */
 }

@@ -171,14 +171,10 @@ class AdminLTELayoutController extends Controller
                 ? htmlspecialchars($parameters['model'])
                 : '';
 
-        $modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
-
-        if (!class_exists($modelNameWithNamespace)) {
-            $modelNameWithNamespace = ('\\App\\' . $model);
-        }
-
         $currentWidget = null;
         $objectAdminLTE = new AdminLTE();
+        $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
+
         $Widgets = $objectAdminLTE->getPageLayout($pageName);
         
         foreach ($Widgets as $Widget) {
@@ -228,16 +224,11 @@ class AdminLTELayoutController extends Controller
                 ? htmlspecialchars($parameters['model'])
                 : '';
 
-        $modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
-        
-        if (!class_exists($modelNameWithNamespace)) {
-            $modelNameWithNamespace = ('\\App\\' . $model);
-        }
-
         $dateFormat = config('adminlte.date_format');
         $yearMonthFormat = config('adminlte.year_month_format');
         
         $objectAdminLTE = new AdminLTE();
+        $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
 
         $Widgets = $objectAdminLTE->getPageLayout($pageName);
         $graphProperties = $objectAdminLTE->getRecordGraphProperties($Widgets, $model);
@@ -324,17 +315,12 @@ class AdminLTELayoutController extends Controller
         $model = isset($parameters['model'])
                 ? htmlspecialchars($parameters['model'])
                 : '';
-                
-        $modelNameWithNamespace = ('\\App\\AdminLTE\\' . $model);
-
-        if (!class_exists($modelNameWithNamespace)) {
-            $modelNameWithNamespace = ('\\App\\' . $model);
-        }
 
         $dateFormat = config('adminlte.date_format');
         $timeFormat = config('adminlte.time_format');
         $objectAdminLTE = new AdminLTE();
-
+        $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
+        
         $search_text = '';
         if ($s = \Request::get('s')) {
             $search_text = $s;
@@ -346,10 +332,8 @@ class AdminLTELayoutController extends Controller
         }
 
         $sort_variable = 'id';
-        $parsed_sort_variable = 'id';
         if ($v = \Request::get('v')) {
             $sort_variable = $v;
-            $parsed_sort_variable = $objectAdminLTE->getSortVariable($model, $sort_variable);
         }
 
         $sort_direction = 'desc';
@@ -410,11 +394,8 @@ class AdminLTELayoutController extends Controller
             'size' => $size,
             'table_header' => $widget_table_header,
         ];
-
-        $objectList = $modelNameWithNamespace::where('deleted', false)
-                ->whereLike($modelNameWithNamespace::$searchable, $search_text)
-                ->orderBy($parsed_sort_variable, $sort_direction)
-                ->paginate($limit, ['*'], 'page', $page);
+        
+        $objectList = $modelNameWithNamespace::defaultQuery($search_text, $sort_variable, $sort_direction)->paginate($limit, ['*'], 'page', $page);
 
         $current_page = $objectList->currentPage();
         $last_page = $objectList->lastPage();
