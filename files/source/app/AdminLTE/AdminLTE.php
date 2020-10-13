@@ -1224,7 +1224,7 @@ class AdminLTE
 		for ($j=0; $j < $countProperty; $j++) { 
 			$property = $property_list[$j];
 
-			$displayTexts[$property['name']]['value'] = '{{' . $model . '/' . $property['name'] . '}}';
+			$displayTexts[$property['name']]['value'] = '{{' . $property['belongs_to'] . '/' . $property['display_property'] . '}}';
 			$displayTexts[$property['name']]['type'] = $property['type'];
 			$displayTexts[$property['name']]['belongs_to'] = $property['belongs_to'];
 			$displayTexts[$property['name']]['display_property'] = $property['display_property'];

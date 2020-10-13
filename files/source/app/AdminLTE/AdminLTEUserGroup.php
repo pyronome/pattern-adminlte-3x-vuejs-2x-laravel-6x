@@ -75,7 +75,7 @@ class AdminLTEUserGroup extends Model
     
     public function scopeDefaultQuery($query, $search_text, $sort_variable, $sort_direction) {
         $objectAdminLTE = new AdminLTE();
-        $query = $objectAdminLTE->getQuery($query, 'AdminLTEUserGroup', $this::$searchable, $this::$property_list, $search_text, $sort_variable, $sort_direction);
+        $query = $objectAdminLTE->getQuery($query, 'AdminLTEUserGroup', $this::$property_list, $search_text, $sort_variable, $sort_direction);
         return $query;
     }
 

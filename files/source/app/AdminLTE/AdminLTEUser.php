@@ -114,7 +114,7 @@ class AdminLTEUser extends Authenticatable
     
     public function scopeDefaultQuery($query, $search_text, $sort_variable, $sort_direction) {
         $objectAdminLTE = new AdminLTE();
-        $query = $objectAdminLTE->getQuery($query, 'AdminLTEUser', $this::$searchable, $this::$property_list, $search_text, $sort_variable, $sort_direction);
+        $query = $objectAdminLTE->getQuery($query, 'AdminLTEUser', $this::$property_list, $search_text, $sort_variable, $sort_direction);
         return $query;
     }
 
