@@ -1,0 +1,5 @@
+
+	public function {{$ ../name/__value__/__lowercase_text__}}()
+	{
+		return $this->belongsTo(\App\AdminLTE\AdminLTEModelOption::class, '{{$ ../name/__value__/__lowercase_text__}}');
+	}

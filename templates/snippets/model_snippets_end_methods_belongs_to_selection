@@ -1,0 +1,13 @@
+{{@if {{$ ../selection_properties/property_model_multiple_selection_0/__value__}} == "0"}}
+
+	public function {{$ ../name/__value__/__lowercase_text__}}()
+	{
+		return $this->belongsTo(\App\AdminLTE\AdminLTEModelOption::class, '{{$ ../name/__value__/__lowercase_text__}}');
+	}
+{{@elseif {{$ ../selection_properties/property_model_multiple_selection_1/__value__}} == "1"}}
+
+	public function {{$ ../name/__value__/__lowercase_text__}}()
+	{
+		return $this->belongsToMany(\App\AdminLTE\AdminLTEModelOption::class, '{{$ ../../../name/__value__/__lowercase_text__}}_{{$ ../name/__value__/__lowercase_text__}}', '{{$ ../../../name/__value__/__lowercase_text__}}_id', '{{$ ../name/__value__/__lowercase_text__}}');
+	}
+{{@endif}}

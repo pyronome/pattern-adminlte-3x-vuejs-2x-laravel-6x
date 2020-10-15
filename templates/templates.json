@@ -285,10 +285,10 @@
         "append_crlf":"0"
     },
     {
-        "description":"\/snippets\/system\/DatabaseSeeder.php\/end_run_method\/0010.php",
+        "description":"DatabaseSeeder Snippets | end_run_method | call seedModelOptions",
         "base":"\/project",
         "enabled":"1",
-        "source":"source\/source2020818124916ff7fe397",
+        "source":"snippets\/databaseseeder_snippet_end_run_method_call_seedmodeloptions",
         "destination":"\/snippets\/system\/source\/database\/seeds\/DatabaseSeeder.php\/end_run_method\/0010.php",
         "temporary":"0",
         "skip_empty":"0",
@@ -300,10 +300,10 @@
         "append_crlf":"0"
     },
     {
-        "description":"\/snippets\/system\/DatabaseSeeder.php\/end_methods\/0010.php",
+        "description":"DatabaseSeeder Snippets | end_methods | seedModelOptions",
         "base":"\/project",
         "enabled":"1",
-        "source":"source\/source20208181250103b1237db",
+        "source":"snippets\/databaseseeder_snippet_end_methods_seedmodeloptions",
         "destination":"\/snippets\/system\/source\/database\/seeds\/DatabaseSeeder.php\/end_methods\/0010.php",
         "temporary":"0",
         "skip_empty":"0",
@@ -333,7 +333,7 @@
         "description":"DatabaseSeeder.php\/model options",
         "base":"\/project\/model_list\/model\/property_list\/property\/option_list\/option",
         "enabled":"1",
-        "source":"source\/source202081812505361f4b59d",
+        "source":"snippets\/databaseseeder_model_options",
         "destination":"SNIPPET_SEED_MODEL_OPTIONS",
         "temporary":"1",
         "skip_empty":"0",
@@ -345,10 +345,10 @@
         "append_crlf":"1"
     },
     {
-        "description":"\/snippets\/system\/source\/app\/{{MODEL}}.php\/begin_class\/0010.php",
+        "description":"{{MODEL}} Snippets | begin_class | use AdminLTE",
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
-        "source":"source\/source20201013163341071d91d9",
+        "source":"snippets\/model_snippets_begin_class_use",
         "destination":"\/snippets\/system\/source\/app\/{{$ __value__}}.php\/begin_class\/0010.php",
         "temporary":"0",
         "skip_empty":"0",
@@ -360,10 +360,10 @@
         "append_crlf":"0"
     },
     {
-        "description":"\/snippets\/system\/source\/app\/{{MODEL}}.php\/begin_methods\/0010.php",
+        "description":"{{MODEL}} Snippets | begin_methods | scopeDefaultQuery",
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
-        "source":"source\/source2020101316384020a495c4",
+        "source":"source\/model_snippets_begin_methods_scopedefaultquery",
         "destination":"\/snippets\/system\/source\/app\/{{$ __value__}}.php\/begin_methods\/0010.php",
         "temporary":"0",
         "skip_empty":"0",
@@ -372,6 +372,36 @@
         "append":"0",
         "glue":"",
         "prepend_crlf":"0",
+        "append_crlf":"0"
+    },
+    {
+        "description":"{{MODEL}} Snippets | end_methods | BelongsTo (Selection)",
+        "base":"\/project\/model_list\/model\/property_list\/property\/property_type_Selection",
+        "enabled":"1",
+        "source":"snippets\/model_snippets_end_methods_belongs_to_selection",
+        "destination":"\/snippets\/system\/source\/app\/{{$ __value__}}.php\/end_methods\/0010.php",
+        "temporary":"1",
+        "skip_empty":"0",
+        "skip_whitespace":"0",
+        "remove_whitespace":"0",
+        "append":"1",
+        "glue":"",
+        "prepend_crlf":"1",
+        "append_crlf":"0"
+    },
+    {
+        "description":"{{MODEL}} Snippets | end_methods | BelongsTo (Radio)",
+        "base":"\/project\/model_list\/model\/property_list\/property\/property_type_Radio",
+        "enabled":"1",
+        "source":"snippets\/model_snippets_end_methods_belongs_to_radio",
+        "destination":"\/snippets\/system\/source\/app\/{{$ __value__}}.php\/end_methods\/0020.php",
+        "temporary":"1",
+        "skip_empty":"0",
+        "skip_whitespace":"0",
+        "remove_whitespace":"0",
+        "append":"1",
+        "glue":"",
+        "prepend_crlf":"1",
         "append_crlf":"0"
     },
     {
