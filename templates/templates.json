@@ -380,13 +380,13 @@
         "enabled":"1",
         "source":"snippets\/model_snippets_end_methods_belongs_to_selection",
         "destination":"\/snippets\/system\/source\/app\/{{$ __value__}}.php\/end_methods\/0010.php",
-        "temporary":"1",
+        "temporary":"0",
         "skip_empty":"0",
         "skip_whitespace":"0",
         "remove_whitespace":"0",
-        "append":"1",
+        "append":"0",
         "glue":"",
-        "prepend_crlf":"1",
+        "prepend_crlf":"0",
         "append_crlf":"0"
     },
     {
@@ -395,13 +395,13 @@
         "enabled":"1",
         "source":"snippets\/model_snippets_end_methods_belongs_to_radio",
         "destination":"\/snippets\/system\/source\/app\/{{$ __value__}}.php\/end_methods\/0020.php",
-        "temporary":"1",
+        "temporary":"0",
         "skip_empty":"0",
         "skip_whitespace":"0",
         "remove_whitespace":"0",
-        "append":"1",
+        "append":"0",
         "glue":"",
-        "prepend_crlf":"1",
+        "prepend_crlf":"0",
         "append_crlf":"0"
     },
     {
