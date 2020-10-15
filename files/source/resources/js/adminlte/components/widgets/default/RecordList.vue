@@ -26,79 +26,81 @@
                         </div>
                     </div>
                 </div>
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th class="text-center show_by_permission_must_update">
-                                <div class="icheck-primary d-inline">
-                                    <input type="checkbox"
-                                        @click="select_all_row($event.target)"
-                                        :id="'select_' + model + '_rows'"
-                                        class="select_all_row"
-                                        :data-model="model">
-                                    <label :for="'select_' + model + '_rows'"></label>
-                                </div>
-                            </th>
-                            <th v-for="(pair, index) in pairs" :key="index">
-                                <button type="button"
-                                    :id="'button_sort_' + model + '_' + pair.variable"
-                                    class="button-table-sort"
-                                    @click="sort(pair.variable)">
-                                    <span>{{pair.title}}</span>&nbsp;
-                                    <span class="sorting loading">
-                                        <img class="imgLoader" src="/img/adminlte/loader.svg" width="14" height="14"/>
-                                    </span>
-                                    <span class="sorting active default text-muted">
-                                        <i class="fa fa-caret-down"></i>
-                                    </span>
-                                    <span class="sorting desc text-primary">
-                                        <i class="fa fa-caret-down"></i>
-                                    </span>
-                                    <span class="sorting asc text-primary">
-                                        <i class="fa fa-caret-up"></i>
-                                    </span>
-                                </button>
-                            </th>
-                            <th class="text-center th-btn-1">
-                                <router-link :id="'buttonNew' + model" class="btn btn-primary btn-xs btn-on-table show_by_permission_must_update"
-                                    :to="'/' + main_folder + '/' + (model.toLowerCase()) + '/edit/new'">
-                                    <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ $t('Add') }}</span>
-                                </router-link>
-                                
-                                <button type="button"
-                                    :id="'buttonDelete' + model"
-                                    @click="deleteSelectedRows($event.target, model)"
-                                    class="btn btn-danger btn-xs btn-on-table button-model-delete show_by_permission_must_update"
-                                    style="display:none;">
-                                    <i class="fa fa-trash"></i> <span class="hidden-xxs">{{ $t('Delete') }}</span> <span class="selected-count"></span>
-                                </button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="'tbody' + model + 'RecordList'">
-                        <tr v-for="row in list" :key="row.id">
-                            <td class="text-center show_by_permission_must_update">
-                                <div class="icheck-primary d-inline">
-                                    <input type="checkbox"
-                                        @click="select_row($event.target)"
-                                        :id="'select_' + model + '_row' + row.id"
-                                        class="select_row"
-                                        :data-model="model"
-                                        :data-row-id="row.id">
-                                    <label :for="'select_' + model + '_row' + row.id"></label>
-                                </div>
-                            </td>
-                            <td v-for="(displaytext, index) in row.displaytexts" :key="index" v-html="displaytext">
-                            </td>
-                            <td class="text-center">
-                                <router-link class="btn btn-outline-primary btn-xs btn-on-table"
-                                    :to="'/' + main_folder + '/' + (model.toLowerCase()) + '/detail/' + row.id">
-                                    <i class="fa fa-info-circle"></i> <span class="hidden-xxs">{{ $t('Detail') }}</span>
-                                </router-link>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center show_by_permission_must_update">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox"
+                                            @click="select_all_row($event.target)"
+                                            :id="'select_' + model + '_rows'"
+                                            class="select_all_row"
+                                            :data-model="model">
+                                        <label :for="'select_' + model + '_rows'"></label>
+                                    </div>
+                                </th>
+                                <th v-for="(pair, index) in pairs" :key="index">
+                                    <button type="button"
+                                        :id="'button_sort_' + model + '_' + pair.variable"
+                                        class="button-table-sort"
+                                        @click="sort(pair.variable)">
+                                        <span>{{pair.title}}</span>&nbsp;
+                                        <span class="sorting loading">
+                                            <img class="imgLoader" src="/img/adminlte/loader.svg" width="14" height="14"/>
+                                        </span>
+                                        <span class="sorting active default text-muted">
+                                            <i class="fa fa-caret-down"></i>
+                                        </span>
+                                        <span class="sorting desc text-primary">
+                                            <i class="fa fa-caret-down"></i>
+                                        </span>
+                                        <span class="sorting asc text-primary">
+                                            <i class="fa fa-caret-up"></i>
+                                        </span>
+                                    </button>
+                                </th>
+                                <th class="text-center th-btn-1">
+                                    <router-link :id="'buttonNew' + model" class="btn btn-primary btn-xs btn-on-table show_by_permission_must_update"
+                                        :to="'/' + main_folder + '/' + (model.toLowerCase()) + '/edit/new'">
+                                        <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ $t('Add') }}</span>
+                                    </router-link>
+                                    
+                                    <button type="button"
+                                        :id="'buttonDelete' + model"
+                                        @click="deleteSelectedRows($event.target, model)"
+                                        class="btn btn-danger btn-xs btn-on-table button-model-delete show_by_permission_must_update"
+                                        style="display:none;">
+                                        <i class="fa fa-trash"></i> <span class="hidden-xxs">{{ $t('Delete') }}</span> <span class="selected-count"></span>
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="'tbody' + model + 'RecordList'">
+                            <tr v-for="row in list" :key="row.id">
+                                <td class="text-center show_by_permission_must_update">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox"
+                                            @click="select_row($event.target)"
+                                            :id="'select_' + model + '_row' + row.id"
+                                            class="select_row"
+                                            :data-model="model"
+                                            :data-row-id="row.id">
+                                        <label :for="'select_' + model + '_row' + row.id"></label>
+                                    </div>
+                                </td>
+                                <td v-for="(displaytext, index) in row.displaytexts" :key="index" v-html="displaytext">
+                                </td>
+                                <td class="text-center">
+                                    <router-link class="btn btn-outline-primary btn-xs btn-on-table"
+                                        :to="'/' + main_folder + '/' + (model.toLowerCase()) + '/detail/' + row.id">
+                                        <i class="fa fa-info-circle"></i> <span class="hidden-xxs">{{ $t('Detail') }}</span>
+                                    </router-link>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="card-footer" style="min-height:60px;">
                 <pagination v-if="show_pagination" :data="data" :limit="1" align="right" :show-disabled="false" @pagination-change-page="paginate">
