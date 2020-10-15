@@ -363,7 +363,7 @@
         "description":"{{MODEL}} Snippets | begin_methods | scopeDefaultQuery",
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
-        "source":"source\/model_snippets_begin_methods_scopedefaultquery",
+        "source":"snippets\/model_snippets_begin_methods_scopedefaultquery",
         "destination":"\/snippets\/system\/source\/app\/{{$ __value__}}.php\/begin_methods\/0010.php",
         "temporary":"0",
         "skip_empty":"0",
