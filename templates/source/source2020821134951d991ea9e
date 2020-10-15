@@ -1,0 +1,3 @@
+import {{$ __value__}}List from "./components/models/default/{{$ __value__/__lowercase_text__}}/list.vue";
+import {{$ __value__}}Detail from "./components/models/default/{{$ __value__/__lowercase_text__}}/detail.vue";
+import {{$ __value__}}Edit from "./components/models/default/{{$ __value__/__lowercase_text__}}/edit.vue";

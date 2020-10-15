@@ -1,0 +1,43 @@
+{{@if {{$ ../selection_properties/property_model_multiple_selection/__value__}} == "0"}}
+		load_{{$ ../name/__value__/__lowercase_text__}}_options: function () {
+            if (this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading) {
+                return;
+            }
+
+            this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading = true;
+			
+			axios.get(AdminLTEHelper.getAPIURL("adminltemodeloption/get_dropdown_option_list/{{$ ../../../name/__value__}}/{{$ ../name/__value__/__lowercase_text__}}"))
+                .then(({ data }) => {
+                    this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loaded = true;
+                    this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading = false;
+                    this.{{$ ../name/__value__/__lowercase_text__}}_options = data.list;
+                    this.processLoadQueue();
+                }).catch(({ data }) => {
+                    this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loaded = true;
+                    this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading = false;
+                    this.$Progress.fail();
+                    this.processLoadQueue();
+                });
+        },
+{{@elseif {{$ ../selection_properties/property_model_multiple_selection/__value__}} == "1"}}
+        load_{{$ ../name/__value__/__lowercase_text__}}_options: function () {
+            if (this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading) {
+                return;
+            }
+
+            this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading = true;
+
+            axios.get(AdminLTEHelper.getAPIURL("adminltemodeloption/get_dropdown_option_list/{{$ ../../../name/__value__}}/{{$ ../name/__value__/__lowercase_text__}}"))
+                .then(({ data }) => {
+                    this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loaded = true;
+                    this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading = false;
+                    this.{{$ ../name/__value__/__lowercase_text__}}_options = data.list;
+                    this.processLoadQueue();
+                }).catch(({ data }) => {
+                    this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loaded = true;
+                    this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading = false;
+                    this.$Progress.fail();
+                    this.processLoadQueue();
+                });
+        },
+{{@endif}}

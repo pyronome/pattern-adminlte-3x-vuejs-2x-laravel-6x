@@ -1,0 +1,15 @@
+,
+    {
+        "path": ("/" + mainFolder + "/{{$ __value__/__lowercase_text__}}"),
+        "component": {{$ __value__}}List
+    }
+,
+    {
+        "path": ("/" + mainFolder + "/{{$ __value__/__lowercase_text__}}/detail/:id"),
+        "component": {{$ __value__}}Detail
+    }
+,
+    {
+        "path": ("/" + mainFolder + "/{{$ __value__/__lowercase_text__}}/edit/:id"),
+        "component": {{$ __value__}}Edit
+    }

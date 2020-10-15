@@ -1,0 +1,10 @@
+		$option_data_list[] = [
+    		'id' => 0,
+    		'deleted' => 0,
+    		'created_at' => now(),
+    		'updated_at' => now(),
+    		'model' => '{{$ ../../../../name/__value__/__lowercase_text__}}',
+    		'property' => '{{$ ../../name/__value__/__lowercase_text__}}',
+    		'value' => '{{$ value/__value__}}',
+    		'title' => '{{$ title/__value__}}'
+        ];

@@ -1,0 +1,9 @@
+	public function seedModelOptions() {
+    	$adminlte = new App\AdminLTE\AdminLTE();
+		
+		$option_data_list = [];
+
+{{SNIPPET_SEED_MODEL_OPTIONS}}
+		
+		$adminlte->seedModelDropdownOptions($option_data_list);
+    }

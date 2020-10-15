@@ -1,0 +1,17 @@
+    {
+        "type":"recordlist",
+        "model":"{{$ __value__}}",
+        "href":"{{$ __value__/__lowercase_text__}}",
+        "text":"{{$ __value__}} Records",
+        "size":"12,12,12",
+        "visibility":"0",
+        "order":"15",
+        "icon":"empty",
+        "iconbackground":"",
+        "limit":"5",
+        "onlylastrecord":"0",
+        "columns":"Id,Creation,Last Update",
+        "values":"id,created_at__displaytext__,updated_at__displaytext__",
+        "graphtype":"",
+        "graphperiod":""
+    },

@@ -7,7 +7,7 @@ return '[
         "visibility": "1"
     },
     {
-        "text": "List",
+        "text": "Contents",
         "href": "",
         "icon": "fas fa-align-justify",
         "visibility": "1",
@@ -27,28 +27,28 @@ return '[
                 "icon": "fas fa-server",
                 "visibility": "1"
             },
+			{
+                "text": "Preferences",
+                "href": "preferences",
+                "icon": "fas fa-asterisk",
+                "visibility": "1"
+            },
             {
                 "text": "General Settings",
                 "href": "general_settings",
                 "icon": "fas fa-atom",
                 "visibility": "1"
             },
-            {
-                "text": "Database Server",
-                "href": "database_server",
-                "icon": "fas fa-database",
+			{
+                "text": "Branding",
+                "href": "branding",
+                "icon": "fas fa-bold",
                 "visibility": "1"
             },
             {
-                "text": "Email Server",
+                "text": "Mail (SMTP) Server",
                 "href": "email_server",
                 "icon": "fas fa-mail-bulk",
-                "visibility": "1"
-            },
-            {
-                "text": "FTP Server",
-                "href": "ftp_server",
-                "icon": "fab fa-connectdevelop",
                 "visibility": "1"
             },
             {
@@ -58,21 +58,9 @@ return '[
                 "visibility": "1"
             },
             {
-                "text": "Display Texts",
-                "href": "laravelmodeldisplaytext",
+                "text": "Model Display Settings",
+                "href": "adminltemodeldisplaytext",
                 "icon": "fas fa-sort-alpha-down",
-                "visibility": "1"
-            },
-            {
-                "text": "Languages",
-                "href": "languages",
-                "icon": "fas fa-language",
-                "visibility": "1"
-            },
-            {
-                "text": "User Groups",
-                "href": "adminlteusergroup",
-                "icon": "fas fa-users-cog",
                 "visibility": "1"
             },
             {
@@ -82,10 +70,10 @@ return '[
                 "visibility": "1"
             },
             {
-            	"text":"System Status",
-            	"href":"systemstatus",
-            	"icon":"fas fa-server",
-            	"visibility":"1"
+                "text": "User Groups",
+                "href": "adminlteusergroup",
+                "icon": "fas fa-users-cog",
+                "visibility": "1"
             }
         ]
     },

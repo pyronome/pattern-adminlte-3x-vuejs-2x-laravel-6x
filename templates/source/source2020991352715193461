@@ -1,0 +1,28 @@
+{{@if {{$ ../selection_properties/property_model_multiple_selection/__value__}} == "0"}}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ ../name/__value__/__lowercase_text__}}" class="detail-label">{{  $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <select2-element
+                                                data-placeholder="{{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}"
+                                                id="{{$ ../../../name/__value__}}Form_{{$ ../name/__value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ ../name/__value__/__lowercase_text__}}"
+                                                :options="{{$ ../name/__value__/__lowercase_text__}}_options"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ ../name/__value__/__lowercase_text__}}"
+    											class="select2-element"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}>
+												<option></option>
+                                            </select2-element>
+                                        </div>
+{{@elseif {{$ ../selection_properties/property_model_multiple_selection/__value__}} == "1"}}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ ../name/__value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <select2-element multiple="multiple"
+                                                data-placeholder="{{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}"
+                                                id="{{$ ../../../name/__value__}}Form_{{$ ../name/__value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ ../name/__value__/__lowercase_text__}}"
+                                                :options="{{$ ../name/__value__/__lowercase_text__}}_options"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ ../name/__value__/__lowercase_text__}}"
+    											class="select2-element"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}>
+                                            </select2-element>
+                                        </div>
+{{@endif}}

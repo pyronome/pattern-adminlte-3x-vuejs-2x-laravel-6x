@@ -1,0 +1,61 @@
+{{@if {{$ ../property_type/__value__}} == 'Checkbox'}}
+,
+				'{{$ ../name/__value__/__lowercase_text__}}': false
+{{@elseif {{$ ../property_type/__value__}} == 'ClassSelection'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': []
+{{@elseif {{$ ../property_type/__value__}} == 'Date'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'DateTime'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'Selection'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': []
+{{@elseif {{$ ../property_type/__value__}} == 'EmailAddress'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'FileList'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'HTMLEditor'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'ImageList'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'Integer'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': 0
+{{@elseif {{$ ../property_type/__value__}} == 'Location'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': '41.015,28.979'
+{{@elseif {{$ ../property_type/__value__}} == 'LongText'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'Number'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': 0.00
+{{@elseif {{$ ../property_type/__value__}} == 'Password'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'PhoneNumber'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'Radio'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': 0
+{{@elseif {{$ ../property_type/__value__}} == 'ShortText'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'Switch'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': false
+{{@elseif {{$ ../property_type/__value__}} == 'Time'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@elseif {{$ ../property_type/__value__}} == 'URLAddress'}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': ''
+{{@endif}}

@@ -1,0 +1,1 @@
+{{@if {{$ __value__}} == "0"}} unvisible-property {{@endif}}

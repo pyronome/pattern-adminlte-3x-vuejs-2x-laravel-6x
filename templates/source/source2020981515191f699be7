@@ -1,0 +1,55 @@
+{{@if {{$ ../property_type/__value__}} == 'Checkbox' }}
+        $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = ('' != $request->input('{{$ __value__/__lowercase_text__}}'))
+                ? intval($request->input('{{$ __value__/__lowercase_text__}}'))
+                : 0;
+{{@elseif {{$ ../property_type/__value__}} == 'ClassSelection' }}
+{{@if {{$ ../selection_properties/property_model_multiple_selection_0/__value__}} == "0"}}
+        if ('' != $request->input('{{$ __value__/__lowercase_text__}}')) {
+		    $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = intval($request->input('{{$ __value__/__lowercase_text__}}'));
+        }
+{{@endif}}
+{{@elseif {{$ ../property_type/__value__}} == 'Date' }}
+		$object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = ('' != $request->input('{{$ __value__/__lowercase_text__}}'))
+                ? $request->input('{{$ __value__/__lowercase_text__}}')
+                : date('Y-m-d');
+{{@elseif {{$ ../property_type/__value__}} == 'DateTime' }}
+        $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = ('' != $request->input('{{$ __value__/__lowercase_text__}}'))
+                ? $request->input('{{$ __value__/__lowercase_text__}}')
+                : date('Y-m-d H:i');
+{{@elseif {{$ ../property_type/__value__}} == 'Selection' }}
+{{@if {{$ ../selection_properties/property_model_multiple_selection_0/__value__}} == "0"}}
+        if ('' != $request->input('{{$ __value__/__lowercase_text__}}')){
+            $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = intval($request->input('{{$ __value__/__lowercase_text__}}'));
+        }
+{{@endif}}
+{{@elseif {{$ ../property_type/__value__}} == 'FileList' }}
+        ${{$ __value__/__lowercase_text__}} = $request->input('{{$ __value__/__lowercase_text__}}');
+{{@elseif {{$ ../property_type/__value__}} == 'ImageList' }}
+        ${{$ __value__/__lowercase_text__}} = $request->input('{{$ __value__/__lowercase_text__}}');
+{{@elseif {{$ ../property_type/__value__}} == 'Integer' }}
+        $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = ('' != $request->input('{{$ __value__/__lowercase_text__}}'))
+                ? intval($request->input('{{$ __value__/__lowercase_text__}}'))
+                : 0;
+{{@elseif {{$ ../property_type/__value__}} == 'Number' }}
+        $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = ('' != $request->input('{{$ __value__/__lowercase_text__}}'))
+                ? floatval($request->input('{{$ __value__/__lowercase_text__}}'))
+                : 0.00;
+{{@elseif {{$ ../property_type/__value__}} == 'Password' }}
+        if ('' != $request->input('{{$ __value__/__lowercase_text__}}')) {
+            $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = bcrypt($request->input('{{$ __value__/__lowercase_text__}}'));
+        }
+{{@elseif {{$ ../property_type/__value__}} == 'Radio' }}
+        if ('' != $request->input('{{$ __value__/__lowercase_text__}}')){
+            $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = intval($request->input('{{$ __value__/__lowercase_text__}}'));
+        }
+{{@elseif {{$ ../property_type/__value__}} == 'Switch' }}
+        $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = ('' != $request->input('{{$ __value__/__lowercase_text__}}'))
+                ? intval($request->input('{{$ __value__/__lowercase_text__}}'))
+                : 0;
+{{@elseif {{$ ../property_type/__value__}} == 'Time' }}
+		$object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = ('' != $request->input('{{$ __value__/__lowercase_text__}}'))
+                ? $request->input('{{$ __value__/__lowercase_text__}}')
+                : date('H:i');
+{{@else}}
+        $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = $request->input('{{$ __value__/__lowercase_text__}}');
+{{@endif}}

@@ -1,0 +1,17 @@
+	{
+        "type":"infobox",
+        "model":"{{$ __value__}}",
+        "text":"{{$ __value__}}",
+        "href":"{{$ __value__/__lowercase_text__}}",
+        "size":"12,12,12",
+        "visibility":"0",
+        "order":"3",
+        "icon":"fas fa-cog",
+        "iconbackground":"#17a2b8",
+        "limit":"0",
+        "onlylastrecord":"0",
+        "columns":"",
+        "values":"",
+        "graphtype":"",
+        "graphperiod":""
+    },

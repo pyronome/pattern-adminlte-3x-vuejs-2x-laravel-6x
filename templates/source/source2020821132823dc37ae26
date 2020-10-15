@@ -1,0 +1,142 @@
+<?php
+
+namespace App\Http\Controllers\AdminLTE\API;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTEModelOption;
+use App\{{$ __value__}};
+use App\Http\Requests\AdminLTE\API\{{$ __value__}}POSTRequest;
+
+class {{$ __value__}}Controller extends Controller
+{
+	public function get(Request $request)
+    {    
+        $list = [];
+        
+        $parameters = $request->route()->parameters();
+
+        $id = isset($parameters['id'])
+            ? intval($parameters['id'])
+            : 0;
+
+
+        if (0 == $id) {
+            return;
+        } // if (!isset($parameters['id'])) {
+        
+        // is new ?
+        if ('new' == htmlspecialchars($parameters['id'])) {
+            return;
+        } // if (isset($parameters['id']) && ('new' == htmlspecialchars($parameters['id']))) {
+
+        if ($id > 0) {
+            $object{{$ __value__}}List[] = {{$ __value__}}::where('id', $id)->first();
+        }
+
+        $objectAdminLTE = new AdminLTE();
+        $object{{$ __value__}} = NULL;
+        $index = 0;
+
+        foreach ($object{{$ __value__}}List as $object{{$ __value__}})
+        {
+            $displayTexts = $objectAdminLTE->getObjectDisplayTexts('{{$ __value__}}', $object{{$ __value__}});
+
+            $list[$index]['id'] = $object{{$ __value__}}->id;
+            $list[$index]['id__displaytext__'] = $displayTexts['id'];
+            $list[$index]['deleted'] = $object{{$ __value__}}->deleted;
+            $list[$index]['deleted__displaytext__'] = $displayTexts['deleted'];
+            $list[$index]['created_at'] = $object{{$ __value__}}->created_at;
+            $list[$index]['created_at__displaytext__'] = $displayTexts['created_at'];
+            $list[$index]['updated_at'] = $object{{$ __value__}}->updated_at;
+            $list[$index]['updated_at__displaytext__'] = $displayTexts['updated_at'];
+{{MODEL{{$ ../__item_index__/__value__}}_GET_SERVICE_ROWS}}
+
+            $index++;
+        } // foreach ($object{{$ __value__}}List as $object{{$ __value__}})
+
+        return [
+            'list' => $list
+        ];
+    }
+
+	public function post({{$ __value__}}POSTRequest $request)
+    {
+        $id = intval($request->input('id'));
+
+        if ($id > 0) {
+            $object{{$ __value__}} = {{$ __value__}}::find($id);
+        } else {
+            $object{{$ __value__}} = new {{$ __value__}}();
+        } // if ($id > 0) {
+        
+        $object{{$ __value__}}->deleted = 0;
+{{MODEL{{$ ../__item_index__/__value__}}_POST_SERVICE_ASSIGNMENTS}}
+
+		$object{{$ __value__}}->save();
+		$objectAdminLTE = new AdminLTE();
+{{MODEL{{$ ../__item_index__/__value__}}_POST_SERVICE_FILE_AND_IMAGE_PROCESS}}
+
+{{MODEL{{$ ../__item_index__/__value__}}_POST_SERVICE_CLASSSELECTION_PROCESS}}
+{{MODEL{{$ ../__item_index__/__value__}}_POST_SERVICE_SELECTION_PROCESS}}
+
+        return [
+            'id' => $object{{$ __value__}}->id
+        ];
+    }
+
+    public function delete(Request $request)
+    {
+        $selected_ids = $request->input('selected_ids');
+        
+        $objects = {{$ __value__}}::where('deleted', false)
+                ->whereIn('id', $selected_ids)
+                ->get();
+
+        foreach ($objects as $object)
+        {
+            $object->deleted = 1;
+            $object->save();                
+        } // foreach ($objects as $object)
+
+        return ['message' => "Success"];
+    }
+
+	public function get_files(Request $request) {
+        $list = [];
+        
+        $parameters = $request->route()->parameters();
+        
+        if (!isset($parameters['id'])) {
+            return;
+        } // if (!isset($parameters['id'])) {
+
+        $object_id = intval($parameters['id']);
+
+        if (0 == $object_id) {
+            return;
+        } // if (!isset($parameters['id'])) {
+        
+        $objectAdminLTE = new AdminLTE();
+        $files = $objectAdminLTE->get_model_files('{{$ __value__}}', $object_id);
+        $index = 0;
+
+        foreach ($files as $fileData) {
+            $list[$index]["id"] = $fileData["id"];
+            $list[$index]["object_property"] = $fileData["object_property"];
+            $list[$index]["file_name"] = $fileData["file_name"];
+            $list[$index]["path"] = $fileData["path"];
+            $list[$index]["media_type"] = $fileData["media_type"];
+
+            $fileNameTokens = explode('.', $fileData["file_name"]);
+            $list[$index]["extension"] = strtolower(end($fileNameTokens));
+
+            $index++;
+        }
+
+        return [
+            'list' => $list
+        ];
+    }
+}

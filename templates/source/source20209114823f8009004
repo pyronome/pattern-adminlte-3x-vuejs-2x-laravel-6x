@@ -1,0 +1,297 @@
+{{@if {{$ ../property_type/__value__}} == "Checkbox" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox"
+                                                    id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                    name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                    class=""
+                                                    v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                    {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                />
+                                                <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">
+                                                    {{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}
+                                                </label>
+                                            </div>
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "ClassSelection" }}
+{{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VIEW_EDIT_FORM_INPUTS_CLASSSELECTION}}
+{{@elseif {{$ ../property_type/__value__}} == "Date" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">değişecek {{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="date"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_CLASS}}
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_MASK}}>
+                                            {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_ERROR}}
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "DateTime" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">değişecek {{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="datetime-local"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_CLASS}}
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_MASK}}>
+                                            {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_ERROR}}
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "Selection" }}
+{{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VIEW_EDIT_FORM_INPUTS_SELECTION}}
+{{@elseif {{$ ../property_type/__value__}} == "EmailAddress" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="email"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_CLASS}}
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_MASK}}>
+                                            {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_ERROR}}
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "FileList" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <div class="input-field">
+                                                <input type="hidden"
+                                                    class="form-control"
+                                                    id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                    name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                    v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                    data-target-field="{{$ ../../../name/__value__}}/{{$ __value__/__lowercase_text__}}"
+                                                    data-media-type="1"
+                                                    data-max-file-count="{{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_FILE_COUNT}}" {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+												/>
+                                                <button type="button"
+                                                    id="buttonBrowse{{$ __value__/__lowercase_text__}}Files"
+                                                    name="buttonBrowse{{$ __value__/__lowercase_text__}}Files"
+                                                    class="buttonBrowseFile btn btn-primary show_by_permission_must_update"
+                                                    data-target-file-list="ul{{$ __value__/__lowercase_text__}}FileList">
+                                                    <i class="ion-ios-folder"></i>&nbsp;{{ $t('Browse...') }}
+                                                </button>
+                                                <ul id="ul{{$ __value__/__lowercase_text__}}FileList" class="col s12 collection ulFileList" data-target-input-id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}">
+                                                </ul>
+                                            </div>
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "HTMLEditor" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <textarea id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="textarea vue-editor"
+                                                rows="5"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                            ></textarea>
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "ImageList" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <div class="input-field">
+                                                <input type="hidden"
+                                                    class="form-control"
+                                                    id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                    name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                    v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                    data-target-field="{{$ ../../../name/__value__}}/{{$ __value__/__lowercase_text__}}"
+                                                    data-media-type="2"
+                                                    data-max-file-count="{{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_FILE_COUNT}}" {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                />
+                                                <button type="button"
+                                                    id="buttonBrowse{{$ __value__/__lowercase_text__}}Files"
+                                                    name="buttonBrowse{{$ __value__/__lowercase_text__}}Files"
+                                                    class="buttonBrowseFile btn btn-primary show_by_permission_must_update"
+                                                    data-target-file-list="ul{{$ __value__/__lowercase_text__}}FileList">
+                                                    <i class="ion-ios-folder"></i>&nbsp;{{ $t('Browse...') }}
+                                                </button>
+                                                <ul id="ul{{$ __value__/__lowercase_text__}}FileList" class="col s12 collection ulFileList" data-target-input-id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}">
+                                                </ul>
+                                            </div>
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "Integer" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="number"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_CLASS}}
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_MINMAX}}>
+                                            {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_ERROR}}
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "Location" }}
+                                        <div class="divLocationProperty form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="hidden"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control vue-location"
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                            />
+
+                                            <div class="divLocationAddress">
+                                                <input type="text" class="form-control blue-text text-darken-4" id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}-Address" />
+                                            </div>
+                                            <div>
+                                                <div class="divLocationLatitude">
+                                                    <label class="detail-label">{{ $t('Latitude') }}</label>
+                                                    <input type="text" class="form-control blue-text text-darken-4" readonly="readonly" id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}-Latitude"/>
+                                                </div>
+                                                <div class="divLocationLongitude">
+                                                    <label class="detail-label">{{ $t('Longitude') }}</label>
+                                                    <input type="text" class="form-control blue-text text-darken-4" readonly="readonly" id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}-Longitude"/>
+                                                </div>
+                                                <div class="divLocationMapObject">
+                                                    <div id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}-MapObject" style="height:350px;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "LongText" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <textarea rows="5"
+												v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+												id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                class="form-control"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                            ></textarea>
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "Number" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="number"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_CLASS}}
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                step="0.01"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_MINMAX}}>
+                                            {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_ERROR}}
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "Password" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="password"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_CLASS}}
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_MASK}}>
+                                            {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_ERROR}}
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "PhoneNumber" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="text"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_CLASS}}
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_MASK}}>
+                                            {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_ERROR}}
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "Radio" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label class="detail-label">{{ $t('{{$ ../title/__value__}}') }}{{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <div id="container_radio_{{$ ../name/__value__/__lowercase_text__}}" class="form-group clearfix">
+												<div class="icheck-primary" v-for="option in {{$ __value__/__lowercase_text__}}_options" :key="option.id">
+                                                    <input type="radio"
+                                                        v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                        :id="'{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}' + option.id"
+                                                        name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                        class="blue-style"
+                                                        :value="option.id">
+                                                    <label :for="'{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}' + option.id" class="detail-label">{{option.text}}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "ShortText" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="text"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_CLASS}}
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_MASK}}>
+                                            {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_ERROR}}
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "Switch" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <div class="bootstrap-switch bootstrap-switch-wrapper fake-switch-container" style="width: 88px;">
+                                                <div class="bootstrap-switch-container" style="width: 129px; margin-left: 0px;">
+                                                    <span class="bootstrap-switch-handle-on bootstrap-switch-primary" style="width: 43px;">{{ $t('ON') }}</span>
+                                                    <span class="bootstrap-switch-label" style="width: 43px;">&nbsp;</span>
+                                                    <span class="bootstrap-switch-handle-off bootstrap-switch-default" style="width: 43px;">{{ $t('OFF') }}</span>
+                                                </div>
+                                            </div>
+                                            <input type="checkbox"
+												v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                class="vue-switch"
+                                                data-bootstrap-switch
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                            />
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="switch-label">
+                                                {{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}
+                                            </label>
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "Time" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">değişecek {{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="time"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_CLASS}}
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_MASK}}>
+                                            {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_ERROR}}
+                                        </div>
+{{@elseif {{$ ../property_type/__value__}} == "URLAddress" }}
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <input type="text"
+                                                v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
+                                                class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_CLASS}}
+                                                id="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                name="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}"
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_READONLY}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_PLACEHOLDER}}
+                                                {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_ATTRIBUTES_MASK}}>
+                                            {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_REQUIRED_ERROR}}
+                                        </div>
+{{@endif}}

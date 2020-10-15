@@ -1,0 +1,1 @@
+{{@if {{$ __value__}} == "1"}} :class="{ 'is-invalid': {{$ ../../../../name/__value__}}Form.errors.has('{{$ ../../name/__value__/__lowercase_text__}}') }"{{@endif}}

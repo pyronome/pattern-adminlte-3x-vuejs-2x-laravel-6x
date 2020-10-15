@@ -1,0 +1,133 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+/* {{@snippet:begin_routes}} */
+\Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
+    Log::info( json_encode($query->sql) );
+    Log::info( json_encode($query->bindings) );
+    Log::info( json_encode($query->time)   );
+});
+
+Route::get('/login', 'LoginController@index');
+Route::get('/logout', 'LogoutController@index');
+Route::get('/forgotpassword', 'ForgotPasswordController@index');
+Route::get('/', 'HomeController@index');
+Route::get('/home', 'HomeController@index');
+
+/* {{@snippet:end_routes}} */
+
+Route::namespace('API')
+        ->middleware(\App\Http\Middleware\AdminLTEAPIMiddleware::class)
+        ->prefix('api')
+        ->group(function () {
+
+    /* {{@snippet:begin_api_routes}} */
+    Route::prefix('login')->group(function () {
+        Route::get('/get_brand_data', 'LoginController@get_brand_data');
+        Route::post('/post', 'LoginController@post');
+    });
+
+    Route::post('forgotpassword', 'ForgotPasswordController@post');
+
+    Route::prefix('profile')->group(function () {
+        Route::get('/get', 'ProfileController@get');
+        Route::get('/get_files', 'ProfileController@get_files');
+        Route::post('/post', 'ProfileController@post');
+    });
+
+    Route::prefix('server_information')->group(function () {
+        Route::get('/', 'ServerInformationController@get');
+    });
+
+	Route::prefix('preferences')->group(function () {
+        Route::get('/get', 'PreferencesController@get');
+        Route::post('/post', 'PreferencesController@post');
+    });
+
+    Route::prefix('general_settings')->group(function () {
+        Route::get('/', 'GeneralSettingsController@get');
+        Route::post('/post', 'GeneralSettingsController@post');
+        Route::get('/get_languages', 'GeneralSettingsController@get_languages');
+        Route::get('/get_timezones', 'GeneralSettingsController@get_timezones');
+    });
+	
+	Route::prefix('branding')->group(function () {
+        Route::get('/get', 'BrandingController@get');
+        Route::post('/post', 'BrandingController@post');
+    });
+
+    Route::prefix('email_server')->group(function () {
+        Route::get('/', 'EmailServerController@get');
+        Route::post('/post', 'EmailServerController@post');
+    });
+
+	Route::prefix('menu_configuration')->group(function () {
+        Route::get('/', 'MenuConfigurationController@get');
+        Route::post('/post', 'MenuConfigurationController@post');
+    });
+
+    Route::prefix('adminlteusergroup')->group(function () {
+        Route::get('/get/{id}', 'AdminLTEUserGroupController@get');
+        Route::post('/delete', 'AdminLTEUserGroupController@delete');
+		Route::post('/post', 'AdminLTEUserGroupController@post');
+    });
+
+    Route::prefix('adminlteuser')->group(function () {
+        Route::get('/get/{id}', 'AdminLTEUserController@get');
+		Route::get('/get_files/{id}', 'AdminLTEUserController@get_files');
+        Route::post('/delete', 'AdminLTEUserController@delete');
+		Route::post('/post', 'AdminLTEUserController@post');
+    });
+
+    Route::prefix('__pagepermission')->group(function () {
+        Route::get('/get/{pageName}', 'PagePermissionController@get');
+    });
+
+    Route::prefix('__layout')->group(function () {
+        Route::get('/get/{pageName}', 'AdminLTELayoutController@get_widgetconfig');
+        Route::get('/get_attributes', 'AdminLTELayoutController@get_attributes');
+        Route::post('/post/{pageName}', 'AdminLTELayoutController@post_widgetconfig');
+        Route::get('/get_page_widgets/{pageName}', 'AdminLTELayoutController@get_page_widgets');
+        Route::get('/get_infoboxvalue/{pageName}/{model}', 'AdminLTELayoutController@get_infoboxvalue');
+        Route::get('/get_recordgraph/{pageName}/{model}', 'AdminLTELayoutController@get_recordgraph');
+        Route::get('/get_recordlist/{pageName}/{model}', 'AdminLTELayoutController@get_recordlist');
+    });
+
+    Route::prefix('__modeldisplaytext')->group(function () {
+        Route::get('/get', 'AdminLTEModelDisplayTextController@get');
+        Route::get('/get_model_property_list', 'AdminLTEModelDisplayTextController@get_model_property_list');
+        Route::post('/post', 'AdminLTEModelDisplayTextController@post');
+    });
+
+    Route::prefix('__services')->group(function () {
+        Route::get('/get', 'AdminLTEServiceController@get');
+        Route::get('/get_directories', 'AdminLTEServiceController@get_directories');
+    });
+	
+	Route::prefix('media')->group(function () {
+        Route::get('/get', 'MediaController@get');
+		Route::post('/post', 'MediaController@post');
+    });
+
+	Route::prefix('adminltemodeloption')->group(function () {
+        Route::get('/get_dropdown_option_list/{model}/{property}', 'AdminLTEModelOptionController@get_dropdown_option_list');
+		Route::get('/get_model_option_list/{model}/{display_property}', 'AdminLTEModelOptionController@get_model_option_list');
+    });
+
+{{ADMINLTE_MODEL_API_ROUTES}}
+
+/* {{@snippet:end_api_routes}} */
+
+});
+
+Route::get('{path}', 'HomeController@index')->where('path', '([A-z0-9-\/_.]+)?');

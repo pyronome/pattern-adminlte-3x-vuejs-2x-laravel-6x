@@ -1,0 +1,5 @@
+{{@if {{$ ../selection_properties/property_model_multiple_selection_1/__value__}} == "1"}}
+		$arr_{{$ ../name/__value__/__lowercase_text__}} = $request->input('{{$ ../name/__value__/__lowercase_text__}}');
+		$object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}} = $arr_{{$ ../name/__value__/__lowercase_text__}};
+		$object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}}()->sync(array_filter((array)$arr_{{$ ../name/__value__/__lowercase_text__}}));
+{{@endif}}

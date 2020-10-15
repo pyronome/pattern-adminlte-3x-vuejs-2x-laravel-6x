@@ -1,0 +1,17 @@
+	{
+        "type":"recordgraph",
+        "model":"{{$ __value__}}",
+        "href":"",
+        "text":"{{$ __value__}} Graph",
+        "size":"12,12,12",
+        "visibility":"0",
+        "order":"9",
+        "icon":"empty",
+        "iconbackground":"",
+        "limit":"",
+        "onlylastrecord":"0",
+        "columns":"",
+        "values":"",
+        "graphtype":"daily",
+        "graphperiod":"6"
+    },

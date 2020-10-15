@@ -1,0 +1,6 @@
+	Route::prefix('{{$ __value__/__lowercase_text__}}')->group(function () {
+        Route::get('/get/{id}', '{{$ __value__}}Controller@get');
+		Route::get('/get_files/{id}', '{{$ __value__}}Controller@get_files');
+        Route::post('/delete', '{{$ __value__}}Controller@delete');
+		Route::post('/post', '{{$ __value__}}Controller@post');
+    });

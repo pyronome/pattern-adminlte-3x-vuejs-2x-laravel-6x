@@ -1,0 +1,3 @@
+{{@if {{$ __value__}} == "1"}}
+			'{{$ ../../name/__value__/__lowercase_text__}}' => 'required'
+{{@endif}}

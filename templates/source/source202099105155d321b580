@@ -1,0 +1,1 @@
+{{@if {{$ __value__}} == "1"}}v-input-mask data-inputmask-mask="{{$ ../input_mask/__value__}}"{{@endif}}
