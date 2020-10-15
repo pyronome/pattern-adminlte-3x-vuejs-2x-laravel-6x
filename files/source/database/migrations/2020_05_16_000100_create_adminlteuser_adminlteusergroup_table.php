@@ -30,7 +30,8 @@ class CreateAdminLTEUserAdminLTEUserGroupTable extends Migration
                 'fullname' => 'AdminLTE Root',
                 'username' => 'root',
                 'email' => 'root',
-                'password' => bcrypt('adminlte')
+                'password' => bcrypt('adminlte'),
+                'remember_token' => Str::random(10)
             )
         );
     }

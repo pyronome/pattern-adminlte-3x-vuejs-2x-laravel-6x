@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminLTE\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
 use App\Http\Requests\AdminLTE\API\LoginPOSTRequest;
@@ -25,7 +26,8 @@ class LoginController extends Controller
                 $request->input('email'))
                 ->first();
 
-        auth()->guard('adminlteuser')->login($adminLTEUser);
+        $remember = $request->input('remember');
+        auth()->guard('adminlteuser')->login($adminLTEUser, $remember);
 
         $landingPage = config('adminlte.landing_page');
 

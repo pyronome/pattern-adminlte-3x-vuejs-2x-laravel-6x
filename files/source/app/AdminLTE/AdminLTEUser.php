@@ -105,7 +105,7 @@ class AdminLTEUser extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password'
+        'password', 'remember_token'
     ];
 
     /* {{snippet:end_properties}} */

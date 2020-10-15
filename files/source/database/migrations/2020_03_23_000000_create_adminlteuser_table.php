@@ -34,6 +34,7 @@ class CreateAdminLTEUserTable extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password')->nullable();
+            $table->rememberToken();
         });
 
         Schema::create('adminlteuser__filetable', function (Blueprint $table) {
