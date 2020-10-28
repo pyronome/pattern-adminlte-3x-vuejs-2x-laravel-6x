@@ -66,7 +66,7 @@ export default {
     data() {
         return {
             main_folder: '',
-            id: 0,{{MODEL{{$ ../__item_index__/__value__}}_OPTION_DEFINITONS}},{{MODEL{{$ ../__item_index__/__value__}}_FILES_DEFINITON}}
+            id: 0,{{MODEL{{$ ../__item_index__/__value__}}_OPTION_DEFINITONS}}{{MODEL{{$ ../__item_index__/__value__}}_FILES_DEFINITON}}
 			{{$ __value__}}Form: new Form({
                 'debug_mode': false,
                 'id': this.id{{MODEL{{$ ../__item_index__/__value__}}_EDIT_COMPONENT_FORM_PROPERTIES}}

@@ -1008,7 +1008,7 @@
         "description":"edit.vue\/option definitions Class Selection",
         "base":"\/project\/model_list\/model\/property_list\/property\/property_type_ClassSelection",
         "enabled":"1",
-        "source":"source\/source202091013373067bd8769",
+        "source":"source\/components\/model\/edit\/selection_definition",
         "destination":"MODEL{{$ ..\/..\/..\/__item_index__\/__value__}}_OPTION_DEFINITONS",
         "temporary":"1",
         "skip_empty":"0",
