@@ -32,6 +32,10 @@ Route::namespace('API')
         ->group(function () {
 
     /* {{@snippet:begin_api_routes}} */
+    Route::prefix('adminlte')->group(function () {
+        Route::get('/get_page_variables/{componentName}', 'AdminLTEController@get_page_variables');
+    });
+    
     Route::prefix('login')->group(function () {
         Route::get('/get_brand_data', 'LoginController@get_brand_data');
         Route::post('/post', 'LoginController@post');

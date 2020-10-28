@@ -53,7 +53,7 @@ export default {
         initializePage() {
             $("#buttonWidgetConfig").addClass("d-none");
 
-            if (this.has_widgets && page_variables.show_widget_config_button) {
+            if (this.has_widgets && this.page_variables.show_widget_config_button) {
                 $("#buttonWidgetConfig").removeClass("d-none");
             }
         }
