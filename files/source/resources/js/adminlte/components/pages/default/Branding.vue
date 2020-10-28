@@ -71,6 +71,7 @@
                 </div>
             </div>
         </section>
+        <page-variables :has_widgets="false"></page-variables>
     </div>
 </template>
 

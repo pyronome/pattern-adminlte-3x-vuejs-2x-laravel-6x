@@ -139,6 +139,7 @@
                 </div>
             </div>
         </div>
+        <page-variables :has_widgets="false"></page-variables>
     </div>
 </template>
 

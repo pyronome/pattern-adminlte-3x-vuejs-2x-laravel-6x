@@ -239,6 +239,7 @@
                 <i class="fas fa-ban nav-icon text-red __ANTI_SH_CLASS__"></i>
             </td>
         </script>
+        <page-variables :has_widgets="false"></page-variables>
     </div>
 </template>
 

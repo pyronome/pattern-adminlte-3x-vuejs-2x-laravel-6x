@@ -44,6 +44,7 @@
         </section>
         <input type="hidden" id="controller" value="{{$ __value__/__lowercase_text__}}">
 		<image-display :init_image_display="init_image_display"></image-display>
+        <page-variables :has_widgets="false"></page-variables>
     </div>
 </template>
 

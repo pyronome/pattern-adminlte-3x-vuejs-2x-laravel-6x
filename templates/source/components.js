@@ -8,6 +8,7 @@ Vue.component('location-display', require('./components/elements/default/Locatio
 Vue.component('image-display', require('./components/elements/default/ImageDisplay.vue').default);
 Vue.component('widget-editor', require('./components/elements/default/WidgetEditor.vue').default);
 Vue.component('body-loader', require('./components/elements/default/BodyLoader.vue').default);
+Vue.component('page-variables', require('./components/elements/PageVariables.vue').default);
 
 /* {{@snippet:end_elements}} */
 /* Elements EOF */

@@ -21,6 +21,7 @@
             <widget-editor :pagename="pagename"></widget-editor>
         </section>
         <input type="hidden" id="controller" value="home">
+        <page-variables :has_widgets="true" pagename="Home"></page-variables>
     </div>
 </template>
 
