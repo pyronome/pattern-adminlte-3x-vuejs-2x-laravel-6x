@@ -1924,6 +1924,19 @@ class AdminLTE
 		return $lastInsertId;
 	}
 
+	public function is_table_exist($connection, $tablename) {
+		$tableExist = true;
+		$objPDO = $connection->prepare("SHOW TABLES LIKE '$tablename'");
+		$objPDO->execute();
+		$data = $objPDO->fetchAll();
+
+		if (empty($data)) {
+			$tableExist = false;
+		}
+
+		return $tableExist;
+	}
+
 	public function get_model_files($model, $object_id) {
 		// initialize connection
         try {
@@ -1935,27 +1948,30 @@ class AdminLTE
         $tablename = strtolower($model) . "__filetable";
         
         $files = array();
-        $index = 0;
-        
-        $selectSQL = "SELECT * FROM `". $tablename . "` WHERE `object_id`=:object_id ORDER BY file_index;";
-        $objPDO = $connection->prepare($selectSQL);
-        $objPDO->bindParam(':object_id', $object_id, PDO::PARAM_INT);
-        
-        $objPDO->execute();
-        $data = $objPDO->fetchAll();
+		
+		if ($this->is_table_exist($connection, $tablename)) {
+			$selectSQL = "SELECT * FROM `$tablename` WHERE `object_id`=:object_id ORDER BY file_index;";
 
-        foreach($data as $row) {
-            $files[$index]["id"] = $row["id"];
-            $files[$index]["object_property"] = $row["object_property"];
-            $files[$index]["file_name"] = $row["file_name"];
-            $files[$index]["path"] = $row["path"];
-            $files[$index]["media_type"] = $row["media_type"];
+			$objPDO = $connection->prepare($selectSQL);
+        	$objPDO->bindParam(':object_id', $object_id, PDO::PARAM_INT);
+			$objPDO->execute();
+			
+			$data = $objPDO->fetchAll();
+			$index = 0;
 
-            $fileNameTokens = explode('.', $row["file_name"]);
-            $files[$index]["extension"] = strtolower(end($fileNameTokens));
+			foreach($data as $row) {
+				$files[$index]["id"] = $row["id"];
+				$files[$index]["object_property"] = $row["object_property"];
+				$files[$index]["file_name"] = $row["file_name"];
+				$files[$index]["path"] = $row["path"];
+				$files[$index]["media_type"] = $row["media_type"];
 
-            $index++;
-        }
+				$fileNameTokens = explode('.', $row["file_name"]);
+				$files[$index]["extension"] = strtolower(end($fileNameTokens));
+
+				$index++;
+			}
+		}
 
         return $files;
 	}
