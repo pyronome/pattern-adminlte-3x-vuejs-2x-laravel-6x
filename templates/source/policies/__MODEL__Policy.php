@@ -1,0 +1,94 @@
+<?php
+
+namespace App\Policies;
+
+use App\AdminLTE\AdminLTEUser;
+use App\{{$ __value__}};
+use Illuminate\Auth\Access\HandlesAuthorization;
+
+class {{$ __value__}}Policy
+{
+    use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view any {{$ __value__/__lowercase_text__}}.
+     *
+     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @return mixed
+     */
+    public function viewAny(AdminLTEUser $user)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can view the {{$ __value__/__lowercase_text__}}.
+     *
+     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @return mixed
+     */
+    public function view(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can create {{$ __value__/__lowercase_text__}}.
+     *
+     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @return mixed
+     */
+    public function create(AdminLTEUser $user)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can update the {{$ __value__/__lowercase_text__}}.
+     *
+     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @return mixed
+     */
+    public function update(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can delete the {{$ __value__/__lowercase_text__}}.
+     *
+     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @return mixed
+     */
+    public function delete(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can restore the {{$ __value__/__lowercase_text__}}.
+     *
+     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @return mixed
+     */
+    public function restore(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can permanently delete the {{$ __value__/__lowercase_text__}}.
+     *
+     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @return mixed
+     */
+    public function forceDelete(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    {
+        //
+    }
+}
