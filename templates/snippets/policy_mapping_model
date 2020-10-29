@@ -1,1 +1,1 @@
-'App\{{$ __value__}}' => 'App\Policies\{{$ __value__}}Policy',
+        'App\{{$ __value__}}' => 'App\Policies\{{$ __value__}}Policy'

@@ -396,12 +396,12 @@
         "source":"snippets\/policy_mapping_model",
         "destination":"MODEL_POLICY_MAPPING",
         "temporary":"1",
-        "skip_empty":"0",
-        "skip_whitespace":"0",
+        "skip_empty":"1",
+        "skip_whitespace":"1",
         "remove_whitespace":"0",
         "append":"1",
-        "glue":"",
-        "prepend_crlf":"1",
+        "glue":",",
+        "prepend_crlf":"0",
         "append_crlf":"1"
     },
     {
