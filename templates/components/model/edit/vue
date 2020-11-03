@@ -149,7 +149,7 @@ export default {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
                     if (this.id > 0) {
-                        this.{{$ __value__}}Form.fill(data.list[0]);
+                        this.{{$ __value__}}Form.fill(data.object);
                     }
                     this.processLoadQueue();
                 }).catch(({ data }) => {

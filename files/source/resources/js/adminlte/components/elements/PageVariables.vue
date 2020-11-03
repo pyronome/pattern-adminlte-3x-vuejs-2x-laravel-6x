@@ -56,16 +56,29 @@ export default {
             if (this.has_widgets && this.page_variables.show_widget_config_button) {
                 $("#buttonWidgetConfig").removeClass("d-none");
             }
+
+            this.showHideMenuItem();
+        },
+        showHideMenuItem() {
+            if(this.page_variables.is_admin) {
+                $('li.nav-item').css("display", "block");
+            } else {
+                if ('undefined' !== typeof this.page_variables.user_permission_data.menu_permissions) {
+                    let menu_permissions = this.page_variables.user_permission_data.menu_permissions;
+                    Object.keys(menu_permissions).map((key) => {
+                        if (1 == menu_permissions[key]) {
+                            $('li.nav-item[data-href="' + key + '"').css("display", "block");
+                        } else {
+                            $('li.nav-item[data-href="' + key + '"').css("display", "none");
+                        }
+                    });
+                }
+            }
         }
     },
     mounted() {
         this.page.is_ready = false;
-
-        if (this.has_widgets) {
-            this.processLoadQueue();
-        } else {
-            this.initializePage();
-        }
+        this.processLoadQueue();
     }
 }
 </script>

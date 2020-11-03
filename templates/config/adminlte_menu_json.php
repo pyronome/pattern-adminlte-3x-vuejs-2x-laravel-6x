@@ -8,7 +8,7 @@ return '[
     },
     {
         "text": "Contents",
-        "href": "",
+        "href": "contents",
         "icon": "fas fa-align-justify",
         "visibility": "1",
         "children": [
@@ -17,7 +17,7 @@ return '[
     },
     {
         "text": "Configuration",
-        "href": "",
+        "href": "configuration",
         "icon": "fas fa-cog",
         "visibility": "1",
         "children": [
@@ -27,7 +27,7 @@ return '[
                 "icon": "fas fa-server",
                 "visibility": "1"
             },
-			{
+            {
                 "text": "Preferences",
                 "href": "preferences",
                 "icon": "fas fa-asterisk",
@@ -39,7 +39,7 @@ return '[
                 "icon": "fas fa-atom",
                 "visibility": "1"
             },
-			{
+            {
                 "text": "Branding",
                 "href": "branding",
                 "icon": "fas fa-bold",

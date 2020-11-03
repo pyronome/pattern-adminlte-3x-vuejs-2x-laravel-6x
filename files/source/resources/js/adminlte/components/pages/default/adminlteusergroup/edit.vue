@@ -9,8 +9,8 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
-                            <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteusergroup'">{{ $t("AdminLTE User Group List") }}</router-link></li>
-                            <li class="breadcrumb-item active">{{ $t("AdminLTE User Group Edit") }}</li>
+                            <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteusergroup'">{{ $t("User Group List") }}</router-link></li>
+                            <li class="breadcrumb-item active">{{ $t("User Group Edit") }}</li>
                         </ol>
                     </div>
                 </div>
@@ -46,6 +46,18 @@
                                                     v-model="AdminLTEUserGroupForm.enabled"/>
                                                 <label for="AdminLTEUserGroupForm_enabled" class="detail-label">
                                                     {{ $t('Enabled') }}  
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox"
+                                                    id="AdminLTEUserGroupForm_admin"
+                                                    name="AdminLTEUserGroupForm_admin"
+                                                    class=""
+                                                    v-model="AdminLTEUserGroupForm.admin"/>
+                                                <label for="AdminLTEUserGroupForm_admin" class="detail-label">
+                                                    {{ $t('Admin') }}  
                                                 </label>
                                             </div>
                                         </div>
@@ -89,6 +101,7 @@
             </div>
         </section>
         <input type="hidden" id="controller" value="adminlteusergroup">
+        <page-variables :has_widgets="false"></page-variables>
     </div>
 </template>
 
@@ -102,7 +115,8 @@ export default {
 			AdminLTEUserGroupForm: new Form({
                 'debug_mode': false,
                 'id': this.id,
-				'enabled': false,
+                'enabled': false,
+                'admin': false,
                 'widget_permission': false,
                 'title': ''
             }),
@@ -144,7 +158,7 @@ export default {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
                     if (this.id > 0) {
-                        this.AdminLTEUserGroupForm.fill(data.list[0]);
+                        this.AdminLTEUserGroupForm.fill(data.list);
                     }
                     this.processLoadQueue();
                 }).catch(({ data }) => {

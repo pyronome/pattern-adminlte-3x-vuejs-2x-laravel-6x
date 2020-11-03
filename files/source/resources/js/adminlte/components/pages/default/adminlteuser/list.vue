@@ -9,7 +9,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
-                        <li class="breadcrumb-item active">{{ $t("AdminLTE User List") }}</li>
+                        <li class="breadcrumb-item active">{{ $t("User List") }}</li>
                     </ol>
                 </div>
                 </div>
@@ -21,6 +21,7 @@
         <section>
             <widget-editor :pagename="pagename"></widget-editor>
         </section>
+        <page-variables :has_widgets="true"></page-variables>
         <input type="hidden" id="controller" value="adminlteuser">
     </div>
 </template>

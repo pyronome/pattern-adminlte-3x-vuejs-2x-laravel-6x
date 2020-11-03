@@ -30,6 +30,7 @@ class CreateAdminLTEUserGroupTable extends Migration
             $table->timestamps();
             $table->boolean('deleted')->default(0);
             $table->boolean('enabled')->default(0);
+            $table->boolean('admin')->default(0);
             $table->string('title')->nullable();
             $table->boolean('widget_permission')->default(0);
         });
@@ -42,6 +43,7 @@ class CreateAdminLTEUserGroupTable extends Migration
                 'updated_at' => now(),
                 'title' => 'Administrators',
                 'enabled' => 1,
+                'admin' => 1,
                 'widget_permission' => 1
             )
         );
@@ -54,6 +56,7 @@ class CreateAdminLTEUserGroupTable extends Migration
                 'updated_at' => now(),
                 'title' => 'Users',
                 'enabled' => 1,
+                'admin' => 0,
                 'widget_permission' => 1
             )
         );

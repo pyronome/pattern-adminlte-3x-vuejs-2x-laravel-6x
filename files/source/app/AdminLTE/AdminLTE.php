@@ -11,6 +11,7 @@ use App\AdminLTE\AdminLTEUserLayout;
 use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTEModelDisplayText;
 use App\AdminLTE\AdminLTEModelOption;
+use App\AdminLTE\AdminLTEPermission;
 use PDO;
 
 /* {{snippet:begin_class}} */
@@ -19,6 +20,16 @@ class AdminLTE
 {
 
 	/* {{snippet:begin_properties}} */
+	public $system_models = [
+		'AdminLTE',
+		'AdminLTELayout',
+		'AdminLTEModelDisplayText',
+		'AdminLTEModelOption',
+		'AdminLTEUserLayout',
+		'AdminLTEVariable',
+		'AdminLTEPermission',
+		'User'
+	];
 
 	/* {{snippet:end_properties}} */
 
@@ -481,7 +492,6 @@ class AdminLTE
 			if (1 == $menuArray[$i]['visibility']) {
 				if (!isset($menuArray[$i]['children'])) {
 					$Menu[$main_index]['id'] = 'p' . $i;
-					$Menu[$main_index]['permission_token'] = $menuArray[$i]['href'];
 					$Menu[$main_index]['url'] = $menuArray[$i]['href'];
 					$Menu[$main_index]['href'] = $menuArray[$i]['href'];
 					$Menu[$main_index]['title'] = $menuArray[$i]['text'];
@@ -496,9 +506,8 @@ class AdminLTE
 					$main_index++;
 				} else {
 					$Menu[$main_index]['id'] = 'p' . $i;
-					$Menu[$main_index]['permission_token'] = '';
 					$Menu[$main_index]['url'] = '';
-					$Menu[$main_index]['href'] = '';
+					$Menu[$main_index]['href'] = $menuArray[$i]['href'];
 					$Menu[$main_index]['title'] = $menuArray[$i]['text'];
 					
 					$icon = $menuArray[$i]['icon'];
@@ -508,17 +517,14 @@ class AdminLTE
 
 					$Menu[$main_index]['icon'] = $icon;
 					$Menu[$main_index]['children'] = array();
-					$parentPermissionToken = '';
 					$childrenMenu = array();
 					$sub_index = 0;
 
 					$subMenuArray = $menuArray[$i]['children'];
 					$countSubmenuArray = count($subMenuArray);
 					for ($j=0; $j < $countSubmenuArray; $j++) {
-						$parentPermissionToken .= $subMenuArray[$j]['href'];
 						if (1 == $subMenuArray[$j]['visibility']) {
 							$childrenMenu[$sub_index]['id'] = 'c' . $j;
-							$childrenMenu[$sub_index]['permission_token'] = $subMenuArray[$j]['href'];
 							$childrenMenu[$sub_index]['url'] = $subMenuArray[$j]['href'];
 							$childrenMenu[$sub_index]['href'] = $subMenuArray[$j]['href'];
 							$childrenMenu[$sub_index]['title'] = $subMenuArray[$j]['text'];
@@ -535,7 +541,6 @@ class AdminLTE
 					} // for ($j=0; $j < $countSubmenuArray; $j++) {
 
 					$Menu[$main_index]['children'] = $childrenMenu;
-					$Menu[$main_index]['permission_token'] = $parentPermissionToken;
 					$main_index++;
 				} // if (0 == count($menuArray[$i]['subMenus'])) {
 			} // if ($menuArray[$i]['visibility']) {
@@ -545,24 +550,24 @@ class AdminLTE
 
 	}
 
-	public function getUserMenuPermission($adminLTEUser)
+	public function getUserMenuPermission()
 	{
+		$user = auth()->guard('adminlteuser')->user();
+
 		$permissions = [];
 		$joinedPermissions = []; // join group and user permissions
 		
 		// group permissions
 		// add group permissions
 
-		$adminLTEUserGroup = AdminLTEUserGroup::find(
-				$adminLTEUser->adminlteusergroup_id);
+		$userGroup = AdminLTEUserGroup::find($user->adminlteusergroup_id);
 		
 		$decodedPermission = '';
 
-		if ($adminLTEUserGroup != null)
+		if ($userGroup != null)
 		{
-			$decodedPermission = $this->base64Decode(
-					$adminLTEUserGroup->menu_permission);
-		} // if ($adminLTEUserGroup != null)
+			$decodedPermission = $this->base64Decode($userGroup->permission_data);
+		} // if ($userGroup != null)
 
 		if ('' != $decodedPermission)
 		{
@@ -580,8 +585,7 @@ class AdminLTE
 		
 		// user permissions
 		// remove group permissions
-		$decodedPermission = $this->base64Decode(
-				$adminLTEUser->menu_permission);
+		$decodedPermission = $this->base64Decode($user->permission_data);
 
 		if ('' != $decodedPermission)
 		{
@@ -740,18 +744,7 @@ class AdminLTE
 
 	public function getModelList($exceptions = [])
 	{
-		if (0 == count($exceptions))
-		{
-			$exceptions = [
-				'AdminLTE',
-				'AdminLTELayout',
-				'AdminLTEModelDisplayText',
-				'AdminLTEModelOption',
-				'AdminLTEUserLayout',
-				'AdminLTEVariable',
-				'User'
-			];
-		} // if (0 == count($exceptions))
+		$exceptions = empty($exceptions) ? $this->system_models : $exceptions;
 		
 		$Models = array();
 		$index = 0;
@@ -1670,15 +1663,7 @@ class AdminLTE
 
 		$displayTexts = [];
 		
-		$exceptions = [
-			'AdminLTE',
-			'AdminLTELayout',
-			'AdminLTEModelDisplayText',
-			'AdminLTEModelOption',
-			'AdminLTEUserLayout',
-			'AdminLTEVariable',
-			'User'
-		];
+		$exceptions = $this->system_models;
 
 		$Models = $this->getModelList($exceptions);
 		$countModels = count($Models);
@@ -2334,6 +2319,40 @@ class AdminLTE
 		$query = $query->from($subquery)->groupBy('id');
 
 		return $query;
+	}
+
+	public function getUserGroupPermissions($usergroup_id) {
+		$permission_data = [];
+		$index = 0;
+
+		$objectPermissionList = AdminLTEPermission::where('deleted', 0)
+                ->where('usergroup_id', $usergroup_id)
+				->get();
+
+		foreach ($objectPermissionList as $objectPermission) {
+			$permission_data[$index]['meta_key'] = $objectPermission->meta_key;
+			$permission_data[$index]['permissions'] = json_decode($this->base64decode($objectPermission->permissions), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			$index++;
+		}
+
+		return $permission_data;
+	}
+
+	public function getUserPermissions($user_id) {
+		$permission_data = [];
+		$index = 0;
+
+		$objectPermissionList = AdminLTEPermission::where('deleted', 0)
+                ->where('user_id', $user_id)
+				->get();
+
+		foreach ($objectPermissionList as $objectPermission) {
+			$permission_data[$index]['meta_key'] = $objectPermission->meta_key;
+			$permission_data[$index]['permissions'] = json_decode($this->base64decode($objectPermission->permissions), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			$index++;
+		}
+
+		return $permission_data;
 	}
 	/* {{snippet:end_methods}} */
 }

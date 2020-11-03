@@ -10,7 +10,7 @@
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
                             <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteuser'">{{ $t("AdminLTE User List") }}</router-link></li>
-                            <li class="breadcrumb-item active">{{ $t("AdminLTE User Detail") }}</li>
+                            <li class="breadcrumb-item active">{{ $t("User Detail") }}</li>
                         </ol>
                     </div>
                 </div>
@@ -27,6 +27,11 @@
                                         class="btn btn-primary btn-xs btn-on-table text-white"
                                         :to="'/' + main_folder + '/adminlteuser/edit/' + id">
                                         <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Edit') }}</span>
+                                    </router-link>
+                                    <router-link tag="a"
+                                        class="btn btn-primary btn-xs btn-on-table text-white"
+                                        :to="'/' + main_folder + '/adminlteuser/permission/' + id">
+                                        <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Permissions') }}</span>
                                     </router-link>
                                 </div>
                             </div>
@@ -67,6 +72,7 @@
         </section>
         <input type="hidden" id="controller" value="adminlteuser">
 		<image-display :init_image_display="init_image_display"></image-display>
+        <page-variables :has_widgets="false"></page-variables>
     </div>
 </template>
 
@@ -99,7 +105,7 @@ export default {
                 .then(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
-                    this.data = data.list[0];
+                    this.data = data.list;
                 }).catch(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;

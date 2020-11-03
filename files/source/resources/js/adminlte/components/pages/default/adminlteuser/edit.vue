@@ -10,7 +10,7 @@
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
                             <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteuser'">{{ $t("AdminLTEUser List") }}</router-link></li>
-                            <li class="breadcrumb-item active">{{ $t("AdminLTEUser Edit") }}</li>
+                            <li class="breadcrumb-item active">{{ $t("User Edit") }}</li>
                         </ol>
                     </div>
                 </div>
@@ -140,6 +140,7 @@
         </section>
         <input type="hidden" id="controller" value="adminlteuser">
         <dropzone upload-url="/api/media/post" style="display:none;"></dropzone>
+        <page-variables :has_widgets="false"></page-variables>
     </div>
 </template>
 
@@ -256,7 +257,7 @@ export default {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
                     if (this.id > 0) {
-                        this.AdminLTEUserForm.fill(data.list[0]);
+                        this.AdminLTEUserForm.fill(data.list);
                     }
                     this.processLoadQueue();
                 }).catch(({ data }) => {

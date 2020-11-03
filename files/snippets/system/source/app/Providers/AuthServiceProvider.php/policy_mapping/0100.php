@@ -1,0 +1,1 @@
+		'App\AdminLTE\AdminLTE' => 'App\Policies\AdminLTEPolicy',

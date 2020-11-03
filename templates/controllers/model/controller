@@ -13,7 +13,7 @@ class {{$ __value__}}Controller extends Controller
 {
 	public function get(Request $request)
     {    
-        $list = [];
+        $data = [];
         
         $parameters = $request->route()->parameters();
 
@@ -22,9 +22,9 @@ class {{$ __value__}}Controller extends Controller
             : 0;
 
 
-        if (0 == $id) {
+        if ($id <= 0) {
             return;
-        } // if (!isset($parameters['id'])) {
+        } // if ($id <= 0) {
         
         // is new ?
         if ('new' == htmlspecialchars($parameters['id'])) {
@@ -32,32 +32,27 @@ class {{$ __value__}}Controller extends Controller
         } // if (isset($parameters['id']) && ('new' == htmlspecialchars($parameters['id']))) {
 
         if ($id > 0) {
-            $object{{$ __value__}}List[] = {{$ __value__}}::where('id', $id)->first();
+            $object{{$ __value__}} = {{$ __value__}}::where('id', $id)->where('deleted', 0)->first();
         }
+        
+
 
         $objectAdminLTE = new AdminLTE();
-        $object{{$ __value__}} = NULL;
-        $index = 0;
 
-        foreach ($object{{$ __value__}}List as $object{{$ __value__}})
-        {
-            $displayTexts = $objectAdminLTE->getObjectDisplayTexts('{{$ __value__}}', $object{{$ __value__}});
+        $displayTexts = $objectAdminLTE->getObjectDisplayTexts('{{$ __value__}}', $object{{$ __value__}});
 
-            $list[$index]['id'] = $object{{$ __value__}}->id;
-            $list[$index]['id__displaytext__'] = $displayTexts['id'];
-            $list[$index]['deleted'] = $object{{$ __value__}}->deleted;
-            $list[$index]['deleted__displaytext__'] = $displayTexts['deleted'];
-            $list[$index]['created_at'] = $object{{$ __value__}}->created_at;
-            $list[$index]['created_at__displaytext__'] = $displayTexts['created_at'];
-            $list[$index]['updated_at'] = $object{{$ __value__}}->updated_at;
-            $list[$index]['updated_at__displaytext__'] = $displayTexts['updated_at'];
+        $data['id'] = $object{{$ __value__}}->id;
+        $data['id__displaytext__'] = $displayTexts['id'];
+        $data['deleted'] = $object{{$ __value__}}->deleted;
+        $data['deleted__displaytext__'] = $displayTexts['deleted'];
+        $data['created_at'] = $object{{$ __value__}}->created_at;
+        $data['created_at__displaytext__'] = $displayTexts['created_at'];
+        $data['updated_at'] = $object{{$ __value__}}->updated_at;
+        $data['updated_at__displaytext__'] = $displayTexts['updated_at'];
 {{MODEL{{$ ../__item_index__/__value__}}_GET_SERVICE_ROWS}}
 
-            $index++;
-        } // foreach ($object{{$ __value__}}List as $object{{$ __value__}})
-
         return [
-            'list' => $list
+            'object' => $data
         ];
     }
 

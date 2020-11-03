@@ -20,6 +20,7 @@ class AdminLTEUserGroup extends Model
 
     protected $fillable = [
         'enabled',
+        'admin',
         'title',
         'widget_permission'
     ];
@@ -54,6 +55,12 @@ class AdminLTEUserGroup extends Model
             'type' => 'checkbox',
             'belongs_to' => 'AdminLTEUserGroup',
             'display_property' => 'enabled'
+        ],
+        [
+            'name' => 'admin',
+            'type' => 'checkbox',
+            'belongs_to' => 'AdminLTEUserGroup',
+            'display_property' => 'admin'
         ],
         [
             'name' => 'title',

@@ -34,6 +34,7 @@ Route::namespace('API')
     /* {{@snippet:begin_api_routes}} */
     Route::prefix('adminlte')->group(function () {
         Route::get('/get_page_variables/{componentName}', 'AdminLTEController@get_page_variables');
+        Route::get('/get_permission_form', 'AdminLTEController@get_permission_form');
     });
     
     Route::prefix('login')->group(function () {
@@ -83,14 +84,18 @@ Route::namespace('API')
     Route::prefix('adminlteusergroup')->group(function () {
         Route::get('/get/{id}', 'AdminLTEUserGroupController@get');
         Route::post('/delete', 'AdminLTEUserGroupController@delete');
-		Route::post('/post', 'AdminLTEUserGroupController@post');
+        Route::post('/post', 'AdminLTEUserGroupController@post');
+        Route::get('/get_permission_data/{id}', 'AdminLTEUserGroupController@get_permission_data');
+        Route::post('/post_permission_data', 'AdminLTEUserGroupController@post_permission_data');
     });
 
     Route::prefix('adminlteuser')->group(function () {
         Route::get('/get/{id}', 'AdminLTEUserController@get');
-		Route::get('/get_files/{id}', 'AdminLTEUserController@get_files');
+        Route::get('/get_files/{id}', 'AdminLTEUserController@get_files');
         Route::post('/delete', 'AdminLTEUserController@delete');
-		Route::post('/post', 'AdminLTEUserController@post');
+        Route::post('/post', 'AdminLTEUserController@post');
+        Route::get('/get_permission_data/{id}', 'AdminLTEUserController@get_permission_data');
+        Route::post('/post_permission_data', 'AdminLTEUserController@post_permission_data');
     });
 
     Route::prefix('__pagepermission')->group(function () {

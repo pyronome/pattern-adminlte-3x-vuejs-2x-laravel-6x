@@ -77,7 +77,7 @@ export default {
                 .then(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
-                    this.data = data.list[0];
+                    this.data = data.object;
                 }).catch(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;

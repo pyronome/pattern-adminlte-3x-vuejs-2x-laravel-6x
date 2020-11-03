@@ -1,27 +1,27 @@
 {{@if {{$ ../property_type/__value__}} == "ClassSelection" }}
 	{{@if {{$ ../selection_properties/property_model_multiple_selection/__value__}} == "0"}}
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = array($object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}});
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
+            $data['{{$ ../name/__value__/__lowercase_text__}}'] = array($object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}});
+            $data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
 	{{@else}}
 			$external_ids = array();
 			foreach ($object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}} as $externalObject) {
                 $external_ids[] = $externalObject->id;
             }
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = $external_ids;
-			$list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
+            $data['{{$ ../name/__value__/__lowercase_text__}}'] = $external_ids;
+			$data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
 	{{@endif}}
 {{@elseif {{$ ../property_type/__value__}} == "Selection" }}
 	{{@if {{$ ../selection_properties/property_model_multiple_selection/__value__}} == "0"}}
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = array($object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}});
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
+            $data['{{$ ../name/__value__/__lowercase_text__}}'] = array($object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}});
+            $data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
 	{{@else}}
 			$external_ids = array();
 			foreach ($object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}} as $externalObject) {
                 $external_ids[] = $externalObject->id;
             }
 
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = $external_ids;
-			$list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
+            $data['{{$ ../name/__value__/__lowercase_text__}}'] = $external_ids;
+			$data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
 	{{@endif}}
 {{@elseif {{$ ../property_type/__value__}} == "FileList" }}
 
@@ -36,8 +36,8 @@
                 $current_external_value = implode(',', $external_ids);
             }
 
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = $current_external_value;
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
+            $data['{{$ ../name/__value__/__lowercase_text__}}'] = $current_external_value;
+            $data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
 {{@elseif {{$ ../property_type/__value__}} == "ImageList" }}
 			
 			$external_ids = array();
@@ -51,11 +51,11 @@
                 $current_external_value = implode(',', $external_ids);
             }
 
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = $current_external_value;
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
+            $data['{{$ ../name/__value__/__lowercase_text__}}'] = $current_external_value;
+            $data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
 {{@elseif {{$ ../property_type/__value__}} == "Location" }}
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = $object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}};
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
+            $data['{{$ ../name/__value__/__lowercase_text__}}'] = $object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}};
+            $data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
 
             $latitude = 41.015;
             $longitude = 28.979;
@@ -66,18 +66,18 @@
                 $longitude = $arrTemp[1];
             } // if (isset($arrTemp[1])) {
         
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}_latitude'] = $latitude;
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}_longitude'] = $longitude;
+            $data['{{$ ../name/__value__/__lowercase_text__}}_latitude'] = $latitude;
+            $data['{{$ ../name/__value__/__lowercase_text__}}_longitude'] = $longitude;
 {{@elseif {{$ ../property_type/__value__}} == "DateTime" }}
-			$list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = $objectAdminLTE->getFormattedDatetime($object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}});
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
+			$data['{{$ ../name/__value__/__lowercase_text__}}'] = $objectAdminLTE->getFormattedDatetime($object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}});
+            $data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
 {{@elseif {{$ ../property_type/__value__}} == "Switch" }}
-			$list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = (1 == $object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}});
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
+			$data['{{$ ../name/__value__/__lowercase_text__}}'] = (1 == $object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}});
+            $data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
 {{@elseif {{$ ../property_type/__value__}} == "Password" }}
-			$list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = '';
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = '******';
+			$data['{{$ ../name/__value__/__lowercase_text__}}'] = '';
+            $data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = '******';
 {{@else}}
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}'] = $object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}};
-            $list[$index]['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
+            $data['{{$ ../name/__value__/__lowercase_text__}}'] = $object{{$ ../../../name/__value__}}->{{$ ../name/__value__/__lowercase_text__}};
+            $data['{{$ ../name/__value__/__lowercase_text__}}__displaytext__'] = $displayTexts['{{$ ../name/__value__/__lowercase_text__}}'];
 {{@endif}}

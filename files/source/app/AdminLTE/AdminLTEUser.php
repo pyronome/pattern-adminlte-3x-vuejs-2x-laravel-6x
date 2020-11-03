@@ -133,6 +133,16 @@ class AdminLTEUser extends Authenticatable
         return false;
     }
 
+    public function is_admin() {
+        $objectAdminLTEUserGroup = AdminLTEUserGroup::find($this->adminlteusergroup_id);
+                
+        if (null != $objectAdminLTEUserGroup) {
+            return (1 == $objectAdminLTEUserGroup->admin);
+        }
+
+        return false;
+    }
+
     /* {{snippet:end_methods}} */
 }
 
