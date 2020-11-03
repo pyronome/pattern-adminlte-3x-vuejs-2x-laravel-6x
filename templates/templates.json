@@ -364,7 +364,7 @@
         "base":"\/project",
         "enabled":"1",
         "source":"snippets\/policy_mapping",
-        "destination":"\/snippets\/system\/source\/app\/Providers\/AuthServiceProvider.php\/policy_mapping\/0010.php",
+        "destination":"\/snippets\/system\/source\/app\/Providers\/AuthServiceProvider.php\/policy_mapping\/0200.php",
         "temporary":"0",
         "skip_empty":"0",
         "skip_whitespace":"0",
