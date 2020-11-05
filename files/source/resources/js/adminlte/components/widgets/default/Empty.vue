@@ -7,7 +7,7 @@
     export default {
         mounted() {
             this.$nextTick(() => {
-                this.$root.$emit("widget-rendered", '', 'empty');
+                this.$root.$emit("widget-rendered", "", "empty");
             });
         }
     }

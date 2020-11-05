@@ -39,7 +39,7 @@
                 this.loadData();
             });     
             this.$nextTick(() => {
-                this.$root.$emit("widget-rendered", this.model, 'infobox');
+                this.$root.$emit("widget-rendered", this.model, "infobox");
             });       
         },
         updated() {

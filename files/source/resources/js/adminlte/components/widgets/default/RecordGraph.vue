@@ -64,7 +64,7 @@
             });
 
             this.$nextTick(() => {
-                this.$root.$emit("widget-rendered", this.model, 'recordgraph');
+                this.$root.$emit("widget-rendered", this.model, "recordgraph");
             });
         },
         updated() {

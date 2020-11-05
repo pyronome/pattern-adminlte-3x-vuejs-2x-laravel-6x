@@ -274,7 +274,7 @@
             });
 
             this.$nextTick(() => {
-                this.$root.$emit("widget-rendered", this.model, 'recordlist');
+                this.$root.$emit("widget-rendered", this.model, "recordlist");
             });
         },
         updated() {
