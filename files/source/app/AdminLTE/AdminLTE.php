@@ -2354,6 +2354,49 @@ class AdminLTE
 
 		return $permission_data;
 	}
+
+	public function getUserPermissionData() {
+		$User = auth()->guard('adminlteuser')->user();
+		$UserGroupPermissions = $this->getUserGroupPermissions($User->adminlteusergroup_id);
+		$UserPermissions = $this->getUserPermissions($User->id);
+
+		$Permissions = [];
+		
+		foreach ($UserGroupPermissions as $permission) {
+			$meta_key = $permission['meta_key'];
+			$Permissions[$meta_key] = [];
+			
+			foreach ($permission['permissions'] as $token => $value) {
+				$Permissions[$meta_key][$token] = false;
+
+				if ('Y' == $value) {
+					$Permissions[$meta_key][$token] = true;
+				}				
+			}
+		}
+
+		foreach ($UserPermissions as $permission) {
+			$meta_key = $permission['meta_key'];
+
+			if (!isset($Permissions[$meta_key])) {
+				$Permissions[$meta_key] = [];
+			}
+			
+			foreach ($permission['permissions'] as $token => $value) {
+				if (!isset($Permissions[$meta_key][$token])) {
+					$Permissions[$meta_key][$token] = false;
+				}
+
+				if ('Y' == $value) {
+					$Permissions[$meta_key][$token] = true;
+				} else if ('N' == $value) {
+					$Permissions[$meta_key][$token] = false;
+				}
+			}
+		}
+ 
+		return $Permissions;
+	}
 	/* {{snippet:end_methods}} */
 }
 

@@ -21,7 +21,6 @@
         <section>
             <widget-editor :pagename="pagename"></widget-editor>
         </section>
-        <page-variables :has_widgets="true"></page-variables>
         <input type="hidden" id="controller" value="adminlteuser">
     </div>
 </template>

@@ -15,13 +15,12 @@
             </div>
         </section>
         <section class="container-fluid">
-            <widgets :widgets="widgets" :pagename="pagename"></widgets>
+            <widgets :widgets="widgets" pagename="home"></widgets>
         </section>
         <section>
-            <widget-editor :pagename="pagename"></widget-editor>
+            <widget-editor pagename="home"></widget-editor>
         </section>
         <input type="hidden" id="controller" value="home">
-        <page-variables :has_widgets="true" pagename="Home"></page-variables>
     </div>
 </template>
 
@@ -31,7 +30,7 @@ export default {
     data() {
         return {
             widgets: [],
-            pagename: '',
+            main_folder: '',
             page: {
                 is_ready: false,
                 is_widgets_loading: false,
@@ -61,7 +60,6 @@ export default {
                     this.page.is_widgets_loaded = true;
                     this.page.is_widgets_loading = false;
                     this.widgets = data;
-                    this.pagename = 'home';
                     this.processLoadQueue();
                 }).catch(({ data }) => {
                     this.page.is_widgets_loaded = true;
@@ -72,6 +70,7 @@ export default {
         }
     },
     mounted() {
+        this.main_folder = AdminLTEHelper.getMainFolder();
         this.page.is_ready = false;
         this.processLoadQueue();
     }

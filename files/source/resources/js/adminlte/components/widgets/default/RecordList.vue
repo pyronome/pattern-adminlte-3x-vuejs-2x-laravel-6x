@@ -30,7 +30,7 @@
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th class="text-center show_by_permission_must_update">
+                                <th class="text-center sbp-item" :model-permission-token="model + '-delete'">
                                     <div class="icheck-primary d-inline">
                                         <input type="checkbox"
                                             @click="select_all_row($event.target)"
@@ -61,7 +61,9 @@
                                     </button>
                                 </th>
                                 <th class="text-center th-btn-1">
-                                    <router-link :id="'buttonNew' + model" class="btn btn-primary btn-xs btn-on-table show_by_permission_must_update"
+                                    <router-link :id="'buttonNew' + model" class="btn btn-primary btn-xs btn-on-table sbp-item"
+                                        :menu-permission-token="model.toLowerCase()"
+                                        :model-permission-token="model + '-create'"
                                         :to="'/' + main_folder + '/' + (model.toLowerCase()) + '/edit/new'">
                                         <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ $t('Add') }}</span>
                                     </router-link>
@@ -69,16 +71,17 @@
                                     <button type="button"
                                         :id="'buttonDelete' + model"
                                         @click="deleteSelectedRows($event.target, model)"
-                                        class="btn btn-danger btn-xs btn-on-table button-model-delete show_by_permission_must_update"
+                                        class="btn btn-danger btn-xs btn-on-table button-model-delete sbp-item"
+                                        :model-permission-token="model + '-delete'"
                                         style="display:none;">
                                         <i class="fa fa-trash"></i> <span class="hidden-xxs">{{ $t('Delete') }}</span> <span class="selected-count"></span>
                                     </button>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="'tbody' + model + 'RecordList'">
+                        <tbody :id="'tbody' + model + 'RecordList'">
                             <tr v-for="row in list" :key="row.id">
-                                <td class="text-center show_by_permission_must_update">
+                                <td class="text-center sbp-item" :model-permission-token="model + '-delete'">
                                     <div class="icheck-primary d-inline">
                                         <input type="checkbox"
                                             @click="select_row($event.target)"
@@ -92,7 +95,9 @@
                                 <td v-for="(displaytext, index) in row.displaytexts" :key="index" v-html="displaytext">
                                 </td>
                                 <td class="text-center">
-                                    <router-link class="btn btn-outline-primary btn-xs btn-on-table"
+                                    <router-link class="btn btn-outline-primary btn-xs btn-on-table sbp-item"
+                                        :menu-permission-token="model.toLowerCase()"
+                                        :model-permission-token="model + '-read'"
                                         :to="'/' + main_folder + '/' + (model.toLowerCase()) + '/detail/' + row.id">
                                         <i class="fa fa-info-circle"></i> <span class="hidden-xxs">{{ $t('Detail') }}</span>
                                     </router-link>
@@ -109,6 +114,7 @@
                 </pagination>
             </div>
         </div>
+        
     </div>
 </template>
 
@@ -266,11 +272,13 @@
             this.loadData(function(){
                 AdminLTEHelper.setDefaultSortButton("button_sort_" + self.$attrs.model + "_id");
             });
+
+            this.$nextTick(() => {
+                this.$root.$emit("widget-rendered", this.model, 'recordlist');
+            });
         },
         updated() {
-            this.$nextTick(() => {
-                this.$root.$emit("widgetComponentRendered");
-            });
+            
         }
     }
 </script>

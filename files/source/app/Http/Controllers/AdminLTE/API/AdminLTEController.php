@@ -26,12 +26,8 @@ class AdminLTEController extends Controller
 
         // widget edit button
         $show_widget_config_button = false;
-        $exceptions = ['AdminLTEModelDisplayText', 'Branding', 'EmailServer', 'GeneralSettings', 'MenuConfiguration', 'Preferences', 'ServerInformation'];
-    
-        if (!in_array($componentName, $exceptions)) {
-            if (Gate::allows('editWidget')) {
-                $show_widget_config_button = true;        
-            }
+        if (Gate::allows('editWidget')) {
+            $show_widget_config_button = true;        
         }
 
         // is user admin ?
@@ -39,30 +35,14 @@ class AdminLTEController extends Controller
         if (Gate::allows('isAdmin')) {
             $admin = true;
         }
-        // menu permission
-        /* $menu_permission = $objectAdminLTE->getUserMenuPermission();
-
-        dd($menu_permission); */
         
-        $userDataJSON = '
-            {
-                "menu_permissions": {
-                    "home": 1,
-                    "contents": 0,
-                    "settings": 1,
-                    "general_settings": 0,
-                    "preferences": 1,
-                    "logout":1
-                }
-            }
-        ';
-    
-        $user_permission_data = json_decode($userDataJSON, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+        // Permissions
+        $permissions = $objectAdminLTE->getUserPermissionData();
 
         return [
             'is_admin' => $admin,
             'show_widget_config_button' => $show_widget_config_button,
-            'user_permission_data' => $user_permission_data
+            'permissions' => $permissions
         ];
     }
 

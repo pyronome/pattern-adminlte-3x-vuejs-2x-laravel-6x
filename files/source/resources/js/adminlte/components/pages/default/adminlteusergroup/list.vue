@@ -21,7 +21,6 @@
         <section>
             <widget-editor :pagename="pagename"></widget-editor>
         </section>
-        <page-variables :has_widgets="true"></page-variables>
         <input type="hidden" id="controller" value="adminlteusergroup">
     </div>
 </template>
@@ -62,7 +61,8 @@ export default {
                     this.page.is_widgets_loaded = true;
                     this.page.is_widgets_loading = false;
                     this.widgets = data;
-					this.pagename = 'adminlteusergroup';
+                    this.pagename = 'adminlteusergroup';
+                    console.log("widgets loaded");
                     this.processLoadQueue();
                 }).catch(({ data }) => {
                     this.page.is_widgets_loaded = true;

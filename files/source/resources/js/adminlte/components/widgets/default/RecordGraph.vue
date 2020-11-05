@@ -15,6 +15,7 @@
                 <canvas :id="this.model + 'RecordGraphContainer'"></canvas>
             </div>
         </div>
+        
     </div>
 </template>
 
@@ -61,11 +62,13 @@
             this.$root.$on(eventName, () => {
                 this.loadData();
             });
+
+            this.$nextTick(() => {
+                this.$root.$emit("widget-rendered", this.model, 'recordgraph');
+            });
         },
         updated() {
-            this.$nextTick(() => {
-                this.$root.$emit("widgetComponentRendered");
-            });
+            
         }
     }
 </script>

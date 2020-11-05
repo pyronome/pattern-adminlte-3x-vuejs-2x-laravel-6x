@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-    props: ['pagename', 'has_widgets'],
+    props: ['has_widgets'],
     data() {
         return {
             page_variables: [],
@@ -14,6 +14,14 @@ export default {
                 is_post_success: false
             }
         };
+    },
+    computed: {
+        main_folder() {
+            return AdminLTEHelper.getMainFolder();
+        },
+        pagename() {
+            return AdminLTEHelper.getPagename();
+        }
     },
     methods: {
         processLoadQueue: function () {
@@ -26,15 +34,21 @@ export default {
         loadData: function () {
             var self = this;
 
+            /* if (!self.has_widgets) {
+                return;
+            } */
+
             if (self.page.is_data_loading) {
                 return;
             }
 
             self.page.is_data_loading = true;
 
-            if('' == self.pagename) {
+            if ('' == self.pagename) {
                 self.pagename = 'anonymous';
             }
+
+            console.log("page_variables loaded");
 
             axios.get(AdminLTEHelper.getAPIURL("adminlte/get_page_variables/" + self.pagename))
                 .then(({ data }) => {
@@ -58,21 +72,47 @@ export default {
             }
 
             this.showHideMenuItem();
+            this.setupShowByPermissionItem();
         },
         showHideMenuItem() {
+            $('li.nav-item').css("display", "none");
+            
             if(this.page_variables.is_admin) {
                 $('li.nav-item').css("display", "block");
             } else {
-                if ('undefined' !== typeof this.page_variables.user_permission_data.menu_permissions) {
-                    let menu_permissions = this.page_variables.user_permission_data.menu_permissions;
+                if ('undefined' !== typeof this.page_variables.permissions.__adminlte_menu) {
+                    let menu_permissions = this.page_variables.permissions.__adminlte_menu;
                     Object.keys(menu_permissions).map((key) => {
-                        if (1 == menu_permissions[key]) {
-                            $('li.nav-item[data-href="' + key + '"').css("display", "block");
-                        } else {
-                            $('li.nav-item[data-href="' + key + '"').css("display", "none");
+                        if (menu_permissions[key]) {
+                            $('li.nav-item[data-href="' + key + '"]').css("display", "block");
                         }
                     });
                 }
+            }
+        },
+        setupShowByPermissionItem() {
+            if (this.page_variables.is_admin) {
+                return;
+            }
+            
+            if ('undefined' !== typeof this.page_variables.permissions.__adminlte_menu) {
+                let menu_permissions = this.page_variables.permissions.__adminlte_menu;
+                Object.keys(menu_permissions).map((key) => {
+                    if (menu_permissions[key]) {
+                        $('.sbp-item.sbp-hide[menu-permission-token="' + key + '"]').removeClass('sbp-hide');
+                    } else {
+                        $('.sbp-item[menu-permission-token="' + key + '"]').addClass('sbp-hide');
+                    }
+                });
+            }
+
+            if ('undefined' !== typeof this.page_variables.permissions.__adminlte_model) {
+                let model_permissions = this.page_variables.permissions.__adminlte_model;
+                Object.keys(model_permissions).map((key) => {
+                    if (!model_permissions[key]) {
+                        $('.sbp-item[model-permission-token="' + key + '"]').addClass('sbp-hide');
+                    }
+                });
             }
         }
     },

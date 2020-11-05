@@ -22,7 +22,7 @@
                             continue;
                         } // if ($href == 'logout') {
                         ?>
-                        <li class="nav-item" data-href="<?php echo $href; ?>">
+                        <li class="nav-item" data-href="<?php echo $href; ?>" style="display:none;">
                             <router-link id="pageurl<?php echo $url; ?>"
                                 class="nav-link"
                                 to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >
@@ -40,7 +40,7 @@
                         $parent_icon = $menu[$i]['icon'];
                         $parent_href = $menu[$i]['href'];
                         ?>
-                        <li class="nav-item has-treeview parentPageLI menu-close" data-href="<?php echo $parent_href; ?>">
+                        <li class="nav-item has-treeview parentPageLI menu-close" data-href="<?php echo $parent_href; ?>" style="display:none;">
                             <a id="parentpageurl<?php echo $parent_id; ?>"
                                 class="parent_menu nav-link"
                                 href="#">
@@ -60,7 +60,7 @@
                                     $title = $submenu[$j]['title'];
                                     $icon = $submenu[$j]['icon'];
                                     ?>
-                                    <li class="nav-item" data-href="<?php echo $href; ?>">
+                                    <li class="nav-item" data-href="<?php echo $href; ?>" style="display:none;">
                                         <router-link id="pageurl<?php echo $url; ?>"
                                             class="child_menu nav-link"
                                             to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>"
@@ -87,7 +87,7 @@
                     $title = $logoutMenu['title'];
                     $icon = $logoutMenu['icon'];
                 ?>
-                <li class="nav-item"data-href="logout">
+                <li class="nav-item" data-href="logout" style="display:none;">
                     <a id="pageurl<?php echo $url; ?>" 
                         class="nav-link"
                         href="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >

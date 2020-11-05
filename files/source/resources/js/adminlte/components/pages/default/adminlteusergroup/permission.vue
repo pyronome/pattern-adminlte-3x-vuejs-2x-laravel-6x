@@ -296,15 +296,16 @@ export default {
                 permission_group_data["meta_key"] = meta_key;
                 permission_group_data["permissions"] = {};
 
-                let selectorText = "." + meta_key + ".permission-button-yes[data-value='Y']";
+                let selectorText = "." + meta_key + ".permission-button-yes";
                 this.$el.querySelectorAll(selectorText).forEach(button => {
                     let token = button.getAttribute("data-token");
-                    permission_group_data["permissions"][token] = 'Y';
+                    let value = button.getAttribute("data-value");
+                    permission_group_data["permissions"][token] = value;
                 });
 
                 permission_data.push(permission_group_data);
             });
-
+            
             this.PermissionForm.permission_data = permission_data;
         },
         submitForm: function () {

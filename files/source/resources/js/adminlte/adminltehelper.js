@@ -77,6 +77,15 @@ var AdminLTEHelper = {
             return "";
         }
     },
+    "getPagename": function () {
+        var url = new URL(window.location);
+        var path = url.pathname.replace(
+            ("/" + AdminLTEHelper.getMainFolder() + "/"),
+            "");
+
+        var pathParts = path.split("/");
+        return pathParts[0];
+    },
     "getURL": function (url) {
         return ("/" + AdminLTEHelper.getMainFolder() + "/" + url);
     },
