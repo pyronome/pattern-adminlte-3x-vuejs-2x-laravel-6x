@@ -141,7 +141,11 @@
                 sort_direction: 'desc',            
                 formDelete: new Form({
                     'selected_ids': []
-                })
+                }),
+                delete_form: {
+                    has_error: false,
+                    error_msg: ''
+                }
             };
         },
         computed: {
@@ -245,23 +249,38 @@
                 self.formDelete.post(AdminLTEHelper.getAPIURL((self.$attrs.model.toLowerCase()) + "/delete"))
                     .then(({ data }) => {
                         self.$Progress.finish();
+                        self.delete_form.has_error = data.has_error;
+                        self.delete_form.error_msg = data.error_msg;
                     }).catch(({ data }) => {
                         self.$Progress.fail();
                     }).finally(function(){
-                        self.loadData(function(){
+                        if (!self.delete_form.has_error) {
+                            self.loadData(function(){
+                                Vue.swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    title: '',
+                                    text: 'Selected records have been deleted.',
+                                    icon: 'success',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                });
+                                let eventName = "refresh" + self.$attrs.model + "Data";
+                                self.$root.$emit(eventName);
+                            });
+                        } else {
                             Vue.swal.fire({
                                 toast: true,
                                 position: 'top-end',
                                 title: '',
-                                text: 'Selected records have been deleted.',
-                                icon: 'success',
+                                text: self.delete_form.error_msg,
+                                icon: 'error',
                                 showConfirmButton: false,
-                                timer: 2000,
-                                timerProgressBar: true,
+                                timer: 10000,
+                                timerProgressBar: true
                             });
-                            let eventName = "refresh" + self.$attrs.model + "Data";
-                            self.$root.$emit(eventName);
-                        });
+                        }
                     });
             }
         },

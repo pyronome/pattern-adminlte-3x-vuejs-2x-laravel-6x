@@ -35,21 +35,28 @@ class {{$ __value__}}Controller extends Controller
             $object{{$ __value__}} = {{$ __value__}}::where('id', $id)->where('deleted', 0)->first();
         }
         
+        $User = auth()->guard('adminlteuser')->user();
 
+        if ($User->can('viewAny', {{$ __value__}}::class) && $User->can('view', $object{{$ __value__}})) {
+            $data['user_can_create'] = $User->can('create', {{$ __value__}}::class);
+            $data['user_can_read'] = $User->can('view', $object{{$ __value__}});
+            $data['user_can_update'] = $User->can('update', $object{{$ __value__}});
+            $data['user_can_delete'] = $User->can('delete', $object{{$ __value__}});
+            $data['user_can_view'] = $User->can('viewAny', $object{{$ __value__}});
 
-        $objectAdminLTE = new AdminLTE();
+            $objectAdminLTE = new AdminLTE();
+            $displayTexts = $objectAdminLTE->getObjectDisplayTexts('{{$ __value__}}', $object{{$ __value__}});
 
-        $displayTexts = $objectAdminLTE->getObjectDisplayTexts('{{$ __value__}}', $object{{$ __value__}});
-
-        $data['id'] = $object{{$ __value__}}->id;
-        $data['id__displaytext__'] = $displayTexts['id'];
-        $data['deleted'] = $object{{$ __value__}}->deleted;
-        $data['deleted__displaytext__'] = $displayTexts['deleted'];
-        $data['created_at'] = $object{{$ __value__}}->created_at;
-        $data['created_at__displaytext__'] = $displayTexts['created_at'];
-        $data['updated_at'] = $object{{$ __value__}}->updated_at;
-        $data['updated_at__displaytext__'] = $displayTexts['updated_at'];
-{{MODEL{{$ ../__item_index__/__value__}}_GET_SERVICE_ROWS}}
+            $data['id'] = $object{{$ __value__}}->id;
+            $data['id__displaytext__'] = $displayTexts['id'];
+            $data['deleted'] = $object{{$ __value__}}->deleted;
+            $data['deleted__displaytext__'] = $displayTexts['deleted'];
+            $data['created_at'] = $object{{$ __value__}}->created_at;
+            $data['created_at__displaytext__'] = $displayTexts['created_at'];
+            $data['updated_at'] = $object{{$ __value__}}->updated_at;
+            $data['updated_at__displaytext__'] = $displayTexts['updated_at'];
+    {{MODEL{{$ ../__item_index__/__value__}}_GET_SERVICE_ROWS}}
+        }
 
         return [
             'object' => $data
@@ -83,6 +90,11 @@ class {{$ __value__}}Controller extends Controller
 
     public function delete(Request $request)
     {
+        $User = auth()->guard('adminlteuser')->user();
+        $this->error_count = 0;
+        $this->error_msg = '';
+        $return_data = [];
+
         $selected_ids = $request->input('selected_ids');
         
         $objects = {{$ __value__}}::where('deleted', false)
@@ -91,11 +103,28 @@ class {{$ __value__}}Controller extends Controller
 
         foreach ($objects as $object)
         {
-            $object->deleted = 1;
-            $object->save();                
+            if (!$User->can('delete', $object)) {
+                $this->error_count++;
+                $this->error_msg = 'You can not delete this object. Contact your system administrator for more information.';
+                break;
+            }              
         } // foreach ($objects as $object)
 
-        return ['message' => "Success"];
+        if (0 == $this->error_count) {
+            foreach ($objects as $object)
+            {
+                $object->deleted = 1;
+                $object->save();                
+            } // foreach ($objects as $object)
+
+            $return_data['has_error'] = false;
+            $return_data['error_msg'] = '';
+        } else {
+            $return_data['has_error'] = true;
+            $return_data['error_msg'] = $this->error_msg;
+        }
+
+        return $return_data;
     }
 
 	public function get_files(Request $request) {

@@ -34,10 +34,6 @@ export default {
         loadData: function () {
             var self = this;
 
-            /* if (!self.has_widgets) {
-                return;
-            } */
-
             if (self.page.is_data_loading) {
                 return;
             }
@@ -47,8 +43,6 @@ export default {
             if ('' == self.pagename) {
                 self.pagename = 'anonymous';
             }
-
-            console.log("page_variables loaded");
 
             axios.get(AdminLTEHelper.getAPIURL("adminlte/get_page_variables/" + self.pagename))
                 .then(({ data }) => {
@@ -89,6 +83,8 @@ export default {
                     });
                 }
             }
+
+            console.log("page_variables showHideMenuItem");
         },
         setupShowByPermissionItem() {
             if (this.page_variables.is_admin) {
@@ -109,7 +105,9 @@ export default {
             if ('undefined' !== typeof this.page_variables.permissions.__adminlte_model) {
                 let model_permissions = this.page_variables.permissions.__adminlte_model;
                 Object.keys(model_permissions).map((key) => {
-                    if (!model_permissions[key]) {
+                    if (model_permissions[key]) {
+                        $('.sbp-item[model-permission-token="' + key + '"]').removeClass('sbp-hide');
+                    } else {
                         $('.sbp-item[model-permission-token="' + key + '"]').addClass('sbp-hide');
                     }
                 });
@@ -119,6 +117,10 @@ export default {
     mounted() {
         this.page.is_ready = false;
         this.processLoadQueue();
+
+        this.$root.$on('widgets-loaded', () => {
+            this.setupShowByPermissionItem();
+        });
     }
 }
 </script>

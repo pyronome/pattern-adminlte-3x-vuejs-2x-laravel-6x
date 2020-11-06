@@ -39,12 +39,25 @@
                                     <div class="row">{{MODEL{{$ ../__item_index__/__value__}}_EDIT_COMPONENT_INPUTS}}
                                     </div>
                                 </div>
-                                <div class="card-footer show_by_permission_must_update">
+                                <div v-if="'new' == id" class="card-footer sbp-item sbp-hide" 
+                                    menu-permission-token="{{$ __value__/__lowercase_text__}}"
+                                    model-permission-token="{{$ __value__}}-create">
                                     <div class="col-lg-12 col-md-12 col-xs-12">
                                         <button :disabled="{{$ __value__}}Form.busy"
     										type="submit"
                                             class="btn btn-success btn-xs btn-on-table float-right">
-                                            <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
+                                            <i class="far fa-save" aria-hidden="true"></i> {{ $t('Create') }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div v-else class="card-footer sbp-item sbp-hide" 
+                                    menu-permission-token="{{$ __value__/__lowercase_text__}}"
+                                    model-permission-token="{{$ __value__}}-update">
+                                    <div class="col-lg-12 col-md-12 col-xs-12">
+                                        <button :disabled="{{$ __value__}}Form.busy"
+    										type="submit"
+                                            class="btn btn-success btn-xs btn-on-table float-right">
+                                            <i class="far fa-save" aria-hidden="true"></i> {{ $t('Update') }}
                                         </button>
                                     </div>
                                 </div>
@@ -73,6 +86,8 @@ export default {
                 'id': this.id{{MODEL{{$ ../__item_index__/__value__}}_EDIT_COMPONENT_FORM_PROPERTIES}}
             }),
             page: {
+                has_error: false,
+                error_msg: '',
                 is_ready: false,
                 is_data_loading: false,
                 is_data_loaded: false,
@@ -175,6 +190,46 @@ export default {
 			AdminLTEHelper.initializePageFiles(this.files);
 		},
         submitForm: function () {
+            var self = this;
+            self.$Progress.start();
+            self.ColorForm.post(AdminLTEHelper.getAPIURL("{{$ __value__/__lowercase_text__}}/post"))
+                .then(({ data }) => {
+                    self.$Progress.finish();
+                    self.id = data.id;
+                    self.page.has_error = data.has_error;
+                    self.page.error_msg = data.error_msg;
+                }).catch(({ data }) => {
+                    self.$Progress.fail();
+                }).finally(function() {
+                    if (!self.page.has_error) {
+                        Vue.swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            title: '',
+                            text: 'Changes have been saved!',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            onClose: () => {
+                                this.$router.push('/adminlte/{{$ __value__/__lowercase_text__}}/detail/' + self.id);
+                            }
+                        });
+                    } else {
+                        Vue.swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            title: '',
+                            text: self.page.error_msg,
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 10000,
+                            timerProgressBar: true
+                        });
+                    }
+                });
+
+                
             // Submit the form via a POST request
             this.$Progress.start();
             this.{{$ __value__}}Form.post(AdminLTEHelper.getAPIURL("{{$ __value__/__lowercase_text__}}/post"))
@@ -188,7 +243,7 @@ export default {
     },
     mounted() {
         this.main_folder = AdminLTEHelper.getMainFolder();
-        this.id = parseInt(this.$route.params.id);    
+        this.id = this.$route.params.id;
         this.page.is_ready = false;
         AdminLTEHelper.loadExternalFiles(this.page.external_files, this.processLoadQueue());
     }

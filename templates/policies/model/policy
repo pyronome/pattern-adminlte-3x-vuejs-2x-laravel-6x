@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
 use App\{{$ __value__}};
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -18,7 +19,17 @@ class {{$ __value__}}Policy
      */
     public function viewAny(AdminLTEUser $user)
     {
-        //
+        $has_permission = false;
+        
+        $objectAdminLTE = new AdminLTE();
+        $permissions = $objectAdminLTE->getUserPermissionData();
+
+        if (isset($permissions['__adminlte_menu']))
+        {
+            $has_permission = $permissions['__adminlte_menu']['{{$ __value__/__lowercase_text__}}'];
+        }
+
+        return $has_permission;
     }
 
     /**
@@ -30,7 +41,19 @@ class {{$ __value__}}Policy
      */
     public function view(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
     {
-        //
+        $has_permission = false;
+        
+        $objectAdminLTE = new AdminLTE();
+        $permissions = $objectAdminLTE->getUserPermissionData();
+
+        if (isset($permissions['__adminlte_model']))
+        {
+            if (isset($permissions['__adminlte_model']['{{$ __value__}}-read'])) {
+                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-read'];
+            }
+        }
+
+        return $has_permission;
     }
 
     /**
@@ -41,7 +64,19 @@ class {{$ __value__}}Policy
      */
     public function create(AdminLTEUser $user)
     {
-        //
+        $has_permission = false;
+        
+        $objectAdminLTE = new AdminLTE();
+        $permissions = $objectAdminLTE->getUserPermissionData();
+
+        if (isset($permissions['__adminlte_model']))
+        {
+            if (isset($permissions['__adminlte_model']['{{$ __value__}}-create'])) {
+                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-create'];
+            }
+        }
+
+        return $has_permission;
     }
 
     /**
@@ -53,7 +88,19 @@ class {{$ __value__}}Policy
      */
     public function update(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
     {
-        //
+        $has_permission = false;
+        
+        $objectAdminLTE = new AdminLTE();
+        $permissions = $objectAdminLTE->getUserPermissionData();
+
+        if (isset($permissions['__adminlte_model']))
+        {
+            if (isset($permissions['__adminlte_model']['{{$ __value__}}-update'])) {
+                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-update'];
+            }
+        }
+
+        return $has_permission;
     }
 
     /**
@@ -65,7 +112,19 @@ class {{$ __value__}}Policy
      */
     public function delete(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
     {
-        //
+        $has_permission = false;
+        
+        $objectAdminLTE = new AdminLTE();
+        $permissions = $objectAdminLTE->getUserPermissionData();
+
+        if (isset($permissions['__adminlte_model']))
+        {
+            if (isset($permissions['__adminlte_model']['{{$ __value__}}-delete'])) {
+                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-delete'];
+            }
+        }
+
+        return $has_permission;
     }
 
     /**

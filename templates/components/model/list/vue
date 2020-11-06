@@ -21,6 +21,7 @@
         <section>
             <widget-editor pagename="{{$ __value__/__lowercase_text__}}"></widget-editor>
         </section>
+        <page-variables :has_widgets="true"></page-variables>
         <input type="hidden" id="controller" value="{{$ __value__/__lowercase_text__}}">
     </div>
 </template>
