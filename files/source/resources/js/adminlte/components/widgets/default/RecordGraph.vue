@@ -15,7 +15,6 @@
                 <canvas :id="this.model + 'RecordGraphContainer'"></canvas>
             </div>
         </div>
-        
     </div>
 </template>
 

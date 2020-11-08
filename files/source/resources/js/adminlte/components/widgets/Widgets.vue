@@ -30,25 +30,25 @@
             }
         },
         mounted() {
-            this.body_loader_active = true;
+            var self = this;
 
-            this.$root.$on('widget-rendered', (model, type) => {
-                this.widget_counter++;
+            self.body_loader_active = true;
+
+            self.$root.$on('widget-rendered', (model, type) => {
+                self.widget_counter++;
                 
-                if (this.total_widget == this.widget_counter) {
-                    let self = this;
+                if (self.total_widget == self.widget_counter) {
                     setTimeout(function() {
                         self.body_loader_active = false;
                         self.$root.$emit("widgets-loaded");
                     }, 700);
                 }
-            });            
+            });
         },
         methods: {
         },
         destroyed() {
             console.log("Widgets.vue destroyed");
-            /* this.$root.$off('widget-rendered'); */
         },
         components: {
             infobox,

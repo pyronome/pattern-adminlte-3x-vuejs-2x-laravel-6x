@@ -73,7 +73,10 @@ class BrandingController extends Controller
         
         Storage::disk('local')->put('config/brand.json', $brandJSON);
         
-        return ['message' => "Success"];
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
     }
     
 }

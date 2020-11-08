@@ -5,15 +5,15 @@ namespace App\Policies;
 use Illuminate\Support\Facades\Gate;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
-use App\{{$ __value__}};
+use App\AdminLTE\AdminLTEUserGroup;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class {{$ __value__}}Policy
+class AdminLTEUserGroupPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can view any adminlteusergroup.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
      * @return mixed
@@ -31,20 +31,20 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_menu']))
         {
-            $has_permission = $permissions['__adminlte_menu']['{{$ __value__/__lowercase_text__}}'];
+            $has_permission = $permissions['__adminlte_menu']['adminlteusergroup'];
         }
 
         return $has_permission;
     }
 
     /**
-     * Determine whether the user can view the {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can view the adminlteusergroup.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
-     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @param  \App\AdminLTE\AdminLTEUserGroup  $adminlteusergroup
      * @return mixed
      */
-    public function view(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function view(AdminLTEUser $user, AdminLTEUserGroup $adminlteusergroup)
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -57,8 +57,8 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_model']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-read'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-read'];
+            if (isset($permissions['__adminlte_model']['AdminLTEUserGroup-read'])) {
+                $has_permission = $permissions['__adminlte_model']['AdminLTEUserGroup-read'];
             }
         }
 
@@ -66,7 +66,7 @@ class {{$ __value__}}Policy
     }
 
     /**
-     * Determine whether the user can create {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can create adminlteusergroup.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
      * @return mixed
@@ -84,8 +84,8 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_model']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-create'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-create'];
+            if (isset($permissions['__adminlte_model']['AdminLTEUserGroup-create'])) {
+                $has_permission = $permissions['__adminlte_model']['AdminLTEUserGroup-create'];
             }
         }
 
@@ -93,13 +93,13 @@ class {{$ __value__}}Policy
     }
 
     /**
-     * Determine whether the user can update the {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can update the adminlteusergroup.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
-     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @param  \App\AdminLTE\AdminLTEUserGroup  $adminlteusergroup
      * @return mixed
      */
-    public function update(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function update(AdminLTEUser $user, AdminLTEUserGroup $adminlteusergroup)
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -112,8 +112,8 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_model']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-update'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-update'];
+            if (isset($permissions['__adminlte_model']['AdminLTEUserGroup-update'])) {
+                $has_permission = $permissions['__adminlte_model']['AdminLTEUserGroup-update'];
             }
         }
 
@@ -121,13 +121,13 @@ class {{$ __value__}}Policy
     }
 
     /**
-     * Determine whether the user can delete the {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can delete the adminlteusergroup.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
-     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @param  \App\AdminLTE\AdminLTEUserGroup  $adminlteusergroup
      * @return mixed
      */
-    public function delete(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function delete(AdminLTEUser $user, AdminLTEUserGroup $adminlteusergroup)
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -140,8 +140,8 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_model']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-delete'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-delete'];
+            if (isset($permissions['__adminlte_model']['AdminLTEUserGroup-delete'])) {
+                $has_permission = $permissions['__adminlte_model']['AdminLTEUserGroup-delete'];
             }
         }
 
@@ -149,25 +149,25 @@ class {{$ __value__}}Policy
     }
 
     /**
-     * Determine whether the user can restore the {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can restore the adminlteusergroup.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
-     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @param  \App\AdminLTE\AdminLTEUserGroup  $adminlteusergroup
      * @return mixed
      */
-    public function restore(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function restore(AdminLTEUser $user, AdminLTEUserGroup $adminlteusergroup)
     {
         //
     }
 
     /**
-     * Determine whether the user can permanently delete the {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can permanently delete the adminlteusergroup.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
-     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @param  \App\AdminLTE\AdminLTEUserGroup  $adminlteusergroup
      * @return mixed
      */
-    public function forceDelete(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function forceDelete(AdminLTEUser $user, AdminLTEUserGroup $adminlteusergroup)
     {
         //
     }

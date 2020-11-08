@@ -126,7 +126,10 @@ class ProfileController extends Controller
             $objectAdminLTE->updateModelFileObject('AdminLTEUser', $objectAdminLTEUser->id, 'profile_img', $profile_img);
         }
 
-        return ['message' => "Success"];
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
     }
 
 }

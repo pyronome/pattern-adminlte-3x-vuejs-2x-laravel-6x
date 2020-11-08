@@ -15,7 +15,7 @@ class AdminLTEUserController extends Controller
 {
     public function get(Request $request)
     {    
-        $list = [];
+        $data = [];
         
         $parameters = $request->route()->parameters();
 
@@ -23,45 +23,52 @@ class AdminLTEUserController extends Controller
             ? intval($parameters['id'])
             : 0;
 
-
-        if (0 == $id) {
+        if ($id <= 0) {
             return;
-        } // if (!isset($parameters['id'])) {
+        } // if ($id <= 0) {
         
         // is new ?
         if ('new' == htmlspecialchars($parameters['id'])) {
             return;
-        } // if (isset($parameters['id']) && ('new' == htmlspecialchars($parameters['id']))) {
+        } // if ('new' == htmlspecialchars($parameters['id'])) {
 
         if ($id > 0) {
             $objectAdminLTEUser = AdminLTEUser::where('id', $id)->where('deleted', 0)->first();
         }
+        
+        $User = auth()->guard('adminlteuser')->user();
 
-        if (null !== $objectAdminLTEUser) {
+        if ($User->can('viewAny', AdminLTEUser::class) && $User->can('view', $objectAdminLTEUser)) {
+            $data['user_can_create'] = $User->can('create', AdminLTEUser::class);
+            $data['user_can_read'] = $User->can('view', $objectAdminLTEUser);
+            $data['user_can_update'] = $User->can('update', $objectAdminLTEUser);
+            $data['user_can_delete'] = $User->can('delete', $objectAdminLTEUser);
+            $data['user_can_view'] = $User->can('viewAny', $objectAdminLTEUser);
+
             $objectAdminLTE = new AdminLTE();
 
             $displayTexts = $objectAdminLTE->getObjectDisplayTexts('AdminLTEUser', $objectAdminLTEUser);
 
-            $list['id'] = $objectAdminLTEUser->id;
-            $list['id__displaytext__'] = $displayTexts['id'];
-            $list['deleted'] = $objectAdminLTEUser->deleted;
-            $list['deleted__displaytext__'] = $displayTexts['deleted'];
-            $list['created_at'] = $objectAdminLTEUser->created_at;
-            $list['created_at__displaytext__'] = $displayTexts['created_at'];
-            $list['updated_at'] = $objectAdminLTEUser->updated_at;
-            $list['updated_at__displaytext__'] = $displayTexts['updated_at'];
-            $list['enabled'] = $objectAdminLTEUser->enabled;
-            $list['enabled__displaytext__'] = $displayTexts['enabled'];
-            $list['adminlteusergroup_id'] = array($objectAdminLTEUser->adminlteusergroup_id);
-            $list['adminlteusergroup_id__displaytext__'] = $displayTexts['adminlteusergroup_id'];
-            $list['fullname'] = $objectAdminLTEUser->fullname;
-            $list['fullname__displaytext__'] = $displayTexts['fullname'];
-            $list['username'] = $objectAdminLTEUser->username;
-            $list['username__displaytext__'] = $displayTexts['username'];
-            $list['email'] = $objectAdminLTEUser->email;
-            $list['email__displaytext__'] = $displayTexts['email'];
-            $list['password'] = '';
-            $list['password__displaytext__'] = '******';
+            $data['id'] = $objectAdminLTEUser->id;
+            $data['id__displaytext__'] = $displayTexts['id'];
+            $data['deleted'] = $objectAdminLTEUser->deleted;
+            $data['deleted__displaytext__'] = $displayTexts['deleted'];
+            $data['created_at'] = $objectAdminLTEUser->created_at;
+            $data['created_at__displaytext__'] = $displayTexts['created_at'];
+            $data['updated_at'] = $objectAdminLTEUser->updated_at;
+            $data['updated_at__displaytext__'] = $displayTexts['updated_at'];
+            $data['enabled'] = $objectAdminLTEUser->enabled;
+            $data['enabled__displaytext__'] = $displayTexts['enabled'];
+            $data['adminlteusergroup_id'] = array($objectAdminLTEUser->adminlteusergroup_id);
+            $data['adminlteusergroup_id__displaytext__'] = $displayTexts['adminlteusergroup_id'];
+            $data['fullname'] = $objectAdminLTEUser->fullname;
+            $data['fullname__displaytext__'] = $displayTexts['fullname'];
+            $data['username'] = $objectAdminLTEUser->username;
+            $data['username__displaytext__'] = $displayTexts['username'];
+            $data['email'] = $objectAdminLTEUser->email;
+            $data['email__displaytext__'] = $displayTexts['email'];
+            $data['password'] = '';
+            $data['password__displaytext__'] = '******';
 
             $external_ids = array();
             foreach ($objectAdminLTE->get_model_files_by_property('AdminLTEUser', $objectAdminLTEUser->id, 'profile_img') as $fileData) {
@@ -74,24 +81,45 @@ class AdminLTEUserController extends Controller
                 $current_external_value = implode(',', $external_ids);
             }
 
-            $list['profile_img'] = $current_external_value;
-            $list['profile_img__displaytext__'] = $displayTexts['profile_img'];
+            $data['profile_img'] = $current_external_value;
+            $data['profile_img__displaytext__'] = $displayTexts['profile_img'];
         } // if (null !== $objectAdminLTEUser) {
 
         return [
-            'list' => $list
+            'object' => $data
         ];
     }
 
     public function post(AdminLTEUserPOSTRequest $request)
     {
+        $User = auth()->guard('adminlteuser')->user();
+        $has_error = false;
+        $error_msg = '';
+        $return_data = [];
+        
         $id = intval($request->input('id'));
 
         if ($id > 0) {
             $objectAdminLTEUser = AdminLTEUser::find($id);
+            if (!$User->can('update', $objectAdminLTEUser)) {
+                $has_error = true;
+                $error_msg = 'You can not update this object. Contact your system administrator for more information.';
+            }
         } else {
             $objectAdminLTEUser = new AdminLTEUser();
+            if (!$User->can('create', AdminLTEUser::class)) {
+                $has_error = true;
+                $error_msg = 'You can not create any object. Contact your system administrator for more information.';
+            }
         } // if ($id > 0) {
+        
+        if ($has_error) {
+            $return_data['id'] = $id;
+            $return_data['has_error'] = $has_error;
+            $return_data['error_msg'] = $error_msg;
+
+            return $return_data;
+        }
         
         $objectAdminLTEUser->deleted = 0;
         
@@ -120,13 +148,20 @@ class AdminLTEUserController extends Controller
         $objectAdminLTE = new AdminLTE();
         $objectAdminLTE->updateModelFileObject('AdminLTEUser', $objectAdminLTEUser->id, 'profile_img', $profile_img);
  
-        return [
-            'id' => $objectAdminLTEUser->id
-        ];
+        $return_data['id'] = $objectAdminLTEUser->id;
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
     }
 
     public function delete(Request $request)
     {
+        $User = auth()->guard('adminlteuser')->user();
+        $has_error = false;
+        $error_msg = '';
+        $return_data = [];
+        
         $selected_ids = $request->input('selected_ids');
         
         $objects = AdminLTEUser::where('deleted', false)
@@ -135,11 +170,25 @@ class AdminLTEUserController extends Controller
 
         foreach ($objects as $object)
         {
-            $object->deleted = 1;
-            $object->save();                
+            if (!$User->can('delete', $object)) {
+                $has_error = true;
+                $error_msg = 'You can not delete this object. Contact your system administrator for more information.';
+                break;
+            }              
         } // foreach ($objects as $object)
 
-        return ['message' => "Success"];
+        if (!$has_error) {
+            foreach ($objects as $object)
+            {
+                $object->deleted = 1;
+                $object->save();                
+            } // foreach ($objects as $object)
+        }
+            
+        $return_data['has_error'] = true;
+        $return_data['error_msg'] = $error_msg;
+
+        return $return_data;
     }
 
     public function get_files(Request $request) {

@@ -7,7 +7,6 @@
                 <span class="info-box-number">{{data.count}}</span>
             </div>
         </router-link>
-        
     </div>
 </template>
 

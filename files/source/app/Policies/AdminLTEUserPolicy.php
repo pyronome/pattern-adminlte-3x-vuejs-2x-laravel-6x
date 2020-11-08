@@ -5,15 +5,14 @@ namespace App\Policies;
 use Illuminate\Support\Facades\Gate;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
-use App\{{$ __value__}};
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class {{$ __value__}}Policy
+class AdminLTEUserPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can view any adminlteuser.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
      * @return mixed
@@ -31,20 +30,20 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_menu']))
         {
-            $has_permission = $permissions['__adminlte_menu']['{{$ __value__/__lowercase_text__}}'];
+            $has_permission = $permissions['__adminlte_menu']['adminlteuser'];
         }
 
         return $has_permission;
     }
 
     /**
-     * Determine whether the user can view the {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can view the adminlteuser.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
-     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @param  \App\AdminLTE\AdminLTEUser  $adminlteuser
      * @return mixed
      */
-    public function view(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function view(AdminLTEUser $user, AdminLTEUser $adminlteuser)
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -57,8 +56,8 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_model']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-read'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-read'];
+            if (isset($permissions['__adminlte_model']['AdminLTEUser-read'])) {
+                $has_permission = $permissions['__adminlte_model']['AdminLTEUser-read'];
             }
         }
 
@@ -66,7 +65,7 @@ class {{$ __value__}}Policy
     }
 
     /**
-     * Determine whether the user can create {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can create adminlteuser.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
      * @return mixed
@@ -84,8 +83,8 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_model']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-create'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-create'];
+            if (isset($permissions['__adminlte_model']['AdminLTEUser-create'])) {
+                $has_permission = $permissions['__adminlte_model']['AdminLTEUser-create'];
             }
         }
 
@@ -93,13 +92,13 @@ class {{$ __value__}}Policy
     }
 
     /**
-     * Determine whether the user can update the {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can update the adminlteuser.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
-     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @param  \App\AdminLTE\AdminLTEUser  $adminlteuser
      * @return mixed
      */
-    public function update(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function update(AdminLTEUser $user, AdminLTEUser $adminlteuser)
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -112,8 +111,8 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_model']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-update'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-update'];
+            if (isset($permissions['__adminlte_model']['AdminLTEUser-update'])) {
+                $has_permission = $permissions['__adminlte_model']['AdminLTEUser-update'];
             }
         }
 
@@ -121,13 +120,13 @@ class {{$ __value__}}Policy
     }
 
     /**
-     * Determine whether the user can delete the {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can delete the adminlteuser.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
-     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @param  \App\AdminLTE\AdminLTEUser  $adminlteuser
      * @return mixed
      */
-    public function delete(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function delete(AdminLTEUser $user, AdminLTEUser $adminlteuser)
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -140,8 +139,8 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_model']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-delete'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-delete'];
+            if (isset($permissions['__adminlte_model']['AdminLTEUser-delete'])) {
+                $has_permission = $permissions['__adminlte_model']['AdminLTEUser-delete'];
             }
         }
 
@@ -149,25 +148,25 @@ class {{$ __value__}}Policy
     }
 
     /**
-     * Determine whether the user can restore the {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can restore the adminlteuser.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
-     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @param  \App\AdminLTE\AdminLTEUser  $adminlteuser
      * @return mixed
      */
-    public function restore(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function restore(AdminLTEUser $user, AdminLTEUser $adminlteuser)
     {
         //
     }
 
     /**
-     * Determine whether the user can permanently delete the {{$ __value__/__lowercase_text__}}.
+     * Determine whether the user can permanently delete the adminlteuser.
      *
      * @param  \App\AdminLTE\AdminLTEUser  $user
-     * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
+     * @param  \App\AdminLTE\AdminLTEUser  $adminlteuser
      * @return mixed
      */
-    public function forceDelete(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function forceDelete(AdminLTEUser $user, AdminLTEUser $adminlteuser)
     {
         //
     }

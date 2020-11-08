@@ -1174,27 +1174,43 @@ var AdminLTEHelper = {
             }
         }
     },
-    "showHideMenuItem": function(page_variables) {
+    "initializePermissions": function(page_variables, page_has_widgets=false) {
+        if (page_variables.is_admin) {
+            $("#buttonWidgetConfig").removeClass("d-none");
+
+            if (!page_has_widgets) {
+                $("#buttonWidgetConfig").addClass("d-none");
+            }
+
+            $('li.nav-item').css("display", "block");
+            $('.sbp-item').removeClass('sbp-hide');
+            return true;
+        }
+
+        // Widget config button
+        $("#buttonWidgetConfig").addClass("d-none");
+
+        if (page_variables.show_widget_config_button) {
+            $("#buttonWidgetConfig").removeClass("d-none");
+        }
+
+        if (!page_has_widgets) {
+            $("#buttonWidgetConfig").addClass("d-none");
+        }
+
+        // show hide menu item
         $('li.nav-item').css("display", "none");
         
-        if(page_variables.is_admin) {
-            $('li.nav-item').css("display", "block");
-        } else {
-            if ('undefined' !== typeof page_variables.permissions.__adminlte_menu) {
-                let menu_permissions = page_variables.permissions.__adminlte_menu;
-                Object.keys(menu_permissions).map((key) => {
-                    if (menu_permissions[key]) {
-                        $('li.nav-item[data-href="' + key + '"]').css("display", "block");
-                    }
-                });
-            }
+        if ('undefined' !== typeof page_variables.permissions.__adminlte_menu) {
+            let menu_permissions = page_variables.permissions.__adminlte_menu;
+            Object.keys(menu_permissions).map((key) => {
+                if (menu_permissions[key]) {
+                    $('li.nav-item[data-href="' + key + '"]').css("display", "block");
+                }
+            });
         }
-    },
-    "setupShowByPermissionItem": function(page_variables) {
-        if (page_variables.is_admin) {
-            return;
-        }
-        
+
+        // model permissions
         if ('undefined' !== typeof page_variables.permissions.__adminlte_menu) {
             let menu_permissions = page_variables.permissions.__adminlte_menu;
             Object.keys(menu_permissions).map((key) => {
@@ -1216,6 +1232,37 @@ var AdminLTEHelper = {
                 }
             });
         }
+    },
+    "isUserAuthorized": function(page_variables, pagename, model="", token="") {
+        var authorize = {};
+        authorize["status"] = true;
+        authorize["type"] = "";
+
+        if (page_variables.is_admin) {
+            return authorize;
+        }
+        
+        if ('undefined' !== typeof page_variables.permissions.__adminlte_menu) {
+            let menu_permissions = page_variables.permissions.__adminlte_menu;
+            if (!menu_permissions[pagename]) {
+                authorize["status"] = false;
+                authorize["type"] = 'menu_permission';
+            }
+        }
+
+        if ("" != model) {
+            if (authorize["status"]) {
+                if ('undefined' !== typeof page_variables.permissions.__adminlte_model) {
+                    let model_permissions = page_variables.permissions.__adminlte_model;
+                    if (!model_permissions[model + "-" + token]) {
+                        authorize["status"] = false;
+                        authorize["type"] = token + '_permission';
+                    }
+                }
+            }
+        }
+
+        return authorize;
     }
 }
 

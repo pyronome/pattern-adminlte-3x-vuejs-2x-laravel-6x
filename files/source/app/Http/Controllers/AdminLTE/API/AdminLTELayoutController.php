@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
+use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTEUserLayout;
 use App\Http\Requests\AdminLTE\API\AdminLTELayoutPOSTRequest;
 
@@ -130,8 +131,6 @@ class AdminLTELayoutController extends Controller
         $objectAdminLTE = new AdminLTE();
 
         $Widgets = $objectAdminLTE->getPageLayout($pageName);
-        $permissions = $objectAdminLTE->getUserPermissionData();
-
         $countWidgets = count($Widgets);
         $index = 0;
 
@@ -466,7 +465,7 @@ class AdminLTELayoutController extends Controller
                 $index++;
             } // foreach ($objectList as $object)
         }
-        
+
         $data = [
             'widget_options' => $widget_options,
             'list' => $list

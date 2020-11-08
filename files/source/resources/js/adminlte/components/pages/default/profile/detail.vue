@@ -72,8 +72,17 @@ export default {
     data() {
         return {
             main_folder: '',
+            pagename: 'profile',
+            id: 0,
             data: [],
             page: {
+                is_ready: false,
+                has_server_error: false,
+                variables: [],
+                is_authorized: true,
+                unauthorized_type: '',
+                is_variables_loading: false,
+                is_variables_loaded: false,
                 is_data_loading: false,
                 is_data_loaded: false,
             },
@@ -81,6 +90,62 @@ export default {
         };
     },
     methods: {
+        processLoadQueue: function () {
+            if (this.page.has_server_error) {
+                this.$Progress.finish();
+                this.page.is_ready = true;
+                return;
+            }
+
+            if (!this.page.is_authorized) {
+                this.$Progress.finish();
+                this.page.is_ready = true;
+                return;
+            }
+
+            if (!this.page.is_variables_loaded && !this.page.is_data_loaded) {
+                this.$Progress.start();
+            }
+
+            if (!this.page.is_variables_loaded) {
+                this.loadPageVariables();
+            } else {
+                if (this.page.is_data_loaded) {
+                    this.$Progress.finish();
+                    this.page.is_ready = true;
+                } else {
+                    this.loadData();
+                }
+            }
+        },
+        loadPageVariables: function () {
+            var self = this;
+
+            if (self.page.is_variables_loading) {
+                return;
+            }
+
+            self.page.is_variables_loading = true;
+
+            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_page_variables/" + self.pagename))
+                .then(({ data }) => {
+                    self.page.is_variables_loaded = true;
+                    self.page.is_variables_loading = false;
+                    self.page.variables = data;
+                }).catch(({ data }) => {
+                    self.page.is_variables_loaded = true;
+                    self.page.is_variables_loading = false;
+                    self.$Progress.fail();
+                    self.page.has_server_error = true;
+                    self.processLoadQueue();
+                }).finally(function() {
+                   AdminLTEHelper.initializePermissions(self.page.variables, false);
+                   let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, 'People', 'read');
+                   self.page.is_authorized = authorize.status;
+                   self.page.unauthorized_type = authorize.type;
+                   self.processLoadQueue();
+                });
+        },
         loadData: function () {
             if (this.page.is_data_loading) {
                 return;
@@ -94,11 +159,14 @@ export default {
                 .then(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
-                    this.data = data;
+                    this.data = data.object;
+                    this.processLoadQueue();
                 }).catch(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
                     this.$Progress.fail();
+                    this.page.has_server_error = true;
+                    this.processLoadQueue();
                 }).finally(function() {
                     self.init_image_display = true;
                 });
@@ -106,7 +174,8 @@ export default {
     },
     mounted() {
         this.main_folder = AdminLTEHelper.getMainFolder();
-        this.loadData();
+        this.id = this.$route.params.id;
+        this.processLoadQueue();
     }
 }
 </script>

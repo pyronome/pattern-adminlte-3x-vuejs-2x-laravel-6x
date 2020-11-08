@@ -482,10 +482,9 @@ class AdminLTE
 					| JSON_HEX_APOS));
 
 		} // if (!$forceDefault
-
+		
 		$Menu = array();
 		$main_index = 0;
-
 		$countMenuArray = count($menuArray);
 
 		for ($i=0; $i < $countMenuArray; $i++) { 

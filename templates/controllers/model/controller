@@ -65,13 +65,34 @@ class {{$ __value__}}Controller extends Controller
 
 	public function post({{$ __value__}}POSTRequest $request)
     {
+        $User = auth()->guard('adminlteuser')->user();
+        $has_error = false;
+        $error_msg = '';
+        $return_data = [];
+
         $id = intval($request->input('id'));
 
         if ($id > 0) {
             $object{{$ __value__}} = {{$ __value__}}::find($id);
+            if (!$User->can('update', $object{{$ __value__}})) {
+                $has_error = true;
+                $error_msg = 'You can not update this object. Contact your system administrator for more information.';
+            }
         } else {
             $object{{$ __value__}} = new {{$ __value__}}();
+            if (!$User->can('create', {{$ __value__}}::class)) {
+                $has_error = true;
+                $error_msg = 'You can not create any object. Contact your system administrator for more information.';
+            }
         } // if ($id > 0) {
+
+        if ($has_error) {
+            $return_data['id'] = $id;
+            $return_data['has_error'] = $has_error;
+            $return_data['error_msg'] = $error_msg;
+
+            return $return_data;
+        }
         
         $object{{$ __value__}}->deleted = 0;
 {{MODEL{{$ ../__item_index__/__value__}}_POST_SERVICE_ASSIGNMENTS}}
@@ -83,16 +104,18 @@ class {{$ __value__}}Controller extends Controller
 {{MODEL{{$ ../__item_index__/__value__}}_POST_SERVICE_CLASSSELECTION_PROCESS}}
 {{MODEL{{$ ../__item_index__/__value__}}_POST_SERVICE_SELECTION_PROCESS}}
 
-        return [
-            'id' => $object{{$ __value__}}->id
-        ];
+        $return_data['id'] = $object{{$ __value__}}->id;
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
     }
 
     public function delete(Request $request)
     {
         $User = auth()->guard('adminlteuser')->user();
-        $this->error_count = 0;
-        $this->error_msg = '';
+        $has_error = false;
+        $error_msg = '';
         $return_data = [];
 
         $selected_ids = $request->input('selected_ids');
@@ -104,25 +127,22 @@ class {{$ __value__}}Controller extends Controller
         foreach ($objects as $object)
         {
             if (!$User->can('delete', $object)) {
-                $this->error_count++;
-                $this->error_msg = 'You can not delete this object. Contact your system administrator for more information.';
+                $has_error = true;
+                $error_msg = 'You can not delete this object. Contact your system administrator for more information.';
                 break;
             }              
         } // foreach ($objects as $object)
 
-        if (0 == $this->error_count) {
+        if (!$has_error) {
             foreach ($objects as $object)
             {
                 $object->deleted = 1;
                 $object->save();                
             } // foreach ($objects as $object)
-
-            $return_data['has_error'] = false;
-            $return_data['error_msg'] = '';
-        } else {
-            $return_data['has_error'] = true;
-            $return_data['error_msg'] = $this->error_msg;
         }
+            
+        $return_data['has_error'] = true;
+        $return_data['error_msg'] = $error_msg;
 
         return $return_data;
     }

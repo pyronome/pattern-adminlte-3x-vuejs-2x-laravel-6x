@@ -14,7 +14,7 @@ class AdminLTEUserGroupController extends Controller
 {
     public function get(Request $request)
     {    
-        $list = [];
+        $data = [];
         
         $parameters = $request->route()->parameters();
 
@@ -22,57 +22,84 @@ class AdminLTEUserGroupController extends Controller
             ? intval($parameters['id'])
             : 0;
 
-
-        if (0 == $id) {
+        if ($id <= 0) {
             return;
-        } // if (!isset($parameters['id'])) {
+        } // if ($id <= 0) {
         
         // is new ?
         if ('new' == htmlspecialchars($parameters['id'])) {
             return;
-        } // if (isset($parameters['id']) && ('new' == htmlspecialchars($parameters['id']))) {
+        } // if ('new' == htmlspecialchars($parameters['id'])) {
 
         if ($id > 0) {
             $objectAdminLTEUserGroup = AdminLTEUserGroup::where('id', $id)->where('deleted', 0)->first();
         }
+        
+        $User = auth()->guard('adminlteuser')->user();
 
-        if (null !== $objectAdminLTEUserGroup) {
+        if ($User->can('viewAny', AdminLTEUserGroup::class) && $User->can('view', $objectAdminLTEUserGroup)) {
+            $data['user_can_create'] = $User->can('create', AdminLTEUserGroup::class);
+            $data['user_can_read'] = $User->can('view', $objectAdminLTEUserGroup);
+            $data['user_can_update'] = $User->can('update', $objectAdminLTEUserGroup);
+            $data['user_can_delete'] = $User->can('delete', $objectAdminLTEUserGroup);
+            $data['user_can_view'] = $User->can('viewAny', $objectAdminLTEUserGroup);
+
             $objectAdminLTE = new AdminLTE();
-  
             $displayTexts = $objectAdminLTE->getObjectDisplayTexts('AdminLTEUserGroup', $objectAdminLTEUserGroup);
 
-            $list['id'] = $objectAdminLTEUserGroup->id;
-            $list['id__displaytext__'] = $displayTexts['id'];
-            $list['deleted'] = $objectAdminLTEUserGroup->deleted;
-            $list['deleted__displaytext__'] = $displayTexts['deleted'];
-            $list['created_at'] = $objectAdminLTEUserGroup->created_at;
-            $list['created_at__displaytext__'] = $displayTexts['created_at'];
-            $list['updated_at'] = $objectAdminLTEUserGroup->updated_at;
-            $list['updated_at__displaytext__'] = $displayTexts['updated_at'];
-            $list['enabled'] = $objectAdminLTEUserGroup->enabled;
-            $list['enabled__displaytext__'] = $displayTexts['enabled'];
-            $list['admin'] = $objectAdminLTEUserGroup->admin;
-            $list['admin__displaytext__'] = $displayTexts['admin'];
-            $list['title'] = $objectAdminLTEUserGroup->title;
-            $list['title__displaytext__'] = $displayTexts['title'];
-            $list['widget_permission'] = $objectAdminLTEUserGroup->widget_permission;
-            $list['widget_permission__displaytext__'] = $displayTexts['widget_permission'];
+            $data['id'] = $objectAdminLTEUserGroup->id;
+            $data['id__displaytext__'] = $displayTexts['id'];
+            $data['deleted'] = $objectAdminLTEUserGroup->deleted;
+            $data['deleted__displaytext__'] = $displayTexts['deleted'];
+            $data['created_at'] = $objectAdminLTEUserGroup->created_at;
+            $data['created_at__displaytext__'] = $displayTexts['created_at'];
+            $data['updated_at'] = $objectAdminLTEUserGroup->updated_at;
+            $data['updated_at__displaytext__'] = $displayTexts['updated_at'];
+            $data['enabled'] = $objectAdminLTEUserGroup->enabled;
+            $data['enabled__displaytext__'] = $displayTexts['enabled'];
+            $data['admin'] = $objectAdminLTEUserGroup->admin;
+            $data['admin__displaytext__'] = $displayTexts['admin'];
+            $data['title'] = $objectAdminLTEUserGroup->title;
+            $data['title__displaytext__'] = $displayTexts['title'];
+            $data['widget_permission'] = $objectAdminLTEUserGroup->widget_permission;
+            $data['widget_permission__displaytext__'] = $displayTexts['widget_permission'];
         } // if (null !== $objectAdminLTEUserGroup) {
 
         return [
-            'list' => $list
+            'object' => $data
         ];
     }
 
     public function post(AdminLTEUserGroupPOSTRequest $request)
     {
+        $User = auth()->guard('adminlteuser')->user();
+        $has_error = false;
+        $error_msg = '';
+        $return_data = [];
+        
         $id = intval($request->input('id'));
 
         if ($id > 0) {
             $objectAdminLTEUserGroup = AdminLTEUserGroup::find($id);
+            if (!$User->can('update', $objectAdminLTEUserGroup)) {
+                $has_error = true;
+                $error_msg = 'You can not update this object. Contact your system administrator for more information.';
+            }
         } else {
             $objectAdminLTEUserGroup = new AdminLTEUserGroup();
+            if (!$User->can('create', AdminLTEUserGroup::class)) {
+                $has_error = true;
+                $error_msg = 'You can not create any object. Contact your system administrator for more information.';
+            }
         } // if ($id > 0) {
+        
+        if ($has_error) {
+            $return_data['id'] = $id;
+            $return_data['has_error'] = $has_error;
+            $return_data['error_msg'] = $error_msg;
+
+            return $return_data;
+        }
         
         $objectAdminLTEUserGroup->deleted = 0;
         $objectAdminLTEUserGroup->enabled = ('' != $request->input('enabled'))
@@ -88,13 +115,20 @@ class AdminLTEUserGroupController extends Controller
 
         $objectAdminLTEUserGroup->save();
         
-        return [
-            'id' => $objectAdminLTEUserGroup->id
-        ];
+        $return_data['id'] = $objectAdminLTEUserGroup->id;
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
     }
 
     public function delete(Request $request)
     {
+        $User = auth()->guard('adminlteuser')->user();
+        $has_error = false;
+        $error_msg = '';
+        $return_data = [];
+        
         $selected_ids = $request->input('selected_ids');
         
         $objects = AdminLTEUserGroup::where('deleted', false)
@@ -103,11 +137,25 @@ class AdminLTEUserGroupController extends Controller
 
         foreach ($objects as $object)
         {
-            $object->deleted = 1;
-            $object->save();                
+            if (!$User->can('delete', $object)) {
+                $has_error = true;
+                $error_msg = 'You can not delete this object. Contact your system administrator for more information.';
+                break;
+            }              
         } // foreach ($objects as $object)
 
-        return ['message' => "Success"];
+        if (!$has_error) {
+            foreach ($objects as $object)
+            {
+                $object->deleted = 1;
+                $object->save();                
+            } // foreach ($objects as $object)
+        }
+            
+        $return_data['has_error'] = true;
+        $return_data['error_msg'] = $error_msg;
+
+        return $return_data;
     }
 
     public function get_permission_data(Request $request)

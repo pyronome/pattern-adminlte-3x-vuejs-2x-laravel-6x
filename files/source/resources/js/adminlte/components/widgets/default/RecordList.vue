@@ -174,23 +174,22 @@
             },
             loadData: function (callback) {
                 var self = this;
-                var query = AdminLTEHelper.getURLQuery(this);
-                axios.get(AdminLTEHelper.getAPIURL("__layout/get_recordlist/" + this.$attrs.pagename + "/" + this.model + query))
+                var query = AdminLTEHelper.getURLQuery(self);
+                axios.get(AdminLTEHelper.getAPIURL("__layout/get_recordlist/" + self.$attrs.pagename + "/" + self.model + query))
                     .then(({ data }) => {
-                        this.data = data;
-                        this.widget_options = data.data.widget_options;
-                        this.titles = this.widget_options.table_header.titles;
-                        this.variables = this.widget_options.table_header.variables;
-                        this.list = data.data.list;
-                        this.show_pagination = data.show_pagination;
-                        this.$nextTick(function () {
-                            this.initializeWidget();
-                        });
+                        self.data = data;
+                        self.widget_options = data.data.widget_options;
+                        self.titles = self.widget_options.table_header.titles;
+                        self.variables = self.widget_options.table_header.variables;
+                        self.list = data.data.list;
+                        self.show_pagination = data.show_pagination;
                     }).catch(({ data }) => {
-                        this.$Progress.fail();
+                        self.$Progress.fail();
                     }).finally(function() {
                         callback();
                         AdminLTEHelper.cleanCheckedBoxes(self.model);
+                        self.initializeWidget();
+                        self.$root.$emit("recordlist-rendered", self.model);
                     });
             },
             search_list: _.debounce(function (e) {

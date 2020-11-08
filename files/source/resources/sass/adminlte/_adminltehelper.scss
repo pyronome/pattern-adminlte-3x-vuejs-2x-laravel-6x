@@ -1131,4 +1131,20 @@ td .showBigPhoto {
 .permission-controller > .detail-label {
     font-weight: normal !important;
 }
+
+.page-server-error {
+    padding: 50px;
+    padding-top: 250px;
+    text-align: center;
+    font-size: 2.3vh;
+    color: #dc3545;
+}
+
+.page-permission-error {
+    padding: 50px;
+    padding-top: 250px;
+    text-align: center;
+    font-size: 2.3vh;
+    color: #dc3545;
+}
 /* {{@snippet:end}} */

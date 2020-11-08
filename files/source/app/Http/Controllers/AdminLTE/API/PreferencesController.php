@@ -47,6 +47,9 @@ class PreferencesController extends Controller
         $objectAdminLTEUserLayout->widgets = $preferencesJSON;
         $objectAdminLTEUserLayout->save();
 
-        return ['message' => "Success"];
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
     }
 }

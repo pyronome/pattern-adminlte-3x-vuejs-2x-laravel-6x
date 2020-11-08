@@ -93,7 +93,10 @@ class AdminLTEModelDisplayTextController extends Controller
         $objectDisplayText->display_texts = $display_texts;
         $objectDisplayText->save();
 
-        return ['message' => "Success"];
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
     }
 
 }

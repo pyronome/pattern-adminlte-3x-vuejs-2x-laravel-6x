@@ -68,7 +68,10 @@ class GeneralSettingsController extends Controller
         $objectAdminLTE = new AdminLTE();
         $objectAdminLTE->writeTemplateFileToTarget($source_path, $destination_path, $variables);
   
-        return ['message' => "Success"];
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
     }
 
 }

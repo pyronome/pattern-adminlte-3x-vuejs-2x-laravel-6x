@@ -38,6 +38,9 @@ class MenuConfigurationController extends Controller
 
     public function post(MenuConfigurationPOSTRequest $request)
     {
+        $has_error = false;
+        $error_msg = '';
+        $return_data = [];
 
         $menu_json = rawurldecode(
                 htmlspecialchars_decode(
@@ -45,8 +48,10 @@ class MenuConfigurationController extends Controller
 
         Storage::disk('local')->put('config/adminlte_menu.json', $menu_json);
         
-        return ['message' => 'UPDATED'];
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
 
+        return $return_data;
     }
 
 }
