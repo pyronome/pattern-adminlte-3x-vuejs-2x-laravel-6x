@@ -1,5 +1,5 @@
 <template>
     <div class="page-server-error">
-        <span>An error occured while loading page.</span>
+        <span>An error occurred while processing your request.</span>
     </div>
 </template>

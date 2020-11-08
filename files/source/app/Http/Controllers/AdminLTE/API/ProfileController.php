@@ -18,7 +18,7 @@ class ProfileController extends Controller
         $objectAdminLTE = new AdminLTE();
         $userData = $objectAdminLTE->getUserData();
 
-        $response = [];
+        $data = [];
 
         if ($userData['id'] > 0)
         {
@@ -28,26 +28,26 @@ class ProfileController extends Controller
             {
                 $displayTexts = $objectAdminLTE->getObjectDisplayTexts('AdminLTEUser', $objectAdminLTEUser);
 
-                $response['id'] = $objectAdminLTEUser->id;
-                $response['id__displaytext__'] = $displayTexts['id'];
-                $response['deleted'] = $objectAdminLTEUser->deleted;
-                $response['deleted__displaytext__'] = $displayTexts['deleted'];
-                $response['created_at'] = $objectAdminLTEUser->created_at;
-                $response['created_at__displaytext__'] = $displayTexts['created_at'];
-                $response['updated_at'] = $objectAdminLTEUser->updated_at;
-                $response['updated_at__displaytext__'] = $displayTexts['updated_at'];
-                $response['enabled'] = $objectAdminLTEUser->enabled;
-                $response['enabled__displaytext__'] = $displayTexts['enabled'];
-                $response['adminlteusergroup_id'] = array($objectAdminLTEUser->adminlteusergroup_id);
-                $response['adminlteusergroup_id__displaytext__'] = $displayTexts['adminlteusergroup_id'];
-                $response['fullname'] = $objectAdminLTEUser->fullname;
-                $response['fullname__displaytext__'] = $displayTexts['fullname'];
-                $response['username'] = $objectAdminLTEUser->username;
-                $response['username__displaytext__'] = $displayTexts['username'];
-                $response['email'] = $objectAdminLTEUser->email;
-                $response['email__displaytext__'] = $displayTexts['email'];
-                $response['password'] = '';
-                $response['password__displaytext__'] = '******';
+                $data['id'] = $objectAdminLTEUser->id;
+                $data['id__displaytext__'] = $displayTexts['id'];
+                $data['deleted'] = $objectAdminLTEUser->deleted;
+                $data['deleted__displaytext__'] = $displayTexts['deleted'];
+                $data['created_at'] = $objectAdminLTEUser->created_at;
+                $data['created_at__displaytext__'] = $displayTexts['created_at'];
+                $data['updated_at'] = $objectAdminLTEUser->updated_at;
+                $data['updated_at__displaytext__'] = $displayTexts['updated_at'];
+                $data['enabled'] = $objectAdminLTEUser->enabled;
+                $data['enabled__displaytext__'] = $displayTexts['enabled'];
+                $data['adminlteusergroup_id'] = array($objectAdminLTEUser->adminlteusergroup_id);
+                $data['adminlteusergroup_id__displaytext__'] = $displayTexts['adminlteusergroup_id'];
+                $data['fullname'] = $objectAdminLTEUser->fullname;
+                $data['fullname__displaytext__'] = $displayTexts['fullname'];
+                $data['username'] = $objectAdminLTEUser->username;
+                $data['username__displaytext__'] = $displayTexts['username'];
+                $data['email'] = $objectAdminLTEUser->email;
+                $data['email__displaytext__'] = $displayTexts['email'];
+                $data['password'] = '';
+                $data['password__displaytext__'] = '******';
 
                 $external_ids = array();
                 foreach ($objectAdminLTE->get_model_files_by_property('AdminLTEUser', $objectAdminLTEUser->id, 'profile_img') as $fileData) {
@@ -60,12 +60,14 @@ class ProfileController extends Controller
                     $current_external_value = implode(',', $external_ids);
                 }
 
-                $response['profile_img'] = $current_external_value;
-                $response['profile_img__displaytext__'] = $displayTexts['profile_img'];
+                $data['profile_img'] = $current_external_value;
+                $data['profile_img__displaytext__'] = $displayTexts['profile_img'];
             } // if ($adminLTEUser != null)
         } // if ($userData['id'] > 0)
 
-        return $response;
+        return [
+            'object' => $data
+        ];
     }
 
     public function get_files(Request $request) {
@@ -73,8 +75,6 @@ class ProfileController extends Controller
         
         $objectAdminLTE = new AdminLTE();
         $userData = $objectAdminLTE->getUserData();
-
-        $response = [];
 
         if ($userData['id'] > 0)
         { 

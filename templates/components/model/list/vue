@@ -108,24 +108,26 @@ export default {
                 });
         },
         loadWidgets: function () {
-            if (this.page.is_widgets_loading) {
+            var self = this;
+
+            if (self.page.is_widgets_loading) {
                 return;
             }
 
-            this.page.is_widgets_loading = true;
+            self.page.is_widgets_loading = true;
 
             axios.get(AdminLTEHelper.getAPIURL("__layout/get_page_widgets/" + self.pagename))
                 .then(({ data }) => {
-                    this.page.is_widgets_loaded = true;
-                    this.page.is_widgets_loading = false;
-                    this.widgets = data;
-                    this.processLoadQueue();
+                    self.page.is_widgets_loaded = true;
+                    self.page.is_widgets_loading = false;
+                    self.widgets = data;
+                    self.processLoadQueue();
                 }).catch(({ data }) => {
-                    this.page.is_widgets_loaded = true;
-                    this.page.is_widgets_loading = false;
-                    this.$Progress.fail();
-                    this.page.has_server_error = true;
-                    this.processLoadQueue();
+                    self.page.is_widgets_loaded = true;
+                    self.page.is_widgets_loading = false;
+                    self.$Progress.fail();
+                    self.page.has_server_error = true;
+                    self.processLoadQueue();
                 });
         }
     },
