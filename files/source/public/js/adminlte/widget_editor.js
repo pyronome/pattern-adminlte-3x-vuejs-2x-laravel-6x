@@ -1146,19 +1146,19 @@ function WidgetEditor(idSelector, options) {
         $("#modalWidgetItem").modal();
     });
 
-    $main.on('click', '#ulWidgetEditor .btnUp', function (e) {
+    $(document).on('click', '#ulWidgetEditor .btnUp', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         $li.prev('li').before($li);
         WidgetEditor.updateButtons($main);
     });
-    $main.on('click', '#ulWidgetEditor .btnDown', function (e) {
+    $(document).on('click', '#ulWidgetEditor .btnDown', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         $li.next('li').after($li);
         WidgetEditor.updateButtons($main);
     });
-    $main.on('click', '#ulWidgetEditor .btnOut', function (e) {
+    $(document).on('click', '#ulWidgetEditor .btnOut', function (e) {
         e.preventDefault();
         var list = $(this).closest('ul');
         var $li = $(this).closest('li');
@@ -1170,7 +1170,7 @@ function WidgetEditor(idSelector, options) {
         }
         WidgetEditor.updateButtons($main);
     });
-    $main.on('click', '#ulWidgetEditor .btnIn', function (e) {
+    $(document).on('click', '#ulWidgetEditor .btnIn', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         var $prev = $li.prev('li');

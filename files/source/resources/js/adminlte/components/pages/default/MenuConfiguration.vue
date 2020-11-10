@@ -198,12 +198,12 @@ export default {
                 this.loadPageVariables();
             } else {
                 if (this.page.is_data_loaded) {
+                    this.$Progress.finish();
+                    this.page.is_ready = true;
+
                     this.$nextTick(function () {
                         this.updateMenuEditor();
                     });
-
-                    this.$Progress.finish();
-                    this.page.is_ready = true;
                 } else {
                     this.loadData();
                 }
@@ -305,6 +305,17 @@ export default {
             if (!this.page.is_ready) {
                 return;
             }
+            
+            $("#buttonNewMenuItem").off("click").on("click", function () {
+                document.getElementById("text").value = "";
+	            document.getElementById("href").value = "";
+                document.getElementById("visibility").value = 1;
+                
+                $("#buttonUpdateMenuItem").hide();
+                $("#buttonAddMenuItem").show();
+    
+                $("#modalMenuItem").modal();
+            });
 
             var rawMenuJSON = decodeURIComponent(this.form.menu_json);
             var menuJSON = JSON.parse(rawMenuJSON);

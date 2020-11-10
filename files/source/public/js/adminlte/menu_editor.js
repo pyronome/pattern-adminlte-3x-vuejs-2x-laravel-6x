@@ -1153,19 +1153,19 @@ function MenuEditor(idSelector, options) {
         $("#modalMenuItem").modal();
     });
 
-    $main.on('click', '#ulMenuEditor .btnUp', function (e) {
+    $(document).on('click', '#ulMenuEditor .btnUp', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         $li.prev('li').before($li);
         MenuEditor.updateButtons($main);
     });
-    $main.on('click', '#ulMenuEditor .btnDown', function (e) {
+    $(document).on('click', '#ulMenuEditor .btnDown', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         $li.next('li').after($li);
         MenuEditor.updateButtons($main);
     });
-    $main.on('click', '#ulMenuEditor .btnOut', function (e) {
+    $(document).on('click', '#ulMenuEditor .btnOut', function (e) {
         e.preventDefault();
         var list = $(this).closest('ul');
         var $li = $(this).closest('li');
@@ -1177,7 +1177,7 @@ function MenuEditor(idSelector, options) {
         }
         MenuEditor.updateButtons($main);
     });
-    $main.on('click', '#ulMenuEditor .btnIn', function (e) {
+    $(document).on('click', '#ulMenuEditor .btnIn', function (e) {
         e.preventDefault();
         var $li = $(this).closest('li');
         var $prev = $li.prev('li');
