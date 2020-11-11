@@ -134,7 +134,8 @@ export default {
         var self = this;
 
         self.main_folder = AdminLTEHelper.getMainFolder();
-        self.pagename = AdminLTEHelper.getPagename();
+        var pagename = AdminLTEHelper.getPagename();
+        self.pagename = ('' != pagename) ? pagename : 'home';
         self.page.is_ready = false;
         self.processLoadQueue();
 

@@ -6,7 +6,6 @@
         </div>
         <div class="card">
             <div class="card-body login-card-body">
-                <!-- <p class="login-box-msg">{{ __('Sign in to start your session') }}</p> -->
                 <form id="formLogin"
                         name="formLogin"
                         class="form-horizontal"
@@ -19,7 +18,7 @@
                             id="formLogin-email"
                             name="formLogin-email"
                             class="form-control"
-                            placeholder="Email"
+                            v-bind:placeholder="$t('Email')"
                             :class="{ 'is-invalid': form.errors.has('email') }">
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -34,7 +33,7 @@
                             id="formLogin-password"
                             name="formLogin-password"
                             class="form-control"
-                            placeholder="Password"
+                            v-bind:placeholder="$t('Password')"
                             :class="{ 'is-invalid': form.errors.has('password') }">
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -46,7 +45,7 @@
                         <has-error :form="form" field="password"></has-error>
                     </div>
                     <div class="row">
-                        <div class="col-8" style="padding-top:8px;">
+                        <div class="col-7" style="padding-top:8px;">
                             <div class="icheck-primary d-inline">
                                 <input type="checkbox"
                                     v-model="form.remember"
@@ -58,7 +57,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-5">
                             <button :disabled="form.busy"
                                     type="submit"
                                     class="btn btn-primary btn-block">{{ $t('Sign in') }}</button>

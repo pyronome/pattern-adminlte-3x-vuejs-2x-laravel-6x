@@ -46,7 +46,7 @@
                                                 <div v-html="data.enabled__displaytext__"></div>
                                             </div>
                                             <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('AdminLTE User Group') }}</label>
+                                                <label class="detail-label">{{ $t('AdminLTEUserGroup') }}</label>
                                                 <div v-html="data.adminlteusergroup_id__displaytext__"></div>
                                             </div>
                                             <div class="detail-container  unvisible-property1 ">

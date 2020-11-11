@@ -38,7 +38,7 @@
                                     </div>
 									<div class="col-lg-12 col-md-12 col-xs-12">
                                         <div class="detail-container">
-                                            <label class="detail-label">{{ $t('User Group') }}</label>
+                                            <label class="detail-label">{{ $t('AdminLTEUserGroup') }}</label>
                                             <div v-html="data.adminlteusergroup_id__displaytext__"></div>
                                         </div>
                                         <div class="detail-container">

@@ -7,12 +7,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>{{ $t("User Permission") }}</h1>
+                            <h1>{{ $t("AdminLTEUser Permission") }}</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
-                                <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteuser'">{{ $t("User List") }}</router-link></li>
+                                <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteuser'">{{ $t("AdminLTEUser List") }}</router-link></li>
                                 <li class="breadcrumb-item active" v-html="this.PermissionForm.fullname"></li>
                             </ol>
                         </div>
@@ -41,7 +41,7 @@
                                                             v-model="search_permission"
                                                             v-on:keyup="searchPermission"
                                                             class="form-control float-right inputSearchBar"
-                                                            placeholder="Search">
+                                                            v-bind:placeholder="$t('Search')">
                                                         <div class="input-group-append labelSearchBar">
                                                             <button type="button" class="btn btn-default ">
                                                                 <img class="imgLoader" src="/img/adminlte/loader.svg" width="14" height="14"/>
@@ -70,7 +70,7 @@
                                                         :id="'gp-__adminlte_menu-' + item.value"
                                                         :data-token="item.value"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
@@ -78,7 +78,7 @@
                                                         :id="'up-__adminlte_menu-' + item.value + '-yes'"
                                                         :data-token="item.value"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
@@ -86,7 +86,7 @@
                                                         :id="'up-__adminlte_menu-' + item.value + '-no'"
                                                         :data-token="item.value"
                                                         data-value="">
-                                                        N
+                                                        {{ $t('N') }}
                                                     </button>
                                                     <span v-html="item.title"></span>
                                                 </div>
@@ -102,7 +102,7 @@
                                                         :id="'gp-__adminlte_model-' + model + '-create'"
                                                         :data-token="model + '-create'"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
@@ -110,7 +110,7 @@
                                                         :id="'up-__adminlte_model-' + model + '-create' + '-yes'"
                                                         :data-token="model + '-create'"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
@@ -118,7 +118,7 @@
                                                         :id="'up-__adminlte_model-' + model + '-create' + '-no'"
                                                         :data-token="model + '-create'"
                                                         data-value="">
-                                                        N
+                                                        {{ $t('N') }}
                                                     </button>
                                                     <span>{{ $t('Create') }}</span>
                                                 </div>
@@ -128,7 +128,7 @@
                                                         :id="'gp-__adminlte_model-' + model + '-read'"
                                                         :data-token="model + '-read'"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
@@ -136,7 +136,7 @@
                                                         :id="'up-__adminlte_model-' + model + '-read' + '-yes'"
                                                         :data-token="model + '-read'"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
@@ -144,7 +144,7 @@
                                                         :id="'up-__adminlte_model-' + model + '-read' + '-no'"
                                                         :data-token="model + '-read'"
                                                         data-value="">
-                                                        N
+                                                        {{ $t('N') }}
                                                     </button>
                                                     <span>{{ $t('Read') }}</span>
                                                 </div>
@@ -154,7 +154,7 @@
                                                         :id="'gp-__adminlte_model-' + model + '-update'"
                                                         :data-token="model + '-update'"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
@@ -162,7 +162,7 @@
                                                         :id="'up-__adminlte_model-' + model + '-update' + '-yes'"
                                                         :data-token="model + '-update'"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
@@ -170,7 +170,7 @@
                                                         :id="'up-__adminlte_model-' + model + '-update' + '-no'"
                                                         :data-token="model + '-update'"
                                                         data-value="">
-                                                        N
+                                                        {{ $t('N') }}
                                                     </button>
                                                     <span>{{ $t('Update') }}</span>
                                                 </div>
@@ -180,7 +180,7 @@
                                                         :id="'gp-__adminlte_model-' + model + '-delete'"
                                                         :data-token="model + '-delete'"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
@@ -188,7 +188,7 @@
                                                         :id="'up-__adminlte_model-' + model + '-delete' + '-yes'"
                                                         :data-token="model + '-delete'"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
@@ -196,7 +196,7 @@
                                                         :id="'up-__adminlte_model-' + model + '-delete' + '-no'"
                                                         :data-token="model + '-delete'"
                                                         data-value="">
-                                                        N
+                                                        {{ $t('N') }}
                                                     </button>
                                                     <span>{{ $t('Delete') }}</span>
                                                 </div>
@@ -212,7 +212,7 @@
                                                         :id="'gp-' + group.meta_key + '-' + item.value"
                                                         :data-token="item.value"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
@@ -221,7 +221,7 @@
                                                         :id="'up-' + group.meta_key + '-' + item.value + '-yes'"
                                                         :data-token="item.value"
                                                         data-value="">
-                                                        Y
+                                                        {{ $t('Y') }}
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
@@ -230,7 +230,7 @@
                                                         :id="'up-' + group.meta_key + '-' + item.value + '-no'"
                                                         :data-token="item.value"
                                                         data-value="">
-                                                        N
+                                                        {{ $t('N') }}
                                                     </button>
                                                     <span v-html="item.title"></span>
                                                 </div>

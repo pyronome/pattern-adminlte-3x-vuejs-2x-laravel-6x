@@ -153,7 +153,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12"><h6>Navbar Variants</h6></div>
+                                            <div class="col-lg-12"><h6>{{ $t('Navbar Variants') }}</h6></div>
                                             <div class="col-lg-12">
                                                 <input type="hidden" id="formPreferences-navbar_variants" value="">
                                                 <div id="container_navbar_variants" class="d-flex flex-wrap mb-3">
@@ -180,7 +180,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12"><h6>Accent Color Variants</h6></div>
+                                            <div class="col-lg-12"><h6>{{ $t('Accent Color Variants') }}</h6></div>
                                             <div class="col-lg-12">
                                                 <input type="hidden" id="formPreferences-accent_variants" value="">
                                                 <div id="container_accent_variants" class="d-flex flex-wrap mb-3">
@@ -204,7 +204,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12"><h6>Dark Sidebar Variants</h6></div>
+                                            <div class="col-lg-12"><h6>{{ $t('Dark Sidebar Variants') }}</h6></div>
                                             <div class="col-lg-12">
                                                 <input type="hidden" id="formPreferences-sidebar_variants" value="">
                                                 <div id="container_sidebar_variants_dark" class="d-flex flex-wrap mb-3">
@@ -228,7 +228,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12"><h6>Light Sidebar Variants</h6></div>
+                                            <div class="col-lg-12"><h6>{{ $t('Light Sidebar Variants') }}</h6></div>
                                             <div class="col-lg-12">
                                                 <div id="container_sidebar_variants_light" class="d-flex flex-wrap mb-3">
                                                     <div data-color="bg-primary" class="bg-primary elevation-2 preferences-button"></div>
@@ -251,7 +251,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12"><h6>Brand Logo Variants</h6></div>
+                                            <div class="col-lg-12"><h6>{{ $t('Brand Logo Variants') }}</h6></div>
                                             <div class="col-lg-12">
                                                 <input type="hidden" id="formPreferences-logo_variants" value="">
                                                 <div id="container_logo_variants" class="d-flex flex-wrap mb-3">
@@ -274,7 +274,7 @@
                                                     <div data-color="navbar-warning" class="bg-warning elevation-2 preferences-button"></div>
                                                     <div data-color="navbar-white" class="bg-white elevation-2 preferences-button"></div>
                                                     <div data-color="navbar-orange" class="bg-orange elevation-2 preferences-button"></div>
-                                                    <a id="clear_logo" href="javascript:void(0)">clear</a>
+                                                    <a id="clear_logo" href="javascript:void(0)">{{ $t('clear') }}</a>
                                                 </div>
                                             </div>
                                         </div>

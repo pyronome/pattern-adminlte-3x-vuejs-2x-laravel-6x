@@ -7,13 +7,13 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>{{ $t("AdminLTE User Group Edit") }}</h1>
+                            <h1>{{ $t("AdminLTEUserGroup Edit") }}</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
-                                <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteusergroup'">{{ $t("User Group List") }}</router-link></li>
-                                <li class="breadcrumb-item active">{{ $t("User Group Edit") }}</li>
+                                <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteusergroup'">{{ $t("AdminLTEUserGroup List") }}</router-link></li>
+                                <li class="breadcrumb-item active">{{ $t("AdminLTEUserGroup Edit") }}</li>
                             </ol>
                         </div>
                     </div>

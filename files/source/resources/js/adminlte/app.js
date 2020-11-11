@@ -29,9 +29,27 @@ window.Router = new VueRouter({
 import VueI18n from 'vue-i18n';
 Vue.use(VueI18n);
 window.I18N = new VueI18n({
-    locale: "en",
-    messages: {}
+    locale: "tr",
+    fallbackLocale: "tr",
+    messages: loadLocaleMessages()
 });
+
+function loadLocaleMessages() {
+    const locales = require.context(
+      "../../../locales",
+      true,
+      /[A-Za-z0-9-_,\s]+\.json$/i
+    );
+    const messages = {};
+    locales.keys().forEach(key => {
+      const matched = key.match(/([A-Za-z0-9-_]+)\./i);
+      if (matched && matched.length > 1) {
+        const locale = matched[1];
+        messages[locale] = locales(key);
+      }
+    });
+    return messages;
+}
 /* vue-i18n Declaration EOF */
 
 /* vform Declaration BOF */

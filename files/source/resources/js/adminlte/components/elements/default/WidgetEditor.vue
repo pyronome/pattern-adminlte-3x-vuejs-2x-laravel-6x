@@ -27,7 +27,7 @@
                                         <input type="search"
                                             id="searchWidget" name="searchWidget"
                                             class="form-control float-right inputSearchBar"
-                                            placeholder="Search">
+                                            v-bind:placeholderr="$t('Search')">
                                         <div class="input-group-append labelSearchBar">
                                             <button type="button" class="btn btn-default">
                                                 <i class="fas fa-search text-primary"></i>

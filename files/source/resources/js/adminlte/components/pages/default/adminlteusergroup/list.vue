@@ -7,12 +7,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>{{ $t("AdminLTE User Group List") }}</h1>
+                        <h1>{{ $t("AdminLTEUserGroup List") }}</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
-                            <li class="breadcrumb-item active">{{ $t("User Group List") }}</li>
+                            <li class="breadcrumb-item active">{{ $t("AdminLTEUserGroup List") }}</li>
                         </ol>
                     </div>
                     </div>

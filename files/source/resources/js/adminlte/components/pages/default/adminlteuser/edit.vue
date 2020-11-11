@@ -13,7 +13,7 @@
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
                                 <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteuser'">{{ $t("AdminLTEUser List") }}</router-link></li>
-                                <li class="breadcrumb-item active">{{ $t("User Edit") }}</li>
+                                <li class="breadcrumb-item active">{{ $t("AdminLTEUser Edit") }}</li>
                             </ol>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="AdminLTEUserForm_adminlteusergroup_id" class="detail-label">{{  $t('AdminLTE User Group') }}  </label>
+                                                <label for="AdminLTEUserForm_adminlteusergroup_id" class="detail-label">{{  $t('AdminLTEUserGroup') }}  </label>
                                                 <select2-element
                                                     data-placeholder=""
                                                     id="AdminLTEUserForm_adminlteusergroup_id"
