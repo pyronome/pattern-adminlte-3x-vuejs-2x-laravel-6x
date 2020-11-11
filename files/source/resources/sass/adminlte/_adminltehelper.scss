@@ -1147,4 +1147,55 @@ td .showBigPhoto {
     font-size: 2.3vh;
     color: #dc3545;
 }
+
+.table td, .table th {
+    padding: 3px 5px !important;
+}
+
+th > [class*="icheck-"],
+td > [class*="icheck-"] {
+    vertical-align: middle;
+    line-height: normal;
+}
+
+th > [class*="icheck-"] > label,
+td > [class*="icheck-"] > label {
+    padding-left: 20px !important;
+    min-height: 20px;
+    line-height: 20px;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+th > [class*="icheck-"] > input:first-child + label::before,
+td > [class*="icheck-"] > input:first-child + label::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #D3CFC8;
+    border-radius: 0px;
+    margin-left: -20px;
+}
+
+th > [class*="icheck-"] > input:first-child:checked + label::after,
+td > [class*="icheck-"] > input:first-child:checked + label::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 9px;
+    border: solid 2px #fff;
+    border-left: none;
+    border-top: none;
+    transform: translate(7.75px, 4.5px) rotate(45deg);
+    -ms-transform: translate(7.75px, 4.5px) rotate(45deg);
+}
+
 /* {{@snippet:end}} */
