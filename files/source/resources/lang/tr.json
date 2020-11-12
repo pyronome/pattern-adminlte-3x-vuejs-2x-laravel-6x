@@ -1,0 +1,15 @@
+{   
+    "Your email address is not recognized. Please check your email address and try again.": "Bu e-posta adresiyle kayıtlı kullanıcı bulunamadı. Lütfen kontrol edip tekrar deneyiniz.",
+    "Your e-mail address or password is not correct. Please check and try again.": "E-posta adresiniz veya şifrenizi kontrol edip tekrar deneyiniz.",
+    "Account has been disabled. Please contact with system administrator.": "Bu hesap devre dışı bırakıldı. Lütfen sistem yöneticisi ile iletişime geçin.",
+    "Username specified belongs to another user. Please specify another username.": "Bu kullanıcı adı kullanılmaktadır. Lütfen farklı bir tane deneyiniz.",
+    "E-mail address specified belongs to another user. Please specify another e-mail address.": "Bu posta adresi kullanılmaktadır. Lütfen farklı bir tane deneyiniz.",
+    "Please specify your current password.": "Lütfen mevcut şifrenizi giriniz.",
+    "Your current password is wrong.": "Mevcut şifrenizi yanlış girdiniz. Lütfen kontrol ediniz.",
+    "Please specify your new password.": "Lütfen yeni şifrenizi giriniz.",
+    "Please re-enter your new password.": "Lütfen yeni şifrenizi tekrar giriniz.",
+    "Your new passwords are not matched. Please check your new passwords and try again.": "Yeni şifre girişleriniz eşleşmiyor. Lütfen kontrol ediniz.",
+    "You can not update this object. Contact your system administrator for more information.": "Bu nesneyi güncelleyemezsiniz. Daha fazla bilgi için sistem yöneticinize başvurun.",
+    "You can not create any object. Contact your system administrator for more information.": "Herhangi bir nesne yaratamazsınız. Daha fazla bilgi için sistem yöneticinize başvurun.",
+    "You can not delete this object. Contact your system administrator for more information.": "Bu nesneyi silemezsiniz. Daha fazla bilgi için sistem yöneticinize başvurun."
+}

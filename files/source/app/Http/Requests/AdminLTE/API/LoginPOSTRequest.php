@@ -55,11 +55,11 @@ class LoginPOSTRequest extends FormRequest
                 if(!$enabled) {
                     $validator->errors()->add(
                         'enabled',
-                        'Account has been disabled. Please contact with system administrator.');
+                        __('This account has been disabled. Please contact with system administrator.'));
                 } else {
                     $validator->errors()->add(
                         'password',
-                        'Your e-mail address or password is not correct. Please check and try again.');
+                        __('Your e-mail address or password is not correct. Please check and try again.'));
                 }
                 
                 sleep(2);

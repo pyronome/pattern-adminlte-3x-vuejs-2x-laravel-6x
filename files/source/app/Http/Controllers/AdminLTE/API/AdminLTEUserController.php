@@ -103,13 +103,13 @@ class AdminLTEUserController extends Controller
             $objectAdminLTEUser = AdminLTEUser::find($id);
             if (!$User->can('update', $objectAdminLTEUser)) {
                 $has_error = true;
-                $error_msg = 'You can not update this object. Contact your system administrator for more information.';
+                $error_msg = __('You can not update this object. Contact your system administrator for more information.');
             }
         } else {
             $objectAdminLTEUser = new AdminLTEUser();
             if (!$User->can('create', AdminLTEUser::class)) {
                 $has_error = true;
-                $error_msg = 'You can not create any object. Contact your system administrator for more information.';
+                $error_msg = __('You can not create any object. Contact your system administrator for more information.');
             }
         } // if ($id > 0) {
         
@@ -172,7 +172,7 @@ class AdminLTEUserController extends Controller
         {
             if (!$User->can('delete', $object)) {
                 $has_error = true;
-                $error_msg = 'You can not delete this object. Contact your system administrator for more information.';
+                $error_msg = __('You can not delete this object. Contact your system administrator for more information.');
                 break;
             }              
         } // foreach ($objects as $object)

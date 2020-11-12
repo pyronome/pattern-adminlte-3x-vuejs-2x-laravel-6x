@@ -264,7 +264,13 @@ export default {
                     self.page.has_server_error = false;
                 }).catch(({ data }) => {
                     self.$Progress.fail();
-                    self.page.has_server_error = true;
+                    let errors = (self.{{$ __value__}}Form.errors.errors);
+                    if (undefined !== errors.error) {
+                        self.page.has_server_error = true;
+                    } else {
+                        self.page.has_post_error = true;
+                        self.page.post_error_msg = "Please fill in the required fields."
+                    }
                 }).finally(function() {
                     if (!self.page.has_server_error) {
                         if (!self.page.has_post_error) {

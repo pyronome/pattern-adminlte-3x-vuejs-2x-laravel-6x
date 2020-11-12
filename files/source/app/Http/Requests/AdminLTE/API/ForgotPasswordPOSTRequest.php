@@ -39,7 +39,7 @@ class ForgotPasswordPOSTRequest extends FormRequest
             {
                 $validator->errors()->add(
                         'email',
-                        'Your email address is not recognized. Please check your email address and try again.');
+                        __('Your email address is not recognized. Please check your email address and try again.'));
                 sleep(2);
             } // if (null == $adminLTEUser)
         });

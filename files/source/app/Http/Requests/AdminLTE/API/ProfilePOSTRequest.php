@@ -48,7 +48,7 @@ class ProfilePOSTRequest extends FormRequest
             {
                $validator->errors()->add(
                         'username',
-                        'Username specified belongs to another user. Please specify another username.');
+                        __('Username specified belongs to another user. Please specify another username.'));
                 sleep(1);
             } // if ($otherUser != null)
 
@@ -61,7 +61,7 @@ class ProfilePOSTRequest extends FormRequest
             {
                 $validator->errors()->add(
                         'email',
-                        'E-mail address specified belongs to another user. Please specify another e-mail address.');
+                        __('E-mail address specified belongs to another user. Please specify another e-mail address.'));
                 sleep(1);
             } // if ($otherUser != null)
 
@@ -71,33 +71,33 @@ class ProfilePOSTRequest extends FormRequest
                             || ($this->property0 == '')) {
                         $validator->errors()->add(
                                 'password0',
-                                'Please specify your current password.');
+                                __('Please specify your current password.'));
                     } else {
                         $currentUser = AdminLTEUser::find($userData['id']);
                         if (!password_verify($this->password0,
                                 $currentUser->password)) {
                             $validator->errors()->add(
                                     'password0',
-                                    'Your current password is wrong.');
+                                    __('Your current password is wrong.'));
                             sleep(1);
                         } else {
                             if ('' == $this->password1)
                             {
                                 $validator->errors()->add(
                                         'password1',
-                                        'Please specify your new password.');
+                                        __('Please specify your new password.'));
                             }
                             else if ('' == $this->password2)
                             {
                                 $validator->errors()->add(
                                         'password2',
-                                        'Please re-enter your new password.');
+                                        __('Please re-enter your new password.'));
                             }
                             else if ($this->password1 != $this->password2)
                             {
                                 $validator->errors()->add(
                                         'password1',
-                                        'Your new passwords are not matched. Please check your new passwords and try again.');
+                                        __('Your new passwords are not matched. Please check your new passwords and try again.'));
                             } // if ('' == $this->password1)
                         } // if (!password_verify($this->password0,
                     } // if (!property_exists($this, 'password0')

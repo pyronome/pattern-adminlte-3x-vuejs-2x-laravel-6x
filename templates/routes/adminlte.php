@@ -98,10 +98,6 @@ Route::namespace('API')
         Route::post('/post_permission_data', 'AdminLTEUserController@post_permission_data');
     });
 
-    Route::prefix('__pagepermission')->group(function () {
-        Route::get('/get/{pageName}', 'PagePermissionController@get');
-    });
-
     Route::prefix('__layout')->group(function () {
         Route::get('/get/{pageName}', 'AdminLTELayoutController@get_widgetconfig');
         Route::get('/get_attributes', 'AdminLTELayoutController@get_attributes');

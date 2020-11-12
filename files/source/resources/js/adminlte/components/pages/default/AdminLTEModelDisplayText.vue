@@ -580,29 +580,38 @@ export default {
                     self.page.post_error_msg = data.error_msg;
                 }).catch(({ data }) => {
                     self.$Progress.fail();
-                }).finally(function() {
-                    if (!self.page.has_post_error) {
-                        Vue.swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            title: '',
-                            text: 'Changes have been saved!',
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true
-                        });
+                    let errors = (self.form.errors.errors);
+                    if (undefined !== errors.error) {
+                        self.page.has_server_error = true;
                     } else {
-                        Vue.swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            title: '',
-                            text: self.page.post_error_msg,
-                            icon: 'error',
-                            showConfirmButton: false,
-                            timer: 10000,
-                            timerProgressBar: true
-                        });
+                        self.page.has_post_error = true;
+                        self.page.post_error_msg = "Please fill in the required fields."
+                    }
+                }).finally(function() {
+                    if (!self.page.has_server_error) {
+                        if (!self.page.has_post_error) {
+                            Vue.swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                title: '',
+                                text: 'Changes have been saved!',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true
+                            });
+                        } else {
+                            Vue.swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                title: '',
+                                text: self.page.post_error_msg,
+                                icon: 'error',
+                                showConfirmButton: false,
+                                timer: 10000,
+                                timerProgressBar: true
+                            });
+                        }
                     }
                 });
         }
