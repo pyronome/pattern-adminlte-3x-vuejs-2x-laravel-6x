@@ -140,9 +140,8 @@ export default {
                     self.processLoadQueue();
                 }).finally(function() {
                    AdminLTEHelper.initializePermissions(self.page.variables, false);
-                   let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, 'People', 'read');
-                   self.page.is_authorized = authorize.status;
-                   self.page.unauthorized_type = authorize.type;
+                   self.page.is_authorized = true;
+                   self.page.unauthorized_type = "";
                    self.processLoadQueue();
                 });
         },
