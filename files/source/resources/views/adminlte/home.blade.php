@@ -79,6 +79,8 @@
     </div>
     <script src="/js/adminlte/app.js"></script>
     <script src="/js/adminlte/custom.js"></script>
-    <script type="text/javascript" src="//maps.google.com/maps/api/js?key={{ config('adminlte.google_maps_api_key') }}&libraries=places"></script>
+    @if('' != config('adminlte.google_maps_api_key'))
+        <script type="text/javascript" src="//maps.google.com/maps/api/js?key={{ config('adminlte.google_maps_api_key') }}&libraries=places"></script>
+    @endif
 </body>
 </html>
