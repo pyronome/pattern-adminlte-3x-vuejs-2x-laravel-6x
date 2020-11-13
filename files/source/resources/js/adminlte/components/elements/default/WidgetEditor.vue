@@ -56,11 +56,7 @@
                                         class="btn btn-success btn-md btn-on-table float-right">
                                         {{ $t('Save') }}
                                     </button>
-                                    <button type="button"
-                                        class="btn btn-outline-secondary float-left"
-                                        data-dismiss="modal" style="margin-right: 10px;">
-                                        {{ $t('Cancel') }}
-                                    </button>                                    
+                                    <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal" style="margin-right:10px;">{{ $t('Cancel') }}</button>                                    
                                 </div>
                             </div>
                         </div>
@@ -249,13 +245,13 @@
                         <div class="modalfooter justify-content-between show_by_permission_must_update">
                             <div class="row mb-10">
                                 <div class="col-md-12">
-                                    <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
                                     <button type="button"
                                         id="buttonUpdateWidgetItem"
                                         name="buttonUpdateWidgetItem"
                                         class="btn btn-success float-right">
                                         {{ $t('Save') }}
                                     </button>
+                                    <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal" style="margin-right:10px;">{{ $t('Cancel') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -297,13 +293,13 @@
                     <div class="modalfooter justify-content-between">
                         <div class="row">
                             <div class="col-md-12">
-                                <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
                                 <button type="button"
                                     id="buttonSave-ColumnValue"
                                     name="buttonSave-ColumnValue"
                                     class="btn btn-success float-right">
                                     {{ $t('Save') }}
                                 </button>
+                                <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal" style="margin-right:10px;">{{ $t('Cancel') }}</button>
                             </div>
                         </div>
                     </div>

@@ -104,6 +104,7 @@
                                         class="btn btn-success float-right">
                                         {{ $t('Save') }}
                                     </button>
+                                    <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal" style="margin-right:10px;">{{ $t('Cancel') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +158,6 @@
                         <div class="modalfooter justify-content-between show_by_permission_must_update">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
                                     <button type="button"
                                         id="buttonSave-formEditDisplayText"
                                         name="buttonSave-formEditDisplayText"
@@ -165,6 +165,7 @@
                                         class="btn btn-success float-right">
                                         {{ $t('Save') }}
                                     </button>
+                                    <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal" style="margin-right:10px;">{{ $t('Cancel') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -226,7 +227,7 @@
                         <div class="modalfooter justify-content-between show_by_permission_must_update">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Close') }}</button>
+                                    <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal">{{ $t('Close') }}</button>
                                 </div>
                             </div>
                         </div>

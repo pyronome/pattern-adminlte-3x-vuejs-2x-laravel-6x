@@ -88,7 +88,6 @@
                             <div class="modalfooter justify-content-between show_by_permission_must_update">
                                 <div class="row">
                                     <div class="col col-lg-12">
-                                        <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
                                         <button type="button"
                                             id="buttonAddMenuItem"
                                             name="buttonAddMenuItem"
@@ -103,6 +102,7 @@
                                             style="display:none;">
                                             {{ $t('Save') }}
                                         </button>
+                                        <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal" style="margin-right:10px;">{{ $t('Cancel') }}</button>
                                     </div>
                                 </div>
                             </div>
