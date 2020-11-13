@@ -106,7 +106,7 @@
                                             <button :disabled="AdminLTEUserGroupForm.busy"
                                                 type="submit"
                                                 class="btn btn-success btn-md btn-on-card float-right">
-                                                <i class="far fa-save" aria-hidden="true"></i> {{ $t('Update') }}
+                                                <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
                                             </button>
                                         </div>
                                     </div>
