@@ -6,11 +6,11 @@
                 <div class="card-tools">
                     <button type="button" :id="'buttonToggleWidgetRecordList' + model" class="btn btn-tool buttonSHWidget"
                         state="state" data-card-widget="collapse" v-on:click="toggleWidget" ref="toggleWidget">
-                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-minus"></i>
                     </button>
                 </div>
             </div>
-            <div class="card-body" style="display:none;">
+            <div class="card-body">
                 <div class="recordlist-search-container">
                     <div class="input-group input-group-sm divSearchBar float-right" style="margin-bottom:1rem;">
                         <input type="text"

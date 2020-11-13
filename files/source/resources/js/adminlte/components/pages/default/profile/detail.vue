@@ -23,7 +23,7 @@
                             <div class="card-header show_by_permission_must_update">
                                 <div class="card-tools">
                                     <router-link tag="a"
-                                        class="btn btn-primary btn-xs btn-on-table text-white"
+                                        class="btn btn-primary btn-md btn-on-card text-white"
                                         :to="'/' + main_folder + '/profile/edit'">
                                         <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Edit') }}</span>
                                     </router-link>

@@ -52,7 +52,7 @@
                                                 </div>
                                                 <div class="col-12 col-sm-4 col-md-6 col-lg-8">
                                                     <router-link tag="a"
-                                                        class="btn btn-danger btn-xs btn-on-table float-right"
+                                                        class="btn btn-danger btn-md btn-on-card float-right"
                                                         :to="backbuttonURL">
                                                         <i class="fas fa-times" aria-hidden="true"></i> <span>{{ $t('Cancel') }}</span>
                                                     </router-link>
@@ -151,7 +151,7 @@
                                         <div class="col-lg-12 col-md-12 col-xs-12">
                                             <button :disabled="PermissionForm.busy"
                                                 type="submit"
-                                                class="btn btn-success btn-xs btn-on-table float-right">
+                                                class="btn btn-success btn-md btn-on-card float-right">
                                                 <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
                                             </button>
                                         </div>
@@ -346,12 +346,12 @@ export default {
         deployPermissions: function() {
             this.PermissionForm.permission_data.forEach(permission_group_data => {
                 let meta_key = permission_group_data['meta_key'];
-                let buttonIdPrefix = "gp-" + meta_key + "-";
+                let buttonIdPrefix = "#gp-" + meta_key + "-";
                 let permissions = permission_group_data['permissions'];
                 let tokens = Object.keys(permission_group_data['permissions']);
                 tokens.forEach(token => {
                     if ("Y" == permissions[token]) {
-                        document.getElementById(buttonIdPrefix + token).setAttribute("data-value", "Y");
+                        $(buttonIdPrefix + token).attr("data-value", "Y");
                     }
                 });
             });

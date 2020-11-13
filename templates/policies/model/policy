@@ -31,7 +31,9 @@ class {{$ __value__}}Policy
 
         if (isset($permissions['__adminlte_menu']))
         {
-            $has_permission = $permissions['__adminlte_menu']['{{$ __value__/__lowercase_text__}}'];
+            if (isset($permissions['__adminlte_menu']['{{$ __value__/__lowercase_text__}}']))
+                $has_permission = $permissions['__adminlte_menu']['{{$ __value__/__lowercase_text__}}'];
+            }
         }
 
         return $has_permission;

@@ -31,7 +31,7 @@
                                     <div class="card-header show_by_permission_must_update">
                                         <div class="card-tools">
                                             <router-link tag="a"
-                                                class="btn btn-danger btn-xs btn-on-table float-right"
+                                                class="btn btn-danger btn-md btn-on-card float-right"
                                                 :to="backbuttonURL">
                                                 <i class="fas fa-times" aria-hidden="true"></i> <span>{{ $t('Cancel') }}</span>
                                             </router-link>
@@ -94,7 +94,7 @@
                                         <div class="col-lg-12 col-md-12 col-xs-12">
                                             <button :disabled="AdminLTEUserGroupForm.busy"
                                                 type="submit"
-                                                class="btn btn-success btn-xs btn-on-table float-right">
+                                                class="btn btn-success btn-md btn-on-card float-right">
                                                 <i class="far fa-save" aria-hidden="true"></i> {{ $t('Create') }}
                                             </button>
                                         </div>
@@ -105,7 +105,7 @@
                                         <div class="col-lg-12 col-md-12 col-xs-12">
                                             <button :disabled="AdminLTEUserGroupForm.busy"
                                                 type="submit"
-                                                class="btn btn-success btn-xs btn-on-table float-right">
+                                                class="btn btn-success btn-md btn-on-card float-right">
                                                 <i class="far fa-save" aria-hidden="true"></i> {{ $t('Update') }}
                                             </button>
                                         </div>

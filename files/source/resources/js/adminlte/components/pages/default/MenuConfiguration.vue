@@ -27,7 +27,7 @@
                                     <div class="card-body">
                                         <div class="row mb-10 show_by_permission_must_update">
                                             <div class="col-lg-12 col-md-12 col-xs-12">
-                                                <a id="buttonNewMenuItem" class="btn btn-primary btn-xs btn-on-table float-right" href="javascript:void(0);">
+                                                <a id="buttonNewMenuItem" class="btn btn-primary btn-md btn-on-card float-right" href="javascript:void(0);">
                                                     <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ $t('New') }}</span>
                                                 </a>
                                             </div>

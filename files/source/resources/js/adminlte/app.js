@@ -12,6 +12,7 @@ require('./bootstrap');
 
 /* vue Declaration BOF */
 window.Vue = require('vue');
+Vue.config.devtools = true;
 /* vue Declaration EOF */
 
 /* vue-router Declaration BOF */
