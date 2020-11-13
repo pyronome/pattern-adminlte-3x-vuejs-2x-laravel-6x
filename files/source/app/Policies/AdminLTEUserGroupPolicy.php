@@ -31,7 +31,10 @@ class AdminLTEUserGroupPolicy
 
         if (isset($permissions['__adminlte_menu']))
         {
-            $has_permission = $permissions['__adminlte_menu']['adminlteusergroup'];
+            if (isset($permissions['__adminlte_menu']['adminlteusergroup']))
+            {
+                $has_permission = $permissions['__adminlte_menu']['adminlteusergroup'];
+            }
         }
 
         return $has_permission;
