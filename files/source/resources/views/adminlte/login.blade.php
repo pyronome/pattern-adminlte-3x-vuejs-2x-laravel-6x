@@ -3,7 +3,7 @@
     <div id="mainVueApplication">
         <login-form></login-form>
     </div>
-    <script src="/js/adminlte/app.js"></script>
-    <script src="/js/adminlte/login.js"></script>
+    <script>document.write("<script type='text/javascript' src='/js/adminlte/app.js?v=" + Date.now() + "'><\/script>");</script>
+    <script>document.write("<script type='text/javascript' src='/js/adminlte/login.js?v=" + Date.now() + "'><\/script>");</script>
 </body>
 </html>
