@@ -29,11 +29,17 @@
                                 @keydown="ProfileForm.onKeydown($event)">
                                 <div class="card">
                                     <div class="card-header show_by_permission_must_update">
-                                        <div class="card-tools">
+                                        <div class="col-lg-12 col-md-12 col-xs-12">
+                                            <button :disabled="ProfileForm.busy"
+                                                type="submit"
+                                                class="btn btn-success btn-md btn-on-card float-right">
+                                                {{ $t('Save') }}
+                                            </button>
                                             <router-link tag="a"
-                                                class="btn btn-danger btn-md btn-on-card float-right"
-                                                :to="'/' + this.main_folder + '/profile/detail'">
-                                                <i class="fas fa-times" aria-hidden="true"></i> <span>{{ $t('Cancel') }}</span>
+                                                class="btn btn-outline-secondary btn-md btn-on-card float-right"
+                                                :to="'/' + this.main_folder + '/profile/detail'"
+                                                style="margin-right:10px;">
+                                                <span>{{ $t('Cancel') }}</span>
                                             </router-link>
                                         </div>
                                     </div>
@@ -102,13 +108,19 @@
                                             </div>                                        
                                         </div>
                                     </div>
-                                    <div class="card-footer show_by_permission_must_update">
+                                    <div class="card-footer">
                                         <div class="col-lg-12 col-md-12 col-xs-12">
                                             <button :disabled="ProfileForm.busy"
                                                 type="submit"
                                                 class="btn btn-success btn-md btn-on-card float-right">
-                                                <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
+                                                {{ $t('Save') }}
                                             </button>
+                                            <router-link tag="a"
+                                                class="btn btn-outline-secondary btn-md btn-on-card float-right"
+                                                :to="'/' + this.main_folder + '/profile/detail'"
+                                                style="margin-right:10px;">
+                                                <span>{{ $t('Cancel') }}</span>
+                                            </router-link>
                                         </div>
                                     </div>
                                 </div>

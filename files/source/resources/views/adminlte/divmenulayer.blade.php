@@ -5,7 +5,7 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column {{ $customization['nav-sidebar'] }}" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column {{ $customization['nav-sidebar'] }}" data-widget="treeview" role="menu" data-accordion="false" style="padding-bottom:60px;">
                 <?php
                 $countMenuArray = count($menu);
                 $logoutMenu = null;

@@ -51,12 +51,16 @@
                         <div class="modalfooter justify-content-between show_by_permission_must_update">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal">{{ $t('Cancel') }}</button>
                                     <button :disabled="form.busy"
                                         type="submit"
                                         class="btn btn-success btn-md btn-on-table float-right">
-                                        <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
+                                        {{ $t('Save') }}
                                     </button>
+                                    <button type="button"
+                                        class="btn btn-outline-secondary float-left"
+                                        data-dismiss="modal" style="margin-right: 10px;">
+                                        {{ $t('Cancel') }}
+                                    </button>                                    
                                 </div>
                             </div>
                         </div>
@@ -358,12 +362,12 @@ export default {
                 is_attributes_loaded: false,
                 is_post_success: false,
                 external_files: [
-                    ("/js" + AdminLTEHelper.getURL('bootstrap-iconpicker/css/bootstrap-iconpicker.min.css')),
-                    ("/js" + AdminLTEHelper.getURL('bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js')),
-                    ("/js" + AdminLTEHelper.getURL('bootstrap-iconpicker/js/bootstrap-iconpicker.min.js')),
-                    ("/js" + AdminLTEHelper.getURL('bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')),
-                    ("/js" + AdminLTEHelper.getURL('bootstrap-colorpicker/js/bootstrap-colorpicker.min.js')),
-                    ("/js" + AdminLTEHelper.getURL('widget_editor.js'))
+                    ("/js/adminlte/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
+                    ("/js/adminlte/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
+                    ("/js/adminlte/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"),
+                    ("/js/adminlte/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"),
+                    ("/js/adminlte/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"),
+                    ("/js/adminlte/widget_editor.js")
                 ],
                 editor: null
             }

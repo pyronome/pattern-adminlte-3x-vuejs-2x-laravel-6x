@@ -43,7 +43,7 @@
                                         <button :disabled="form.busy"
                                             type="submit"
                                             class="btn btn-success btn-md btn-on-table float-right">
-                                            <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
+                                            {{ $t('Save') }}
                                         </button>
                                     </div>
                                 </form>
@@ -167,10 +167,10 @@ export default {
                 is_data_loaded: false,
                 is_post_success: false,
                 external_files: [
-                    ("/js" + AdminLTEHelper.getURL('bootstrap-iconpicker/css/bootstrap-iconpicker.min.css')),
-                    ("/js" + AdminLTEHelper.getURL('bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js')),
-                    ("/js" + AdminLTEHelper.getURL('bootstrap-iconpicker/js/bootstrap-iconpicker.min.js')),
-                    ("/js" + AdminLTEHelper.getURL('menu_editor.js'))
+                    ("/js/adminlte/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
+                    ("/js/adminlte/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
+                    ("/js/adminlte/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"),
+                    ("/js/adminlte/menu_editor.js")
                 ],
                 editor: null
             }

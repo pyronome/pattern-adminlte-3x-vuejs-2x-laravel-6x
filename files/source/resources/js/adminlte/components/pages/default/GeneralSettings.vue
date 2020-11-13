@@ -230,7 +230,7 @@
                                             <button :disabled="form.busy"
                                                 type="submit"
                                                 class="btn btn-success btn-md btn-on-table float-right">
-                                                <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
+                                                {{ $t('Save') }}
                                             </button>
                                         </div>
                                     </div>

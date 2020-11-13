@@ -51,10 +51,17 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-sm-4 col-md-6 col-lg-8">
+                                                    <button type="submit"
+                                                        menu-permission-token="adminlteusergroup"
+                                                        model-permission-token="AdminLTEUserGroup-update"
+                                                        :disabled="PermissionForm.busy"
+                                                        class="sbp-item sbp-hide btn btn-success btn-md btn-on-card float-right">
+                                                        {{ $t('Save') }}
+                                                    </button>
                                                     <router-link tag="a"
-                                                        class="btn btn-danger btn-md btn-on-card float-right"
-                                                        :to="backbuttonURL">
-                                                        <i class="fas fa-times" aria-hidden="true"></i> <span>{{ $t('Cancel') }}</span>
+                                                        class="btn btn-outline-secondary btn-md btn-on-card float-right"
+                                                        :to="backbuttonURL" style="margin-right:10px;">
+                                                        <span>{{ $t('Cancel') }}</span>
                                                     </router-link>
                                                 </div>
                                             </div>                                        
@@ -146,14 +153,21 @@
                                         </div>
                                     </div>
                                     <div class="card-footer sbp-item sbp-hide" 
-                                        menu-permission-token="adminlteusergroup"
+                                        menu-permission-token=""
                                         model-permission-token="AdminLTEUserGroup-update">
                                         <div class="col-lg-12 col-md-12 col-xs-12">
-                                            <button :disabled="PermissionForm.busy"
-                                                type="submit"
-                                                class="btn btn-success btn-md btn-on-card float-right">
-                                                <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
+                                            <button type="submit"
+                                                menu-permission-token="adminlteusergroup"
+                                                model-permission-token="AdminLTEUserGroup-update"
+                                                :disabled="PermissionForm.busy"
+                                                class="sbp-item sbp-hide btn btn-success btn-md btn-on-card float-right">
+                                                {{ $t('Save') }}
                                             </button>
+                                            <router-link tag="a"
+                                                class="btn btn-outline-secondary btn-md btn-on-card float-right"
+                                                :to="backbuttonURL" style="margin-right:10px;">
+                                                <span>{{ $t('Cancel') }}</span>
+                                            </router-link>
                                         </div>
                                     </div>
                                 </div>

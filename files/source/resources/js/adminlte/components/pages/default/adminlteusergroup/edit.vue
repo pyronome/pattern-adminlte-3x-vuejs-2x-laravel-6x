@@ -28,12 +28,28 @@
                                 @submit.prevent="submitForm"
                                 @keydown="AdminLTEUserGroupForm.onKeydown($event)">
                                 <div class="card">
-                                    <div class="card-header show_by_permission_must_update">
-                                        <div class="card-tools">
+                                    <div class="card-header">
+                                        <div class="col-lg-12 col-md-12 col-xs-12">
+                                            <button v-if="'new' == id"
+                                                menu-permission-token="adminlteusergroup"
+                                                model-permission-token="AdminLTEUserGroup-create"
+                                                :disabled="AdminLTEUserGroupForm.busy"
+                                                type="submit"
+                                                class="sbp-item sbp-hide btn btn-success btn-md btn-on-card float-right">
+                                                {{ $t('Create') }}
+                                            </button>
+                                            <button v-else 
+                                                menu-permission-token="adminlteusergroup"
+                                                model-permission-token="AdminLTEUserGroup-update"
+                                                :disabled="AdminLTEUserGroupForm.busy"
+                                                type="submit"
+                                                class="sbp-item sbp-hide btn btn-success btn-md btn-on-card float-right">
+                                                {{ $t('Save') }}
+                                            </button>
                                             <router-link tag="a"
-                                                class="btn btn-danger btn-md btn-on-card float-right"
-                                                :to="backbuttonURL">
-                                                <i class="fas fa-times" aria-hidden="true"></i> <span>{{ $t('Cancel') }}</span>
+                                                class="btn btn-outline-secondary btn-md btn-on-card float-right"
+                                                :to="backbuttonURL" style="margin-right:10px;">
+                                                <span>{{ $t('Cancel') }}</span>
                                             </router-link>
                                         </div>
                                     </div>
@@ -88,26 +104,29 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div v-if="'new' == id" class="card-footer sbp-item sbp-hide" 
-                                        menu-permission-token="adminlteusergroup"
-                                        model-permission-token="AdminLTEUserGroup-create">
+                                    <div class="card-footer">
                                         <div class="col-lg-12 col-md-12 col-xs-12">
-                                            <button :disabled="AdminLTEUserGroupForm.busy"
+                                            <button v-if="'new' == id"
+                                                menu-permission-token="adminlteusergroup"
+                                                model-permission-token="AdminLTEUserGroup-create"
+                                                :disabled="AdminLTEUserGroupForm.busy"
                                                 type="submit"
-                                                class="btn btn-success btn-md btn-on-card float-right">
-                                                <i class="far fa-save" aria-hidden="true"></i> {{ $t('Create') }}
+                                                class="sbp-item sbp-hide btn btn-success btn-md btn-on-card float-right">
+                                                {{ $t('Create') }}
                                             </button>
-                                        </div>
-                                    </div>
-                                    <div v-else class="card-footer sbp-item sbp-hide" 
-                                        menu-permission-token="adminlteusergroup"
-                                        model-permission-token="AdminLTEUserGroup-update">
-                                        <div class="col-lg-12 col-md-12 col-xs-12">
-                                            <button :disabled="AdminLTEUserGroupForm.busy"
+                                            <button v-else 
+                                                menu-permission-token="adminlteusergroup"
+                                                model-permission-token="AdminLTEUserGroup-update"
+                                                :disabled="AdminLTEUserGroupForm.busy"
                                                 type="submit"
-                                                class="btn btn-success btn-md btn-on-card float-right">
-                                                <i class="far fa-save" aria-hidden="true"></i> {{ $t('Save') }}
+                                                class="sbp-item sbp-hide btn btn-success btn-md btn-on-card float-right">
+                                                {{ $t('Save') }}
                                             </button>
+                                            <router-link tag="a"
+                                                class="btn btn-outline-secondary btn-md btn-on-card float-right"
+                                                :to="backbuttonURL" style="margin-right:10px;">
+                                                <span>{{ $t('Cancel') }}</span>
+                                            </router-link>
                                         </div>
                                     </div>
                                 </div>
