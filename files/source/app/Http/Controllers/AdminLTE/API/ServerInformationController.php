@@ -38,9 +38,7 @@ class ServerInformationController extends Controller
 
 		$data['os_header'] = $OS_header;
 		$data['os_detail'] = $OS_detail;
-		$data['os_icon_src'] = ('/img/'
-				. $adminLTE->getAdminLTEFolder()
-				. $OS_icon_src);
+		$data['os_icon_src'] = ('/img/adminlte/' . $OS_icon_src);
 
 		// Web Server
 		$WEB_detail = $_SERVER['SERVER_SOFTWARE'];
@@ -57,16 +55,12 @@ class ServerInformationController extends Controller
 
 		$data['web_header'] = $WEB_header;
 		$data['web_detail'] = $WEB_detail;
-		$data['web_icon_src'] = ('/img/'
-				. $adminLTE->getAdminLTEFolder()
-				. $WEB_icon_src);
+		$data['web_icon_src'] = ('/img/adminlte/' . $WEB_icon_src);
 
 		// Application
 		$data['app_header'] = 'PHP';
 		$data['app_detail'] = 'PHP ' . PHP_VERSION;
-		$data['app_icon_src'] = ('/img/'
-				. $adminLTE->getAdminLTEFolder()
-				. 'php.png');
+		$data['app_icon_src'] = ('/img/adminlte/php.png');
 
 		$DB_icon_src = 'mysql.png';
 		$DB_header = 'MySQL';
@@ -81,9 +75,7 @@ class ServerInformationController extends Controller
 
 		$data['db_header'] = $DB_header;
 		$data['db_detail'] = $DB_detail;
-		$data['db_icon_src'] = ('/img/'
-				. $adminLTE->getAdminLTEFolder()
-				. $DB_icon_src);
+		$data['db_icon_src'] = ('/img/adminlte/' . $DB_icon_src);
 
         return $data;
     }
