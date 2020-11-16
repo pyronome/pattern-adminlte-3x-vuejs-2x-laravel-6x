@@ -270,10 +270,8 @@
                             });
                         } else {
                             Vue.swal.fire({
-                                toast: true,
                                 position: 'top-end',
-                                title: '',
-                                text: self.delete_form.error_msg,
+                                title: self.delete_form.error_msg,
                                 icon: 'error',
                                 showConfirmButton: false,
                                 timer: 10000,

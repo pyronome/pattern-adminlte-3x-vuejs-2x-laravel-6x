@@ -449,10 +449,8 @@ export default {
                             });
                         } else {
                             Vue.swal.fire({
-                                toast: true,
                                 position: 'top-end',
-                                title: '',
-                                text: self.page.post_error_msg,
+                                title: self.page.post_error_msg,
                                 icon: 'error',
                                 showConfirmButton: false,
                                 timer: 10000,
