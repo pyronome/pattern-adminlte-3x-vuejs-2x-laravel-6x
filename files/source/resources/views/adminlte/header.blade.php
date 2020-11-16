@@ -1,4 +1,4 @@
-    <div class="wrapper">
+<div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand {{ $customization['main-header'] }}">
             <!-- Left navbar links -->
@@ -23,12 +23,12 @@
             <!-- Brand Logo -->
             <router-link to="/{{ config('adminlte.main_folder') }}/home"
                     class="brand-link {{ $customization['brand-link'] }}">
-                <img src="{{ $brand['logo']}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <img src="{{ $brand['logo']}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
                 <span class="brand-text font-weight-light">{{ $brand['name']}}</span>
             </router-link>
             <router-link to="/{{ config('adminlte.main_folder') }}/profile/detail"
                     class="brand-link">
-                <img src="{{ $user['image'] }}" alt="User Image" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <img src="{{ $user['image'] }}" alt="User Image" class="brand-image img-circle elevation-3">
                 <span class="brand-text font-weight-light">{{ $user['name'] }}</span>
             </router-link>
 

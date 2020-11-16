@@ -8,8 +8,15 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Tell the browser to be responsive to screen width -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/css/adminlte/app.css">
-        <link rel="stylesheet" href="/css/adminlte/custom.css">
+
+        @if (config('app.env') == 'local')
+        <link rel="stylesheet" href="{{asset('css/adminlte/app.css')}}">
+        <link rel="stylesheet" href="{{asset('css/adminlte/custom.css')}}">
+        @else
+        <link rel="stylesheet" href="{{asset(mix('css/adminlte/app.css'), true)}}">
+        <link rel="stylesheet" href="{{asset(mix('css/adminlte/custom.css'), true)}}">
+        @endif
+
         <script>var __publicAssetsURL = "{{ URL::asset('/') }}";</script>
         <script>var __storageURL = "{{ URL::asset('/storage/') }}/";</script>
     </head>

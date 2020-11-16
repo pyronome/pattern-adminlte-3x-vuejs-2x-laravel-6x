@@ -31,6 +31,14 @@ class LoginPOSTRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'email.required' => __('Please enter your email address.'),
+            'password.required' => __('Please enter your password.'),
+        ];
+    }
+
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {

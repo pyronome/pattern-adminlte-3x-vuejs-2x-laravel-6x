@@ -419,7 +419,7 @@ export default {
                                 timer: 2000,
                                 timerProgressBar: true,
                                 onClose: () => {
-                                    self.$router.push('/adminlte/adminlteusergroup/detail/' + self.usergroup_id);
+                                    self.$router.push('/' + self.main_folder + '/adminlteusergroup/detail/' + self.usergroup_id);
                                 }
                             });
                         } else {

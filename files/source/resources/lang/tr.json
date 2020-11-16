@@ -11,5 +11,8 @@
     "Your new passwords are not matched. Please check your new passwords and try again.": "Yeni şifre girişleriniz eşleşmiyor. Lütfen kontrol ediniz.",
     "You can not update this object. Contact your system administrator for more information.": "Bu nesneyi güncelleyemezsiniz. Daha fazla bilgi için sistem yöneticinize başvurun.",
     "You can not create any object. Contact your system administrator for more information.": "Herhangi bir nesne yaratamazsınız. Daha fazla bilgi için sistem yöneticinize başvurun.",
-    "You can not delete this object. Contact your system administrator for more information.": "Bu nesneyi silemezsiniz. Daha fazla bilgi için sistem yöneticinize başvurun."
+    "You can not delete this object. Contact your system administrator for more information.": "Bu nesneyi silemezsiniz. Daha fazla bilgi için sistem yöneticinize başvurun.",
+    "Please enter your email address.": "Lütfen e-posta adresinizi giriniz.",
+    "Please enter your password.": "Lütfen şifrenizi giriniz.",
+    "You have entered an invalid email address.": "Geçersiz bir e-posta adresi girdiniz."
 }

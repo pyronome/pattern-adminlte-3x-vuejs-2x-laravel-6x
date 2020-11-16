@@ -77,10 +77,17 @@
             </tr>
         </script>
     </div>
-    <script>document.write("<script type='text/javascript' src='/js/adminlte/app.js?v=" + Date.now() + "'><\/script>");</script>
-    <script>document.write("<script type='text/javascript' src='/js/adminlte/custom.js?v=" + Date.now() + "'><\/script>");</script>
+
+    @if (config('app.env') == 'local')
+    <script src="{{asset('js/adminlte/app.js')}}"></script>
+    <script src="{{asset('js/adminlte/custom.js')}}"></script>
+    @else
+    <script src="{{asset(mix('js/adminlte/app.js'), true)}}"></script>
+    <script src="{{asset(mix('js/adminlte/custom.js'), true)}}"></script>
+    @endif
+
     @if('' != config('adminlte.google_maps_api_key'))
-        <script type="text/javascript" src="//maps.google.com/maps/api/js?key={{ config('adminlte.google_maps_api_key') }}&libraries=places"></script>
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?key={{ config('adminlte.google_maps_api_key') }}&libraries=places"></script>
     @endif
 </body>
 </html>

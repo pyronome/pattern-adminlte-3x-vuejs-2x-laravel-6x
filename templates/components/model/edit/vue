@@ -303,7 +303,7 @@ export default {
                                 timer: 2000,
                                 timerProgressBar: true,
                                 onClose: () => {
-                                    self.$router.push('/adminlte/{{$ __value__/__lowercase_text__}}/detail/' + self.id);
+                                    self.$router.push('/' + self.main_folder + '/{{$ __value__/__lowercase_text__}}/detail/' + self.id);
                                 }
                             });
                         } else {

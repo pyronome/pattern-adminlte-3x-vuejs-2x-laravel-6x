@@ -421,7 +421,7 @@ export default {
                                 timer: 2000,
                                 timerProgressBar: true,
                                 onClose: () => {
-                                    self.$router.push('/adminlte/adminlteuser/detail/' + self.id);
+                                    self.$router.push('/' + self.main_folder + '/adminlteuser/detail/' + self.id);
                                 }
                             });
                         } else {
