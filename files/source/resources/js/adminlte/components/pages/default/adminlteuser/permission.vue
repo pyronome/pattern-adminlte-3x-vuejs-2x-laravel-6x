@@ -535,10 +535,8 @@ export default {
                     if (!self.page.has_server_error) {
                         if (!self.page.has_post_error) {
                             Vue.swal.fire({
-                                toast: true,
                                 position: 'top-end',
-                                title: '',
-                                text: 'Changes have been saved!',
+                                title: self.$t("Your changes have been saved!"),
                                 icon: 'success',
                                 showConfirmButton: false,
                                 timer: 2000,

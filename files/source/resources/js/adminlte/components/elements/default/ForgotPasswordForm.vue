@@ -117,10 +117,8 @@ export default {
                 }).finally(function() {
                     if (self.page.is_post_success) {
                         Vue.swal.fire({
-                            toast: true,
                             position: 'top-end',
-                            title: '',
-                            text: 'Your new password was sent to your email.',
+                            title: self.$t("Your new password was sent to your email."),
                             icon: 'success',
                             showConfirmButton: false,
                             timer: 2000,

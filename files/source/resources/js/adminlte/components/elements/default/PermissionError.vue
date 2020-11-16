@@ -1,33 +1,42 @@
 <template>
     <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-xs-12">
-                    <div class="page-permission-error">
-                        <div v-if="'menu_permission' == type" class="alert alert-danger">
-                            <span>{{ $t('You have not permission to access this page.') }}</span>
-                        </div>
-                        <div v-else-if="'read_permission' == type" class="alert alert-danger">
-                            <span>{{ $t('You have not permission to view this object.') }}</span>
-                        </div>
-                        <div v-else-if="'create_permission' == type" class="alert alert-danger">
-                            <span>{{ $t('You have not permission to create an object.') }}</span>
-                        </div>
-                        <div v-else-if="'update_permission' == type" class="alert alert-danger">
-                            <span>{{ $t('You have not permission to update this object.') }}</span>
-                        </div>
-                        <div v-else class="alert alert-danger">
-                            <span>{{ $t('You have not permission to change anything at this page.') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="container-fluid inner-swal-container" id="swalContainer"></div>
     </section>
 </template>
 
 <script>
+
 export default {
-    props: ['type']
+    props: ['type'],
+    methods: {
+        swalFire: function () {
+            var self = this;
+            var msg = "";
+
+            if ("menu_permission" == self.type) {
+                msg = self.$t("You have not permission to access this page.");
+            } else if ("read_permission" == self.type) {
+                msg = self.$t("You have not permission to view this object.");
+            } else if ("create_permission" == self.type) {
+                msg = self.$t("You have not permission to create an object.");
+            } else if ("update_permission" == self.type) {
+                msg = self.$t("You have not permission to update this object.");
+            } else {
+                msg = self.$t("You have not permission to change anything at this page.");
+            }
+
+            Vue.swal.fire({
+                target: document.getElementById('swalContainer'),
+                position: 'center',
+                title: msg,
+                icon: 'error',
+                showConfirmButton: false,
+                backdrop: false
+            });
+        }
+    },
+    mounted() {
+        this.swalFire();
+    }
 }
 </script>

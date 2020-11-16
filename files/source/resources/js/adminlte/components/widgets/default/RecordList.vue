@@ -227,18 +227,20 @@
                 AdminLTEHelper.doCheckboxClick(target);
             },
             deleteSelectedRows: function(sender, model) {
+                var self = this;
                 Vue.swal.fire({
-                    title: 'Selected record(s) will be deleted.',
-                    text: "Do you confirm?",
+                    title: self.$t("Selected records will be deleted."),
+                    text: self.$t("Do you confirm?"),
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Continue'
+                    confirmButtonText: self.$t("Continue"),
+                    cancelButtonText: self.$t("Cancel")
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        this.formDelete.selected_ids = AdminLTEHelper.getTableSelectedRowIds(model);
-                        this.submitDeleteForm();
+                        self.formDelete.selected_ids = AdminLTEHelper.getTableSelectedRowIds(model);
+                        self.submitDeleteForm();
                     }
                 });
             },
@@ -256,10 +258,8 @@
                         if (!self.delete_form.has_error) {
                             self.loadData(function(){
                                 Vue.swal.fire({
-                                    toast: true,
                                     position: 'top-end',
-                                    title: '',
-                                    text: 'Selected records have been deleted.',
+                                    title: self.$t("Selected records have been deleted."),
                                     icon: 'success',
                                     showConfirmButton: false,
                                     timer: 2000,

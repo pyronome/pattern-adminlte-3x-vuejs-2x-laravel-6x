@@ -586,16 +586,14 @@ export default {
                         self.page.has_server_error = true;
                     } else {
                         self.page.has_post_error = true;
-                        self.page.post_error_msg = "Please fill in the required fields."
+                        self.page.post_error_msg = self.$t("Please fill in the required fields.");
                     }
                 }).finally(function() {
                     if (!self.page.has_server_error) {
                         if (!self.page.has_post_error) {
                             Vue.swal.fire({
-                                toast: true,
                                 position: 'top-end',
-                                title: '',
-                                text: 'Changes have been saved!',
+                                title: self.$t("Your changes have been saved!"),
                                 icon: 'success',
                                 showConfirmButton: false,
                                 timer: 2000,

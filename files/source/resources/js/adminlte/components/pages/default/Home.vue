@@ -17,8 +17,10 @@
                     </div>
                 </div>
             </section>
-            <section class="container-fluid">
-                <widgets :widgets="widgets" :pagename="pagename"></widgets>
+            <section class="content">
+                <div class="container-fluid">
+                    <widgets :widgets="widgets" :pagename="pagename"></widgets>
+                </div>
             </section>
             <section>
                 <widget-editor :pagename="pagename"></widget-editor>

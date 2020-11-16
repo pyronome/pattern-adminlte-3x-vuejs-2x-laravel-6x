@@ -504,10 +504,8 @@ export default {
                 }).finally(function() {
                     if (self.page.is_post_success) {
                         Vue.swal.fire({
-                            toast: true,
                             position: 'top-end',
-                            title: '',
-                            text: 'Widget configuration have been saved!',
+                            title: self.$t("Your changes have been saved!"),
                             icon: 'success',
                             showConfirmButton: false,
                             timer: 2000,

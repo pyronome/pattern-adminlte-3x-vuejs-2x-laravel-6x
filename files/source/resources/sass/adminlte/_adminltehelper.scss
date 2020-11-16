@@ -1013,6 +1013,13 @@ td .showBigPhoto {
 .swal2-content {
     margin-left: 10px !important;
 }
+.inner-swal-container {
+    position: relative;
+}
+.inner-swal-container > .swal2-container {
+    position: absolute;
+    margin-top: 50%;
+}
 .preferences-button {
     width: 40px;
     height: 20px;
@@ -1202,6 +1209,10 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
 
 .widgetcomponent > .collapsed-card > .card-body {
     display: block;
+}
+
+.content-wrapper > div > .content {
+    padding: 0 .5rem;
 }
 
 /* {{@snippet:end}} */
