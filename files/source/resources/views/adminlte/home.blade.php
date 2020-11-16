@@ -80,11 +80,10 @@
 
     @if (config('app.env') == 'local')
     <script src="{{asset('js/adminlte/app.js')}}"></script>
-    <script src="{{asset('js/adminlte/custom.js')}}"></script>
     @else
     <script src="{{asset(mix('js/adminlte/app.js'), true)}}"></script>
-    <script src="{{asset(mix('js/adminlte/custom.js'), true)}}"></script>
     @endif
+    <script src="/js/adminlte/custom.js"></script>
 
     @if('' != config('adminlte.google_maps_api_key'))
     <script type="text/javascript" src="//maps.google.com/maps/api/js?key={{ config('adminlte.google_maps_api_key') }}&libraries=places"></script>

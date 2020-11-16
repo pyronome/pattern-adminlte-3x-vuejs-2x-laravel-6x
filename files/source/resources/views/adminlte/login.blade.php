@@ -3,7 +3,13 @@
     <div id="mainVueApplication">
         <login-form></login-form>
     </div>
-    <script>document.write("<script type='text/javascript' src='/js/adminlte/app.js?v=" + Date.now() + "'><\/script>");</script>
-    <script>document.write("<script type='text/javascript' src='/js/adminlte/login.js?v=" + Date.now() + "'><\/script>");</script>
+
+    @if (config('app.env') == 'local')
+    <script src="{{asset('js/adminlte/app.js')}}"></script>
+    @else
+    <script src="{{asset(mix('js/adminlte/app.js'), true)}}"></script>
+    @endif
+    <script src="/js/adminlte/login.js"></script>
+    
 </body>
 </html>

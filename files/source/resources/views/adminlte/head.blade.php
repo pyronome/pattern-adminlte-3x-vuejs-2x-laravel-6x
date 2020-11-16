@@ -11,12 +11,11 @@
 
         @if (config('app.env') == 'local')
         <link rel="stylesheet" href="{{asset('css/adminlte/app.css')}}">
-        <link rel="stylesheet" href="{{asset('css/adminlte/custom.css')}}">
         @else
         <link rel="stylesheet" href="{{asset(mix('css/adminlte/app.css'), true)}}">
-        <link rel="stylesheet" href="{{asset(mix('css/adminlte/custom.css'), true)}}">
         @endif
-
+        <link rel="stylesheet" href="/css/adminlte/custom.css">
+        
         <script>var __publicAssetsURL = "{{ URL::asset('/') }}";</script>
         <script>var __storageURL = "{{ URL::asset('/storage/') }}/";</script>
     </head>
