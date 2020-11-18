@@ -1,0 +1,41 @@
+import HomePage from "./components/pages/default/Home.vue";
+import ProfileDetail from "./components/pages/default/profile/detail.vue";
+import ProfileEdit from "./components/pages/default/profile/edit.vue";
+import ServerInformationPage from "./components/pages/default/ServerInformation.vue";
+import PreferencesPage from "./components/pages/default/Preferences.vue";
+import EmailServerPage from "./components/pages/default/EmailServer.vue";
+import GeneralSettingsPage from "./components/pages/default/GeneralSettings.vue";
+import BrandingPage from "./components/pages/default/Branding.vue";
+import MenuConfigurationPage from "./components/pages/default/MenuConfiguration.vue";
+import AdminLTEModelDisplayTextPage from "./components/pages/default/AdminLTEModelDisplayText.vue";
+import AdminLTEUserList from "./components/pages/default/adminlteuser/list.vue";
+import AdminLTEUserDetail from "./components/pages/default/adminlteuser/detail.vue";
+import AdminLTEUserEdit from "./components/pages/default/adminlteuser/edit.vue";
+import AdminLTEUserPermission from "./components/pages/default/adminlteuser/permission.vue";
+import AdminLTEUserGroupList from "./components/pages/default/adminlteusergroup/list.vue";
+import AdminLTEUserGroupDetail from "./components/pages/default/adminlteusergroup/detail.vue";
+import AdminLTEUserGroupEdit from "./components/pages/default/adminlteusergroup/edit.vue";
+import AdminLTEUserGroupPermission from "./components/pages/default/adminlteusergroup/permission.vue";
+{{ROUTES_MODEL_DEFAULT_IMPORT_DEFINITONS}}
+
+export default {
+    "HomePage": HomePage,
+    "ProfileDetail": ProfileDetail,
+    "ProfileEdit": ProfileEdit,
+    "ServerInformationPage": ServerInformationPage,
+    "PreferencesPage": PreferencesPage,
+    "EmailServerPage": EmailServerPage,
+    "GeneralSettingsPage": GeneralSettingsPage,
+    "BrandingPage": BrandingPage,
+    "MenuConfigurationPage": MenuConfigurationPage,
+    "AdminLTEModelDisplayTextPage": AdminLTEModelDisplayTextPage,
+    "AdminLTEUserList": AdminLTEUserList,
+    "AdminLTEUserDetail": AdminLTEUserDetail,
+    "AdminLTEUserEdit": AdminLTEUserEdit,
+    "AdminLTEUserPermission": AdminLTEUserPermission,
+    "AdminLTEUserGroupList": AdminLTEUserGroupList,
+    "AdminLTEUserGroupDetail": AdminLTEUserGroupDetail,
+    "AdminLTEUserGroupEdit": AdminLTEUserGroupEdit,
+    "AdminLTEUserGroupPermission": AdminLTEUserGroupPermission,
+    {{ROUTES_MODEL_DEFAULT_EXPORT_DEFINITONS}}
+};

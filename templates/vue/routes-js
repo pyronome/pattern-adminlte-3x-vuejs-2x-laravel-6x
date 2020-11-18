@@ -1,0 +1,97 @@
+import defaultRoutes from './routes-default';
+import customRoutes from './routes-custom';
+
+var defaultRouteKeys = Object.keys(defaultRoutes);
+var defaultRouteKeyCount = defaultRouteKeys.length;
+
+for (var i = 0; i < defaultRouteKeyCount; i++) {
+    if (undefined !== customRoutes[defaultRouteKeys[i]]) {
+        defaultRoutes[defaultRouteKeys[i]]
+                = customRoutes[defaultRouteKeys[i]];
+    }
+}
+
+var mainFolder = document.body.getAttribute("data-main-folder");
+if (!mainFolder) {
+    mainFolder = "adminlte";
+}
+
+export var Routes = [
+    {
+        "path": ("/" + mainFolder + "/"),
+        "component": defaultRoutes.HomePage
+    },
+    {
+        "path": ("/" + mainFolder + "/home"),
+        "component": defaultRoutes.HomePage
+    },
+    {
+        "path": ("/" + mainFolder + "/profile/detail"),
+        "component": defaultRoutes.ProfileDetail
+    },
+    {
+        "path": ("/" + mainFolder + "/profile/edit"),
+        "component": defaultRoutes.ProfileEdit
+    },
+    {
+        "path": ("/" + mainFolder + "/server_information"),
+        "component": defaultRoutes.ServerInformationPage
+    },
+	{
+        "path": ("/" + mainFolder + "/preferences"),
+        "component": defaultRoutes.PreferencesPage
+    },
+    {
+        "path": ("/" + mainFolder + "/email_server"),
+        "component": defaultRoutes.EmailServerPage
+    },
+    {
+        "path": ("/" + mainFolder + "/general_settings"),
+        "component": defaultRoutes.GeneralSettingsPage
+    },
+	{
+        "path": ("/" + mainFolder + "/branding"),
+        "component": defaultRoutes.BrandingPage
+    },
+    {
+        "path": ("/" + mainFolder + "/menu_configuration"),
+        "component": defaultRoutes.MenuConfigurationPage
+    },
+    {
+        "path": ("/" + mainFolder + "/adminltemodeldisplaytext"),
+        "component": defaultRoutes.AdminLTEModelDisplayTextPage
+    },
+	{
+        "path": ("/" + mainFolder + "/adminlteuser"),
+        "component": defaultRoutes.AdminLTEUserList
+    },
+    {
+        "path": ("/" + mainFolder + "/adminlteuser/detail/:id"),
+        "component": defaultRoutes.AdminLTEUserDetail
+    },
+    {
+        "path": ("/" + mainFolder + "/adminlteuser/edit/:id"),
+        "component": defaultRoutes.AdminLTEUserEdit
+    },
+    {
+        "path": ("/" + mainFolder + "/adminlteuser/permission/:id"),
+        "component": defaultRoutes.AdminLTEUserPermission
+    },
+    {
+        "path": ("/" + mainFolder + "/adminlteusergroup"),
+        "component": defaultRoutes.AdminLTEUserGroupList
+    },
+    {
+        "path": ("/" + mainFolder + "/adminlteusergroup/detail/:id"),
+        "component": defaultRoutes.AdminLTEUserGroupDetail
+    },
+    {
+        "path": ("/" + mainFolder + "/adminlteusergroup/edit/:id"),
+        "component": defaultRoutes.AdminLTEUserGroupEdit
+    },
+    {
+        "path": ("/" + mainFolder + "/adminlteusergroup/permission/:id"),
+        "component": defaultRoutes.AdminLTEUserGroupPermission
+    },
+{{ROUTES_MODEL_EXPORT_DEFINITONS}}
+];

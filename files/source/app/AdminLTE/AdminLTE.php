@@ -23,6 +23,7 @@ class AdminLTE
 	public $system_models = [
 		'AdminLTE',
 		'AdminLTELayout',
+		'AdminLTEMeta',
 		'AdminLTEModelDisplayText',
 		'AdminLTEModelOption',
 		'AdminLTEUserLayout',
@@ -1782,6 +1783,7 @@ class AdminLTE
 		$exceptions = [
 			'AdminLTE',
 			'AdminLTELayout',
+			'AdminLTEMeta',
 			'AdminLTEModelDisplayText',
 			'AdminLTEUser',
 			'AdminLTEUserGroup',

@@ -1,0 +1,3 @@
+    "{{$ __value__}}List": {{$ __value__}}List,
+    "{{$ __value__}}Detail": {{$ __value__}}Detail,
+    "{{$ __value__}}Edit": {{$ __value__}}Edit,
