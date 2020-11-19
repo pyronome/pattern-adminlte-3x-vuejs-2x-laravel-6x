@@ -38,5 +38,5 @@ export default {
     "/adminlteusergroup/detail/:id": AdminLTEUserGroupDetail,
     "/adminlteusergroup/edit/:id": AdminLTEUserGroupEdit,
     "/adminlteusergroup/permission/:id": AdminLTEUserGroupPermission,
-    {{ROUTES_MODEL_DEFAULT_EXPORT_DEFINITONS}}
+{{ROUTES_MODEL_DEFAULT_EXPORT_DEFINITONS}}
 };

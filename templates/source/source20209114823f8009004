@@ -17,7 +17,7 @@
 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VIEW_EDIT_FORM_INPUTS_CLASSSELECTION}}
 {{@elseif {{$ ../property_type/__value__}} == "Date" }}
                                         <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
-                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">değişecek {{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
                                             <input type="date"
                                                 v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
                                                 class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
@@ -31,7 +31,7 @@
                                         </div>
 {{@elseif {{$ ../property_type/__value__}} == "DateTime" }}
                                         <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
-                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">değişecek {{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
                                             <input type="datetime-local"
                                                 v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
                                                 class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
@@ -268,7 +268,7 @@
                                         </div>
 {{@elseif {{$ ../property_type/__value__}} == "Time" }}
                                         <div class="form-group col-lg-12 col-md-12 col-xs-12 {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_VISIBILITY_CLASS}}">
-                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">değişecek {{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
+                                            <label for="{{$ ../../../name/__value__}}Form_{{$ __value__/__lowercase_text__}}" class="detail-label">{{ $t('{{$ ../title/__value__}}') }} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_REQUIRED}} {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_LABEL_HINT}}</label>
                                             <input type="time"
                                                 v-model="{{$ ../../../name/__value__}}Form.{{$ __value__/__lowercase_text__}}"
                                                 class="form-control {{MODEL{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_INPUT_MASK_CLASS}}"
