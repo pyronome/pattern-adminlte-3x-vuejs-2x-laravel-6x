@@ -30,49 +30,57 @@ class AdminLTEUserGroup extends Model
             'name' => 'id',
             'type' => 'integer',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'id'
+            'display_property' => 'id',
+            'title' => 'Id'
         ],
         [
             'name' => 'deleted',
             'type' => 'checkbox',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'deleted'
+            'display_property' => 'deleted',
+            'title' => 'Deleted'
         ],
         [
             'name' => 'created_at',
             'type' => 'date',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'created_at'
+            'display_property' => 'created_at',
+            'title' => 'Created At'
         ],
         [
             'name' => 'updated_at',
             'type' => 'date',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'updated_at'
+            'display_property' => 'updated_at',
+            'title' => 'Updated At'
         ],
         [
             'name' => 'enabled',
             'type' => 'checkbox',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'enabled'
+            'display_property' => 'enabled',
+            'title' => 'Enabled'
         ],
         [
             'name' => 'admin',
             'type' => 'checkbox',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'admin'
+            'display_property' => 'admin',
+            'title' => 'Admin'
         ],
         [
             'name' => 'title',
             'type' => 'text',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'title'
+            'display_property' => 'title',
+            'title' => 'Title'
         ],
         [
             'name' => 'widget_permission',
             'type' => 'checkbox',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'widget_permission'
+            'display_property' => 'widget_permission',
+            'title' => 'Edit Widget Permission'
         ]
     ];
 

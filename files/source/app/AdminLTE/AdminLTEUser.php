@@ -35,25 +35,29 @@ class AdminLTEUser extends Authenticatable
             'name' => 'id',
             'type' => 'integer',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'id'
+            'display_property' => 'id',
+            'title' => 'Id'
         ],
         [
             'name' => 'deleted',
             'type' => 'checkbox',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'deleted'
+            'display_property' => 'deleted',
+            'title' => 'Deleted'
         ],
         [
             'name' => 'created_at',
             'type' => 'date',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'created_at'
+            'display_property' => 'created_at',
+            'title' => 'Created At'
         ],
         [
             'name' => 'updated_at',
             'type' => 'date',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'updated_at'
+            'display_property' => 'updated_at',
+            'title' => 'Updated At'
         ],
         [
             'name' => 'profile_img',
@@ -65,37 +69,43 @@ class AdminLTEUser extends Authenticatable
             'name' => 'adminlteusergroup_id',
             'type' => 'class_selection_single',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'title'
+            'display_property' => 'title',
+            'title' => 'User Group'
         ],
         [
             'name' => 'enabled',
             'type' => 'checkbox',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'enabled'
+            'display_property' => 'enabled',
+            'title' => 'Enabled'
         ],
         [
             'name' => 'fullname',
             'type' => 'text',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'fullname'
+            'display_property' => 'fullname',
+            'title' => 'Fullname'
         ],
         [
             'name' => 'username',
             'type' => 'text',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'username'
+            'display_property' => 'username',
+            'title' => 'Username'
         ],
         [
             'name' => 'email',
             'type' => 'text',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'email'
+            'display_property' => 'email',
+            'title' => 'Email'
         ],
         [
             'name' => 'password',
             'type' => 'text',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'password'
+            'display_property' => 'password',
+            'title' => 'Password'
         ]
     ];
 
