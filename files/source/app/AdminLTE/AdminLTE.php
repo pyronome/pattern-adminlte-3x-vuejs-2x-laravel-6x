@@ -12,6 +12,7 @@ use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTEModelDisplayText;
 use App\AdminLTE\AdminLTEModelOption;
 use App\AdminLTE\AdminLTEPermission;
+use App\AdminLTE\AdminLTEMeta;
 use PDO;
 
 /* {{snippet:begin_class}} */
@@ -2397,6 +2398,40 @@ class AdminLTE
 		}
  
 		return $Permissions;
+	}
+
+	public function getMetaData($meta_key, $term_id = 0) {
+		$objects = [];
+
+		if ($term_id > 0) {
+			$objects = AdminLTEMeta::where('deleted', false)->where('term_id', $term_id)->where('meta_key', $meta_key)->get();
+		} else {
+			$objects = AdminLTEMeta::where('deleted', false)->where('meta_key', $meta_key)->get();
+		}
+		
+		return $objects;
+	}
+
+	public function setMetaData($meta_key, $term_id, $meta_value) {
+		if ((0 == $term_id) || ('' == $meta_key)) {
+			return false;
+		}
+
+		$object = null;
+        $objects = AdminLTEMeta::where('deleted', false)->where('term_id', $term_id)->where('meta_key', $meta_key)->get();
+
+        if (count($objects) > 0) {
+            $object = $objects[0];
+        } else {
+            $object = new AdminLTEMeta();
+        }
+        
+        $object->term_id = $term_id;
+        $object->meta_key = $meta_key;
+        $object->meta_value = $meta_value;
+		$object->save();
+		
+		return true;
 	}
 	/* {{snippet:end_methods}} */
 }
