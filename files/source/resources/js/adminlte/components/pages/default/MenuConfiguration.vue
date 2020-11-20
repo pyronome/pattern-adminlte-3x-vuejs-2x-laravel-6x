@@ -230,8 +230,11 @@ export default {
                     self.page.has_server_error = true;
                     self.processLoadQueue();
                 }).finally(function() {
-                   AdminLTEHelper.initializePermissions(self.page.variables, false);
-                   self.processLoadQueue();
+                    AdminLTEHelper.initializePermissions(self.page.variables, false);
+                    let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename);
+                    self.page.is_authorized = authorize.status;
+                    self.page.unauthorized_type = authorize.type;
+                    self.processLoadQueue();
                 });
         },
         loadData: function () {
