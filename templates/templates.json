@@ -105,11 +105,11 @@
         "append_crlf":"0"
     },
     {
-        "description":"routes\/adminlte.php",
+        "description":"routes\/adminlte-default",
         "base":"\/project",
         "enabled":"1",
         "source":"routes\/adminlte-default",
-        "destination":"\/source\/routes\/adminlte.php",
+        "destination":"\/source\/routes\/adminlte-default.php",
         "temporary":"0",
         "skip_empty":"0",
         "skip_whitespace":"0",
@@ -120,7 +120,7 @@
         "append_crlf":"0"
     },
     {
-        "description":"routes\/adminlte.php\/model definitions (empty)",
+        "description":"routes\/adminlte-default\/model definitions (empty)",
         "base":"\/project",
         "enabled":"1",
         "source":"",
@@ -135,7 +135,7 @@
         "append_crlf":"0"
     },
     {
-        "description":"routes\/adminlte.php\/model definitions",
+        "description":"routes\/adminlte-default\/model definitions",
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
         "source":"routes\/adminlte-default-model-definitions",
