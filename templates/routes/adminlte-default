@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Admin Routes
+| Admin Default Routes
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
@@ -12,11 +12,6 @@
 */
 
 /* {{@snippet:begin_routes}} */
-\Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
-    Log::info( json_encode($query->sql) );
-    Log::info( json_encode($query->bindings) );
-    Log::info( json_encode($query->time)   );
-});
 
 Route::get('/login', 'LoginController@index');
 Route::get('/logout', 'LogoutController@index');
