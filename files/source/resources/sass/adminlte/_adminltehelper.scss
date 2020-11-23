@@ -203,8 +203,11 @@ table.checkbox-table > thead > tr > th:nth-child(2) {
     min-width: 100px;
 }
 
-.btn-on-card {
+.btn-card-footer {
     text-align: center;
+}
+
+.btn-success.btn-card-footer {
     min-width: 150px;
 }
 
@@ -392,7 +395,7 @@ transform: scale(1, 1);
 .detail-label {
     display: block;
     color: #6c757d!important;
-    margin-bottom: 0;
+    /*margin-bottom: 0;*/
     font-weight: bold;
 }
 .detail-container ul li {
@@ -1219,12 +1222,12 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
     margin-bottom: 1rem;
 }
 
-.form-part-instructions {
-    color: #555555;
-}
-
 .input-container {
     margin-bottom: 10px;
+}
+
+.form-part-header {
+    padding-top: 1.0rem;
 }
 
 /* {{@snippet:end}} */
