@@ -28,7 +28,10 @@ class ProfilePOSTRequest extends FormRequest
         return [
             'fullname' => 'required|string',
             'username' => 'required|string',
-            'email' => 'required|string|email'
+            'email' => 'required|string|email',
+            'password0' => 'nullable',
+            'password1' => 'nullable',
+            'password2' => 'nullable'
         ];
     }
 
@@ -75,44 +78,42 @@ class ProfilePOSTRequest extends FormRequest
                 sleep(1);
             } // if ($otherUser != null)
 
-            if (property_exists($this, 'password1') && property_exists($this, 'password2')) {
-                if (($this->password1 != '') || ($this->password2 != '')) {
-                    if (!property_exists($this, 'password0')
-                            || ($this->property0 == '')) {
+            if (($this->password0 != null)
+                    || ($this->password1 != null)
+                    || ($this->password2 != null)) {
+                $currentUser = AdminLTEUser::find($userData['id']);
+                if ($this->password0 == null) {
+                    $validator->errors()->add(
+                            'password0',
+                            __('Please specify your current password.'));
+                    sleep(1);
+                } else if (!password_verify($this->password0,
+                        $currentUser->password)) {
+                    $validator->errors()->add(
+                            'password0',
+                            __('Your current password is wrong.'));
+                    sleep(1);
+                } else {
+                    if ('' == $this->password1)
+                    {
                         $validator->errors()->add(
-                                'password0',
-                                __('Please specify your current password.'));
-                    } else {
-                        $currentUser = AdminLTEUser::find($userData['id']);
-                        if (!password_verify($this->password0,
-                                $currentUser->password)) {
-                            $validator->errors()->add(
-                                    'password0',
-                                    __('Your current password is wrong.'));
-                            sleep(1);
-                        } else {
-                            if ('' == $this->password1)
-                            {
-                                $validator->errors()->add(
-                                        'password1',
-                                        __('Please specify your new password.'));
-                            }
-                            else if ('' == $this->password2)
-                            {
-                                $validator->errors()->add(
-                                        'password2',
-                                        __('Please re-enter your new password.'));
-                            }
-                            else if ($this->password1 != $this->password2)
-                            {
-                                $validator->errors()->add(
-                                        'password1',
-                                        __('Your new passwords are not matched. Please check your new passwords and try again.'));
-                            } // if ('' == $this->password1)
-                        } // if (!password_verify($this->password0,
-                    } // if (!property_exists($this, 'password0')
-                } // if (($this->password1 != '') || ($this->password2 != '')) {
-            } // if (property_exists($this, 'password1') && property_exists($this, 'password2')) {
+                                'password1',
+                                __('Please specify your new password.'));
+                    }
+                    else if ('' == $this->password2)
+                    {
+                        $validator->errors()->add(
+                                'password2',
+                                __('Please re-enter your new password.'));
+                    }
+                    else if ($this->password1 != $this->password2)
+                    {
+                        $validator->errors()->add(
+                                'password1',
+                                __('Your new passwords are not matched. Please check your new passwords and try again.'));
+                    } // if ('' == $this->password1)
+                } // if (!password_verify($this->password0,
+            } // if (property_exists($this, 'password0')) {
         });
         return;
     }

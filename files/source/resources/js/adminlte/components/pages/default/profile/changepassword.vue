@@ -127,9 +127,6 @@ export default {
             ProfileForm: new Form({
                 'debug_mode': false,
                 'id': 0,
-                'email': '',
-                'username': '',
-                'fullname': '',
                 'password0': '',
                 'password1': '',
                 'password2': ''
@@ -275,7 +272,7 @@ export default {
                         self.page.has_server_error = true;
                     } else {
                         self.page.has_post_error = true;
-                        self.page.post_error_msg = self.$t("Please fill in the required fields.");
+                        self.page.post_error_msg = self.$t("Your changes could not be saved. Please check your details and try again.");
                     }
                 }).finally(function() {
                     if (!self.page.has_server_error) {
