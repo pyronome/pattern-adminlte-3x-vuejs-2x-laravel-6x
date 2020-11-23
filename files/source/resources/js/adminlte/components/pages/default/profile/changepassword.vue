@@ -98,7 +98,7 @@
                                                 {{ $t('Save') }}
                                             </button>
                                             <router-link tag="a"
-                                                class="btn btn-secondary btn-card-footer float-right"
+                                                class="btn btn-outline-secondary btn-card-footer float-right"
                                                 :to="'/' + this.main_folder + '/profile/detail'"
                                                 style="margin-right:10px;">
                                                 <span>{{ $t('Cancel') }}</span>
