@@ -211,7 +211,8 @@ table.checkbox-table > thead > tr > th:nth-child(2) {
     text-align: center;
 }
 
-.btn-success.btn-card-footer {
+.btn-success.btn-card-default,
+.btn-primary.btn-card-default {
     min-width: 150px;
 }
 
