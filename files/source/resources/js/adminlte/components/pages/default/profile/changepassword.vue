@@ -15,7 +15,7 @@
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
                                 <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/profile/detail'">{{ $t("Profile Detail") }}</router-link></li>
-                                <li class="breadcrumb-item active">{{ $t("Profile Edit") }}</li>
+                                <li class="breadcrumb-item active">{{ $t("Change Password") }}</li>
                             </ol>
                         </div>
                     </div>
@@ -29,9 +29,9 @@
                             @keydown="ProfileForm.onKeydown($event)">
                         <div class="row">
                             <div class="col-lg-4 col-md-4 col-xs-12 ">
-                                <h4 class="form-part-header">{{  $t('Profile Image') }}</h4>
+                                <h4 class="form-part-header">{{  $t('Current Password') }}</h4>
                                 <h6 class="form-part-instructions text-muted">
-                                    {{  $t('You can upload a profile image using this section.') }}
+                                    {{  $t('In order to change your password, firstly you need to enter your current password.') }}
                                 </h6>
                             </div>
                             <div class="col-lg-8 col-md-8 col-xs-12 ">
@@ -40,37 +40,21 @@
                                         <input type="hidden" v-model="ProfileForm.id" id="id" name="id">
                                         <div class="row">
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="ProfileForm_profile_img" class="detail-label">{{ $t('Profile Image') }}  </label>
-                                                <div class="input-field">
-                                                    <input type="hidden"
-                                                        class="form-control"
-                                                        id="ProfileForm_profile_img"
-                                                        name="ProfileForm_profile_img"
-                                                        v-model="ProfileForm.profile_img"
-                                                        :class="{ 'is-invalid': ProfileForm.errors.has('profile_img') }"
-                                                        data-target-field="AdminLTEUser/profile_img"
-                                                        data-media-type="2"
-                                                        data-max-file-count="1"/>
-                                                    <button type="button"
-                                                        id="buttonBrowseprofile_imgFiles"
-                                                        name="buttonBrowseprofile_imgFiles"
-                                                        class="buttonBrowseFile btn btn-primary show_by_permission_must_update"
-                                                        data-target-file-list="ulprofile_imgFileList">
-                                                        <i class="ion-ios-folder"></i>&nbsp;{{ $t('Browse Profile Image...') }}
-                                                    </button>
-                                                    <has-error :form="ProfileForm" field="profile_img"></has-error>
-                                                    <ul id="ulprofile_imgFileList" class="col s12 collection ulFileList" data-target-input-id="ProfileForm_profile_img">
-                                                    </ul>
-                                                </div>
+                                                <label for="ProfileForm_fullname" class="detail-label">{{ $t('Current Password') }}</label>
+                                                <input type="password"
+                                                    v-model="ProfileForm.fullname"
+                                                    class="form-control "
+                                                    id="ProfileForm_fullname"
+                                                    name="ProfileForm_fullname">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-xs-12 ">
-                                <h4 class="form-part-header">{{  $t('Profile Information') }}</h4>
+                                <h4 class="form-part-header">{{  $t('New Password') }}</h4>
                                 <h6 class="form-part-instructions text-muted">
-                                    {{  $t('You can edit profile information using this section.') }}
+                                    {{  $t('Please specify your new password.') }}
                                 </h6>
                             </div>
                             <div class="col-lg-8 col-md-8 col-xs-12 ">
@@ -78,7 +62,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="ProfileForm_fullname" class="detail-label">{{ $t('Fullname') }}  </label>
+                                                <label for="ProfileForm_fullname" class="detail-label">{{ $t('New Password') }}  </label>
                                                 <input type="text"
                                                     v-model="ProfileForm.fullname"
                                                     class="form-control "
@@ -86,7 +70,7 @@
                                                     name="ProfileForm_fullname">
                                             </div> 
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="ProfileForm_username" class="detail-label">{{ $t('Username') }} <span class="required">*</span></label>
+                                                <label for="ProfileForm_username" class="detail-label">{{ $t('New Password (Again)') }} <span class="required">*</span></label>
                                                 <input type="text"
                                                     v-model="ProfileForm.username"
                                                     class="form-control "
@@ -94,16 +78,6 @@
                                                     id="ProfileForm_username"
                                                     name="ProfileForm_username">
                                                 <has-error :form="ProfileForm" field="username"></has-error>
-                                            </div>
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="ProfileForm_email" class="detail-label">{{ $t('Email') }} <span class="required">*</span></label>
-                                                <input type="email"
-                                                    v-model="ProfileForm.email"
-                                                    class="form-control "
-                                                    :class="{ 'is-invalid': ProfileForm.errors.has('email') }"
-                                                    id="ProfileForm_email"
-                                                    name="ProfileForm_email">
-                                                <has-error :form="ProfileForm" field="email"></has-error>
                                             </div>
                                         </div>
                                     </div>

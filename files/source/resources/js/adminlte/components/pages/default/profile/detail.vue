@@ -3,10 +3,12 @@
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
+                    <!--
                     <div class="col-sm-6">
                         <h1>{{ $t("Profile Detail") }}</h1>
                     </div>
-                    <div class="col-sm-6">
+                    -->
+                    <div class="col-sm-12">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
                             <li class="breadcrumb-item active">{{ $t("Profile Detail") }}</li>
@@ -18,17 +20,28 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12 col-md-12 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-xs-12 "></div>
+                    <div class="col-lg-8 col-md-8 col-xs-12 ">
                         <div class="card">
-                            <div class="card-header show_by_permission_must_update">
-                                <div class="card-tools">
+                            <div class="card-footer">
+                                <div class="col-lg-12 col-md-12 col-xs-12">
                                     <router-link tag="a"
-                                        class="btn btn-primary btn-md btn-on-card text-white"
+                                        class="btn btn-primary btn-md btn-on-card btn-card-default text-white float-right"
                                         :to="'/' + main_folder + '/profile/edit'">
                                         <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Edit') }}</span>
                                     </router-link>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-xs-12 ">
+                        <h4 class="form-part-header">{{  $t('Profile Information') }}</h4>
+                        <h6 class="form-part-instructions text-muted">
+                            {{  $t('You can edit profile information using this section.') }}
+                        </h6>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-xs-12 ">
+                        <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-xs-12">
@@ -37,10 +50,6 @@
                                         </div>
                                     </div>
 									<div class="col-lg-12 col-md-12 col-xs-12">
-                                        <div class="detail-container">
-                                            <label class="detail-label">{{ $t('AdminLTEUserGroup') }}</label>
-                                            <div v-html="data.adminlteusergroup_id__displaytext__"></div>
-                                        </div>
                                         <div class="detail-container">
                                             <label class="detail-label">{{ $t('Fullname') }}</label>
                                             <div v-html="data.fullname__displaytext__"></div>
@@ -54,6 +63,30 @@
                                             <div v-html="data.email__displaytext__"></div>
                                         </div>
 									</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-xs-12 ">
+                        <h4 class="form-part-header">{{  $t('Profile Security') }}</h4>
+                        <h6 class="form-part-instructions text-muted">
+                            {{  $t('You can specify your profile password using this section.') }}
+                        </h6>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-xs-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-xs-12">
+                                        <label for="ProfileForm_profile_img" class="detail-label">{{ $t('Profile Password') }}  </label>
+                                        <div class="input-field">
+                                            <router-link tag="a"
+                                                class="btn btn-primary btn-md btn-on-card btn-card-default text-white"
+                                                :to="'/' + main_folder + '/profile/changepassword'">
+                                                <span>{{ $t('Change Password...') }}</span>
+                                            </router-link>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

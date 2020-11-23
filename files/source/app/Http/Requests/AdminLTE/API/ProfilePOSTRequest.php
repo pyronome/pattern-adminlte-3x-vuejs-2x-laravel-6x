@@ -32,6 +32,16 @@ class ProfilePOSTRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'fullname.required' => __('Please enter your full name.'),
+            'username.required' => __('Please enter your user name.'),
+            'email.required' => __('Please enter your email address.'),
+            'email.email' => __('You have entered an invalid email address.'),
+        ];
+    }
+
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
