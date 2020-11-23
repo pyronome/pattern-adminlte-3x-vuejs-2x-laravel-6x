@@ -78,12 +78,14 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="ProfileForm_fullname" class="detail-label">{{ $t('Fullname') }}  </label>
+                                                <label for="ProfileForm_fullname" class="detail-label">{{ $t('Fullname') }} <span class="required">*</span></label>
                                                 <input type="text"
                                                     v-model="ProfileForm.fullname"
                                                     class="form-control "
+                                                    :class="{ 'is-invalid': ProfileForm.errors.has('fullname') }"
                                                     id="ProfileForm_fullname"
                                                     name="ProfileForm_fullname">
+                                                <has-error :form="ProfileForm" field="fullname"></has-error>
                                             </div> 
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
                                                 <label for="ProfileForm_username" class="detail-label">{{ $t('Username') }} <span class="required">*</span></label>

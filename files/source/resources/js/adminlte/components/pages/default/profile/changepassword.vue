@@ -47,6 +47,7 @@
                                                     :class="{ 'is-invalid': ProfileForm.errors.has('password0') }"
                                                     id="ProfileForm_password0"
                                                     name="ProfileForm_password0">
+                                                <has-error :form="ProfileForm" field="password0"></has-error>
                                             </div>
                                         </div>
                                     </div>
@@ -70,10 +71,11 @@
                                                     :class="{ 'is-invalid': ProfileForm.errors.has('password1') }"
                                                     id="ProfileForm_password1"
                                                     name="ProfileForm_password1">
+                                                <has-error :form="ProfileForm" field="password1"></has-error>
                                             </div> 
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
                                                 <label for="ProfileForm_password2" class="detail-label">{{ $t('New Password (Again)') }} <span class="required">*</span></label>
-                                                <input type="text"
+                                                <input type="password"
                                                     v-model="ProfileForm.password2"
                                                     class="form-control "
                                                     :class="{ 'is-invalid': ProfileForm.errors.has('password2') }"
@@ -127,6 +129,9 @@ export default {
             ProfileForm: new Form({
                 'debug_mode': false,
                 'id': 0,
+                'username': '',
+                'fullname': '',
+                'email': '',
                 'password0': '',
                 'password1': '',
                 'password2': ''
