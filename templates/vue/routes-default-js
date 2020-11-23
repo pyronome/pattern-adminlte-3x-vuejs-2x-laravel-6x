@@ -1,6 +1,7 @@
 import HomePage from "./components/pages/default/Home.vue";
 import ProfileDetail from "./components/pages/default/profile/detail.vue";
 import ProfileEdit from "./components/pages/default/profile/edit.vue";
+import ProfileChangePassword from "./components/pages/default/profile/changepassword.vue";
 import ServerInformationPage from "./components/pages/default/ServerInformation.vue";
 import PreferencesPage from "./components/pages/default/Preferences.vue";
 import EmailServerPage from "./components/pages/default/EmailServer.vue";
