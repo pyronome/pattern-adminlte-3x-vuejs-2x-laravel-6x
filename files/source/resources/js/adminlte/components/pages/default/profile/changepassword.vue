@@ -40,12 +40,13 @@
                                         <input type="hidden" v-model="ProfileForm.id" id="id" name="id">
                                         <div class="row">
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="ProfileForm_fullname" class="detail-label">{{ $t('Current Password') }}</label>
+                                                <label for="ProfileForm_password0" class="detail-label">{{ $t('Current Password') }}</label>
                                                 <input type="password"
-                                                    v-model="ProfileForm.fullname"
+                                                    v-model="ProfileForm.password0"
                                                     class="form-control "
-                                                    id="ProfileForm_fullname"
-                                                    name="ProfileForm_fullname">
+                                                    :class="{ 'is-invalid': ProfileForm.errors.has('password0') }"
+                                                    id="ProfileForm_password0"
+                                                    name="ProfileForm_password0">
                                             </div>
                                         </div>
                                     </div>
@@ -62,22 +63,23 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="ProfileForm_fullname" class="detail-label">{{ $t('New Password') }}  </label>
-                                                <input type="text"
-                                                    v-model="ProfileForm.fullname"
+                                                <label for="ProfileForm_password1" class="detail-label">{{ $t('New Password') }}  </label>
+                                                <input type="password"
+                                                    v-model="ProfileForm.password1"
                                                     class="form-control "
-                                                    id="ProfileForm_fullname"
-                                                    name="ProfileForm_fullname">
+                                                    :class="{ 'is-invalid': ProfileForm.errors.has('password1') }"
+                                                    id="ProfileForm_password1"
+                                                    name="ProfileForm_password1">
                                             </div> 
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="ProfileForm_username" class="detail-label">{{ $t('New Password (Again)') }} <span class="required">*</span></label>
+                                                <label for="ProfileForm_password2" class="detail-label">{{ $t('New Password (Again)') }} <span class="required">*</span></label>
                                                 <input type="text"
-                                                    v-model="ProfileForm.username"
+                                                    v-model="ProfileForm.password2"
                                                     class="form-control "
-                                                    :class="{ 'is-invalid': ProfileForm.errors.has('username') }"
-                                                    id="ProfileForm_username"
-                                                    name="ProfileForm_username">
-                                                <has-error :form="ProfileForm" field="username"></has-error>
+                                                    :class="{ 'is-invalid': ProfileForm.errors.has('password2') }"
+                                                    id="ProfileForm_password2"
+                                                    name="ProfileForm_password2">
+                                                <has-error :form="ProfileForm" field="password2"></has-error>
                                             </div>
                                         </div>
                                     </div>
@@ -119,17 +121,15 @@ export default {
     data() {
         return {
             main_folder: '',
-            pagename: 'adminlteusergroup',
+            pagename: 'changepassword',
             id: 0,
             files: [],
             ProfileForm: new Form({
                 'debug_mode': false,
                 'id': 0,
-                'fullname': '',
-                'username': '',
-                'email': '',
-                'password': '',
-                'profile_img': ''
+                'password0': '',
+                'password1': '',
+                'password2': ''
             }),
             page: {
                 is_ready: false,
