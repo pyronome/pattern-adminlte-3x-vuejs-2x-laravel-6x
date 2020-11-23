@@ -129,5 +129,3 @@ Route::namespace('API')
 /* {{@snippet:end_api_routes}} */
 
 });
-
-Route::get('{path}', 'HomeController@index')->where('path', '([A-z0-9-\/_.]+)?');
