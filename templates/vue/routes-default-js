@@ -24,6 +24,7 @@ export default {
     "/home": HomePage,
     "/profile/detail": ProfileDetail,
     "/profile/edit": ProfileEdit,
+    "/profile/changepassword": ProfileChangePassword,
     "/server_information": ServerInformationPage,
     "/preferences": PreferencesPage,
     "/email_server": EmailServerPage,
