@@ -40,7 +40,7 @@
                                         <input type="hidden" v-model="ProfileForm.id" id="id" name="id">
                                         <div class="row">
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="ProfileForm_password0" class="detail-label">{{ $t('Current Password') }}</label>
+                                                <label for="ProfileForm_password0" class="detail-label">{{ $t('Current Password') }} <span class="required">*</span></label>
                                                 <input type="password"
                                                     v-model="ProfileForm.password0"
                                                     class="form-control "
@@ -63,7 +63,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <label for="ProfileForm_password1" class="detail-label">{{ $t('New Password') }}  </label>
+                                                <label for="ProfileForm_password1" class="detail-label">{{ $t('New Password') }} <span class="required">*</span></label>
                                                 <input type="password"
                                                     v-model="ProfileForm.password1"
                                                     class="form-control "
