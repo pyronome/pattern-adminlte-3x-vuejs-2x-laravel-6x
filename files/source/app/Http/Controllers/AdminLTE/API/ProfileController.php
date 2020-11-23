@@ -114,8 +114,8 @@ class ProfileController extends Controller
 
             $objectAdminLTEUser->email = $request->input('email');
             
-            if ('' != $request->input('password')) {
-                $objectAdminLTEUser->password = bcrypt($request->input('password'));
+            if ('' != $request->input('password1')) {
+                $objectAdminLTEUser->password = bcrypt($request->input('password1'));
             } 
 
             $profile_img = $request->input('profile_img');
