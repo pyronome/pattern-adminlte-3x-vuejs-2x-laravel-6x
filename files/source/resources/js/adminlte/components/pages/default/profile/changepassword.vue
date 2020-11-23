@@ -127,6 +127,9 @@ export default {
             ProfileForm: new Form({
                 'debug_mode': false,
                 'id': 0,
+                'email': '',
+                'username': '',
+                'fullname': '',
                 'password0': '',
                 'password1': '',
                 'password2': ''
