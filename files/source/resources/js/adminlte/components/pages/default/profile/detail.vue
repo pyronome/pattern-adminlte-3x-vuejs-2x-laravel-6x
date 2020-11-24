@@ -42,12 +42,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-xs-12">
-                                        <div class="detail-container profile-image-container">
-                                            <div v-html="data.profile_img__displaytext__"></div>
-                                        </div>
-                                    </div>
-									<div class="col-lg-12 col-md-12 col-xs-12">
+									<div class="col-lg-6 col-md-6 col-xs-12">
                                         <div class="detail-container">
                                             <label class="detail-label">{{ $t('Fullname') }}</label>
                                             <div v-html="data.fullname__displaytext__"></div>
@@ -61,6 +56,11 @@
                                             <div v-html="data.email__displaytext__"></div>
                                         </div>
 									</div>
+                                    <div class="col-lg-6 col-md-6 col-xs-12">
+                                        <div class="detail-container profile-image-container">
+                                            <div v-html="data.profile_img__displaytext__"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

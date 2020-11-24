@@ -959,6 +959,11 @@ table p {
 .detail-container .showBigPhoto {
     height: 100px;
     margin-right: 5px;
+    border-radius: 50%;
+}
+
+.detail-container.profile-image-container {
+    text-align: right;
 }
 
 .detail-container.profile-image-container .showBigPhoto{
