@@ -1241,4 +1241,10 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
     padding-top: 1.0rem;
 }
 
+.detail-nav-tabs .nav-link.active {
+    color: #495057;
+    background-color: #f4f6f9;
+    border-color: #dee2e6 #dee2e6 #f4f6f9;
+}
+
 /* {{@snippet:end}} */
