@@ -140,9 +140,6 @@ class {{$ __value__}}Controller extends Controller
                 $object->save();                
             } // foreach ($objects as $object)
         }
-            
-        $return_data['has_error'] = true;
-        $return_data['error_msg'] = $error_msg;
 
         return $return_data;
     }

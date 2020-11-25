@@ -1247,4 +1247,17 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
     border-color: #dee2e6 #dee2e6 #f4f6f9;
 }
 
+.select2-container.select2-readonly {
+    pointer-events: none;
+    touch-action: none;
+}
+.select2-container.select2-readonly .select2-selection {
+    background: #eee;
+    box-shadow: none;
+}
+.select2-container.select2-readonly .select2-selection__arrow, 
+.select2-container.select2-readonly .select2-selection__clear {
+    display: none;
+}
+
 /* {{@snippet:end}} */

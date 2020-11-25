@@ -6,9 +6,9 @@
 
 <script>
 export default {
-    props: ['options', 'value'],
+    props: ['options', 'value', 'readonly'],
     mounted() {
-        var vm = this
+        var vm = this;
         $(this.$el)
             .select2({ data: this.options })
             .val(this.value)
@@ -33,7 +33,12 @@ export default {
             if (undefined !== options && 0 != options.length) {
                 $(this.$el).select2({ data: options });
             }
-        }
+        },
+        readonly: function (readonly) {
+            if (readonly) {
+                $(this.$el).closest('div').find('.select2-container:first').addClass('select2-readonly')
+            }
+        },
     },
     destroyed() {
         $(this.$el).off().select2('destroy');

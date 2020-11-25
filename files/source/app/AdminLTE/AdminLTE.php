@@ -1274,13 +1274,17 @@ class AdminLTE
 					$time = time();
 				}
 
-				$format = 'Y-m-d H:i:s';
+				if (0 == $time) {
+					$partResult = '-';
+				} else {
+					$format = 'Y-m-d H:i:s';
 
-				if (3 == $countPart) {
-					$format = $textPart[2];
+					if (3 == $countPart) {
+						$format = $textPart[2];
+					}
+
+					$partResult = date($format, $time);
 				}
-
-				$partResult = date($format, $time);
 			} else if ('image' == $type) {
 				if ($textPart[0] == $model) { // current model
 					$arr_files = $this->get_model_files_by_property($model, $objectCurrent->id, $property);
@@ -1353,6 +1357,8 @@ class AdminLTE
 						}
 					}
 				}
+
+				$partResult = ('' == $partResult) ? '-' : $partResult;
 			} else if ('class_selection_multiple' == $type) {
 				if ($textPart[0] == $model) { // current model
 					$display_text_Property = $textPart[1];
@@ -1379,13 +1385,17 @@ class AdminLTE
 
 						$partResult .= $objectExternal->$display_text_Property;
 					}
-		        } // if ($textPart[0] == $model) { // current model
+				} // if ($textPart[0] == $model) { // current model
+					
+				$partResult = ('' == $partResult) ? '-' : $partResult;
 			} else if ('selection_single' == $type) {
 				$id = $objectCurrent->$property;
 				if($id > 0) {
 					$objectExternal = AdminLTEModelOption::find($id);
 					$partResult = $objectExternal->title;
 				}
+				
+				$partResult = ('' == $partResult) ? '-' : $partResult;
 			} else if ('selection_multiple' == $type) {
 				$objectExternals = $objectCurrent->$property;
 
@@ -1396,6 +1406,8 @@ class AdminLTE
 
 					$partResult .= $objectExternal->title;
 				}
+
+				$partResult = ('' == $partResult) ? '-' : $partResult;
 			} else {
 				if ($textPart[0] == $model) { // current model
 					$display_text_Property = $textPart[1];
@@ -1404,7 +1416,7 @@ class AdminLTE
 					$partResult = '-';
 				} // if ($textPart[0] == $model) { // current model
 			} // if ('date' == $type) {
-
+			
 			$display_text = str_replace($parsedWithMustache, $partResult, $display_text);
 			$temp_text = $display_text;
 			$parsed = $this->getStringBetween($temp_text, '{{', '}}');
