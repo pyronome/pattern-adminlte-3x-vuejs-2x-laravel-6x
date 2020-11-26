@@ -2,8 +2,13 @@
 ,
 				'{{$ ../name/__value__/__lowercase_text__}}': false
 {{@elseif {{$ ../property_type/__value__}} == 'ClassSelection'}}
+    {{@if {{$ ../selection_properties/property_model_multiple_selection/__value__}} == "0"}}
+,
+                '{{$ ../name/__value__/__lowercase_text__}}': 0
+	{{@else}}
 ,
                 '{{$ ../name/__value__/__lowercase_text__}}': []
+	{{@endif}}
 {{@elseif {{$ ../property_type/__value__}} == 'Date'}}
 ,
                 '{{$ ../name/__value__/__lowercase_text__}}': ''

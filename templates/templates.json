@@ -1020,7 +1020,7 @@
         "append_crlf":"0"
     },
     {
-        "description":"edit.vue\/form model properties (empty)",
+        "description":"edit.vue\/form properties (empty)",
         "base":"\/project\/model_list\/model\/property_list\/__is_count_0__",
         "enabled":"1",
         "source":"",
@@ -1035,10 +1035,10 @@
         "append_crlf":"0"
     },
     {
-        "description":"edit.vue\/form model properties",
+        "description":"edit.vue\/form properties",
         "base":"\/project\/model_list\/model\/property_list\/property\/name",
         "enabled":"1",
-        "source":"source\/source202098118536d7b6690",
+        "source":"components\/model\/edit\/form_properties",
         "destination":"MODEL{{$ ..\/..\/..\/__item_index__\/__value__}}_EDIT_COMPONENT_FORM_PROPERTIES",
         "temporary":"1",
         "skip_empty":"0",
