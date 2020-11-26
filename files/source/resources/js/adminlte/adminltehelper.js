@@ -1263,6 +1263,17 @@ var AdminLTEHelper = {
         }
 
         return authorize;
+    },
+    "getTabIdFromURL": function () {
+        var url = new URL(window.location);
+        return url.hash.replace("#", "");
+    },
+    "goToTab": function () {
+        var tabId = AdminLTEHelper.getTabIdFromURL();
+        
+        if (("" != tabId) && document.getElementById(tabId)) {
+            $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
+        }
     }
 }
 
