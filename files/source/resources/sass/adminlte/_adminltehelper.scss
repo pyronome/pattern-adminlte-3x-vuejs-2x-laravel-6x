@@ -685,6 +685,7 @@ label > .hint-text {
 .noborder-edit-btn:active,
 .noborder-edit-btn:focus {
     opacity: 1;
+    outline: none;
 }
 
 .card-translation {
@@ -1111,8 +1112,8 @@ td .showBigPhoto {
     font-size: 14px;
     cursor: default;
 }
-.permission-button-yes,
-.permission-button-yes-disabled {
+.btn-confirmation-success,
+.btn-confirmation-success-disabled {
     outline: none !important;
     border: 1px solid #28a745;
     background: #fff;
@@ -1124,13 +1125,13 @@ td .showBigPhoto {
     font-family: inherit;
     font-size: 14px;    
 }
-.permission-button-yes[data-value="Y"],
-.permission-button-yes-disabled[data-value="Y"] {
+.btn-confirmation-success[data-value="Y"],
+.btn-confirmation-success-disabled[data-value="Y"] {
     background: #28a745;
     color: #fff;
 }
-.permission-button-no,
-.permission-button-no-disabled {
+.btn-confirmation-danger,
+.btn-confirmation-danger-disabled {
     outline: none !important;
     border: 1px solid #dc3545;
     background: #fff;
@@ -1142,13 +1143,13 @@ td .showBigPhoto {
     font-family: inherit;
     font-size: 14px;    
 }
-.permission-button-no[data-value="N"],
-.permission-button-no-disabled[data-value="N"] {
+.btn-confirmation-danger[data-value="N"],
+.btn-confirmation-danger-disabled[data-value="N"] {
     background: #dc3545;
     color: #fff;
 }
-.permission-button-yes-disabled,
-.permission-button-no-disabled {
+.btn-confirmation-success-disabled,
+.btn-confirmation-danger-disabled {
     cursor: default;
 }
 .permission-controller > span {
@@ -1259,5 +1260,4 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
 .select2-container.select2-readonly .select2-selection__clear {
     display: none;
 }
-
 /* {{@snippet:end}} */

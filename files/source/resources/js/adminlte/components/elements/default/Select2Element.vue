@@ -25,7 +25,12 @@ export default {
         },
         options: function (options) {
             if (undefined !== options && 0 != options.length) {
-                $(this.$el).select2({ data: options });
+                if ($(this.$el).children().length > 1) {
+                    $(this.$el).children().detach();
+                    this.$el.innerHTML = "<option></option>";
+                }
+
+                $(this.$el).select2({ data: options }).trigger('change');
                 this.options_initialized = true;
 
                 if ((!this.value_initialized) && (undefined !== this.initial_value)) {
