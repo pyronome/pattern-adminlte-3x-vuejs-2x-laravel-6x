@@ -16,7 +16,12 @@ export default {
     },
     mounted() {
         var vm = this;
-        $(this.$el).select2({ data: this.options });
+
+        $(this.$el)
+            .select2({ data: this.options })
+            .on('change', function () {
+                vm.$emit('input', $(this).val())
+            });;
     },
     watch: {
         value: function (value) {
@@ -46,6 +51,8 @@ export default {
     },
     methods: {
         setValue: function(value) {
+            var vm = this;
+            
             if (!this.options_initialized) {
                 return;
             }
@@ -53,13 +60,13 @@ export default {
             if (!Array.isArray(value)) {
                 if (value !== $(this.$el).val()) {
                     $(this.$el).val(value).trigger('change').on('change', function () {
-                        this.$emit('input', $(this).val())
+                        vm.$emit('input', $(this).val())
                     });
                 }
             } else {
                 if ([...value].sort().join(",") !== [...$(this.$el).val()].sort().join(",")) {
                     $(this.$el).val(value).trigger('change').on('change', function () {
-                        this.$emit('input', $(this).val())
+                        vm.$emit('input', $(this).val())
                     });
                 }
             }
