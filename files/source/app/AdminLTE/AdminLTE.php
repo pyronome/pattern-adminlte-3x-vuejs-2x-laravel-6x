@@ -2271,7 +2271,7 @@ class AdminLTE
 					)
 					->leftJoin(
 						($external_modelTableName . ' as ' . $external_modelTableNameAlias), 
-						($relationTableName . '.' . $property),
+						($relationTableName . '.' . strtolower($external_model) . '_id'),
 						'=',
 						($external_modelTableNameAlias . '.id')
 					);
