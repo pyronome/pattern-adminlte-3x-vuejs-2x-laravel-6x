@@ -207,6 +207,12 @@ table.checkbox-table > thead > tr > th:nth-child(2) {
     min-width: 100px;
 }
 
+.btn-on-card {
+    position: absolute;
+    right:1.25rem;
+    top:0.75rem;
+}
+
 .btn-card-footer {
     text-align: center;
 }
@@ -1152,6 +1158,44 @@ td .showBigPhoto {
 .btn-confirmation-danger-disabled {
     cursor: default;
 }
+
+.btn-confirmation-checkmark,
+.btn-confirmation-checkmark-disabled {
+    outline: none !important;
+    border: none;
+    background: transparent;
+    color: #28a745;
+    height: 18px;
+    width: 18px;
+    padding: 0px;
+    line-height: 1;
+    font-family: inherit;
+    font-size: 17px;
+    vertical-align: middle;
+}
+.btn-confirmation-checkmark-disabled {
+    cursor: default;
+}
+.btn-confirmation-checkmark[data-value="Y"] {
+    background: transparent;
+    color: #28a745;
+    border: none;
+    font-weight: bold;
+}
+
+.btn-confirmation-checkmark > span.empty {
+    display:block;
+}
+.btn-confirmation-checkmark[data-value="Y"] > span.empty {
+    display:none;
+}
+.btn-confirmation-checkmark > span.checked {
+    display: none;
+}
+.btn-confirmation-checkmark[data-value="Y"] > span.checked {
+    display:block;
+}
+
 .permission-controller > span {
     font-family: inherit;
     font-size: 14px;
