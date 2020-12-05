@@ -49,18 +49,27 @@ class AdminLTEMiddleware
 
     private function isPagePublic($request) {
 
+        $adminLTEFolder = config('adminlte.main_folder');
+
         $publicPages = [
-            '/login',
-            '/logout',
-            '/forgotpassword'
+            'login',
+            'logout',
+            'forgotpassword'
         ];
 
-        if (preg_match('(' . implode('|', $publicPages) . ')', $request->path()) === 1)
+        $publicPageCount = count($publicPages);
+        $found = false;
+        $path = $request->path();
+
+        for ($i = 0; (($i < $publicPageCount) && !$found); $i++)
         {
-            return true;
-        } else {
-            return false;
-        } // if (preg_match('(' . implode('|', $publicPages) . ')', $request->path()) === 1)
+            if (0 == strpos($path, ($adminLTEFolder . '/' . $publicPages[$i])))
+            {
+                $found = true;
+            }
+        }
+
+        return $found;
 
     }
 
