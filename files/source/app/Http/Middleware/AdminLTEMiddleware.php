@@ -56,8 +56,8 @@ class AdminLTEMiddleware
             'logout',
             'forgotpassword',
 	    'api/login/get_brand_data',
-	    'api/login/post',
-	    'api/forgotpassword/post'
+	    'api/login',
+	    'api/forgotpassword'
         ];
 
         $publicPageCount = count($publicPages);
