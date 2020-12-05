@@ -63,7 +63,7 @@ class AdminLTEMiddleware
 
         for ($i = 0; (($i < $publicPageCount) && !$found); $i++)
         {
-            if (0 == strpos($path, ($adminLTEFolder . '/' . $publicPages[$i])))
+            if (0 === strpos($path, ($adminLTEFolder . '/' . $publicPages[$i])))
             {
                 $found = true;
             }
