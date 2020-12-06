@@ -2369,6 +2369,12 @@ class AdminLTE
 
 	public function getUserPermissionData() {
 		$User = auth()->guard('adminlteuser')->user();
+		
+		if ($User == null)
+		{
+			return [];	
+		}
+		
 		$UserGroupPermissions = $this->getUserGroupPermissions($User->adminlteusergroup_id);
 		$UserPermissions = $this->getUserPermissions($User->id);
 
