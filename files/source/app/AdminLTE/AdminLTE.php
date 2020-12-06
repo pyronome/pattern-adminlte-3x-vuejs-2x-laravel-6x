@@ -907,8 +907,6 @@ class AdminLTE
 		
 		if (null == $layout)
 		{
-			echo __LINE__;
-			die();
 			return $Widgets;
 		} // if (null == $layout)
 
