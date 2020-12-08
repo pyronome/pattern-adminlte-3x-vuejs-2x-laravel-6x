@@ -163,10 +163,10 @@
         methods: {
             toggleWidget: function() {
                 this.state = (1 == this.state) ? 0 : 1;
-                setWidgetState(this.cookie_suffix, this.state);
+                AdminLTEHelper.setWidgetState(this.cookie_suffix, this.state);
             },
             initializeWidget: function() {
-                this.state = getWidgetState(this.cookie_suffix);
+                this.state = AdminLTEHelper.getWidgetState(this.cookie_suffix);
                 
                 if (1 == this.state) {
                     $("#buttonToggleWidgetRecordList" + this.model).parent().parent().parent().CardWidget('expand');
