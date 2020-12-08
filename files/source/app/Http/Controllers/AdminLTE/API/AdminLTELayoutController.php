@@ -87,8 +87,6 @@ class AdminLTELayoutController extends Controller
         $pagename = $request->input('pagename');
         $widgetJSON = html_entity_decode(htmlspecialchars($request->input('widgetJSON')));
 
-        echo $widgetJSON;
-
         if ('' == $widgetJSON) {
             $widgetJSON = '[]';
         } 

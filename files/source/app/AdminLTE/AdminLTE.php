@@ -907,8 +907,6 @@ class AdminLTE
 		
 		if (null == $layout)
 		{
-			echo __LINE__;
-			die();
 			return $Widgets;
 		} // if (null == $layout)
 
@@ -2371,6 +2369,12 @@ class AdminLTE
 
 	public function getUserPermissionData() {
 		$User = auth()->guard('adminlteuser')->user();
+		
+		if ($User == null)
+		{
+			return [];	
+		}
+		
 		$UserGroupPermissions = $this->getUserGroupPermissions($User->adminlteusergroup_id);
 		$UserPermissions = $this->getUserPermissions($User->id);
 
