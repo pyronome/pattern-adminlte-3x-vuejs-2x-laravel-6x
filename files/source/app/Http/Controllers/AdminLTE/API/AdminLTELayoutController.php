@@ -418,51 +418,48 @@ class AdminLTELayoutController extends Controller
         $next_page_url = null;
         $prev_page_url = null;
 
-        $user_can_view_page = $User->can('viewAny', $modelNameWithNamespace);
-        if ($user_can_view_page) {
-            $objectList = $modelNameWithNamespace::defaultQuery($search_text, $sort_variable, $sort_direction)->paginate($limit, ['*'], 'page', $page);
+        $objectList = $modelNameWithNamespace::defaultQuery($search_text, $sort_variable, $sort_direction)->paginate($limit, ['*'], 'page', $page);
 
-            $current_page = $objectList->currentPage();
-            $last_page = $objectList->lastPage();
-            $per_page = $objectList->perPage();
-            $from = (($current_page - 1) * $per_page) + 1;
-            $to = ($current_page * $per_page);
-            $total = $objectList->total();
-            $next_page_url = ($last_page == $current_page) ? null : 'get_recordlist?p=' . ($current_page + 1);
-            $prev_page_url = (1 == $current_page) ? null : 'get_recordlist?p=' . ($current_page - 1);
-                        
-            $index = 0;
-
-            foreach ($objectList as $object) {
-                $user_can_view = $User->can('view', $object);
-
-                if ($user_can_view) {
-                    $displayTexts = $objectAdminLTE->getObjectDisplayTexts($model, $object);
+        $current_page = $objectList->currentPage();
+        $last_page = $objectList->lastPage();
+        $per_page = $objectList->perPage();
+        $from = (($current_page - 1) * $per_page) + 1;
+        $to = ($current_page * $per_page);
+        $total = $objectList->total();
+        $next_page_url = ($last_page == $current_page) ? null : 'get_recordlist?p=' . ($current_page + 1);
+        $prev_page_url = (1 == $current_page) ? null : 'get_recordlist?p=' . ($current_page - 1);
                     
-                    $list[$index] = array();
-                    $list[$index]['id'] = $object->id;
-                    $list[$index]['user_can_create'] = $User->can('create', $object);
-                    $list[$index]['user_can_read'] = $user_can_view;
-                    $list[$index]['user_can_update'] = $User->can('update', $object);
-                    $list[$index]['user_can_delete'] = $User->can('delete', $object);
-                    $list[$index]['user_can_view'] = $user_can_view_page;
-                    $list[$index]['displaytexts'] = array();
+        $index = 0;
 
-                    foreach ($widget_table_header['variables'] as $variable) {
-                        $displayVariable = str_replace('__displaytext__', '', $variable);
-                        if (isset($displayTexts[$displayVariable])) {
-                            $list[$index]['displaytexts'][] = $displayTexts[$displayVariable];
-                        } else if (property_exists($object, $variable)) {
-                            $list[$index]['displaytexts'][] = $object->$variable;
-                        } else {
-                            $list[$index]['displaytexts'][] = '-';
-                        }
+        foreach ($objectList as $object) {
+            $user_can_view = $User->can('view', $object);
+
+            if ($user_can_view) {
+                $displayTexts = $objectAdminLTE->getObjectDisplayTexts($model, $object);
+                
+                $list[$index] = array();
+                $list[$index]['id'] = $object->id;
+                $list[$index]['user_can_create'] = $User->can('create', $object);
+                $list[$index]['user_can_read'] = $user_can_view;
+                $list[$index]['user_can_update'] = $User->can('update', $object);
+                $list[$index]['user_can_delete'] = $User->can('delete', $object);
+                $list[$index]['user_can_view'] = $User->can('viewAny', $object);
+                $list[$index]['displaytexts'] = array();
+
+                foreach ($widget_table_header['variables'] as $variable) {
+                    $displayVariable = str_replace('__displaytext__', '', $variable);
+                    if (isset($displayTexts[$displayVariable])) {
+                        $list[$index]['displaytexts'][] = $displayTexts[$displayVariable];
+                    } else if (property_exists($object, $variable)) {
+                        $list[$index]['displaytexts'][] = $object->$variable;
+                    } else {
+                        $list[$index]['displaytexts'][] = '-';
                     }
                 }
+            }
 
-                $index++;
-            } // foreach ($objectList as $object)
-        }
+            $index++;
+        } // foreach ($objectList as $object)
 
         $data = [
             'widget_options' => $widget_options,
