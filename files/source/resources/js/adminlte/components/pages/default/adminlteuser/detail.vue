@@ -71,11 +71,13 @@
                             </div>
                         </div>
                     </div>
+                    <page-layout :pagename="pagename"></page-layout>
                 </div>
             </section>
 		    <image-display :init_image_display="init_image_display"></image-display>
         </div>
         <input type="hidden" id="controller" :value="pagename">
+        <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
 </template>
 
@@ -99,7 +101,8 @@ export default {
                 is_data_loading: false,
                 is_data_loaded: false,
             },
-			init_image_display: false
+			init_image_display: false,
+            body_loader_active: false
         };
     },
     methods: {
@@ -124,6 +127,15 @@ export default {
                 this.loadPageVariables();
             } else {
                 if (this.page.is_data_loaded) {
+                    this.$nextTick(function () {
+                        var self = this;
+
+                        setTimeout(function() {
+                            self.initializePage();
+                            self.body_loader_active = false;
+                        }, 500);                        
+                    });
+
                     this.$Progress.finish();
                     this.page.is_ready = true;
                 } else {
@@ -180,12 +192,15 @@ export default {
                     this.$Progress.fail();
                     this.page.has_server_error = true;
                     this.processLoadQueue();
-                }).finally(function() {
-                    self.init_image_display = true;
                 });
+        },
+        initializePage: function () {
+            var self = this;
+            self.init_image_display = true;
         }
     },
     mounted() {
+        this.body_loader_active = true;
         this.main_folder = AdminLTEHelper.getMainFolder();
         this.pagename = AdminLTEHelper.getPagename();
         this.id = this.$route.params.id;

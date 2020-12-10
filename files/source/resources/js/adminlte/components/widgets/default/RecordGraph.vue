@@ -47,7 +47,7 @@
                 AdminLTEHelper.setWidgetState(this.cookie_suffix, this.state);
             },
             initializeWidget: function() {
-                this.state = getWidgetState(this.cookie_suffix);
+                this.state = AdminLTEHelper.getWidgetState(this.cookie_suffix);
                 
                 if (1 == this.state) {
                     $("#buttonToggleWidgetRecordGraph" + this.model).parent().parent().parent().CardWidget('expand');

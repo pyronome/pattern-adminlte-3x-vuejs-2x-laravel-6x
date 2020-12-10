@@ -10,6 +10,7 @@ Vue.component('widget-editor', require('./components/elements/default/WidgetEdit
 Vue.component('body-loader', require('./components/elements/default/BodyLoader.vue').default);
 Vue.component('permission-error', require('./components/elements/default/PermissionError.vue').default);
 Vue.component('server-error', require('./components/elements/default/ServerError.vue').default);
+Vue.component('page-layout', require('./components/elements/default/PageLayout.vue').default);
 
 /* {{@snippet:end_elements}} */
 /* Elements EOF */

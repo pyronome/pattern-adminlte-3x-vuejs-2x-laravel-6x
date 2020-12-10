@@ -485,4 +485,77 @@ class AdminLTELayoutController extends Controller
             'data' => $data
         ];
     }
+
+    public function get_layout_page_options(Request $request) {
+        $list = [];
+        $index = 0;
+
+        $list[$index]['id'] = 'home';
+        $list[$index]['text'] = 'Home';
+        $index++;
+
+        $objectAdminLTE = new AdminLTE();
+        $exceptions = $objectAdminLTE->system_models;
+
+		$Models = $objectAdminLTE->getModelList($exceptions);
+		$countModels = count($Models);
+
+		// get default display texts
+		for ($i=0; $i < $countModels; $i++) {
+            $model = $Models[$i];
+
+            $list[$index]['id'] = strtolower($model);
+            $list[$index]['text'] = $model;
+            $index++;
+        }
+
+        return [
+            'list' => $list
+        ];
+    }
+
+    public function get_page_layout(Request $request)
+    {
+        $layout_value = '';
+
+        $User = auth()->guard('adminlteuser')->user();
+
+        $parameters = $request->route()->parameters();
+
+        $pagename = isset($parameters['pagename'])
+                ? htmlspecialchars($parameters['pagename'])
+                : '';
+
+        $usergroup_id = $User->adminlteusergroup_id;
+
+        $objectAdminLTE = new AdminLTE();
+        $objectAdminLTEMetas = $objectAdminLTE->getMetaData('__usergroup_layout', $usergroup_id);
+        
+        if (count($objectAdminLTEMetas) > 0) {
+            $objectAdminLTEMeta = $objectAdminLTEMetas[0];
+            
+            $metaData = json_decode(
+                $objectAdminLTE->base64Decode($objectAdminLTEMeta->meta_value),
+                (JSON_HEX_QUOT
+                | JSON_HEX_TAG
+                | JSON_HEX_AMP
+                | JSON_HEX_APOS));
+
+            $iframeData = isset($metaData['iframes']) ? $metaData['iframes'] : [];
+
+            $selected_pages = isset($iframeData['selected_pages']) ? $iframeData['selected_pages'] : [];
+            $values = isset($iframeData['values']) ? $iframeData['values'] : [];
+            
+            if (in_array($pagename,  $selected_pages)) {
+                foreach ($values as $value) {
+                    if ($pagename == $value['id']) {
+                        $layout_value = $value['value'];
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $layout_value;
+    }
 }

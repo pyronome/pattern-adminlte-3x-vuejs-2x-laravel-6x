@@ -48,7 +48,6 @@
         methods: {
         },
         destroyed() {
-            console.log("Widgets.vue destroyed");
         },
         components: {
             infobox,

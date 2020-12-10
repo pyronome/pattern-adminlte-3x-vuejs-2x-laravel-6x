@@ -17,7 +17,7 @@
                             id="searchText" name="searchText"
                             @keyup="search_list" v-model="search_text"
                             class="form-control float-right inputSearchBar"
-                            v-bind:placeholderr="$t('Search')">
+                            v-bind:placeholder="$t('Search')">
                         <div class="input-group-append labelSearchBar">
                             <button type="button" class="btn btn-default ">
                                 <img class="imgLoader" src="/img/adminlte/loader.svg" width="14" height="14"/>
