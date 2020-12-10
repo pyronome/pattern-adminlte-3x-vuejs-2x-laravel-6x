@@ -48,7 +48,6 @@
                                     <div class="card-body">
                                         <div v-show="!show_page" class="row">
                                             <div class="callout callout-warning col-lg-12">
-                                                <h5>{{  $t('Warning') }}</h5>
                                                 <p>{{  $t('No records added yet.') }}</p>
                                             </div>
                                         </div>
