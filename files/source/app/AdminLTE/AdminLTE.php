@@ -1275,7 +1275,7 @@ class AdminLTE
 				if (0 == $time) {
 					$partResult = '-';
 				} else {
-					$format = 'Y-m-d H:i:s';
+					$format = config('adminlte.date_format');
 
 					if (3 == $countPart) {
 						$format = $textPart[2];
