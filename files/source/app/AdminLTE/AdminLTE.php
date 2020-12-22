@@ -1669,6 +1669,21 @@ class AdminLTE
 		return $propertyList;
 	}
 
+	public function getModelPropertyListByIndexed($model) {
+		$propertyList = [];
+
+		$propertyListData = $this->getModelPropertyList($model);
+		foreach ($propertyListData as $property_data) {
+			$property = $property_data['name'];
+			$propertyList[$property]['type'] = $property_data['type'];
+			$propertyList[$property]['belongs_to'] = $property_data['belongs_to'];
+			$propertyList[$property]['display_property'] = $property_data['display_property'];
+			$propertyList[$property]['title'] = $property_data['title'];
+		}
+
+		return $propertyList;
+	}
+
 	public function getAllModelDisplayTexts()
 	{
 

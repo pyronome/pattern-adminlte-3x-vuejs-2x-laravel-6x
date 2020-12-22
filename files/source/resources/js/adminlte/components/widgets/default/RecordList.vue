@@ -106,15 +106,14 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="card-footer" style="min-height:60px;">
-                <pagination v-if="show_pagination" :data="data" :limit="1" align="right" :show-disabled="false" @pagination-change-page="paginate">
-                    <span slot="prev-nav">&lt;</span>
-                    <span slot="next-nav">&gt;</span>
-                </pagination>
-            </div>
-        </div>
-        
+                <div style="min-height:60px;">
+                    <pagination v-if="show_pagination" :data="data" :limit="1" align="right" :show-disabled="false" @pagination-change-page="paginate">
+                        <span slot="prev-nav">&lt;</span>
+                        <span slot="next-nav">&gt;</span>
+                    </pagination>
+                </div>
+            </div>            
+        </div>        
     </div>
 </template>
 
