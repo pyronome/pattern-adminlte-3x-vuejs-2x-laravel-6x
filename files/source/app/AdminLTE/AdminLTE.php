@@ -409,7 +409,7 @@ class AdminLTE
 				'type' => $userType,
 				'email' => $adminLTEUser->email,
 				'username' => $adminLTEUser->username,
-				'name' => $adminLTEUser->fullname,
+				'name' => ('' != $adminLTEUser->fullname) ? $adminLTEUser->fullname : $adminLTEUser->username,
 				'fullname' => $adminLTEUser->fullname,
 				'menu_permission' => $this->getUserMenuPermission($adminLTEUser),
 				'service_permission' => $this->getUserServicePermission($adminLTEUser),
