@@ -15,12 +15,12 @@ use App\AdminLTE\AdminLTEPermission;
 use App\AdminLTE\AdminLTEMeta;
 use PDO;
 
-/* {{snippet:begin_class}} */
+/* {{@snippet:begin_class}} */
 
 class AdminLTE
 {
 
-	/* {{snippet:begin_properties}} */
+	/* {{@snippet:begin_properties}} */
 	public $system_models = [
 		'AdminLTE',
 		'AdminLTELayout',
@@ -33,9 +33,9 @@ class AdminLTE
 		'User'
 	];
 
-	/* {{snippet:end_properties}} */
+	/* {{@snippet:end_properties}} */
 
-	/* {{snippet:begin_methods}} */
+	/* {{@snippet:begin_methods}} */
 	
 	public function __construct()
     {
@@ -2464,7 +2464,7 @@ class AdminLTE
 		
 		return true;
 	}
-	/* {{snippet:end_methods}} */
+	/* {{@snippet:end_methods}} */
 }
 
-/* {{snippet:end_class}} */
+/* {{@snippet:end_class}} */
