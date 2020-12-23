@@ -91,7 +91,7 @@ class AdminLTEController extends Controller
         $other_permission_items[$index]['items'][$item_index]['value'] = 'sign_in';
         $other_permission_items[$index]['items'][$item_index]['title'] = 'Sign-In'; */
 
-        /* {{snippet:other_permissions}} */
+        /* {{@snippet:other_permissions}} */
 
         return [
             'menu_permission_items' => $menu_permission_items,
