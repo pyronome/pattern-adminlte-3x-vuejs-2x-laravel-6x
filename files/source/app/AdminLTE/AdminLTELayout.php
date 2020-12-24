@@ -4,11 +4,11 @@ namespace App\AdminLTE;
 
 use Illuminate\Database\Eloquent\Model;
 
-/* {{snippet:begin_class}} */
+/* {{@snippet:begin_class}} */
 
 class AdminLTELayout extends Model
 {
-	/* {{snippet:begin_properties}} */
+	/* {{@snippet:begin_properties}} */
 
     /**
      * The table associated with the model.
@@ -49,12 +49,12 @@ class AdminLTELayout extends Model
         ]
     ];
 
-	/* {{snippet:end_properties}} */
+	/* {{@snippet:end_properties}} */
 
-	/* {{snippet:begin_methods}} */
+	/* {{@snippet:begin_methods}} */
 	
-	/* {{snippet:end_methods}} */
+	/* {{@snippet:end_methods}} */
 
 }
 
-/* {{snippet:end_class}} */
+/* {{@snippet:end_class}} */

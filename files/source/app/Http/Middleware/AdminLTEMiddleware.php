@@ -6,16 +6,16 @@ use Closure;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
 
-/* {{snippet:begin_class}} */
+/* {{@snippet:begin_class}} */
 
 class AdminLTEMiddleware
 {
 
-	/* {{snippet:begin_properties}} */
+	/* {{@snippet:begin_properties}} */
 
-	/* {{snippet:end_properties}} */
+	/* {{@snippet:end_properties}} */
 
-	/* {{snippet:begin_methods}} */
+	/* {{@snippet:begin_methods}} */
 
     /**
      * Handle an incoming request.
@@ -26,7 +26,7 @@ class AdminLTEMiddleware
      */
     public function handle($request, Closure $next)
     {
-        /* {{snippet:begin_handle_method}} */
+        /* {{@snippet:begin_handle_method}} */
 
         $adminLTE = new AdminLTE();
 
@@ -44,7 +44,7 @@ class AdminLTEMiddleware
 
         return $next($request);
 
-        /* {{snippet:end_handle_method}} */
+        /* {{@snippet:end_handle_method}} */
     }
 
     private function isPagePublic($request) {
@@ -76,7 +76,7 @@ class AdminLTEMiddleware
 
     }
 
-    /* {{snippet:end_methods}} */
+    /* {{@snippet:end_methods}} */
 }
 
-/* {{snippet:end_class}} */
+/* {{@snippet:end_class}} */
