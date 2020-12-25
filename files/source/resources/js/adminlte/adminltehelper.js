@@ -1233,6 +1233,8 @@ var AdminLTEHelper = {
                 }
             });
         }
+
+        AdminLTEHelper.initializeOtherPermissions(page_variables);
     },
     "isUserAuthorized": function(page_variables, pagename, model="", token="") {
         var authorize = {};
@@ -1398,7 +1400,12 @@ var AdminLTEHelper = {
     },
     "eraseCookie": function (name) {   
         document.cookie = name+'=; Max-Age=-99999999;';  
+    },
+    "initializeOtherPermissions": function(page_variables) {
+        /* {{@snippet:begin_initialize_other_permissions}} */
+        /* {{@snippet:end_initialize_other_permissions}} */
     }
+    /* {{@snippet:end_methods}} */
 }
 
 module.exports = AdminLTEHelper;

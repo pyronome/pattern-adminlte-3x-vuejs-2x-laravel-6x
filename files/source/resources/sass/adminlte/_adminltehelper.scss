@@ -186,6 +186,10 @@ div.dataTables_processing {
     }
 }
 
+table.table > thead > tr {
+    height: 35px;
+}
+
 .table.table-object-list > thead > tr > th{
     padding: 2px 4px;
     vertical-align: unset;
@@ -464,6 +468,10 @@ label > .hint-text {
     height: 300px;
     width: 100%;
     display: block;
+}
+
+.margin-0 {
+    margin: 0px !important;
 }
 
 /*Dropzone*/
@@ -775,6 +783,29 @@ label > .hint-text {
     border-left: 2px solid #d0d0d0 !important;
 }
 
+.sbp-show {
+    display: block;
+}
+a.sbp-show {
+    display: inline-block;
+}
+
+.row.sbp-show {
+    display: flex;
+}
+
+th.sbp-show,
+td.sbp-show {
+    display: table-cell;
+}
+
+.form-group.row.sbp-show {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0rem !important;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
 .sbp-hide {
     display: none !important;
 }
@@ -1008,6 +1039,9 @@ td .showBigPhoto {
     display: none;
 }
 .select2-element {
+    width: 100%;
+}
+.select2.select2-container {
     width: 100%;
 }
 .page-item > .page-link {
@@ -1298,4 +1332,5 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
 .select2-container.select2-readonly .select2-selection__clear {
     display: none;
 }
+
 /* {{@snippet:end}} */
