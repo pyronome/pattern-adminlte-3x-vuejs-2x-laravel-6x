@@ -4,7 +4,7 @@
 
 **Laravel** is a web application framework with expressive, elegant syntax. For further information about **Laravel** Framework, please visit https://laravel.com/.
 
-This repository contains Pyronome **AdminLTE 3.x + Vue.js 2.x + Laravel 6.x** pattern basic information, pattern files, pattern templates, documentation and issue tracker. For further information about this pattern, please visit https://pyronome.com/pyronome/adminlte-3x-vuejs-2x-laravel-6x.
+This repository contains Pyronome **AdminLTE 3.x + Vue.js 2.x + Laravel 6.x** pattern basic information, pattern files, pattern templates, documentation and issue tracker. For further information about this pattern, please visit https://pyronome.com/pyronome/adminlte-3x-vuejs-2x-laravel-6x. 
 
 **Please note that you cannot directly use this repository.** To generate source code using this pattern, please visit [Pyronome Sign Up Page](https://pyronome.com/builder/signup), and create an account.
 
