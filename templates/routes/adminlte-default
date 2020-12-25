@@ -82,6 +82,8 @@ Route::namespace('API')
         Route::post('/post', 'AdminLTEUserGroupController@post');
         Route::get('/get_permission_data/{id}', 'AdminLTEUserGroupController@get_permission_data');
         Route::post('/post_permission_data', 'AdminLTEUserGroupController@post_permission_data');
+        Route::get('/get_layout_data/{id}', 'AdminLTEUserGroupController@get_layout_data');
+        Route::post('/post_layout_data', 'AdminLTEUserGroupController@post_layout_data');
     });
 
     Route::prefix('adminlteuser')->group(function () {
@@ -101,6 +103,8 @@ Route::namespace('API')
         Route::get('/get_infoboxvalue/{pageName}/{model}', 'AdminLTELayoutController@get_infoboxvalue');
         Route::get('/get_recordgraph/{pageName}/{model}', 'AdminLTELayoutController@get_recordgraph');
         Route::get('/get_recordlist/{pageName}/{model}', 'AdminLTELayoutController@get_recordlist');
+        Route::get('/get_layout_page_options', 'AdminLTELayoutController@get_layout_page_options');
+        Route::get('/get_page_layout/{pagename}', 'AdminLTELayoutController@get_page_layout');
     });
 
     Route::prefix('__modeldisplaytext')->group(function () {

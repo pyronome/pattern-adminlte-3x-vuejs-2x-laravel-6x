@@ -73,7 +73,7 @@
                                             <div class="permission-item col-lg-12 col-md-12 col-xs-12" v-for="(item, index) in menu_permission_items" :key="index">
                                                 <div class="d-inline permission-controller">
                                                     <button type="button"
-                                                        class="permission-button-yes-disabled __adminlte_menu"
+                                                        class="btn-confirmation-success-disabled __adminlte_menu"
                                                         :id="'gp-__adminlte_menu-' + item.value"
                                                         :data-token="item.value"
                                                         data-value="">
@@ -81,7 +81,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
-                                                        class="permission-button-yes __adminlte_menu"
+                                                        class="btn-confirmation-success __adminlte_menu"
                                                         :id="'up-__adminlte_menu-' + item.value + '-yes'"
                                                         :data-token="item.value"
                                                         data-value="">
@@ -89,7 +89,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
-                                                        class="permission-button-no __adminlte_menu"
+                                                        class="btn-confirmation-danger __adminlte_menu"
                                                         :id="'up-__adminlte_menu-' + item.value + '-no'"
                                                         :data-token="item.value"
                                                         data-value="">
@@ -105,7 +105,7 @@
                                                 <h6>{{model}}</h6>
                                                 <div class="d-inline permission-controller">
                                                     <button type="button"
-                                                        class="permission-button-yes-disabled __adminlte_model"
+                                                        class="btn-confirmation-success-disabled __adminlte_model"
                                                         :id="'gp-__adminlte_model-' + model + '-create'"
                                                         :data-token="model + '-create'"
                                                         data-value="">
@@ -113,7 +113,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
-                                                        class="permission-button-yes __adminlte_model"
+                                                        class="btn-confirmation-success __adminlte_model"
                                                         :id="'up-__adminlte_model-' + model + '-create' + '-yes'"
                                                         :data-token="model + '-create'"
                                                         data-value="">
@@ -121,7 +121,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
-                                                        class="permission-button-no __adminlte_model"
+                                                        class="btn-confirmation-danger __adminlte_model"
                                                         :id="'up-__adminlte_model-' + model + '-create' + '-no'"
                                                         :data-token="model + '-create'"
                                                         data-value="">
@@ -131,7 +131,7 @@
                                                 </div>
                                                 <div class="d-inline permission-controller">
                                                     <button type="button"
-                                                        class="permission-button-yes-disabled __adminlte_model"
+                                                        class="btn-confirmation-success-disabled __adminlte_model"
                                                         :id="'gp-__adminlte_model-' + model + '-read'"
                                                         :data-token="model + '-read'"
                                                         data-value="">
@@ -139,7 +139,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
-                                                        class="permission-button-yes __adminlte_model"
+                                                        class="btn-confirmation-success __adminlte_model"
                                                         :id="'up-__adminlte_model-' + model + '-read' + '-yes'"
                                                         :data-token="model + '-read'"
                                                         data-value="">
@@ -147,7 +147,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
-                                                        class="permission-button-no __adminlte_model"
+                                                        class="btn-confirmation-danger __adminlte_model"
                                                         :id="'up-__adminlte_model-' + model + '-read' + '-no'"
                                                         :data-token="model + '-read'"
                                                         data-value="">
@@ -157,7 +157,7 @@
                                                 </div>
                                                 <div class="d-inline permission-controller">
                                                     <button type="button"
-                                                        class="permission-button-yes-disabled __adminlte_model"
+                                                        class="btn-confirmation-success-disabled __adminlte_model"
                                                         :id="'gp-__adminlte_model-' + model + '-update'"
                                                         :data-token="model + '-update'"
                                                         data-value="">
@@ -165,7 +165,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
-                                                        class="permission-button-yes __adminlte_model"
+                                                        class="btn-confirmation-success __adminlte_model"
                                                         :id="'up-__adminlte_model-' + model + '-update' + '-yes'"
                                                         :data-token="model + '-update'"
                                                         data-value="">
@@ -173,7 +173,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
-                                                        class="permission-button-no __adminlte_model"
+                                                        class="btn-confirmation-danger __adminlte_model"
                                                         :id="'up-__adminlte_model-' + model + '-update' + '-no'"
                                                         :data-token="model + '-update'"
                                                         data-value="">
@@ -183,7 +183,7 @@
                                                 </div>
                                                 <div class="d-inline permission-controller">
                                                     <button type="button"
-                                                        class="permission-button-yes-disabled __adminlte_model"
+                                                        class="btn-confirmation-success-disabled __adminlte_model"
                                                         :id="'gp-__adminlte_model-' + model + '-delete'"
                                                         :data-token="model + '-delete'"
                                                         data-value="">
@@ -191,7 +191,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
-                                                        class="permission-button-yes __adminlte_model"
+                                                        class="btn-confirmation-success __adminlte_model"
                                                         :id="'up-__adminlte_model-' + model + '-delete' + '-yes'"
                                                         :data-token="model + '-delete'"
                                                         data-value="">
@@ -199,7 +199,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
-                                                        class="permission-button-no __adminlte_model"
+                                                        class="btn-confirmation-danger __adminlte_model"
                                                         :id="'up-__adminlte_model-' + model + '-delete' + '-no'"
                                                         :data-token="model + '-delete'"
                                                         data-value="">
@@ -214,7 +214,7 @@
                                             <div class="permission-item col-lg-12 col-md-12 col-xs-12" v-for="(item, index) in group.items" :key="index">
                                                 <div class="d-inline permission-controller">
                                                     <button type="button"
-                                                        class="permission-button-yes-disabled"
+                                                        class="btn-confirmation-success-disabled"
                                                         :class="group.meta_key"
                                                         :id="'gp-' + group.meta_key + '-' + item.value"
                                                         :data-token="item.value"
@@ -223,7 +223,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleYes"
-                                                        class="permission-button-yes"
+                                                        class="btn-confirmation-success"
                                                         :class="group.meta_key"
                                                         :id="'up-' + group.meta_key + '-' + item.value + '-yes'"
                                                         :data-token="item.value"
@@ -232,7 +232,7 @@
                                                     </button>
                                                     <button type="button"
                                                         v-on:click="toggleNo"
-                                                        class="permission-button-no"
+                                                        class="btn-confirmation-danger"
                                                         :class="group.meta_key"
                                                         :id="'up-' + group.meta_key + '-' + item.value + '-no'"
                                                         :data-token="item.value"
@@ -327,7 +327,7 @@ export default {
                 button.setAttribute("data-value", "");
             } else {
                 button.setAttribute("data-value", "Y");
-                $(button).closest(".permission-controller").find(".permission-button-no").first().attr("data-value", "");
+                $(button).closest(".permission-controller").find(".btn-confirmation-danger").first().attr("data-value", "");
             }
         },
         toggleNo: function (event) {
@@ -337,7 +337,7 @@ export default {
                 button.setAttribute("data-value", "");
             } else {
                 button.setAttribute("data-value", "N");
-                $(button).closest(".permission-controller").find(".permission-button-yes").first().attr("data-value", "");
+                $(button).closest(".permission-controller").find(".btn-confirmation-success").first().attr("data-value", "");
             }
         },
         processLoadQueue: function () {
@@ -498,14 +498,14 @@ export default {
                 permission_group_data["meta_key"] = meta_key;
                 permission_group_data["permissions"] = {};
 
-                let selectorText = "." + meta_key + ".permission-button-yes";
+                let selectorText = "." + meta_key + ".btn-confirmation-success";
                 this.$el.querySelectorAll(selectorText).forEach(button => {
                     let token = button.getAttribute("data-token");
                     let value = button.getAttribute("data-value");
                     permission_group_data["permissions"][token] = value;
                 });
 
-                selectorText = "." + meta_key + ".permission-button-no[data-value='N']";
+                selectorText = "." + meta_key + ".btn-confirmation-danger[data-value='N']";
                 this.$el.querySelectorAll(selectorText).forEach(button => {
                     let token = button.getAttribute("data-token");
                     permission_group_data["permissions"][token] = 'N';

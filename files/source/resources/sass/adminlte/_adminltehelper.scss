@@ -186,6 +186,10 @@ div.dataTables_processing {
     }
 }
 
+table.table > thead > tr {
+    height: 35px;
+}
+
 .table.table-object-list > thead > tr > th{
     padding: 2px 4px;
     vertical-align: unset;
@@ -209,11 +213,6 @@ table.checkbox-table > thead > tr > th:nth-child(2) {
 
 .btn-card-footer {
     text-align: center;
-}
-
-.btn-success.btn-card-default,
-.btn-primary.btn-card-default {
-    min-width: 150px;
 }
 
 .th-btn-1 {
@@ -471,6 +470,10 @@ label > .hint-text {
     display: block;
 }
 
+.margin-0 {
+    margin: 0px !important;
+}
+
 /*Dropzone*/
 .media {
     margin-top: 15px;
@@ -685,6 +688,12 @@ label > .hint-text {
 .noborder-edit-btn:active,
 .noborder-edit-btn:focus {
     opacity: 1;
+    outline: none;
+}
+
+.noborder-edit-btn-on-table {
+    font-size: 17px;
+    vertical-align: middle;
 }
 
 .card-translation {
@@ -772,6 +781,29 @@ label > .hint-text {
 
 .border-left-grey {
     border-left: 2px solid #d0d0d0 !important;
+}
+
+.sbp-show {
+    display: block;
+}
+a.sbp-show {
+    display: inline-block;
+}
+
+.row.sbp-show {
+    display: flex;
+}
+
+th.sbp-show,
+td.sbp-show {
+    display: table-cell;
+}
+
+.form-group.row.sbp-show {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0rem !important;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
 }
 
 .sbp-hide {
@@ -1009,6 +1041,9 @@ td .showBigPhoto {
 .select2-element {
     width: 100%;
 }
+.select2.select2-container {
+    width: 100%;
+}
 .page-item > .page-link {
     outline: 0;
     font-weight: bold;
@@ -1111,8 +1146,8 @@ td .showBigPhoto {
     font-size: 14px;
     cursor: default;
 }
-.permission-button-yes,
-.permission-button-yes-disabled {
+.btn-confirmation-success,
+.btn-confirmation-success-disabled {
     outline: none !important;
     border: 1px solid #28a745;
     background: #fff;
@@ -1124,13 +1159,13 @@ td .showBigPhoto {
     font-family: inherit;
     font-size: 14px;    
 }
-.permission-button-yes[data-value="Y"],
-.permission-button-yes-disabled[data-value="Y"] {
+.btn-confirmation-success[data-value="Y"],
+.btn-confirmation-success-disabled[data-value="Y"] {
     background: #28a745;
     color: #fff;
 }
-.permission-button-no,
-.permission-button-no-disabled {
+.btn-confirmation-danger,
+.btn-confirmation-danger-disabled {
     outline: none !important;
     border: 1px solid #dc3545;
     background: #fff;
@@ -1142,15 +1177,53 @@ td .showBigPhoto {
     font-family: inherit;
     font-size: 14px;    
 }
-.permission-button-no[data-value="N"],
-.permission-button-no-disabled[data-value="N"] {
+.btn-confirmation-danger[data-value="N"],
+.btn-confirmation-danger-disabled[data-value="N"] {
     background: #dc3545;
     color: #fff;
 }
-.permission-button-yes-disabled,
-.permission-button-no-disabled {
+.btn-confirmation-success-disabled,
+.btn-confirmation-danger-disabled {
     cursor: default;
 }
+
+.btn-confirmation-checkmark,
+.btn-confirmation-checkmark-disabled {
+    outline: none !important;
+    border: none;
+    background: transparent;
+    color: #28a745;
+    height: 18px;
+    width: 18px;
+    padding: 0px;
+    line-height: 1;
+    font-family: inherit;
+    font-size: 17px;
+    vertical-align: middle;
+}
+.btn-confirmation-checkmark-disabled {
+    cursor: default;
+}
+.btn-confirmation-checkmark[data-value="Y"] {
+    background: transparent;
+    color: #28a745;
+    border: none;
+    font-weight: bold;
+}
+
+.btn-confirmation-checkmark > span.empty {
+    display:block;
+}
+.btn-confirmation-checkmark[data-value="Y"] > span.empty {
+    display:none;
+}
+.btn-confirmation-checkmark > span.checked {
+    display: none;
+}
+.btn-confirmation-checkmark[data-value="Y"] > span.checked {
+    display:block;
+}
+
 .permission-controller > span {
     font-family: inherit;
     font-size: 14px;
@@ -1239,6 +1312,25 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
 
 .form-part-header {
     padding-top: 1.0rem;
+}
+
+.detail-nav-tabs .nav-link.active {
+    color: #495057;
+    background-color: #f4f6f9;
+    border-color: #dee2e6 #dee2e6 #f4f6f9;
+}
+
+.select2-container.select2-readonly {
+    pointer-events: none;
+    touch-action: none;
+}
+.select2-container.select2-readonly .select2-selection {
+    background: #eee;
+    box-shadow: none;
+}
+.select2-container.select2-readonly .select2-selection__arrow, 
+.select2-container.select2-readonly .select2-selection__clear {
+    display: none;
 }
 
 /* {{@snippet:end}} */

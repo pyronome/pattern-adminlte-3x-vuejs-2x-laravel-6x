@@ -23,14 +23,12 @@
                     <div class="col-lg-4 col-md-4 col-xs-12 "></div>
                     <div class="col-lg-8 col-md-8 col-xs-12 ">
                         <div class="card">
-                            <div class="card-footer">
-                                <div class="col-lg-12 col-md-12 col-xs-12">
-                                    <router-link tag="a"
-                                        class="btn btn-primary btn-md btn-on-card btn-card-default text-white float-right"
-                                        :to="'/' + main_folder + '/profile/edit'">
-                                        <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Edit') }}</span>
-                                    </router-link>
-                                </div>
+                            <div class="action-buttons-container">
+                                <router-link tag="a"
+                                    class="btn btn-primary btn-md btn-on-card btn-card-default text-white float-right"
+                                    :to="'/' + main_folder + '/profile/edit'">
+                                    <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Edit') }}</span>
+                                </router-link>
                             </div>
                         </div>
                     </div>

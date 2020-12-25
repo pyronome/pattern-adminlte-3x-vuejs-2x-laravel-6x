@@ -6,16 +6,16 @@ use Closure;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
 
-/* {{snippet:begin_class}} */
+/* {{@snippet:begin_class}} */
 
 class AdminLTEAPIMiddleware
 {
 
-    /* {{snippet:begin_properties}} */
+    /* {{@snippet:begin_properties}} */
 
-    /* {{snippet:end_properties}} */
+    /* {{@snippet:end_properties}} */
 
-    /* {{snippet:begin_methods}} */
+    /* {{@snippet:begin_methods}} */
 
     /**
      * Handle an incoming request.
@@ -26,13 +26,13 @@ class AdminLTEAPIMiddleware
      */
     public function handle($request, Closure $next)
     {
-        /* {{snippet:begin_handle_method}} */
+        /* {{@snippet:begin_handle_method}} */
 
         return $next($request);
 
-        /* {{snippet:end_handle_method}} */
+        /* {{@snippet:end_handle_method}} */
     }
-    /* {{snippet:end_methods}} */
+    /* {{@snippet:end_methods}} */
 }
 
-/* {{snippet:end_class}} */
+/* {{@snippet:end_class}} */

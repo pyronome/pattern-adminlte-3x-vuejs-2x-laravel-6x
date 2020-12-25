@@ -156,7 +156,7 @@ class AdminLTEUserGroupController extends Controller
         $return_data['error_msg'] = $error_msg;
 
         return $return_data;
-    }
+    }    
 
     public function get_permission_data(Request $request)
     {    
@@ -215,5 +215,78 @@ class AdminLTEUserGroupController extends Controller
         return [
             'id' => $usergroup_id
         ];
+    }
+    
+    public function get_layout_data(Request $request) {
+        $form_data = [];
+        
+        $data = [];
+
+        $parameters = $request->route()->parameters();
+
+        $id = isset($parameters['id'])
+            ? intval($parameters['id'])
+            : 0;
+
+        if ($id <= 0) {
+            return;
+        } // if (!isset($parameters['id'])) {
+
+        $objectAdminLTEUserGroup = AdminLTEUserGroup::find($id);
+        
+        if (null !== $objectAdminLTEUserGroup) {
+            $form_data['usergroup_id'] = $id;
+            $form_data['title'] = $objectAdminLTEUserGroup->title;
+            $form_data['selected_pages'] = array();
+            $form_data['layout_data'] = '';        
+
+            $objectAdminLTE = new AdminLTE();
+            $objectAdminLTEMetas = $objectAdminLTE->getMetaData('__usergroup_layout', $id);
+
+            if (count($objectAdminLTEMetas) > 0) {
+                $objectAdminLTEMeta = $objectAdminLTEMetas[0];
+                
+                $metaData = json_decode(
+                    $objectAdminLTE->base64Decode($objectAdminLTEMeta->meta_value),
+                    (JSON_HEX_QUOT
+                    | JSON_HEX_TAG
+                    | JSON_HEX_AMP
+                    | JSON_HEX_APOS));
+
+                $iframeData = isset($metaData['iframes']) ? $metaData['iframes'] : [];
+
+                $form_data['selected_pages'] = $iframeData['selected_pages'];
+                $form_data['layout_data'] = $iframeData['values'];
+            }
+        }
+
+        return [
+            'form_data' => $form_data
+        ];
+    }
+
+    public function post_layout_data(Request $request)
+    {
+        $usergroup_id = intval($request->input('usergroup_id'));
+        $metaData = [];
+        $metaData['iframes'] = array();
+        $metaData['iframes']['selected_pages'] = $request->input('selected_pages');
+        $metaData['iframes']['values'] = $request->input('layout_data');
+        
+        $objectAdminLTE = new AdminLTE();
+        $encodedData = $objectAdminLTE->base64encode(json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
+        $success = $objectAdminLTE->setMetaData('__usergroup_layout', $usergroup_id, $encodedData);
+
+        if ($success) {
+            $return_data['id'] = $usergroup_id;
+            $return_data['has_error'] = false;
+            $return_data['error_msg'] = '';
+        } else {
+            $return_data['id'] = $usergroup_id;
+            $return_data['has_error'] = true;
+            $return_data['error_msg'] = __('An error occurred while processing your request.');
+        }
+
+        return $return_data;
     }
 }

@@ -17,6 +17,7 @@ import AdminLTEUserGroupList from "./components/pages/default/adminlteusergroup/
 import AdminLTEUserGroupDetail from "./components/pages/default/adminlteusergroup/detail.vue";
 import AdminLTEUserGroupEdit from "./components/pages/default/adminlteusergroup/edit.vue";
 import AdminLTEUserGroupPermission from "./components/pages/default/adminlteusergroup/permission.vue";
+import AdminLTEUserGroupLayout from "./components/pages/default/adminlteusergroup/layout.vue";
 {{ROUTES_MODEL_DEFAULT_IMPORT_DEFINITONS}}
 
 export default {
@@ -40,5 +41,6 @@ export default {
     "/adminlteusergroup/detail/:id": AdminLTEUserGroupDetail,
     "/adminlteusergroup/edit/:id": AdminLTEUserGroupEdit,
     "/adminlteusergroup/permission/:id": AdminLTEUserGroupPermission,
+    "/adminlteusergroup/layout/:id": AdminLTEUserGroupLayout,
 {{ROUTES_MODEL_DEFAULT_EXPORT_DEFINITONS}}
 };

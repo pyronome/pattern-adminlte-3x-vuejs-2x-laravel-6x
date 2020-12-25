@@ -87,8 +87,6 @@ class AdminLTELayoutController extends Controller
         $pagename = $request->input('pagename');
         $widgetJSON = html_entity_decode(htmlspecialchars($request->input('widgetJSON')));
 
-        echo $widgetJSON;
-
         if ('' == $widgetJSON) {
             $widgetJSON = '[]';
         } 
@@ -420,51 +418,48 @@ class AdminLTELayoutController extends Controller
         $next_page_url = null;
         $prev_page_url = null;
 
-        $user_can_view_page = $User->can('viewAny', $modelNameWithNamespace);
-        if ($user_can_view_page) {
-            $objectList = $modelNameWithNamespace::defaultQuery($search_text, $sort_variable, $sort_direction)->paginate($limit, ['*'], 'page', $page);
+        $objectList = $modelNameWithNamespace::defaultQuery($search_text, $sort_variable, $sort_direction)->paginate($limit, ['*'], 'page', $page);
 
-            $current_page = $objectList->currentPage();
-            $last_page = $objectList->lastPage();
-            $per_page = $objectList->perPage();
-            $from = (($current_page - 1) * $per_page) + 1;
-            $to = ($current_page * $per_page);
-            $total = $objectList->total();
-            $next_page_url = ($last_page == $current_page) ? null : 'get_recordlist?p=' . ($current_page + 1);
-            $prev_page_url = (1 == $current_page) ? null : 'get_recordlist?p=' . ($current_page - 1);
-                        
-            $index = 0;
-
-            foreach ($objectList as $object) {
-                $user_can_view = $User->can('view', $object);
-
-                if ($user_can_view) {
-                    $displayTexts = $objectAdminLTE->getObjectDisplayTexts($model, $object);
+        $current_page = $objectList->currentPage();
+        $last_page = $objectList->lastPage();
+        $per_page = $objectList->perPage();
+        $from = (($current_page - 1) * $per_page) + 1;
+        $to = ($current_page * $per_page);
+        $total = $objectList->total();
+        $next_page_url = ($last_page == $current_page) ? null : 'get_recordlist?p=' . ($current_page + 1);
+        $prev_page_url = (1 == $current_page) ? null : 'get_recordlist?p=' . ($current_page - 1);
                     
-                    $list[$index] = array();
-                    $list[$index]['id'] = $object->id;
-                    $list[$index]['user_can_create'] = $User->can('create', $object);
-                    $list[$index]['user_can_read'] = $user_can_view;
-                    $list[$index]['user_can_update'] = $User->can('update', $object);
-                    $list[$index]['user_can_delete'] = $User->can('delete', $object);
-                    $list[$index]['user_can_view'] = $user_can_view_page;
-                    $list[$index]['displaytexts'] = array();
+        $index = 0;
 
-                    foreach ($widget_table_header['variables'] as $variable) {
-                        $displayVariable = str_replace('__displaytext__', '', $variable);
-                        if (isset($displayTexts[$displayVariable])) {
-                            $list[$index]['displaytexts'][] = $displayTexts[$displayVariable];
-                        } else if (property_exists($object, $variable)) {
-                            $list[$index]['displaytexts'][] = $object->$variable;
-                        } else {
-                            $list[$index]['displaytexts'][] = '-';
-                        }
+        foreach ($objectList as $object) {
+            $user_can_view = $User->can('view', $object);
+
+            if ($user_can_view) {
+                $displayTexts = $objectAdminLTE->getObjectDisplayTexts($model, $object);
+                
+                $list[$index] = array();
+                $list[$index]['id'] = $object->id;
+                $list[$index]['user_can_create'] = $User->can('create', $object);
+                $list[$index]['user_can_read'] = $user_can_view;
+                $list[$index]['user_can_update'] = $User->can('update', $object);
+                $list[$index]['user_can_delete'] = $User->can('delete', $object);
+                $list[$index]['user_can_view'] = $User->can('viewAny', $object);
+                $list[$index]['displaytexts'] = array();
+
+                foreach ($widget_table_header['variables'] as $variable) {
+                    $displayVariable = str_replace('__displaytext__', '', $variable);
+                    if (isset($displayTexts[$displayVariable])) {
+                        $list[$index]['displaytexts'][] = $displayTexts[$displayVariable];
+                    } else if (property_exists($object, $variable)) {
+                        $list[$index]['displaytexts'][] = $object->$variable;
+                    } else {
+                        $list[$index]['displaytexts'][] = '-';
                     }
                 }
+            }
 
-                $index++;
-            } // foreach ($objectList as $object)
-        }
+            $index++;
+        } // foreach ($objectList as $object)
 
         $data = [
             'widget_options' => $widget_options,
@@ -486,5 +481,78 @@ class AdminLTELayoutController extends Controller
             'show_pagination' => $show_pagination,
             'data' => $data
         ];
+    }
+
+    public function get_layout_page_options(Request $request) {
+        $list = [];
+        $index = 0;
+
+        $list[$index]['id'] = 'home';
+        $list[$index]['text'] = 'Home';
+        $index++;
+
+        $objectAdminLTE = new AdminLTE();
+        $exceptions = $objectAdminLTE->system_models;
+
+		$Models = $objectAdminLTE->getModelList($exceptions);
+		$countModels = count($Models);
+
+		// get default display texts
+		for ($i=0; $i < $countModels; $i++) {
+            $model = $Models[$i];
+
+            $list[$index]['id'] = strtolower($model);
+            $list[$index]['text'] = $model;
+            $index++;
+        }
+
+        return [
+            'list' => $list
+        ];
+    }
+
+    public function get_page_layout(Request $request)
+    {
+        $layout_value = '';
+
+        $User = auth()->guard('adminlteuser')->user();
+
+        $parameters = $request->route()->parameters();
+
+        $pagename = isset($parameters['pagename'])
+                ? htmlspecialchars($parameters['pagename'])
+                : '';
+
+        $usergroup_id = $User->adminlteusergroup_id;
+
+        $objectAdminLTE = new AdminLTE();
+        $objectAdminLTEMetas = $objectAdminLTE->getMetaData('__usergroup_layout', $usergroup_id);
+        
+        if (count($objectAdminLTEMetas) > 0) {
+            $objectAdminLTEMeta = $objectAdminLTEMetas[0];
+            
+            $metaData = json_decode(
+                $objectAdminLTE->base64Decode($objectAdminLTEMeta->meta_value),
+                (JSON_HEX_QUOT
+                | JSON_HEX_TAG
+                | JSON_HEX_AMP
+                | JSON_HEX_APOS));
+
+            $iframeData = isset($metaData['iframes']) ? $metaData['iframes'] : [];
+
+            $selected_pages = isset($iframeData['selected_pages']) ? $iframeData['selected_pages'] : [];
+            $values = isset($iframeData['values']) ? $iframeData['values'] : [];
+            
+            if (in_array($pagename,  $selected_pages)) {
+                foreach ($values as $value) {
+                    if ($pagename == $value['id']) {
+                        $layout_value = $value['value'];
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $layout_value;
     }
 }

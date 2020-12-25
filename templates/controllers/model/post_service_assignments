@@ -11,11 +11,11 @@
 {{@elseif {{$ ../property_type/__value__}} == 'Date' }}
 		$object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = ('' != $request->input('{{$ __value__/__lowercase_text__}}'))
                 ? $request->input('{{$ __value__/__lowercase_text__}}')
-                : date('Y-m-d');
+                : null;
 {{@elseif {{$ ../property_type/__value__}} == 'DateTime' }}
         $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = ('' != $request->input('{{$ __value__/__lowercase_text__}}'))
                 ? $request->input('{{$ __value__/__lowercase_text__}}')
-                : date('Y-m-d H:i');
+                : null;
 {{@elseif {{$ ../property_type/__value__}} == 'Selection' }}
 {{@if {{$ ../selection_properties/property_model_multiple_selection_0/__value__}} == "0"}}
         if ('' != $request->input('{{$ __value__/__lowercase_text__}}')){
@@ -49,7 +49,7 @@
 {{@elseif {{$ ../property_type/__value__}} == 'Time' }}
 		$object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = ('' != $request->input('{{$ __value__/__lowercase_text__}}'))
                 ? $request->input('{{$ __value__/__lowercase_text__}}')
-                : date('H:i');
+                : null;
 {{@else}}
         $object{{$ ../../../name/__value__}}->{{$ __value__/__lowercase_text__}} = $request->input('{{$ __value__/__lowercase_text__}}');
 {{@endif}}

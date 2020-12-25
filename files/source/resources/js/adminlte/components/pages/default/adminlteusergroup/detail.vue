@@ -36,6 +36,11 @@
                                             :to="'/' + main_folder + '/adminlteusergroup/permission/' + id">
                                             <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Permissions') }}</span>
                                         </router-link>
+                                        <router-link tag="a"
+                                            class="btn btn-primary btn-md btn-on-card text-white"
+                                            :to="'/' + main_folder + '/adminlteusergroup/layout/' + id">
+                                            <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Layout Settings') }}</span>
+                                        </router-link>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -63,10 +68,12 @@
                             </div>
                         </div>
                     </div>
+                    <page-layout :pagename="pagename"></page-layout>
                 </div>
             </section>
         </div>
         <input type="hidden" id="controller" value="adminlteusergroup">
+        <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
 </template>
 
@@ -89,7 +96,8 @@
                     is_data_loading: false,
                     is_data_loaded: false,
                 },
-                init_image_display: false
+                init_image_display: false,
+            body_loader_active: false
             };
         },
         methods: {
@@ -114,6 +122,15 @@
                     this.loadPageVariables();
                 } else {
                     if (this.page.is_data_loaded) {
+                        this.$nextTick(function () {
+                            var self = this;
+
+                            setTimeout(function() {
+                                self.initializePage();
+                                self.body_loader_active = false;
+                            }, 500);                        
+                        });
+
                         this.$Progress.finish();
                         this.page.is_ready = true;
                     } else {
@@ -170,16 +187,19 @@
                         this.$Progress.fail();
                         this.page.has_server_error = true;
                         this.processLoadQueue();
-                    }).finally(function() {
-                        self.init_image_display = true;
                     });
-            }
         },
-        mounted() {
-            this.main_folder = AdminLTEHelper.getMainFolder();
-            this.pagename = AdminLTEHelper.getPagename();
-            this.id = this.$route.params.id;
-            this.processLoadQueue();
+        initializePage: function () {
+            var self = this;
+            self.init_image_display = true;
         }
+    },
+    mounted() {
+        this.body_loader_active = true;
+        this.main_folder = AdminLTEHelper.getMainFolder();
+        this.pagename = AdminLTEHelper.getPagename();
+        this.id = this.$route.params.id;
+        this.processLoadQueue();
+    }
     }
 </script>

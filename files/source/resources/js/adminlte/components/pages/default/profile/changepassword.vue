@@ -90,20 +90,18 @@
                             <div class="col-lg-4 col-md-4 col-xs-12 "></div>
                             <div class="col-lg-8 col-md-8 col-xs-12 ">
                                 <div class="card">
-                                    <div class="card-footer">
-                                        <div class="col-lg-12 col-md-12 col-xs-12">
-                                            <button :disabled="ProfileForm.busy"
-                                                type="submit"
-                                                class="btn btn-success btn-card-default btn-card-footer float-right">
-                                                {{ $t('Save') }}
-                                            </button>
-                                            <router-link tag="a"
-                                                class="btn btn-secondary btn-card-footer float-right"
-                                                :to="'/' + this.main_folder + '/profile/detail'"
-                                                style="margin-right:10px;">
-                                                <span>{{ $t('Cancel') }}</span>
-                                            </router-link>
-                                        </div>
+                                    <div class="action-buttons-container">
+                                        <button :disabled="ProfileForm.busy"
+                                            type="submit"
+                                            class="btn btn-success btn-card-default btn-card-footer float-right">
+                                            {{ $t('Save') }}
+                                        </button>
+                                        <router-link tag="a"
+                                            class="btn btn-outline-secondary btn-card-footer float-right"
+                                            :to="'/' + this.main_folder + '/profile/detail'"
+                                            style="margin-right:10px;">
+                                            <span>{{ $t('Cancel') }}</span>
+                                        </router-link>
                                     </div>
                                 </div>
                             </div>

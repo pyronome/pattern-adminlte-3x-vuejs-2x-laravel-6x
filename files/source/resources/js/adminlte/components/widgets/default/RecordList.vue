@@ -17,7 +17,7 @@
                             id="searchText" name="searchText"
                             @keyup="search_list" v-model="search_text"
                             class="form-control float-right inputSearchBar"
-                            v-bind:placeholderr="$t('Search')">
+                            v-bind:placeholder="$t('Search')">
                         <div class="input-group-append labelSearchBar">
                             <button type="button" class="btn btn-default ">
                                 <img class="imgLoader" src="/img/adminlte/loader.svg" width="14" height="14"/>
@@ -106,15 +106,14 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="card-footer" style="min-height:60px;">
-                <pagination v-if="show_pagination" :data="data" :limit="1" align="right" :show-disabled="false" @pagination-change-page="paginate">
-                    <span slot="prev-nav">&lt;</span>
-                    <span slot="next-nav">&gt;</span>
-                </pagination>
-            </div>
-        </div>
-        
+                <div style="min-height:60px;">
+                    <pagination v-if="show_pagination" :data="data" :limit="1" align="right" :show-disabled="false" @pagination-change-page="paginate">
+                        <span slot="prev-nav">&lt;</span>
+                        <span slot="next-nav">&gt;</span>
+                    </pagination>
+                </div>
+            </div>            
+        </div>        
     </div>
 </template>
 
@@ -163,10 +162,10 @@
         methods: {
             toggleWidget: function() {
                 this.state = (1 == this.state) ? 0 : 1;
-                setWidgetState(this.cookie_suffix, this.state);
+                AdminLTEHelper.setWidgetState(this.cookie_suffix, this.state);
             },
             initializeWidget: function() {
-                this.state = getWidgetState(this.cookie_suffix);
+                this.state = AdminLTEHelper.getWidgetState(this.cookie_suffix);
                 
                 if (1 == this.state) {
                     $("#buttonToggleWidgetRecordList" + this.model).parent().parent().parent().CardWidget('expand');

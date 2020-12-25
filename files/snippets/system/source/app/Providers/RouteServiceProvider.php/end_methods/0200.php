@@ -10,7 +10,7 @@
     {
         $adminLTEFolder = config('adminlte.main_folder');
         Route::prefix($adminLTEFolder)
-             ->middleware(['web', AdminLTEMiddleware::class])
-             ->namespace('App\Http\Controllers\AdminLTE')
-             ->group(base_path('routes/adminlte.php'));
+                ->middleware(['web', AdminLTEMiddleware::class])
+                ->namespace('App\Http\Controllers\AdminLTE')
+                ->group(base_path('routes/adminlte.php'));
     }

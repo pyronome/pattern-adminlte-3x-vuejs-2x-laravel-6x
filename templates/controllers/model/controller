@@ -37,7 +37,7 @@ class {{$ __value__}}Controller extends Controller
         
         $User = auth()->guard('adminlteuser')->user();
 
-        if ($User->can('viewAny', {{$ __value__}}::class) && $User->can('view', $object{{$ __value__}})) {
+        if ($User->can('view', $object{{$ __value__}})) {
             $data['user_can_create'] = $User->can('create', {{$ __value__}}::class);
             $data['user_can_read'] = $User->can('view', $object{{$ __value__}});
             $data['user_can_update'] = $User->can('update', $object{{$ __value__}});
@@ -140,9 +140,6 @@ class {{$ __value__}}Controller extends Controller
                 $object->save();                
             } // foreach ($objects as $object)
         }
-            
-        $return_data['has_error'] = true;
-        $return_data['error_msg'] = $error_msg;
 
         return $return_data;
     }

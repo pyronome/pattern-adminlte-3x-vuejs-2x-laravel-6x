@@ -19,14 +19,12 @@
             </section>
             <section class="content">
                 <div class="container-fluid">
-                    <widgets :widgets="widgets" :pagename="pagename"></widgets>
+                    <page-layout :pagename="pagename"></page-layout>
                 </div>
-            </section>
-            <section>
-                <widget-editor :pagename="pagename"></widget-editor>
             </section>
         </div>
         <input type="hidden" id="controller" :value="pagename">
+        <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
 </template>
 
@@ -35,7 +33,6 @@
 export default {
     data() {
         return {
-            widgets: [],
             main_folder: '',
             pagename: '',
             page: {
@@ -45,10 +42,9 @@ export default {
                 is_authorized: true,
                 unauthorized_type: '',
                 is_variables_loading: false,
-                is_variables_loaded: false,
-                is_widgets_loading: false,
-                is_widgets_loaded: false,
-            }
+                is_variables_loaded: false
+            },
+            body_loader_active: false
         };
     },
     methods: {
@@ -65,19 +61,21 @@ export default {
                 return;
             }
 
-            if (!this.page.is_variables_loaded && !this.page.is_widgets_loaded) {
-                this.$Progress.start();
-            }
-
             if (!this.page.is_variables_loaded) {
+                this.$Progress.start();
                 this.loadPageVariables();
             } else {
-                if (this.page.is_widgets_loaded) {
-                    this.$Progress.finish();
-                    this.page.is_ready = true;
-                } else {
-                    this.loadWidgets();
-                }
+                this.$nextTick(function () {
+                    var self = this;
+
+                    setTimeout(function() {
+                        self.initializePage();
+                        self.body_loader_active = false;
+                    }, 500);                        
+                });
+                
+                this.$Progress.finish();
+                this.page.is_ready = true;
             }
         },
         loadPageVariables: function () {
@@ -108,42 +106,18 @@ export default {
                    self.processLoadQueue();
                 });
         },
-        loadWidgets: function () {
+        initializePage: function () {
             var self = this;
-
-            if (self.page.is_widgets_loading) {
-                return;
-            }
-
-            self.page.is_widgets_loading = true;
-
-            axios.get(AdminLTEHelper.getAPIURL("__layout/get_page_widgets/" + self.pagename))
-                .then(({ data }) => {
-                    self.page.is_widgets_loaded = true;
-                    self.page.is_widgets_loading = false;
-                    self.widgets = data;
-                    self.processLoadQueue();
-                }).catch(({ data }) => {
-                    self.page.is_widgets_loaded = true;
-                    self.page.is_widgets_loading = false;
-                    self.$Progress.fail();
-                    self.page.has_server_error = true;
-                    self.processLoadQueue();
-                });
         }
     },
     mounted() {
         var self = this;
-
+        self.body_loader_active = true;
         self.main_folder = AdminLTEHelper.getMainFolder();
         var pagename = AdminLTEHelper.getPagename();
         self.pagename = ('' != pagename) ? pagename : 'home';
         self.page.is_ready = false;
         self.processLoadQueue();
-
-        self.$root.$on('recordlist-rendered', (model) => {
-            AdminLTEHelper.initializePermissions(self.page.variables, true);
-        });
     }
 }
 </script>

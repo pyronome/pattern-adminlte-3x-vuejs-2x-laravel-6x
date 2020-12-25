@@ -15,12 +15,12 @@ use App\AdminLTE\AdminLTEPermission;
 use App\AdminLTE\AdminLTEMeta;
 use PDO;
 
-/* {{snippet:begin_class}} */
+/* {{@snippet:begin_class}} */
 
 class AdminLTE
 {
 
-	/* {{snippet:begin_properties}} */
+	/* {{@snippet:begin_properties}} */
 	public $system_models = [
 		'AdminLTE',
 		'AdminLTELayout',
@@ -33,9 +33,9 @@ class AdminLTE
 		'User'
 	];
 
-	/* {{snippet:end_properties}} */
+	/* {{@snippet:end_properties}} */
 
-	/* {{snippet:begin_methods}} */
+	/* {{@snippet:begin_methods}} */
 	
 	public function __construct()
     {
@@ -409,7 +409,7 @@ class AdminLTE
 				'type' => $userType,
 				'email' => $adminLTEUser->email,
 				'username' => $adminLTEUser->username,
-				'name' => $adminLTEUser->fullname,
+				'name' => ('' != $adminLTEUser->fullname) ? $adminLTEUser->fullname : $adminLTEUser->username,
 				'fullname' => $adminLTEUser->fullname,
 				'menu_permission' => $this->getUserMenuPermission($adminLTEUser),
 				'service_permission' => $this->getUserServicePermission($adminLTEUser),
@@ -907,8 +907,6 @@ class AdminLTE
 		
 		if (null == $layout)
 		{
-			echo __LINE__;
-			die();
 			return $Widgets;
 		} // if (null == $layout)
 
@@ -1274,13 +1272,17 @@ class AdminLTE
 					$time = time();
 				}
 
-				$format = 'Y-m-d H:i:s';
+				if (0 == $time) {
+					$partResult = '-';
+				} else {
+					$format = config('adminlte.date_format');
 
-				if (3 == $countPart) {
-					$format = $textPart[2];
+					if (3 == $countPart) {
+						$format = $textPart[2];
+					}
+
+					$partResult = date($format, $time);
 				}
-
-				$partResult = date($format, $time);
 			} else if ('image' == $type) {
 				if ($textPart[0] == $model) { // current model
 					$arr_files = $this->get_model_files_by_property($model, $objectCurrent->id, $property);
@@ -1353,6 +1355,8 @@ class AdminLTE
 						}
 					}
 				}
+
+				$partResult = ('' == $partResult) ? '-' : $partResult;
 			} else if ('class_selection_multiple' == $type) {
 				if ($textPart[0] == $model) { // current model
 					$display_text_Property = $textPart[1];
@@ -1379,13 +1383,17 @@ class AdminLTE
 
 						$partResult .= $objectExternal->$display_text_Property;
 					}
-		        } // if ($textPart[0] == $model) { // current model
+				} // if ($textPart[0] == $model) { // current model
+					
+				$partResult = ('' == $partResult) ? '-' : $partResult;
 			} else if ('selection_single' == $type) {
 				$id = $objectCurrent->$property;
 				if($id > 0) {
 					$objectExternal = AdminLTEModelOption::find($id);
 					$partResult = $objectExternal->title;
 				}
+				
+				$partResult = ('' == $partResult) ? '-' : $partResult;
 			} else if ('selection_multiple' == $type) {
 				$objectExternals = $objectCurrent->$property;
 
@@ -1396,6 +1404,8 @@ class AdminLTE
 
 					$partResult .= $objectExternal->title;
 				}
+
+				$partResult = ('' == $partResult) ? '-' : $partResult;
 			} else {
 				if ($textPart[0] == $model) { // current model
 					$display_text_Property = $textPart[1];
@@ -1404,7 +1414,7 @@ class AdminLTE
 					$partResult = '-';
 				} // if ($textPart[0] == $model) { // current model
 			} // if ('date' == $type) {
-
+			
 			$display_text = str_replace($parsedWithMustache, $partResult, $display_text);
 			$temp_text = $display_text;
 			$parsed = $this->getStringBetween($temp_text, '{{', '}}');
@@ -1656,6 +1666,21 @@ class AdminLTE
 	{
 		$modelNameWithNamespace = $this->getModelNameWithNamespace($model);
 		$propertyList = $modelNameWithNamespace::$property_list;
+		return $propertyList;
+	}
+
+	public function getModelPropertyListByIndexed($model) {
+		$propertyList = [];
+
+		$propertyListData = $this->getModelPropertyList($model);
+		foreach ($propertyListData as $property_data) {
+			$property = $property_data['name'];
+			$propertyList[$property]['type'] = $property_data['type'];
+			$propertyList[$property]['belongs_to'] = $property_data['belongs_to'];
+			$propertyList[$property]['display_property'] = $property_data['display_property'];
+			$propertyList[$property]['title'] = $property_data['title'];
+		}
+
 		return $propertyList;
 	}
 
@@ -2259,7 +2284,7 @@ class AdminLTE
 					)
 					->leftJoin(
 						($external_modelTableName . ' as ' . $external_modelTableNameAlias), 
-						($relationTableName . '.' . $property),
+						($relationTableName . '.' . strtolower($external_model) . '_id'),
 						'=',
 						($external_modelTableNameAlias . '.id')
 					);
@@ -2359,6 +2384,12 @@ class AdminLTE
 
 	public function getUserPermissionData() {
 		$User = auth()->guard('adminlteuser')->user();
+		
+		if ($User == null)
+		{
+			return [];	
+		}
+		
 		$UserGroupPermissions = $this->getUserGroupPermissions($User->adminlteusergroup_id);
 		$UserPermissions = $this->getUserPermissions($User->id);
 
@@ -2433,7 +2464,7 @@ class AdminLTE
 		
 		return true;
 	}
-	/* {{snippet:end_methods}} */
+	/* {{@snippet:end_methods}} */
 }
 
-/* {{snippet:end_class}} */
+/* {{@snippet:end_class}} */

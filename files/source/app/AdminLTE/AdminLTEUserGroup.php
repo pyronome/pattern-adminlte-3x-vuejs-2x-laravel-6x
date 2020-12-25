@@ -4,12 +4,12 @@ namespace App\AdminLTE;
 
 use Illuminate\Database\Eloquent\Model;
 use App\AdminLTE\AdminLTE;
-/* {{snippet:begin_class}} */
+/* {{@snippet:begin_class}} */
 
 class AdminLTEUserGroup extends Model
 {
 
-    /* {{snippet:begin_properties}} */
+    /* {{@snippet:begin_properties}} */
 
     /**
      * The table associated with the model.
@@ -84,9 +84,9 @@ class AdminLTEUserGroup extends Model
         ]
     ];
 
-    /* {{snippet:end_properties}} */
+    /* {{@snippet:end_properties}} */
 
-    /* {{snippet:begin_methods}} */
+    /* {{@snippet:begin_methods}} */
     
     public function scopeDefaultQuery($query, $search_text, $sort_variable, $sort_direction) {
         $objectAdminLTE = new AdminLTE();
@@ -99,7 +99,7 @@ class AdminLTEUserGroup extends Model
         return $this->hasMany(AdminLTEUser::class);
     }
     
-    /* {{snippet:end_methods}} */
+    /* {{@snippet:end_methods}} */
 }
 
-/* {{snippet:end_class}} */
+/* {{@snippet:end_class}} */

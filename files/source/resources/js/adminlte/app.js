@@ -15,6 +15,9 @@ window.Vue = require('vue');
 Vue.config.devtools = true;
 /* vue Declaration EOF */
 
+import _ from 'lodash';
+Vue.use(_);
+
 /* vue-router Declaration BOF */
 import VueRouter from 'vue-router';
 import { Routes } from './routes';

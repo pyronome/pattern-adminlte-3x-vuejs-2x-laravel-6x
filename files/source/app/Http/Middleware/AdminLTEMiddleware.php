@@ -6,16 +6,16 @@ use Closure;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
 
-/* {{snippet:begin_class}} */
+/* {{@snippet:begin_class}} */
 
 class AdminLTEMiddleware
 {
 
-	/* {{snippet:begin_properties}} */
+	/* {{@snippet:begin_properties}} */
 
-	/* {{snippet:end_properties}} */
+	/* {{@snippet:end_properties}} */
 
-	/* {{snippet:begin_methods}} */
+	/* {{@snippet:begin_methods}} */
 
     /**
      * Handle an incoming request.
@@ -26,7 +26,7 @@ class AdminLTEMiddleware
      */
     public function handle($request, Closure $next)
     {
-        /* {{snippet:begin_handle_method}} */
+        /* {{@snippet:begin_handle_method}} */
 
         $adminLTE = new AdminLTE();
 
@@ -44,27 +44,39 @@ class AdminLTEMiddleware
 
         return $next($request);
 
-        /* {{snippet:end_handle_method}} */
+        /* {{@snippet:end_handle_method}} */
     }
 
     private function isPagePublic($request) {
 
+        $adminLTEFolder = config('adminlte.main_folder');
+
         $publicPages = [
-            '/login',
-            '/logout',
-            '/forgotpassword'
+            'login',
+            'logout',
+            'forgotpassword',
+	    'api/login/get_brand_data',
+	    'api/login',
+	    'api/forgotpassword'
         ];
 
-        if (preg_match('(' . implode('|', $publicPages) . ')', $request->path()) === 1)
+        $publicPageCount = count($publicPages);
+        $found = false;
+        $path = $request->path();
+
+        for ($i = 0; (($i < $publicPageCount) && !$found); $i++)
         {
-            return true;
-        } else {
-            return false;
-        } // if (preg_match('(' . implode('|', $publicPages) . ')', $request->path()) === 1)
+            if (0 === strpos($path, ($adminLTEFolder . '/' . $publicPages[$i])))
+            {
+                $found = true;
+            }
+        }
+
+        return $found;
 
     }
 
-    /* {{snippet:end_methods}} */
+    /* {{@snippet:end_methods}} */
 }
 
-/* {{snippet:end_class}} */
+/* {{@snippet:end_class}} */

@@ -74,13 +74,12 @@ class AdminLTEController extends Controller
         }
 
         // other api permission items
-        // read api config from DB
-
-        // example
         $other_permission_items = [];
         $index = 0;
 
-        $other_permission_items[$index]['meta_key'] = '__google_api';
+        // read api config from DB or read with snippet
+        // example
+        /* $other_permission_items[$index]['meta_key'] = '__google_api';
         $other_permission_items[$index]['title'] = 'Google API';
         $item_index = 0;
         $other_permission_items[$index]['items'][$item_index]['value'] = 'captcha';
@@ -90,7 +89,9 @@ class AdminLTEController extends Controller
         $other_permission_items[$index]['items'][$item_index]['title'] = 'Maps';
         $item_index++;
         $other_permission_items[$index]['items'][$item_index]['value'] = 'sign_in';
-        $other_permission_items[$index]['items'][$item_index]['title'] = 'Sign-In';
+        $other_permission_items[$index]['items'][$item_index]['title'] = 'Sign-In'; */
+
+        /* {{@snippet:other_permissions}} */
 
         return [
             'menu_permission_items' => $menu_permission_items,
