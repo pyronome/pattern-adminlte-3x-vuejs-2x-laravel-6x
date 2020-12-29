@@ -2,6 +2,7 @@
 
 namespace App\AdminLTE;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
