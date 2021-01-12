@@ -276,7 +276,7 @@ class AdminLTE
 			
 			if (null != $layout)
 			{
-				$user_preferences = json_decode($this->base64decode($layout->widgets), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+				$user_preferences = json_decode($this->base64Decode($layout->widgets), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 				if (!empty($user_preferences)) {
 					$preferences = $user_preferences;
 				}
@@ -832,7 +832,7 @@ class AdminLTE
 		} // if (null == $layout)
 
 		$defaultWidgets = json_decode(
-				$this->base64decode($layout->widgets),
+				$this->base64Decode($layout->widgets),
 				(JSON_HEX_QUOT
 				| JSON_HEX_TAG
 				| JSON_HEX_AMP
@@ -912,7 +912,7 @@ class AdminLTE
 		} // if (null == $layout)
 
 		$defaultWidgets = json_decode(
-				$this->base64decode($layout->widgets),
+				$this->base64Decode($layout->widgets),
 				(JSON_HEX_QUOT
 				| JSON_HEX_TAG
 				| JSON_HEX_AMP
@@ -1053,7 +1053,7 @@ class AdminLTE
 		} // if (null == $layout)
 
 
-		$userWidgets = json_decode($this->base64decode($layout->widgets), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+		$userWidgets = json_decode($this->base64Decode($layout->widgets), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 
 		$countWidgets = count($userWidgets);
 		$emptyIndex = 0;
@@ -1233,7 +1233,7 @@ class AdminLTE
 
 			if ('' != $display_texts)
 			{
-				$arrDisplayTexts = json_decode($this->base64decode($display_texts), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+				$arrDisplayTexts = json_decode($this->base64Decode($display_texts), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 				$countDisplayText = count($arrDisplayTexts);
 
 				for ($j=0; $j < $countDisplayText; $j++)
@@ -1776,7 +1776,7 @@ class AdminLTE
 			$temp_widgets[$w]['visibility'] = 1;
 		}
 		
-		$encoded = $this->base64encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
+		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
 		$SQLText = "INSERT INTO `adminltelayouttable` (`deleted`, `pagename`, `widgets`) VALUES ('0', 'home', '" . $encoded . "');";
 		$objPDO = $connection->prepare($SQLText);
 		$objPDO->execute();
@@ -1789,7 +1789,7 @@ class AdminLTE
 			}
 		}
 		
-		$encoded = $this->base64encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
+		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
 		$SQLText = "INSERT INTO `adminltelayouttable` (`deleted`, `pagename`, `widgets`) VALUES ('0', 'adminlteusergroup', '" . $encoded . "');";
 		$objPDO = $connection->prepare($SQLText);
 		$objPDO->execute();
@@ -1802,7 +1802,7 @@ class AdminLTE
 			}
 		}
 		
-		$encoded = $this->base64encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
+		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
 		$SQLText = "INSERT INTO `adminltelayouttable` (`deleted`, `pagename`, `widgets`) VALUES ('0', 'adminlteuser', '" . $encoded . "');";
 		$objPDO = $connection->prepare($SQLText);
 		$objPDO->execute();
@@ -1834,7 +1834,7 @@ class AdminLTE
 			}
 			
 			$pagename = strtolower($model);
-			$encoded = $this->base64encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
+			$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
 			$SQLText = "INSERT INTO `adminltelayouttable` (`deleted`, `pagename`, `widgets`) VALUES ('0', '" . $pagename . "', '" . $encoded . "');";
 			$objPDO = $connection->prepare($SQLText);
 			$objPDO->execute();
@@ -2359,7 +2359,7 @@ class AdminLTE
 
 		foreach ($objectPermissionList as $objectPermission) {
 			$permission_data[$index]['meta_key'] = $objectPermission->meta_key;
-			$permission_data[$index]['permissions'] = json_decode($this->base64decode($objectPermission->permissions), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			$permission_data[$index]['permissions'] = json_decode($this->base64Decode($objectPermission->permissions), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 			$index++;
 		}
 
@@ -2376,7 +2376,7 @@ class AdminLTE
 
 		foreach ($objectPermissionList as $objectPermission) {
 			$permission_data[$index]['meta_key'] = $objectPermission->meta_key;
-			$permission_data[$index]['permissions'] = json_decode($this->base64decode($objectPermission->permissions), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			$permission_data[$index]['permissions'] = json_decode($this->base64Decode($objectPermission->permissions), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 			$index++;
 		}
 
