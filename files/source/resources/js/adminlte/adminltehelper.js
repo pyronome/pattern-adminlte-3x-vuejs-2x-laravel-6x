@@ -1183,7 +1183,7 @@ var AdminLTEHelper = {
                 $("#buttonWidgetConfig").addClass("d-none");
             }
 
-            $('.lte-side-menu > li.nav-item').css("display", "block");
+            $('li.nav-item.menu-nav-item').css("display", "block");
             $('.sbp-item').removeClass('sbp-hide');
             return true;
         }
@@ -1200,13 +1200,13 @@ var AdminLTEHelper = {
         }
 
         // show hide menu item
-        $('.lte-side-menu > li.nav-item').css("display", "none");
+        $('li.nav-item.menu-nav-item').css("display", "none");
         
         if ('undefined' !== typeof page_variables.permissions.__adminlte_menu) {
             let menu_permissions = page_variables.permissions.__adminlte_menu;
             Object.keys(menu_permissions).map((key) => {
                 if (menu_permissions[key]) {
-                    $('.lte-side-menu > li.nav-item[data-href="' + key + '"]').css("display", "block");
+                    $('li.nav-item.menu-nav-item[data-href="' + key + '"]').css("display", "block");
                 }
             });
         }
