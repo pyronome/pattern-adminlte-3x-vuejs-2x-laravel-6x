@@ -9,6 +9,7 @@ use App\AdminLTE\AdminLTEModelOption;
 use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTEUser;
 use App\AdminLTE\AdminLTEPermission;
+use App\AdminLTE\AdminLTEUserLayout;
 use App\Http\Requests\AdminLTE\API\AdminLTEUserPOSTRequest;
 
 class AdminLTEUserController extends Controller
@@ -96,6 +97,7 @@ class AdminLTEUserController extends Controller
         $has_error = false;
         $error_msg = '';
         $return_data = [];
+        $bNewUser = false;
         
         $id = intval($request->input('id'));
 
@@ -106,6 +108,8 @@ class AdminLTEUserController extends Controller
                 $error_msg = __('You can not update this object. Contact your system administrator for more information.');
             }
         } else {
+            $bNewUser = true;
+
             $objectAdminLTEUser = new AdminLTEUser();
             if (!$User->can('create', AdminLTEUser::class)) {
                 $has_error = true;
@@ -144,6 +148,28 @@ class AdminLTEUserController extends Controller
         $profile_img = $request->input('profile_img');
 
         $objectAdminLTEUser->save();
+
+        if ($bNewUser) {
+            // Copy UserLayout from first enabled User layout in same group
+            $baseUser = AdminLTEUser::where('adminlteusergroup_id', $objectAdminLTEUser->adminlteusergroup_id)
+                ->where('deleted', 0)
+                ->where('enabled', 1)
+                ->first();
+
+            if (null !== $baseUser) {
+                $layoutList = AdminLTEUserLayout::where('deleted', false)->where('adminlteuser_id', $baseUser->id)->get();
+                foreach ($layoutList as $layout) {
+                    $newLayout = new AdminLTEUserLayout();
+                    
+                    $newLayout->created_at = time();
+                    $newLayout->updated_at = time();
+                    $newLayout->adminlteuser_id = $objectAdminLTEUser->id;
+                    $newLayout->pagename = $layout->pagename;
+                    $newLayout->widgets = $layout->widgets;
+                    $newLayout->save();
+                } // foreach ($objectList as $object)
+            }
+        }
         
         $objectAdminLTE = new AdminLTE();
         $objectAdminLTE->updateModelFileObject('AdminLTEUser', $objectAdminLTEUser->id, 'profile_img', $profile_img);
