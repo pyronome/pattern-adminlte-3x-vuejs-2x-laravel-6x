@@ -1,22 +1,26 @@
 {{@if {{$ ../property_type/__value__}} == 'Location' }}
-                                        <div class="detail-container {{MODEL_VIEW{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
-                                            <label class="detail-label">{{ $t('{{$ ../title/__value__}}') }}</label>
-                                            <location-display
-                                                id="made_in_map"
-                                                class="googlemap"
-                                                :coordinates="{lat:data.{{$ __value__/__lowercase_text__}}_latitude,lng:data.{{$ __value__/__lowercase_text__}}_longitude}">
-                                            </location-display>
-                                        </div>                                        
+                                            <tr class="{{MODEL_VIEW{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
+                                                <td width="30%" class="text-muted"><strong>{{ $t('{{$ ../title/__value__}}') }}</strong></td>
+                                                <td>
+                                                    <location-display
+                                                            id="made_in_map"
+                                                            class="googlemap"
+                                                            :coordinates="{lat:data.{{$ __value__/__lowercase_text__}}_latitude,lng:data.{{$ __value__/__lowercase_text__}}_longitude}">
+                                                    </location-display>
+                                                </td>
+                                            </tr>
 {{@elseif {{$ ../property_type/__value__}} == 'URLAddress' }}
-                                        <div class="detail-container {{MODEL_VIEW{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
-                                            <label class="detail-label">{{ $t('{{$ ../title/__value__}}') }}</label>
-                                            <a target="_blank" :href="data.{{$ __value__/__lowercase_text__}}__displaytext__">
-                                                {{data.{{$ __value__/__lowercase_text__}}__displaytext__}}
-                                            </a>
-                                        </div>
+                                            <tr class="{{MODEL_VIEW{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
+                                                <td width="30%" class="text-muted"><strong>{{ $t('{{$ ../title/__value__}}') }}</strong></td>
+                                                <td>
+                                                    <a target="_blank" :href="data.{{$ __value__/__lowercase_text__}}__displaytext__">
+                                                        {{data.{{$ __value__/__lowercase_text__}}__displaytext__}}
+                                                    </a>
+                                                </td>
+                                            </tr>
 {{@else}}
-                                        <div class="detail-container {{MODEL_VIEW{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
-                                            <label class="detail-label">{{ $t('{{$ ../title/__value__}}') }}</label>
-                                            <div v-html="data.{{$ __value__/__lowercase_text__}}__displaytext__"></div>
-                                        </div>
+                                            <tr class="{{MODEL_VIEW{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
+                                                <td width="30%" class="text-muted"><strong>{{ $t('{{$ ../title/__value__}}') }}</strong></td>
+                                                <td><div v-html="data.{{$ __value__/__lowercase_text__}}__displaytext__"></div></td>
+                                            </tr>
 {{@endif}}

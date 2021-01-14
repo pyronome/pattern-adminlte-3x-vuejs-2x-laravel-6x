@@ -43,27 +43,32 @@
                                         </router-link>
                                     </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-lg-12 col-md-12 col-xs-12">
-                                            <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('Enabled') }}</label>
-                                                <div v-html="data.enabled__displaytext__"></div>
-                                            </div>
-                                            <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('Admin') }}</label>
-                                                <div v-html="data.admin__displaytext__"></div>
-                                            </div>
-                                            <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('Widget Edit Permission') }}</label>
-                                                <div v-html="data.widget_permission__displaytext__"></div>
-                                            </div>
-                                            <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('Title') }}</label>
-                                                <div v-html="data.title__displaytext__"></div>
-                                            </div>                                        
-                                        </div>
-                                    </div>
+                                <div class="card-body p-0">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">{{ $t("AdminLTEUserGroup Detail") }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td width="30%" class="text-muted"><strong>{{ $t('Enabled') }}</strong></td>
+                                                <td><div v-html="data.enabled__displaytext__"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%" class="text-muted"><strong>{{ $t('Admin') }}</strong></td>
+                                                <td><div v-html="data.admin__displaytext__"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%" class="text-muted"><strong>{{ $t('Widget Edit Permission') }}</strong></td>
+                                                <td><div v-html="data.widget_permission__displaytext__"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%" class="text-muted"><strong>{{ $t('Title') }}</strong></td>
+                                                <td><div v-html="data.title__displaytext__"></div></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
