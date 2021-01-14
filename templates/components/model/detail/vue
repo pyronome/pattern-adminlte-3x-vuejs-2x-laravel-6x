@@ -173,11 +173,12 @@ export default {
         }
     },
     mounted() {
+        var self = this;
         self.body_loader_active = true;
-        this.main_folder = AdminLTEHelper.getMainFolder();
-        this.pagename = AdminLTEHelper.getPagename();
-        this.id = this.$route.params.id;
-        this.processLoadQueue();
+        self.main_folder = AdminLTEHelper.getMainFolder();
+        self.pagename = AdminLTEHelper.getPagename();
+        self.id = self.$route.params.id;
+        self.processLoadQueue();
     }
 }
 </script>
