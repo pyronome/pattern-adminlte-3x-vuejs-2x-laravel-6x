@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover">
+                    <table class="table table-striped table-bordered table-hover table-sm">
                         <thead>
                             <tr>
                                 <th class="text-center sbp-item" :model-permission-token="model + '-delete'">

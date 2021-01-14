@@ -41,7 +41,7 @@
                     <div class="col-lg-8 col-md-8 col-xs-12 ">
                         <div class="card">
                         <div class="card-body p-0">
-                            <table class="table table-hover">
+                            <table class="table table-hover table-sm">
                                 <thead>
                                     <tr>
                                         <th colspan="2">{{  $t('Profile Information') }}</th>

@@ -25,7 +25,7 @@
                             <div class="card card-primary">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-striped table-bordered table-hover">
+                                        <table class="table table-striped table-bordered table-hover table-sm">
                                             <thead>
                                                 <tr>
                                                     <th>Model</th>
@@ -78,7 +78,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <table class="table table-striped table-bordered table-hover">
+                                        <table class="table table-striped table-bordered table-hover table-sm">
                                             <thead>
                                                 <tr>
                                                     <th>{{ $t('Property') }}</th>

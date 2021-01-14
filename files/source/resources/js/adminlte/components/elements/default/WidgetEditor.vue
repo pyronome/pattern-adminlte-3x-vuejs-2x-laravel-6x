@@ -214,7 +214,7 @@
                                 <input type="hidden" id="__widgetconfig-columns" name="__widgetconfig-columns" class="item-widget">
                                 <input type="hidden" id="__widgetconfig-values" name="__widgetconfig-values" class="item-widget">
                                 <div class="col-md-12">
-                                    <table id="recordlistColumnTable" class="table table-bordered">
+                                    <table id="recordlistColumnTable" class="table table-bordered table-sm">
                                         <thead>
                                             <tr>
                                                 <th>{{ $t('Column') }}</th>

@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body p-0">
-                                    <table class="table table-hover">
+                                    <table class="table table-hover table-sm">
                                         <thead>
                                             <tr>
                                                 <th colspan="2">{{ $t("AdminLTEUserGroup Detail") }}</th>
