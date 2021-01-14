@@ -40,26 +40,28 @@
                     </div>
                     <div class="col-lg-8 col-md-8 col-xs-12 ">
                         <div class="card">
-                          <div class="card-header">
-                            <h3 class="card-title">{{ $t('Details') }}</h3>
-                          </div>
                           <div class="card-body p-0">
                             <table class="table table-striped">
+                              <thead>
+                                  <tr>
+                                      <th colspan="2">{{  $t('Profile Information') }}</th>
+                                  </tr>
+                              </thead>
                               <tbody>
                                 <tr>
-                                  <td>{{ $t('Fullname') }}</td>
+                                  <td width="30%" class="text-muted"><strong>{{ $t('Fullname') }}</strong></td>
                                   <td><div v-html="data.fullname__displaytext__"></div></td>
                                 </tr>
                                 <tr>
-                                  <td>{{ $t('Username') }}</td>
+                                  <td width="30%" class="text-muted"><strong>{{ $t('Username') }}</strong></td>
                                   <td><div v-html="data.username__displaytext__"></div></td>
                                 </tr>
                                 <tr>
-                                  <td>{{ $t('Email') }}</td>
+                                  <td width="30%" class="text-muted"><strong>{{ $t('Email') }}</strong></td>
                                   <td><div v-html="data.email__displaytext__"></div></td>
                                 </tr>
                                 <tr>
-                                  <td>{{ $t('Profile Image') }}</td>
+                                  <td width="30%" class="text-muted"><strong>{{ $t('Profile Image') }}</strong></td>
                                   <td>
                                     <div class="detail-container profile-image-container">
                                       <div v-html="data.profile_img__displaytext__"></div>
