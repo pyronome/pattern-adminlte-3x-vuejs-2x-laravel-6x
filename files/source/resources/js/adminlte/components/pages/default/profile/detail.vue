@@ -40,29 +40,36 @@
                     </div>
                     <div class="col-lg-8 col-md-8 col-xs-12 ">
                         <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-									<div class="col-lg-6 col-md-6 col-xs-12">
-                                        <div class="detail-container">
-                                            <label class="detail-label">{{ $t('Fullname') }}</label>
-                                            <div v-html="data.fullname__displaytext__"></div>
-                                        </div>
-                                        <div class="detail-container">
-                                            <label class="detail-label">{{ $t('Username') }}</label>
-                                            <div v-html="data.username__displaytext__"></div>
-                                        </div>
-                                        <div class="detail-container">
-                                            <label class="detail-label">{{ $t('Email') }}</label>
-                                            <div v-html="data.email__displaytext__"></div>
-                                        </div>
-									</div>
-                                    <div class="col-lg-6 col-md-6 col-xs-12">
+                        <div class="card-body p-0">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">{{  $t('Profile Information') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td width="30%" class="text-muted"><strong>{{ $t('Fullname') }}</strong></td>
+                                        <td><div v-html="data.fullname__displaytext__"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%" class="text-muted"><strong>{{ $t('Username') }}</strong></td>
+                                        <td><div v-html="data.username__displaytext__"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%" class="text-muted"><strong>{{ $t('Email') }}</strong></td>
+                                        <td><div v-html="data.email__displaytext__"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%" class="text-muted"><strong>{{ $t('Profile Image') }}</strong></td>
+                                        <td>
                                         <div class="detail-container profile-image-container">
                                             <div v-html="data.profile_img__displaytext__"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                        </div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-xs-12 ">

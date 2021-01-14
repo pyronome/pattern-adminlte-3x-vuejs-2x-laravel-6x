@@ -38,35 +38,43 @@
                                         </router-link>
                                     </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-lg-12 col-md-12 col-xs-12">
-                                            <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('Enabled') }}</label>
-                                                <div v-html="data.enabled__displaytext__"></div>
-                                            </div>
-                                            <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('AdminLTEUserGroup') }}</label>
-                                                <div v-html="data.adminlteusergroup_id__displaytext__"></div>
-                                            </div>
-                                            <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('Fullname') }}</label>
-                                                <div v-html="data.fullname__displaytext__"></div>
-                                            </div>
-                                            <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('Username') }}</label>
-                                                <div v-html="data.username__displaytext__"></div>
-                                            </div>
-                                            <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('Email') }}</label>
-                                                <div v-html="data.email__displaytext__"></div>
-                                            </div>
-                                            <div class="detail-container  unvisible-property1 ">
-                                                <label class="detail-label">{{ $t('Profile Image') }}</label>
+                                <div class="card-body p-0">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">{{ $t("AdminLTE User Detail") }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td width="30%" class="text-muted"><strong>{{ $t('Enabled') }}</strong></td>
+                                                <td><div v-html="data.enabled__displaytext__"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%" class="text-muted"><strong>{{ $t('AdminLTEUserGroup') }}</strong></td>
+                                                <td><div v-html="data.adminlteusergroup_id__displaytext__"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%" class="text-muted"><strong>{{ $t('Fullname') }}</strong></td>
+                                                <td><div v-html="data.fullname__displaytext__"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%" class="text-muted"><strong>{{ $t('Username') }}</strong></td>
+                                                <td><div v-html="data.username__displaytext__"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%" class="text-muted"><strong>{{ $t('Email') }}</strong></td>
+                                                <td><div v-html="data.email__displaytext__"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%" class="text-muted"><strong>{{ $t('Profile Image') }}</strong></td>
+                                                <td>
+                                                <div class="detail-container profile-image-container">
                                                 <div v-html="data.profile_img__displaytext__"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                </div></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
