@@ -2139,11 +2139,13 @@ class AdminLTE
 			$parsed = $this->getStringBetween($temp_text, '{{', '}}');
 		}
 
-		$arrSplittedDisplayText = preg_split('#', $display_text, -1, PREG_SPLIT_NO_EMPTY);
+		$arrSplittedDisplayText = preg_split('~#~', $display_text, -1, PREG_SPLIT_NO_EMPTY);
 		return $arrSplittedDisplayText;
 	}
 	public function getPropertyDisplayTextSQL($baseModel, $aliasIndex, $baseProperty, $display_text, $type)
 	{
+		$base_display_text = $display_text;
+
 		$SQLText = '';
 		if (('file' == $type) || ('image' == $type) || ('location' == $type)) {
 			return $SQLText;
@@ -2192,7 +2194,7 @@ class AdminLTE
 			} // while (strlen($parsed) > 0) {
 			
 			$SQLText = '';
-			$arrSplittedDisplayText = $this->getSplittedDisplayText($display_text);
+			$arrSplittedDisplayText = $this->getSplittedDisplayText($base_display_text);
 			foreach ($arrSplittedDisplayText as $splittedText) {
 				if (false !== strpos($splittedText, '_displaytextvariable_')) {
 					$SQLPart = $variablesConverted[$splittedText];
@@ -2208,7 +2210,7 @@ class AdminLTE
 			}
 			
 			if('' != $SQLText) {
-				$SQLText = 'concat(' . $SQLText . ') as ' . $baseProperty . '__displaytext__';
+				$SQLText = DB::raw('concat(' . $SQLText . ') as ' . $baseProperty . '__displaytext__');
 			}
 		}
 
