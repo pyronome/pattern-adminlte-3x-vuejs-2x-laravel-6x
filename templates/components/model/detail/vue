@@ -42,22 +42,6 @@
                                         </thead>
                                         <tbody>
 {{MODEL{{$ ../__item_index__/__value__}}_DETAIL_COMPONENT_ROWS}}
-                                            <tr>
-                                                <td width="30%" class="text-muted"><strong>{{ $t('Enabled') }}</strong></td>
-                                                <td><div v-html="data.enabled__displaytext__"></div></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="30%" class="text-muted"><strong>{{ $t('Admin') }}</strong></td>
-                                                <td><div v-html="data.admin__displaytext__"></div></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="30%" class="text-muted"><strong>{{ $t('Widget Edit Permission') }}</strong></td>
-                                                <td><div v-html="data.widget_permission__displaytext__"></div></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="30%" class="text-muted"><strong>{{ $t('Title') }}</strong></td>
-                                                <td><div v-html="data.title__displaytext__"></div></td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
