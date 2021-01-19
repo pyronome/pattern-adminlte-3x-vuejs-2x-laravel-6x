@@ -1060,7 +1060,7 @@
         "skip_whitespace":"1",
         "remove_whitespace":"0",
         "append":"1",
-        "glue":",",
+        "glue":"",
         "prepend_crlf":"0",
         "append_crlf":"1"
     },
