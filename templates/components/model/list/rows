@@ -1,5 +1,5 @@
 {{@if {{$ ../property_type/__value__}} == 'Location' }}
-                                            <tr class="{{MODEL_VIEW{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
+                                            <tr class="{{MODEL_{{$ ../../../__item_index__/__value__}}_PROPERTY_{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
                                                 <td width="30%" class="text-muted"><strong>{{ $t('{{$ ../title/__value__}}') }}</strong></td>
                                                 <td>
                                                     <location-display
@@ -10,7 +10,7 @@
                                                 </td>
                                             </tr>
 {{@elseif {{$ ../property_type/__value__}} == 'URLAddress' }}
-                                            <tr class="{{MODEL_VIEW{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
+                                            <tr class="{{MODEL_{{$ ../../../__item_index__/__value__}}_PROPERTY_{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
                                                 <td width="30%" class="text-muted"><strong>{{ $t('{{$ ../title/__value__}}') }}</strong></td>
                                                 <td>
                                                     <a target="_blank" :href="data.{{$ __value__/__lowercase_text__}}__displaytext__">
@@ -19,7 +19,7 @@
                                                 </td>
                                             </tr>
 {{@else}}
-                                            <tr class="{{MODEL_VIEW{{$ ../../../__item_index__/__value__}}_PROPERTY{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
+                                            <tr class="{{MODEL_{{$ ../../../__item_index__/__value__}}_PROPERTY_{{$ ../__item_index__/__value__}}_VISIBILITY_CLASS}}">
                                                 <td width="30%" class="text-muted"><strong>{{ $t('{{$ ../title/__value__}}') }}</strong></td>
                                                 <td><div v-html="data.{{$ __value__/__lowercase_text__}}__displaytext__"></div></td>
                                             </tr>

@@ -1,0 +1,3 @@
+				if (!this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loaded) {
+					this.load_{{$ ../name/__value__/__lowercase_text__}}_options();
+				}
