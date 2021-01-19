@@ -2194,6 +2194,7 @@ class AdminLTE
 				$display_text = str_replace($parsedWithMustache, '', $display_text);
 				$temp_text = $display_text;
 				$parsed = $this->getStringBetween($temp_text, '{{', '}}');
+				$variableIndex++;
 			} // while (strlen($parsed) > 0) {
 			
 			$SQLText = '';
