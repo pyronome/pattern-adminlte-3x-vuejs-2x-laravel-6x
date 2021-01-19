@@ -1245,7 +1245,10 @@ class AdminLTE
 					for ($k=0; $k < $countKey; $k++)
 					{ 
 						$property = $keys[$k];
-						$displayTexts[$property]['value'] = $item[$property];
+						if (isset($displayTexts[$property])) 
+						{
+							$displayTexts[$property]['value'] = $item[$property];
+						}
 					} // for ($k=0; $k < $countKey; $k++)
 				} // for ($j=0; $j < $countDisplayText; $j++)
 			} // if ('' != $display_texts)
