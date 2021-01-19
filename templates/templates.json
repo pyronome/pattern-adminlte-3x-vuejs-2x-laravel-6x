@@ -1060,9 +1060,9 @@
         "skip_whitespace":"0",
         "remove_whitespace":"0",
         "append":"1",
-        "glue":",",
+        "glue":"",
         "prepend_crlf":"0",
-        "append_crlf":"1"
+        "append_crlf":"0"
     },
     {
         "description":"edit.vue\/option definitions Selection",
@@ -1075,9 +1075,9 @@
         "skip_whitespace":"0",
         "remove_whitespace":"0",
         "append":"1",
-        "glue":",",
+        "glue":"",
         "prepend_crlf":"0",
-        "append_crlf":"1"
+        "append_crlf":"0"
     },
     {
         "description":"edit.vue\/option definitions Radio",
@@ -1090,9 +1090,9 @@
         "skip_whitespace":"0",
         "remove_whitespace":"0",
         "append":"1",
-        "glue":",",
+        "glue":"",
         "prepend_crlf":"0",
-        "append_crlf":"1"
+        "append_crlf":"0"
     },
     {
         "description":"edit.vue\/all loaded controls (empty)",
