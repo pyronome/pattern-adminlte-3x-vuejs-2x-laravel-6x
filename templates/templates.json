@@ -906,13 +906,13 @@
         "source":"components\/model\/edit\/input_fields\/error_msg_container",
         "destination":"MODEL{{$ ..\/..\/..\/..\/__item_index__\/__value__}}_PROPERTY{{$ ..\/..\/__item_index__\/__value__}}_REQUIRED_ERROR",
         "temporary":"1",
-        "skip_empty":"1",
-        "skip_whitespace":"1",
+        "skip_empty":"0",
+        "skip_whitespace":"0",
         "remove_whitespace":"0",
-        "append":"1",
-        "glue":",",
+        "append":"0",
+        "glue":"",
         "prepend_crlf":"0",
-        "append_crlf":"1"
+        "append_crlf":"0"
     },
     {
         "description":"edit.vue\/input\/hint",
