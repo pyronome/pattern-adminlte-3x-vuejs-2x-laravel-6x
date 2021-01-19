@@ -1,3 +1,5 @@
 {{@if {{$ __value__}} == "1"}}
-					<has-error :form="{{$ ../../../../name/__value__}}Form" field="{{$ ../../name/__value__/__lowercase_text__}}"></has-error>
+<has-error :form="{{$ ../../../../name/__value__}}Form" field="{{$ ../../name/__value__/__lowercase_text__}}"></has-error>
+{{@else}}
+
 {{@endif}}
