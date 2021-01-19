@@ -56,7 +56,7 @@
                                     <div class="card-body">
                                         <input type="hidden" v-model="{{$ __value__}}Form.id" id="id" name="id">
                                         <div class="row">
-                                            {{MODEL{{$ ../__item_index__/__value__}}_EDIT_COMPONENT_INPUTS}}
+{{MODEL{{$ ../__item_index__/__value__}}_EDIT_COMPONENT_INPUTS}}
                                         </div>
                                     </div>
                                     <div class="card-footer">
