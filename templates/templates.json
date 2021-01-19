@@ -1061,7 +1061,7 @@
         "remove_whitespace":"0",
         "append":"1",
         "glue":"",
-        "prepend_crlf":"0",
+        "prepend_crlf":"1",
         "append_crlf":"0"
     },
     {
@@ -1076,7 +1076,7 @@
         "remove_whitespace":"0",
         "append":"1",
         "glue":"",
-        "prepend_crlf":"0",
+        "prepend_crlf":"1",
         "append_crlf":"0"
     },
     {
@@ -1091,7 +1091,7 @@
         "remove_whitespace":"0",
         "append":"1",
         "glue":"",
-        "prepend_crlf":"0",
+        "prepend_crlf":"1",
         "append_crlf":"0"
     },
     {
