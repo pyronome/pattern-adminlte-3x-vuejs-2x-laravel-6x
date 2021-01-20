@@ -46,6 +46,359 @@ class GeneralSettingsController extends Controller
 
     }
 
+    public function get_date_format_options(Request $request)
+    {
+        $list = [];
+        $index = 0;
+
+        $list[$index]['id'] = 'd/m/Y';
+        $list[$index]['text'] = '15/06/1981';
+        $index++;
+        
+        $list[$index]['id'] = 'j/n/Y';
+        $list[$index]['text'] = '15/6/1981';
+        $index++;
+        
+        $list[$index]['id'] = 'd/m/y';
+        $list[$index]['text'] = '15/06/81';
+        $index++;
+        
+        $list[$index]['id'] = 'j/n/y';
+        $list[$index]['text'] = '15/6/81';
+        $index++;
+        
+        $list[$index]['id'] = 'd-m-Y';
+        $list[$index]['text'] = '15-06-1981';
+        $index++;
+        
+        $list[$index]['id'] = 'j-n-Y';
+        $list[$index]['text'] = '15-6-1981';
+        $index++;
+        
+        $list[$index]['id'] = 'd-m-y';
+        $list[$index]['text'] = '15-06-81';
+        $index++;
+        
+        $list[$index]['id'] = 'j-n-y';
+        $list[$index]['text'] = '15-6-81';
+        $index++;
+        
+        $list[$index]['id'] = 'd.m.Y';
+        $list[$index]['text'] = '15.06.1981';
+        $index++;
+        
+        $list[$index]['id'] = 'j.n.Y';
+        $list[$index]['text'] = '15.6.1981';
+        $index++;
+        
+        $list[$index]['id'] = 'd.m.y';
+        $list[$index]['text'] = '15.06.81';
+        $index++;
+        
+        $list[$index]['id'] = 'j.n.y';
+        $list[$index]['text'] = '15.6.81';
+        $index++;
+        
+        $list[$index]['id'] = 'm/d/Y';
+        $list[$index]['text'] = '06/15/1981';
+        $index++;
+        
+        $list[$index]['id'] = 'n/j/Y';
+        $list[$index]['text'] = '6/15/1981';
+        $index++;
+        
+        $list[$index]['id'] = 'm/d/y';
+        $list[$index]['text'] = '06/15/81';
+        $index++;
+        
+        $list[$index]['id'] = 'n/j/y';
+        $list[$index]['text'] = '6/15/81';
+        $index++;
+        
+        $list[$index]['id'] = 'm-d-Y';
+        $list[$index]['text'] = '06-15-1981';
+        $index++;
+        
+        $list[$index]['id'] = 'n-j-Y';
+        $list[$index]['text'] = '6-15-1981';
+        $index++;
+        
+        $list[$index]['id'] = 'm-d-y';
+        $list[$index]['text'] = '06-15-81';
+        $index++;
+        
+        $list[$index]['id'] = 'n-j-y';
+        $list[$index]['text'] = '6-15-81';
+        $index++;
+        
+        $list[$index]['id'] = 'm.d.Y';
+        $list[$index]['text'] = '06.15.1981';
+        $index++;
+        
+        $list[$index]['id'] = 'n.j.Y';
+        $list[$index]['text'] = '6.15.1981';
+        $index++;
+        
+        $list[$index]['id'] = 'm.d.y';
+        $list[$index]['text'] = '06.15.81';
+        $index++;
+        
+        $list[$index]['id'] = 'n.j.y';
+        $list[$index]['text'] = '6.15.81';
+        $index++;
+        
+        $list[$index]['id'] = 'Y/m/d';
+        $list[$index]['text'] = '1981/06/15';
+        $index++;
+        
+        $list[$index]['id'] = 'Y/n/j';
+        $list[$index]['text'] = '1981/6/15';
+        $index++;
+        
+        $list[$index]['id'] = 'y/m/d';
+        $list[$index]['text'] = '81/06/15';
+        $index++;
+        
+        $list[$index]['id'] = 'y/n/j';
+        $list[$index]['text'] = '81/6/15';
+        $index++;
+        
+        $list[$index]['id'] = 'Y-m-d';
+        $list[$index]['text'] = '1981-06-15';
+        $index++;
+        
+        $list[$index]['id'] = 'Y-n-j';
+        $list[$index]['text'] = '1981-6-15';
+        $index++;
+        
+        $list[$index]['id'] = 'y-m-d';
+        $list[$index]['text'] = '81-06-15';
+        $index++;
+        
+        $list[$index]['id'] = 'y-n-j';
+        $list[$index]['text'] = '81-6-15';
+        $index++;
+        
+        $list[$index]['id'] = 'Y.m.d';
+        $list[$index]['text'] = '1981.06.15';
+        $index++;
+        
+        $list[$index]['id'] = 'Y.n.j';
+        $list[$index]['text'] = '1981.6.15';
+        $index++;
+        
+        $list[$index]['id'] = 'y.m.d';
+        $list[$index]['text'] = '81.06.15';
+        $index++;
+        
+        $list[$index]['id'] = 'y.n.j';
+        $list[$index]['text'] = '81.6.15';
+        $index++;
+        
+        $list[$index]['id'] = 'j F Y';
+        $list[$index]['text'] = __('15 June 1981');
+        $index++;
+        
+        $list[$index]['id'] = 'j F y';
+        $list[$index]['text'] = __('15 June 81');
+        $index++;
+        
+        $list[$index]['id'] = 'j M Y';
+        $list[$index]['text'] = __('15 Jun 1981');
+        $index++;
+        
+        $list[$index]['id'] = 'j M y';
+        $list[$index]['text'] = __('15 Jun 81');
+        $index++;
+        
+        $list[$index]['id'] = 'F j, Y';
+        $list[$index]['text'] = __('June 15, 1981');
+        $index++;
+        
+        $list[$index]['id'] = 'F j, y';
+        $list[$index]['text'] = __('June 15, 81');
+        $index++;
+        
+        $list[$index]['id'] = 'F j, Y';
+        $list[$index]['text'] = __('Jun 15, 1981');
+        $index++;
+        
+        $list[$index]['id'] = 'M j, y';
+        $list[$index]['text'] = __('Jun 15, 81');
+        $index++;
+        
+        return [
+            'list' => $list
+        ];
+    }
+
+    public function get_year_month_format_options(Request $request)
+    {
+        $list = [];
+        $index = 0;
+
+        $list[$index]['id'] = 'm/Y';
+        $list[$index]['text'] = '06/1981';
+        $index++;
+
+        $list[$index]['id'] = 'n/Y';
+        $list[$index]['text'] = '6/1981';
+        $index++;
+
+        $list[$index]['id'] = 'm/y';
+        $list[$index]['text'] = '06/81';
+        $index++;
+
+        $list[$index]['id'] = 'n/y';
+        $list[$index]['text'] = '6/81';
+        $index++;
+
+        $list[$index]['id'] = 'm-Y';
+        $list[$index]['text'] = '06-1981';
+        $index++;
+
+        $list[$index]['id'] = 'n-Y';
+        $list[$index]['text'] = '6-1981';
+        $index++;
+
+        $list[$index]['id'] = 'm-y';
+        $list[$index]['text'] = '06-81';
+        $index++;
+
+        $list[$index]['id'] = 'n-y';
+        $list[$index]['text'] = '6-81';
+        $index++;
+
+        $list[$index]['id'] = 'm.Y';
+        $list[$index]['text'] = '06.1981';
+        $index++;
+
+        $list[$index]['id'] = 'n.Y';
+        $list[$index]['text'] = '6.1981';
+        $index++;
+
+        $list[$index]['id'] = 'm.y';
+        $list[$index]['text'] = '06.81';
+        $index++;
+
+        $list[$index]['id'] = 'n.y';
+        $list[$index]['text'] = '6.81';
+        $index++;
+
+        $list[$index]['id'] = 'Y/m';
+        $list[$index]['text'] = '1981/06';
+        $index++;
+
+        $list[$index]['id'] = 'Y/n';
+        $list[$index]['text'] = '1981/6';
+        $index++;
+
+        $list[$index]['id'] = 'y/m';
+        $list[$index]['text'] = '81/06';
+        $index++;
+
+        $list[$index]['id'] = 'y/n';
+        $list[$index]['text'] = '81/6';
+        $index++;
+
+        $list[$index]['id'] = 'Y-m';
+        $list[$index]['text'] = '1981-06';
+        $index++;
+
+        $list[$index]['id'] = 'Y-n';
+        $list[$index]['text'] = '1981-6';
+        $index++;
+
+        $list[$index]['id'] = 'y-m';
+        $list[$index]['text'] = '81-06';
+        $index++;
+
+        $list[$index]['id'] = 'y-n';
+        $list[$index]['text'] = '81-6';
+        $index++;
+
+        $list[$index]['id'] = 'Y.m';
+        $list[$index]['text'] = '1981.06';
+        $index++;
+
+        $list[$index]['id'] = 'Y.n';
+        $list[$index]['text'] = '1981.6';
+        $index++;
+
+        $list[$index]['id'] = 'y.m';
+        $list[$index]['text'] = '81.06';
+        $index++;
+
+        $list[$index]['id'] = 'y.n';
+        $list[$index]['text'] = '81.6';
+        $index++;
+
+        $list[$index]['id'] = 'F Y';
+        $list[$index]['text'] = __('June 1981');
+        $index++;
+
+        $list[$index]['id'] = 'F y';
+        $list[$index]['text'] = __('June 81');
+        $index++;
+
+        $list[$index]['id'] = 'M Y';
+        $list[$index]['text'] = __('Jun 1981');
+        $index++;
+
+        $list[$index]['id'] = 'M y';
+        $list[$index]['text'] = __('Jun 81');
+        $index++;
+
+        return [
+            'list' => $list
+        ];
+    }
+
+    public function get_time_format_options(Request $request)
+    {
+        $list = [];
+        $index = 0;
+
+        
+        $list[$index]['id'] = 'H:i';
+        $list[$index]['text'] = '17:00';
+        $index++;
+
+        $list[$index]['id'] = 'h:i a';
+        $list[$index]['text'] = '05:00 pm';
+        $index++;
+
+        $list[$index]['id'] = 'H:i:s';
+        $list[$index]['text'] = '17:00:00';
+        $index++;
+
+        $list[$index]['id'] = 'h:i:s a';
+        $list[$index]['text'] = '05:00:00 pm';
+        $index++;
+
+        return [
+            'list' => $list
+        ];
+    }
+
+    public function get_number_format_options(Request $request)
+    {
+        $list = [];
+        $index = 0;
+
+        $list[$index]['id'] = 'tr';
+        $list[$index]['text'] = '1.000.000,00';
+        $index++;
+
+        $list[$index]['id'] = 'en';
+        $list[$index]['text'] = '1,000,000.00';
+        $index++;
+        
+        return [
+            'list' => $list
+        ];
+    }
+
     public function post(GeneralSettingsPOSTRequest $request)
     {
 

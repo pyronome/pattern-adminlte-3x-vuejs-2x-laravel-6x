@@ -1,15 +1,16 @@
 <template>
-    <div :pagename="pagename">
+    <div :pagename="pagename" :parameters="parameters">
         <div class="pageLayoutContainer" v-html="layout_value"></div>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['pagename'],
+        props: ['pagename', 'parameters'],
         data() {
             return {
                 main_folder: '',
+                layout_base_value: '',
                 layout_value: '',
                 is_layout_loading: false,
                 is_layout_loaded: false,
@@ -22,17 +23,18 @@
         },
         methods: {
             processLoadQueue: function () {
-                if (this.is_layout_loaded) {
-                    this.$nextTick(function () {
-                        var self = this;
+                var self = this;
 
+                if (self.is_layout_loaded) {
+                    self.$nextTick(function () {
                         setTimeout(function() {
+                            self.addParameterToLayout();
                             self.initializePage();
                             self.body_loader_active = false;
                         }, 500);                        
                     });
                 } else {
-                    this.loadLayouts();
+                    self.loadLayouts();
                 }
             },
             loadLayouts: function () {
@@ -48,7 +50,7 @@
                     .then(({ data }) => {
                         self.is_layout_loaded = true;
                         self.is_layout_loading = false;
-                        self.layout_value = data;
+                        self.layout_base_value = data;
                         self.processLoadQueue();
                     }).catch(({ data }) => {
                         self.is_layout_loaded = true;
@@ -65,6 +67,19 @@
                         window.CustomJS.doPageActivate(self);
                     }
                 }
+            },
+            addParameterToLayout: function() {
+                var self = this;
+
+                var result = self.layout_base_value;
+
+                if (self.parameters) {
+                    Object.keys(self.parameters).forEach(key => {
+                        result = self.layout_base_value.replace(key, self.parameters[key]);
+                    });
+                }
+
+                self.layout_value = result;
             }
         },
         mounted() {

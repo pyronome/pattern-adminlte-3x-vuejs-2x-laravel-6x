@@ -59,6 +59,10 @@ Route::namespace('API')
         Route::post('/post', 'GeneralSettingsController@post');
         Route::get('/get_languages', 'GeneralSettingsController@get_languages');
         Route::get('/get_timezones', 'GeneralSettingsController@get_timezones');
+        Route::get('/get_date_format_options', 'GeneralSettingsController@get_date_format_options');
+        Route::get('/get_year_month_format_options', 'GeneralSettingsController@get_year_month_format_options');
+        Route::get('/get_time_format_options', 'GeneralSettingsController@get_time_format_options');
+        Route::get('/get_number_format_options', 'GeneralSettingsController@get_number_format_options');
     });
 	
 	Route::prefix('branding')->group(function () {
