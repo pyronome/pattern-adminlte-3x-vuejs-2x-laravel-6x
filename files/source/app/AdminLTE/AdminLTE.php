@@ -40,7 +40,9 @@ class AdminLTE
 	
 	public function __construct()
     {
-		$this->initConfig();              
+		/* {{@snippet:begin_construct}} */
+		$this->initConfig();
+		/* {{@snippet:end_construct}} */             
 	}
 	
 	public function convertNameToFileName($strName) {
