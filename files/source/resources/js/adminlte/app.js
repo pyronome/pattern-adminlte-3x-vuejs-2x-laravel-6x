@@ -33,8 +33,8 @@ window.Router = new VueRouter({
 import VueI18n from 'vue-i18n';
 Vue.use(VueI18n);
 window.I18N = new VueI18n({
-    locale: "tr",
-    fallbackLocale: "tr",
+    locale: "default",
+    fallbackLocale: "en",
     messages: loadLocaleMessages()
 });
 
