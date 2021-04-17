@@ -2356,7 +2356,7 @@ class AdminLTE
 			}
 		} */
 
-		$query = $query->from($subquery)->groupBy('id');
+		$query = $query->from($subquery, 'subquery')->groupBy('id');
 
 		return $query;
 	}
