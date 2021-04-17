@@ -1900,6 +1900,10 @@ class AdminLTE
 
 			$countFileIds = count($fileIds);
 			for ($i=0; $i < $countFileIds; $i++) {
+				if (intval($fileIds[$i]) == 0)
+				{
+					continue;
+				}
 
 				$objPDO->bindParam(':classId', $classId, PDO::PARAM_INT);
 				$objPDO->bindParam(':propertyName', $propertyName, PDO::PARAM_STR);

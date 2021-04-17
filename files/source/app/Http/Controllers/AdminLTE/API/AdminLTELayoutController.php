@@ -255,10 +255,8 @@ class AdminLTELayoutController extends Controller
 
         $graphData = array();
 
-        
-
         $objectList = $modelNameWithNamespace::where('deleted', false)
-                ->where('created_at', '>=', $fromDate)
+                ->whereDate('created_at', '>=', date('Y-m-d H:i:s', $fromDate))
                 ->orderBy('created_at', 'asc')
                 ->get();
 
