@@ -1447,7 +1447,7 @@ class AdminLTE
 
 	    $connection = DB::connection()->getPdo();
 	
-		$selectSQL = "SELECT * FROM `". $tablename . "` WHERE `id`=:id;";
+		$selectSQL = "SELECT * FROM ". $tablename . " WHERE id=:id;";
 		$objPDO = $connection->prepare($selectSQL);
 		$objPDO->bindParam(':id', $id, PDO::PARAM_INT);
 		/*$objPDO->bindParam(':propertyName', $propertyName, PDO::PARAM_STR);*/
@@ -1766,7 +1766,7 @@ class AdminLTE
 			print($e->getMessage());
 		}
 
-		$SQLText = 'TRUNCATE `adminltelayouttable`;';
+		$SQLText = 'TRUNCATE adminltelayouttable;';
 		$objPDO = $connection->prepare($SQLText);
 		$objPDO->execute();
 
@@ -1782,7 +1782,7 @@ class AdminLTE
 		}
 		
 		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-		$SQLText = "INSERT INTO `adminltelayouttable` (`deleted`, `pagename`, `widgets`) VALUES ('0', 'home', '" . $encoded . "');";
+		$SQLText = "INSERT INTO adminltelayouttable (deleted, pagename, widgets) VALUES ('0', 'home', '" . $encoded . "');";
 		$objPDO = $connection->prepare($SQLText);
 		$objPDO->execute();
 
@@ -1795,7 +1795,7 @@ class AdminLTE
 		}
 		
 		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-		$SQLText = "INSERT INTO `adminltelayouttable` (`deleted`, `pagename`, `widgets`) VALUES ('0', 'adminlteusergroup', '" . $encoded . "');";
+		$SQLText = "INSERT INTO adminltelayouttable (deleted, pagename, widgets) VALUES ('0', 'adminlteusergroup', '" . $encoded . "');";
 		$objPDO = $connection->prepare($SQLText);
 		$objPDO->execute();
 
@@ -1808,7 +1808,7 @@ class AdminLTE
 		}
 		
 		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-		$SQLText = "INSERT INTO `adminltelayouttable` (`deleted`, `pagename`, `widgets`) VALUES ('0', 'adminlteuser', '" . $encoded . "');";
+		$SQLText = "INSERT INTO adminltelayouttable (deleted, pagename, widgets) VALUES ('0', 'adminlteuser', '" . $encoded . "');";
 		$objPDO = $connection->prepare($SQLText);
 		$objPDO->execute();
 
@@ -1840,7 +1840,7 @@ class AdminLTE
 			
 			$pagename = strtolower($model);
 			$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-			$SQLText = "INSERT INTO `adminltelayouttable` (`deleted`, `pagename`, `widgets`) VALUES ('0', '" . $pagename . "', '" . $encoded . "');";
+			$SQLText = "INSERT INTO adminltelayouttable (deleted, pagename, widgets) VALUES ('0', '" . $pagename . "', '" . $encoded . "');";
 			$objPDO = $connection->prepare($SQLText);
 			$objPDO->execute();
 		}
@@ -1863,7 +1863,7 @@ class AdminLTE
 		
 		// get existed file objectIds	
 		$existedIds = array();
-		$selectSQL = "SELECT `id` FROM `". $tablename . "` WHERE `object_id`=:classId and `object_property`=:propertyName;";
+		$selectSQL = "SELECT id FROM ". $tablename . " WHERE object_id=:classId and object_property=:propertyName;";
 		$objPDO = $connection->prepare($selectSQL);
 		$objPDO->bindParam(':classId', $classId, PDO::PARAM_INT);
 		$objPDO->bindParam(':propertyName', $propertyName, PDO::PARAM_STR);
@@ -1885,7 +1885,7 @@ class AdminLTE
 			}
 
 			if (count($existedIds) > 0) {
-				$deleteFileSQL = "DELETE FROM `". $tablename . "` WHERE `id` IN (" . implode(',', $existedIds) . ") AND `object_property`=:propertyName;";
+				$deleteFileSQL = "DELETE FROM ". $tablename . " WHERE id IN (" . implode(',', $existedIds) . ") AND object_property=:propertyName;";
 				$objPDO = $connection->prepare($deleteFileSQL);
 				$objPDO->bindParam(':propertyName', $propertyName, PDO::PARAM_STR);
 				$objPDO->execute();
@@ -1895,7 +1895,7 @@ class AdminLTE
 		// update file objects
 		if (count($fileIds) > 0) {
 
-			$updateSQL = "UPDATE `" . $tablename . "` SET `object_id`=:classId,`object_property`=:propertyName,`file_index`=:file_index WHERE `id`=:id;";
+			$updateSQL = "UPDATE " . $tablename . " SET object_id=:classId,object_property=:propertyName,file_index=:file_index WHERE id=:id;";
 			$objPDO = $connection->prepare($updateSQL);
 
 			$countFileIds = count($fileIds);
@@ -1926,7 +1926,7 @@ class AdminLTE
 		$guid = Str::uuid();
 		$lastInsertId = 0;
 		
-		$SQLText = "INSERT INTO " . $tablename . " (`id`, `guid`, `object_property`, `file_name`, `path`, `media_type`)"
+		$SQLText = "INSERT INTO " . $tablename . " (id, guid, object_property, file_name, path, media_type)"
 			. " VALUES (0, :guid, :object_property, :file_name, :path, :media_type);";
 
 		$objPDO = $connection->prepare($SQLText);
@@ -1968,7 +1968,7 @@ class AdminLTE
         $files = array();
 		
 		if ($this->is_table_exist($connection, $tablename)) {
-			$selectSQL = "SELECT * FROM `$tablename` WHERE `object_id`=:object_id ORDER BY file_index;";
+			$selectSQL = "SELECT * FROM $tablename WHERE object_id=:object_id ORDER BY file_index;";
 
 			$objPDO = $connection->prepare($selectSQL);
         	$objPDO->bindParam(':object_id', $object_id, PDO::PARAM_INT);
@@ -2006,7 +2006,7 @@ class AdminLTE
         $index = 0;
         $tablename = strtolower($modelName) . '__filetable';
         
-        $selectSQL = "SELECT * FROM `" . $tablename . "` WHERE `object_id`=:object_id and `object_property`=:object_property ORDER BY file_index;";
+        $selectSQL = "SELECT * FROM " . $tablename . " WHERE object_id=:object_id and object_property=:object_property ORDER BY file_index;";
         $objPDO = $connection->prepare($selectSQL);
         $objPDO->bindParam(':object_id', $object_id, PDO::PARAM_INT);
         $objPDO->bindParam(':object_property', $object_property, PDO::PARAM_STR);
@@ -2088,7 +2088,7 @@ class AdminLTE
 			$title = $option_data['title'];
 			
 			$option = DB::table('adminltemodeloptiontable')
-                ->where(DB::raw("Concat(`model`,`property`,`value`)"), '=', $search)
+                ->where(DB::raw("CONCAT(model,property,value)"), '=', $search)
                 ->first();
 
 			if (null !== $option) {
