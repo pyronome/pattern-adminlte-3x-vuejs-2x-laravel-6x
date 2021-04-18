@@ -31,7 +31,7 @@ After generating and downloading source code from the Pyronome platform, you can
 Firstly, go to the `source` folder, install the project, and load dependencies.
 
 ```console
-composer update
+composer install
 ```
 
 ```console
