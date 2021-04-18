@@ -1947,16 +1947,14 @@ class AdminLTE
 	}
 
 	public function is_table_exist($connection, $tablename) {
-		$tableExist = true;
-		$objPDO = $connection->prepare("SHOW TABLES LIKE '$tablename'");
-		$objPDO->execute();
-		$data = $objPDO->fetchAll();
-
-		if (empty($data)) {
-			$tableExist = false;
+		try {
+			$result = $connection->query('SELECT 1 FROM ' . $tablename . ' LIMIT 1');
+		} catch (\Exception $e) {
+			// We got an exception == table not found
+			return false;
 		}
 
-		return $tableExist;
+    	return ($result !== false);
 	}
 
 	public function get_model_files($model, $object_id) {
@@ -2356,7 +2354,8 @@ class AdminLTE
 			}
 		} */
 
-		$query = $query->from($subquery, 'subquery')->groupBy('id');
+		// $query = $query->from($subquery, 'subquery')->groupBy('id');
+		$query = $query->from($subquery, 'subquery');
 
 		return $query;
 	}
