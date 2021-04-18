@@ -1930,8 +1930,8 @@ class AdminLTE
 		$guid = Str::uuid();
 		$lastInsertId = 0;
 		
-		$SQLText = "INSERT INTO " . $tablename . " (id, guid, object_property, file_name, path, media_type)"
-			. " VALUES (0, :guid, :object_property, :file_name, :path, :media_type);";
+		$SQLText = "INSERT INTO " . $tablename . " (guid, object_property, file_name, path, media_type)"
+			. " VALUES (:guid, :object_property, :file_name, :path, :media_type);";
 
 		$objPDO = $connection->prepare($SQLText);
 		$objPDO->bindParam(':guid', $guid, PDO::PARAM_STR);
