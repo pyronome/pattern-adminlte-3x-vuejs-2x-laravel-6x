@@ -2469,7 +2469,8 @@ class AdminLTE
             $object = new AdminLTEMeta();
         }
         
-        $object->term_id = $term_id;
+        $object->deleted = false;
+		$object->term_id = $term_id;
         $object->meta_key = $meta_key;
         $object->meta_value = $meta_value;
 		$object->save();
