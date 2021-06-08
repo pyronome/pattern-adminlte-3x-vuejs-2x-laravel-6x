@@ -127,9 +127,9 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 }
 
                 if (Schema::hasColumn('adminltepermissiontable', 'user_id')) { 
-                    $table->bigInter('user_id', false, true)->change();
+                    $table->bigInteger('user_id', false, true)->change();
                 } else {
-                    $table->bigInter('user_id', false, true);
+                    $table->bigInteger('user_id', false, true);
                 }
                 
                 if (Schema::hasColumn('adminltepermissiontable', 'meta_key')) { 
@@ -175,13 +175,13 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 }
 
                 if (Schema::hasColumn('adminlteusertable', 'username')) { 
-                    $table->string('username')->unique()->change();
+                    $table->string('username')->change();
                 } else {
                     $table->string('username')->unique();
                 }
 
                 if (Schema::hasColumn('adminlteusertable', 'email')) { 
-                    $table->string('email')->unique()->change();
+                    $table->string('email')->change();
                 } else {
                     $table->string('email')->unique();
                 }
