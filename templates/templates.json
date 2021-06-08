@@ -1273,5 +1273,20 @@
         "glue":"",
         "prepend_crlf":"1",
         "append_crlf":"0"
+    },
+    {
+        "description":"adminlte_migrate_revision.php",
+        "base":"\/project",
+        "enabled":"1",
+        "source":"database\/migrations\/adminlte_migrate_revision.php",
+        "destination":"\/source\/database\/migrations\/{{$ __globals__\/PYRONOME_CURRENT_YEAR}}_{{$ __globals__\/PYRONOME_CURRENT_MONTH}}_{{$ __globals__\/PYRONOME_CURRENT_DAY}}_000000_adminlte_migrate_revision{{$ __globals__\/PYRONOME_CURRENT_DATE}}{{$ __globals__\/PYRONOME_CURRENT_TIME}}.php",
+        "temporary":"0",
+        "skip_empty":"0",
+        "skip_whitespace":"0",
+        "remove_whitespace":"0",
+        "append":"0",
+        "glue":"",
+        "prepend_crlf":"0",
+        "append_crlf":"0"
     }
 ]
