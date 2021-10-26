@@ -26,6 +26,9 @@ class DatabaseSeeder extends Seeder
         $menu = [];
 
         /* {{@snippet:model_menu_definitions}} */ 
+
+        $adminLTE = new AdminLTE();
+        $adminLTE->setupAdminLTEMenu($menu);
     }
 
     /* {{@snippet:end_methods}} */
