@@ -150,11 +150,11 @@
         "append_crlf":"0"
     },
     {
-        "description":"adminlte_menu_json.php",
+        "description":"__model_menu.php",
         "base":"\/project",
         "enabled":"1",
-        "source":"config\/adminlte_menu_json.php",
-        "destination":"\/source\/config\/adminlte_menu_json.php",
+        "source":"config\/__model_menu.php",
+        "destination":"\/source\/config\/__model_menu.php",
         "temporary":"0",
         "skip_empty":"0",
         "skip_whitespace":"0",
@@ -165,7 +165,7 @@
         "append_crlf":"0"
     },
     {
-        "description":"adminlte_menu_json.php\/model definitions (empty)",
+        "description":"__model_menu.php\/model definitions (empty)",
         "base":"\/project",
         "enabled":"1",
         "source":"",
@@ -180,10 +180,10 @@
         "append_crlf":"0"
     },
     {
-        "description":"adminlte_menu_json.php\/model definitions",
+        "description":"__model_menu.php\/model definitions",
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
-        "source":"source\/source3505812170820206aUc8CPI",
+        "source":"menu\/model\/menu_item.php",
         "destination":"MODEL_MENU_DEFINITONS",
         "temporary":"1",
         "skip_empty":"0",

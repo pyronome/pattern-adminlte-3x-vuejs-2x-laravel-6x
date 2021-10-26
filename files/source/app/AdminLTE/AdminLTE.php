@@ -472,6 +472,28 @@ class AdminLTE
 		return $adminLTEFolder; 
 	}
 
+	public function setupAdminLTEMenu() {
+		$this->setDefaultMenu();
+		$this->setModelMenu();
+		$this->setOtherMenu();
+	}
+
+	public function setDefaultMenu() {
+
+	}
+
+	public function setModelMenu() {
+		
+	}
+
+	public function setOtherMenu() {
+
+		/* {{@snippet:begin_app_menu}} */
+
+		/* {{@snippet:end_app_menu}} */
+		
+	}
+
 	public function getAdminLTEMenu() {
 		$menu = [];
 		$parentIndexHistory = [];
