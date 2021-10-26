@@ -17,10 +17,15 @@ class DatabaseSeeder extends Seeder
     {
     	/* {{@snippet:begin_run_method}} */
 
-    	$AdminLTE = new AdminLTE();
-        $AdminLTE->setupAdminLTEMenu();
+        $this->setupAdminLTEModelMenu();
 
     	/* {{@snippet:end_run_method}} */         
+    }
+
+    public function setupAdminLTEModelMenu() {
+        $menu = [];
+
+        /* {{@snippet:model_menu_definitions}} */ 
     }
 
     /* {{@snippet:end_methods}} */

@@ -150,6 +150,53 @@
         "append_crlf":"0"
     },
     {
+        "description":"DatabaseSeeder Snippets | model_menu_definitions",
+        "base":"\/project",
+        "enabled":"1",
+        "source":"snippets\/databaseseeder_snippet_model_menu_definitions",
+        "destination":"\/snippets\/system\/source\/database\/seeds\/DatabaseSeeder.php\/model_menu_definitions\/0010.php",
+        "temporary":"0",
+        "skip_empty":"0",
+        "skip_whitespace":"0",
+        "remove_whitespace":"0",
+        "append":"0",
+        "glue":"",
+        "prepend_crlf":"0",
+        "append_crlf":"0"
+    },
+
+    {
+        "description":"DatabaseSeeder.php\/model menu (empty)",
+        "base":"\/project",
+        "enabled":"1",
+        "source":"",
+        "destination":"MODEL_MENU_DEFINITONS",
+        "temporary":"1",
+        "skip_empty":"0",
+        "skip_whitespace":"0",
+        "remove_whitespace":"0",
+        "append":"0",
+        "glue":"",
+        "prepend_crlf":"1",
+        "append_crlf":"1"
+    },
+    {
+        "description":"DatabaseSeeder.php\/model menu",
+        "base":"\/project\/model_list\/model",
+        "enabled":"1",
+        "source":"snippets\/databaseseeder_model_menu_definition",
+        "destination":"MODEL_MENU_DEFINITONS",
+        "temporary":"1",
+        "skip_empty":"0",
+        "skip_whitespace":"0",
+        "remove_whitespace":"0",
+        "append":"1",
+        "glue":"",
+        "prepend_crlf":"1",
+        "append_crlf":"1"
+    },
+
+    {
         "description":"__model_menu.json",
         "base":"\/project",
         "enabled":"1",

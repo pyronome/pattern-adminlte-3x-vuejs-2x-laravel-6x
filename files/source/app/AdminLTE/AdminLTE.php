@@ -472,26 +472,43 @@ class AdminLTE
 		return $adminLTEFolder; 
 	}
 
-	public function setupAdminLTEMenu() {
-		$this->setDefaultMenu();
-		$this->setModelMenu();
-		$this->setOtherMenu();
+	public function getMenuIdByHref($href) {
+		$id = 0;
+
+		$AdminLTEMenuItem = AdminLTEMenu::where('href', $href)->first();
+		if (null !== $AdminLTEMenuItem) {
+			$id = $AdminLTEMenuItem->id;
+		}
+
+		return $id;
 	}
 
-	public function setDefaultMenu() {
-
-	}
-
-	public function setModelMenu() {
+	public function setupAdminLTEMenu($menu) {
+		$__order = 0;
 		
-	}
+		foreach ($menu as $menu_item) {
+			$id = $this->getMenuIdByHref($menu_item['href']);
 
-	public function setOtherMenu() {
+			if (0 == $id) {
+				$AdminLTEMenu = new AdminLTEMenu();
+				$AdminLTEMenu->visibility = $menu_item['visibility'];
+				$AdminLTEMenu->__order = $__order;
 
-		/* {{@snippet:begin_app_menu}} */
+				$parent_id = 0;
+				if ('' != $menu_item['parent']) {
+					$parent_id = $this->getMenuIdByHref($menu_item['parent']);
+				}
 
-		/* {{@snippet:end_app_menu}} */
-		
+				$AdminLTEMenu->parent_id = $parent_id;
+
+				$AdminLTEMenu->text = $menu_item['text'];
+				$AdminLTEMenu->href = $menu_item['href'];
+				$AdminLTEMenu->icon = $menu_item['icon'];
+				$AdminLTEMenu->save();
+
+				$__order++;
+			}
+		}
 	}
 
 	public function getAdminLTEMenu() {
