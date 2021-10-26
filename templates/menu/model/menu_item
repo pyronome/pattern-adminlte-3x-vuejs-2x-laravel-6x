@@ -1,0 +1,7 @@
+    {
+        "text": "{{$ __value__}} List",
+        "href": "{{$ __value__/__lowercase_text__}}",
+        "icon": "far fa-list-alt",
+        "visibility": 1,
+        "parent": "contents"
+    }

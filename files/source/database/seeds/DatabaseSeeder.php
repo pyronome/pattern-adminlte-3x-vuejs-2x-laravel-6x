@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     	/* {{@snippet:begin_run_method}} */
 
     	$AdminLTE = new AdminLTE();
-        $AdminLTE->setupAdminLTEMenu($menu);
+        $AdminLTE->setupAdminLTEMenu();
 
     	/* {{@snippet:end_run_method}} */         
     }
