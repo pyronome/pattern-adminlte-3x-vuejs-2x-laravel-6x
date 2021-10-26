@@ -154,7 +154,7 @@
         "base":"\/project",
         "enabled":"1",
         "source":"menu\/model\/menu.json",
-        "destination":"\/source\/storage\/app\/config\/__model_menu.json",
+        "destination":"\/source\/config\/__model_menu.json",
         "temporary":"0",
         "skip_empty":"0",
         "skip_whitespace":"0",
@@ -192,7 +192,7 @@
         "append":"1",
         "glue":",",
         "prepend_crlf":"0",
-        "append_crlf":"0"
+        "append_crlf":"1"
     },
     {
         "description":"routes-default.js",
