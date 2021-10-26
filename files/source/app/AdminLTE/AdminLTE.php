@@ -13,6 +13,7 @@ use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTEModelDisplayText;
 use App\AdminLTE\AdminLTEModelOption;
 use App\AdminLTE\AdminLTEPermission;
+use App\AdminLTE\AdminLTEMenu;
 use App\AdminLTE\AdminLTEMeta;
 use PDO;
 
@@ -25,6 +26,7 @@ class AdminLTE
 	public $system_models = [
 		'AdminLTE',
 		'AdminLTELayout',
+		'AdminLTEMenu',
 		'AdminLTEMeta',
 		'AdminLTEModelDisplayText',
 		'AdminLTEModelOption',
@@ -470,24 +472,85 @@ class AdminLTE
 		return $adminLTEFolder; 
 	}
 
-	public function getSideMenu($forceDefault = false)
+	public function getAdminLTEMenu() {
+		$menu = [];
+		$parentIndexHistory = [];
+		$index_parent = 0;
+		$index_child = 0;
+
+		$AdminLTEMenuList = AdminLTEMenu::get();
+
+		foreach ($AdminLTEMenuList as $object) {
+			
+			if (0 == $object->parent_id) {
+				// main
+				$parentIndexHistory[$object->id] = $index_parent;
+
+				$parent = [];
+				$parent['text'] = $object->text;
+				$parent['href'] = $object->href;
+				$parent['icon'] = $object->icon;
+				$parent['visibility'] = $object->visibility;
+
+				$menu[$index_parent] = $parent;
+				$index_parent++;
+			} else {
+				//sub
+				$parentIndex = $parentIndexHistory[$object->parent_id];
+
+				if (!isset($menu[$parentIndex]['children'])) {
+					$menu[$parentIndex]['children'] = [];
+				}
+
+				$childIndex = count($menu[$parentIndex]['children']);
+
+				$child = [];
+				$child['text'] = $object->text;
+				$child['href'] = $object->href;
+				$child['icon'] = $object->icon;
+				$child['visibility'] = $object->visibility;
+
+				$menu[$parentIndex]['children'][$childIndex] = $child;
+			}
+		}
+
+		return $menu;
+	}
+
+	public function saveAdminLTEMenu($menu) {
+		AdminLTEMenu::query()->truncate();
+
+		foreach ($menu as $__order => $data) {
+			$AdminLTEMenu = new AdminLTEMenu();
+			$AdminLTEMenu->visibility = $data['visibility'];
+			$AdminLTEMenu->__order = $__order;
+			$AdminLTEMenu->parent_id = 0;
+			$AdminLTEMenu->text = $data['text'];
+			$AdminLTEMenu->href = $data['href'];
+			$AdminLTEMenu->icon = $data['icon'];
+			$AdminLTEMenu->save();
+
+			$parent_id = $AdminLTEMenu->id;
+
+			if (isset($data['children'])) {
+				foreach ($data['children'] as $__orderChild => $dataChild) {
+					$AdminLTEMenu = new AdminLTEMenu();
+					$AdminLTEMenu->visibility = $dataChild['visibility'];
+					$AdminLTEMenu->__order = $__orderChild;
+					$AdminLTEMenu->parent_id = $parent_id;
+					$AdminLTEMenu->text = $dataChild['text'];
+					$AdminLTEMenu->href = $dataChild['href'];
+					$AdminLTEMenu->icon = $dataChild['icon'];
+					$AdminLTEMenu->save();
+				}
+			}
+		}
+	}
+
+	public function getSideMenu()
 	{
+		$menuArray = $this->getAdminLTEMenu();
 
-		if (!$forceDefault && Storage::disk('local')->exists('config/adminlte_menu.json')) {
-			$menuArray = json_decode(Storage::disk('local')->get('config/adminlte_menu.json'),
-					(JSON_HEX_QUOT
-					| JSON_HEX_TAG
-					| JSON_HEX_AMP
-					| JSON_HEX_APOS));
-		} else {
-			$menuArray = json_decode(config('adminlte_menu_json'),
-					(JSON_HEX_QUOT
-					| JSON_HEX_TAG
-					| JSON_HEX_AMP
-					| JSON_HEX_APOS));
-
-		} // if (!$forceDefault
-		
 		$Menu = array();
 		$main_index = 0;
 		$countMenuArray = count($menuArray);
@@ -1815,6 +1878,7 @@ class AdminLTE
 		$exceptions = [
 			'AdminLTE',
 			'AdminLTELayout',
+			'AdminLTEMenu',
 			'AdminLTEMeta',
 			'AdminLTEModelDisplayText',
 			'AdminLTEUser',
@@ -2477,7 +2541,7 @@ class AdminLTE
 		
 		return true;
 	}
-	/* {{@snippet:end_methods}} */
+    /* {{@snippet:end_methods}} */
 }
 
 /* {{@snippet:end_class}} */

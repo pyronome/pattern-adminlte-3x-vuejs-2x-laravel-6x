@@ -1,5 +1,6 @@
 <?php
 
+use App\AdminLTE\AdminLTE;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,7 +17,8 @@ class DatabaseSeeder extends Seeder
     {
     	/* {{@snippet:begin_run_method}} */
 
-    	// $this->call(UsersTableSeeder::class);
+    	$AdminLTE = new AdminLTE();
+        $AdminLTE->setupAdminLTEMenu($menu);
 
     	/* {{@snippet:end_run_method}} */         
     }

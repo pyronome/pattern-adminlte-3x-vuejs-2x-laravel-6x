@@ -14,26 +14,18 @@ class MenuConfigurationController extends Controller
 
     public function get(Request $request)
     {
-
         $response = [];
 
-        if (Storage::disk('local')->exists('config/adminlte_menu.json'))
-        {
-            $menu_json = Storage::disk('local')->get('config/adminlte_menu.json');
-        }
-        else
-        {
-            $menu_json = config('adminlte_menu_json');
-        } // if (!$forceDefault
+        $AdminLTE = new AdminLTE();
+        $menu = $AdminLTE->getAdminLTEMenu();
 
-        $response['menu_json'] = json_encode($menu_json,
+        $response['menu_json'] = json_encode($menu,
                 (JSON_HEX_QUOT
                 | JSON_HEX_TAG
                 | JSON_HEX_AMP
                 | JSON_HEX_APOS));
         
         return $response;
-
     }
 
     public function post(MenuConfigurationPOSTRequest $request)
@@ -42,11 +34,15 @@ class MenuConfigurationController extends Controller
         $error_msg = '';
         $return_data = [];
 
-        $menu_json = rawurldecode(
-                htmlspecialchars_decode(
-                $request->input('menu_json')));
+        $menu_json = rawurldecode(htmlspecialchars_decode($request->input('menu_json')));
+        $menu = json_decode($menu_json,
+                (JSON_HEX_QUOT
+                | JSON_HEX_TAG
+                | JSON_HEX_AMP
+                | JSON_HEX_APOS));
 
-        Storage::disk('local')->put('config/adminlte_menu.json', $menu_json);
+        $AdminLTE = new AdminLTE();
+        $AdminLTE->saveAdminLTEMenu($menu);
         
         $return_data['has_error'] = false;
         $return_data['error_msg'] = '';

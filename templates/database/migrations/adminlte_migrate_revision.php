@@ -433,10 +433,101 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 }
             });
         }
+        /* {{@snippet:end_adminltemodeloptiontable_migration}} */
+
+        /* {{@snippet:begin_adminltemenutable_migration}} */        
+        if (!Schema::hasTable('adminltemenutable')) {
+            Schema::create('adminltemenutable', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->timestamps();
+                $table->boolean('deleted')->default(0);
+                $table->smallInteger('visibility')->default(0);
+                $table->bigInteger('__order')->default(0);
+                $table->bigInteger('parent_id')->default(0);
+                $table->string('text')->nullable();
+                $table->string('href')->nullable();
+                $table->string('icon')->nullable();
+            });
+        } else {
+            Schema::table('adminltemenutable', function (Blueprint $table) {
+                $foreignKeys = $this->listTableForeignKeys('adminltemenutable');
+                //Schema::disableForeignKeyConstraints();
+                if (Schema::hasColumn('adminltemenutable', 'visibility')) {                    
+                    if (in_array('adminltemenutable_visibility_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminltemenutable_visibility_foreign');
+                        $table->dropIndex('adminltemenutable_visibility_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminltemenutable', '__order')) {                    
+                    if (in_array('adminltemenutable___order_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminltemenutable___order_foreign');
+                        $table->dropIndex('adminltemenutable___order_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminltemenutable', 'parent_id')) {                    
+                    if (in_array('adminltemenutable_parent_id_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminltemenutable_parent_id_foreign');
+                        $table->dropIndex('adminltemenutable_parent_id_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminltemenutable', 'text')) {                    
+                    if (in_array('adminltemenutable_text_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminltemenutable_text_foreign');
+                        $table->dropIndex('adminltemenutable_text_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminltemenutable', 'href')) {                    
+                    if (in_array('adminltemenutable_href_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminltemenutable_href_foreign');
+                        $table->dropIndex('adminltemenutable_href_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminltemenutable', 'icon')) {                    
+                    if (in_array('adminltemenutable_icon_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminltemenutable_icon_foreign');
+                        $table->dropIndex('adminltemenutable_icon_foreign');
+                    }
+                }
+                //Schema::enableForeignKeyConstraints();
+            });
+
+            Schema::table('adminltemenutable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminltemenutable', 'visibility')) { 
+                    $table->smallInteger('visibility')->default(0)->change();
+                } else {
+                    $table->smallInteger('visibility')->default(0);
+                }
+                if (Schema::hasColumn('adminltemenutable', '__order')) { 
+                    $table->bigInteger('__order')->default(0)->change();
+                } else {
+                    $table->bigInteger('__order')->default(0);
+                }
+                if (Schema::hasColumn('adminltemenutable', 'parent_id')) { 
+                    $table->bigInteger('parent_id')->default(0)->change();
+                } else {
+                    $table->bigInteger('parent_id')->default(0);
+                }
+                if (Schema::hasColumn('adminltemenutable', 'text')) { 
+                    $table->string('text')->nullable()->change();
+                } else {
+                    $table->string('text')->nullable();
+                }
+                if (Schema::hasColumn('adminltemenutable', 'href')) { 
+                    $table->string('href')->nullable()->change();
+                } else {
+                    $table->string('href')->nullable();
+                }
+                if (Schema::hasColumn('adminltemenutable', 'icon')) { 
+                    $table->string('icon')->nullable()->change();
+                } else {
+                    $table->string('icon')->nullable();
+                }
+            });
+            
+        } // if (!Schema::hasTable('adminltemenutable')) {
+        /* {{@snippet:end_adminltemenutable_migration}} */
 
         Artisan::call('db:seed', ['--force' => true]);
-
-        /* {{@snippet:end_adminltemodeloptiontable_migration}} */
 
         /* {{@snippet:end_up_method}} */
     }
@@ -460,6 +551,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         Schema::dropIfExists('adminlteuserlayouttable');
         Schema::dropIfExists('adminltevariabletable');
         Schema::dropIfExists('adminltemodeloptiontable');
+        Schema::dropIfExists('adminltemenuoptiontable');
         */
         /* {{@snippet:end_down_method}} */
     }
