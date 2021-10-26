@@ -182,7 +182,7 @@
     },
     {
         "description":"DatabaseSeeder.php\/model menu",
-        "base":"\/project\/model_list\/model",
+        "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
         "source":"snippets\/databaseseeder_model_menu_definition",
         "destination":"MODEL_MENU_DEFINITONS",
