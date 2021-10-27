@@ -483,7 +483,7 @@ class AdminLTE
 		return $id;
 	}
 
-	public function setupAdminLTEMenu($menu) {
+	public function updateAdminLTEMenu($menu) {
 		$__order = 0;
 		
 		foreach ($menu as $menu_item) {
