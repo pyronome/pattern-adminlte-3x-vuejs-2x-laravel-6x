@@ -1188,7 +1188,7 @@ function MenuEditor(idSelector, options) {
         var $prev = $li.prev('li');
         
         if (1 == $prev.data("__group")) {
-            alert("You cannot add a submenu to group element!")
+            alert("You cannot add a submenu into group element!")
             return false;
         }
 
