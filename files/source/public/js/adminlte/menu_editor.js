@@ -3,7 +3,7 @@
  * @author David Ticona Saravia https://github.com/davicotico
  * @version 1.0.0
  * */
-(function ($){
+ (function ($){
     
     /**
      * @desc jQuery plugin to sort html list also the tree structures
@@ -1010,6 +1010,7 @@
             object["href"] = li.data("href");
             object["icon"] = li.data("icon");
             object["visibility"] = li.data("visibility");
+            object["__group"] = li.data("__group");
 
             arr.push(object);
             var ch = li.children('ul,ol').sortableListsToJson();
@@ -1174,6 +1175,10 @@ function MenuEditor(idSelector, options) {
         if (list.children().length <= 0) {
             list.prev('div').children('.sortableListsOpener').first().remove();
             list.remove();
+
+            if (1 == $liParent.data.__group) {
+                $liParent.find('.btnMove').remove();
+            }
         }
         MenuEditor.updateButtons($main);
     });
@@ -1181,6 +1186,12 @@ function MenuEditor(idSelector, options) {
         e.preventDefault();
         var $li = $(this).closest('li');
         var $prev = $li.prev('li');
+        
+        if (1 == $prev.data("__group")) {
+            alert("You cannot add a submenu to group element!")
+            return false;
+        }
+
         if ($prev.length > 0) {
             var $ul = $prev.children('ul');
             if ($ul.length > 0)
@@ -1212,6 +1223,11 @@ function MenuEditor(idSelector, options) {
             iconPicker.iconpicker('setIcon', 'empty');
         }
 
+        var __groupVal = document.getElementById("__group").checked ? 1 : 0;
+        if (__groupVal != data.__group) {
+            $('#__group').trigger('click');
+        }
+
         /*$updateButton.removeAttr('disabled');*/
     }
 
@@ -1236,7 +1252,7 @@ function MenuEditor(idSelector, options) {
         return $("<a>").addClass(attr.classCss).addClass('clickable').attr("href", "#").html(attr.text);
     }
 
-    function TButtonGroup() {
+    function TButtonGroup(__groupVal) {
         var $divbtn = $('<div>').addClass('btn-group item-btn-group float-right');
         var $btnEdit = TButton({classCss: 'btn btn-sm btnEdit', text: settings.labelEdit});
         var $btnRemv = TButton({classCss: 'btn btn-sm btnRemove', text: settings.labelRemove});
@@ -1244,7 +1260,12 @@ function MenuEditor(idSelector, options) {
         var $btnDown = TButton({classCss: 'btn btn-sm btnDown btnMove', text: '<i class="fas fa-angle-down clickable"></i>'});
         var $btnOut = TButton({classCss: 'btn btn-sm btnOut btnMove', text: '<i class="fas fa-level-down-alt clickable"></i>'});
         var $btnIn = TButton({classCss: 'btn btn-sm btnIn btnMove', text: '<i class="fas fa-level-up-alt clickable"></i>'});
-        $divbtn.append($btnUp).append($btnDown).append($btnIn).append($btnOut).append($btnEdit).append($btnRemv);
+
+        if (1 == __groupVal) {
+            $divbtn.append($btnEdit).append($btnRemv);
+        } else {
+            $divbtn.append($btnUp).append($btnDown).append($btnIn).append($btnOut).append($btnEdit).append($btnRemv);
+        }
         return $divbtn;
     }
 
@@ -1258,7 +1279,7 @@ function MenuEditor(idSelector, options) {
         var $elem = (level === 0) ? $main : $('<ul>').addClass('pl-0').css('padding-top', '10px');
         $.each(arrayItem, function (k, v) {
             var isParent = (typeof (v.children) !== "undefined") && ($.isArray(v.children));
-            var itemObject = {text: "", href: "", icon: "empty", visibility: 0};
+            var itemObject = {text: "", href: "", icon: "empty", visibility: 0, __group: 0};
             var temp = $.extend({}, v);
             if (isParent){ 
                 delete temp['children'];
@@ -1275,7 +1296,7 @@ function MenuEditor(idSelector, options) {
             var $div = $('<div>').css('overflow', 'auto');
             var $i = $('<i>').addClass(v.icon);
             var $span = $('<span>').addClass('txt').addClass(opacity_class).append(v.text).css('margin-right', '5px');
-            var $divbtn =  TButtonGroup();
+            var $divbtn =  TButtonGroup(itemObject.__group);
             $div.append($i).append("&nbsp;").append($span).append($divbtn);
             $li.append($div);
             if (isParent) {
@@ -1344,6 +1365,8 @@ function MenuEditor(idSelector, options) {
             return;
         }
 
+        $cEl.find('div.btn-group.item-btn-group').first().remove();
+
         var data = {};
         var oldIcon = $cEl.data('icon');
 
@@ -1352,6 +1375,13 @@ function MenuEditor(idSelector, options) {
             data[$(this).attr('name')] = $(this).val();
         });
 
+        var __groupVal = document.getElementById("__group").checked ? 1 : 0;
+        $cEl.data('__group', __groupVal);
+        data['__group'] = __groupVal;
+
+        var btnGroup = TButtonGroup(__groupVal);
+        $cEl.find('div').first().append(btnGroup);
+
         if (0 == data["visibility"]) {
             $cEl.find('span.txt').first().addClass("menu_item_unvisible").text($cEl.data('text'));
         } else {
@@ -1359,7 +1389,7 @@ function MenuEditor(idSelector, options) {
         }
 
         $cEl.children().children('i').removeClass(oldIcon).addClass($cEl.data('icon'));
-        
+        MenuEditor.updateButtons($main);
         resetForm();
     };
    
@@ -1369,12 +1399,15 @@ function MenuEditor(idSelector, options) {
             data[$(this).attr('name')] = $(this).val();
         });
 
+        var __groupVal = document.getElementById("__group").checked ? 1 : 0;
+        data['__group'] = __groupVal;
+
         var opacity_class = "";
         if (0 == data["visibility"]) {
             opacity_class = "menu_item_unvisible";
         }
 
-        var btnGroup = TButtonGroup();
+        var btnGroup = TButtonGroup(__groupVal);
         var textItem = $('<span>').addClass('txt').addClass(opacity_class).text(data.text);
         var iconItem = $('<i>').addClass(data.icon);
         var div = $('<div>').css({"overflow": "auto"}).append(iconItem).append("&nbsp;").append(textItem).append(btnGroup);

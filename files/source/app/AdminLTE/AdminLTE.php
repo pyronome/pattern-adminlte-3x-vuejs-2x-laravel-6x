@@ -492,6 +492,7 @@ class AdminLTE
 			if (0 == $id) {
 				$AdminLTEMenu = new AdminLTEMenu();
 				$AdminLTEMenu->visibility = $menu_item['visibility'];
+				$AdminLTEMenu->__group = isset($menu_item['__group']) ? intval($menu_item['__group']) : 0;
 				$AdminLTEMenu->__order = $__order;
 
 				$parent_id = 0;
@@ -530,6 +531,7 @@ class AdminLTE
 				$parent['href'] = $object->href;
 				$parent['icon'] = $object->icon;
 				$parent['visibility'] = $object->visibility;
+				$parent['__group'] = $object->__group;
 
 				$menu[$index_parent] = $parent;
 				$index_parent++;
@@ -548,6 +550,7 @@ class AdminLTE
 				$child['href'] = $object->href;
 				$child['icon'] = $object->icon;
 				$child['visibility'] = $object->visibility;
+				$child['__group'] = $object->__group;
 
 				$menu[$parentIndex]['children'][$childIndex] = $child;
 			}
@@ -562,6 +565,7 @@ class AdminLTE
 		foreach ($menu as $__order => $data) {
 			$AdminLTEMenu = new AdminLTEMenu();
 			$AdminLTEMenu->visibility = $data['visibility'];
+			$AdminLTEMenu->__group = $data['__group'];
 			$AdminLTEMenu->__order = $__order;
 			$AdminLTEMenu->parent_id = 0;
 			$AdminLTEMenu->text = $data['text'];
@@ -575,6 +579,7 @@ class AdminLTE
 				foreach ($data['children'] as $__orderChild => $dataChild) {
 					$AdminLTEMenu = new AdminLTEMenu();
 					$AdminLTEMenu->visibility = $dataChild['visibility'];
+					$AdminLTEMenu->__group = $dataChild['__group'];
 					$AdminLTEMenu->__order = $__orderChild;
 					$AdminLTEMenu->parent_id = $parent_id;
 					$AdminLTEMenu->text = $dataChild['text'];
@@ -596,64 +601,77 @@ class AdminLTE
 
 		for ($i=0; $i < $countMenuArray; $i++) { 
 			if (1 == $menuArray[$i]['visibility']) {
-				if (!isset($menuArray[$i]['children'])) {
+				if (1 == $menuArray[$i]['__group']) {
 					$Menu[$main_index]['id'] = 'p' . $i;
+					$Menu[$main_index]['__group'] = 1;
 					$Menu[$main_index]['url'] = $menuArray[$i]['href'];
 					$Menu[$main_index]['href'] = $menuArray[$i]['href'];
 					$Menu[$main_index]['title'] = $menuArray[$i]['text'];
-					
-					$icon = $menuArray[$i]['icon'];
-					if ('empty' == $icon) {
-						$icon = 'far fa-circle';
-					}
-
-					$Menu[$main_index]['icon'] = $icon;
+					$Menu[$main_index]['icon'] = 'far fa-circle';
 					$Menu[$main_index]['children'] = array();
 					$main_index++;
 				} else {
-					$Menu[$main_index]['id'] = 'p' . $i;
-					$Menu[$main_index]['url'] = '';
-					$Menu[$main_index]['href'] = $menuArray[$i]['href'];
-					$Menu[$main_index]['title'] = $menuArray[$i]['text'];
-					
-					$icon = $menuArray[$i]['icon'];
-					if ('empty' == $icon) {
-						$icon = 'fas fa-list';
-					}
+					if (!isset($menuArray[$i]['children'])) {
+						$Menu[$main_index]['id'] = 'p' . $i;
+						$Menu[$main_index]['__group'] = 0;
+						$Menu[$main_index]['url'] = $menuArray[$i]['href'];
+						$Menu[$main_index]['href'] = $menuArray[$i]['href'];
+						$Menu[$main_index]['title'] = $menuArray[$i]['text'];
+						
+						$icon = $menuArray[$i]['icon'];
+						if ('empty' == $icon) {
+							$icon = 'far fa-circle';
+						}
 
-					$Menu[$main_index]['icon'] = $icon;
-					$Menu[$main_index]['children'] = array();
-					$childrenMenu = array();
-					$sub_index = 0;
+						$Menu[$main_index]['icon'] = $icon;
+						$Menu[$main_index]['children'] = array();
+						$main_index++;
+					} else {
+						$Menu[$main_index]['id'] = 'p' . $i;
+						$Menu[$main_index]['__group'] = 0;
+						$Menu[$main_index]['url'] = '';
+						$Menu[$main_index]['href'] = $menuArray[$i]['href'];
+						$Menu[$main_index]['title'] = $menuArray[$i]['text'];
+						
+						$icon = $menuArray[$i]['icon'];
+						if ('empty' == $icon) {
+							$icon = 'fas fa-list';
+						}
 
-					$subMenuArray = $menuArray[$i]['children'];
-					$countSubmenuArray = count($subMenuArray);
-					for ($j=0; $j < $countSubmenuArray; $j++) {
-						if (1 == $subMenuArray[$j]['visibility']) {
-							$childrenMenu[$sub_index]['id'] = 'c' . $j;
-							$childrenMenu[$sub_index]['url'] = $subMenuArray[$j]['href'];
-							$childrenMenu[$sub_index]['href'] = $subMenuArray[$j]['href'];
-							$childrenMenu[$sub_index]['title'] = $subMenuArray[$j]['text'];
+						$Menu[$main_index]['icon'] = $icon;
+						$Menu[$main_index]['children'] = array();
+						$childrenMenu = array();
+						$sub_index = 0;
 
-							$icon = $subMenuArray[$j]['icon'];
-							if ('empty' == $icon) {
-								$icon = 'far fa-circle';
-							}
+						$subMenuArray = $menuArray[$i]['children'];
+						$countSubmenuArray = count($subMenuArray);
+						for ($j=0; $j < $countSubmenuArray; $j++) {
+							if (1 == $subMenuArray[$j]['visibility']) {
+								$childrenMenu[$sub_index]['id'] = 'c' . $j;
+								$childrenMenu[$sub_index]['__group'] = 0;
+								$childrenMenu[$sub_index]['url'] = $subMenuArray[$j]['href'];
+								$childrenMenu[$sub_index]['href'] = $subMenuArray[$j]['href'];
+								$childrenMenu[$sub_index]['title'] = $subMenuArray[$j]['text'];
 
-							$childrenMenu[$sub_index]['icon'] = $icon;
-							$childrenMenu[$sub_index]['children'] = array();
-							$sub_index++;
-						} // if($subMenus[$j]['visibility']) {
-					} // for ($j=0; $j < $countSubmenuArray; $j++) {
+								$icon = $subMenuArray[$j]['icon'];
+								if ('empty' == $icon) {
+									$icon = 'far fa-circle';
+								}
 
-					$Menu[$main_index]['children'] = $childrenMenu;
-					$main_index++;
-				} // if (0 == count($menuArray[$i]['subMenus'])) {
+								$childrenMenu[$sub_index]['icon'] = $icon;
+								$childrenMenu[$sub_index]['children'] = array();
+								$sub_index++;
+							} // if($subMenus[$j]['visibility']) {
+						} // for ($j=0; $j < $countSubmenuArray; $j++) {
+
+						$Menu[$main_index]['children'] = $childrenMenu;
+						$main_index++;
+					} // if (0 == count($menuArray[$i]['subMenus'])) {
+				} // if (1 == $menuArray[$i]['__group']) {
 			} // if ($menuArray[$i]['visibility']) {
 		} // for ($i=0; $i < $countMenuArray; $i++) { 
 
 		return $Menu;
-
 	}
 
 	public function getUserMenuPermission()

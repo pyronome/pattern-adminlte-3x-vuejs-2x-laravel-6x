@@ -64,16 +64,32 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
+                                    <div class="">
+                                        <div class="icheck-primary d-inline">
+                                            <input type="checkbox"
+                                                id="__group"
+                                                name="__group"
+                                                class="item-menu"
+                                                v-model="group_checked"
+                                                @change="__groupChanged($event)">
+                                            <label for="__group" class="">
+                                                {{ $t('Group') }}  
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <label for="text">{{ $t('Title') }}</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control item-menu" name="text" id="text">
-                                        <div class="input-group-append">
+                                        <div class="input-group-append" :style="group_style">
                                             <button type="button" id="ulMenuEditor_icon" class="btn btn-outline-secondary"></button>
                                         </div>
                                     </div>
                                     <input type="hidden" name="icon" class="item-menu">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" :style="group_style">
                                     <label for="href">{{ $t('URL') }}</label>
                                     <input type="text" class="form-control item-menu" id="href" name="href">
                                 </div>
@@ -153,6 +169,8 @@ export default {
             form: new Form({
                 'menu_json': ''
             }),
+            group_checked: false,
+            group_style: "",
             page: {
                 is_ready: false,
                 has_server_error: false,
@@ -177,6 +195,15 @@ export default {
         };
     },
     methods: {
+        __groupChanged: function() {
+            var self = this;
+
+            if (self.group_checked) {
+                self.group_style = "display:none";
+            } else {
+                self.group_style = "";
+            }
+        },
         processLoadQueue: function () {
             if (this.page.has_server_error) {
                 this.$Progress.finish();

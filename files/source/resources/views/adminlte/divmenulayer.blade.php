@@ -1,4 +1,4 @@
-        <?php
+<?php
             $adminLTE = new \App\AdminLTE\AdminLTE();
             $menu = $adminLTE->getSideMenu();
         ?>
@@ -11,71 +11,82 @@
                 $logoutMenu = null;
 
                 for ($i=0; $i < $countMenuArray; $i++) { 
-                    if (empty($menu[$i]['children'])) {
-                        $url = $menu[$i]['url'];
-                        $href = $menu[$i]['href'];
+                    if (1 == $menu[$i]['__group']) {
                         $title = $menu[$i]['title'];
-                        $icon = $menu[$i]['icon'];
-
-                        if ($href == 'logout') {
-                            $logoutMenu = $menu[$i];
-                            continue;
-                        } // if ($href == 'logout') {
                         ?>
-                        <li class="nav-item menu-nav-item" data-href="<?php echo $href; ?>" style="display:none;">
-                            <router-link id="pageurl<?php echo $url; ?>"
-                                class="nav-link"
-                                to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >
-                                <i class="<?php echo $icon; ?> nav-icon"></i>
-                                <p>
-                                    {{ __($title) }}
-                                    <!-- <span class="badge badge-info right">2</span> -->
-                                </p>
-                            </router-link>
+                        <li class="nav-header menu-nav-item" data-href="__no_href__" style="padding: 0.75rem 1rem 1rem;">
+                            <span class="" id="pageurl__no_href__">
+                                {{ __($title) }}
+                            </span>
                         </li>
                         <?php
                     } else {
-                        $parent_id = $menu[$i]['id'];
-                        $parent_title = $menu[$i]['title'];
-                        $parent_icon = $menu[$i]['icon'];
-                        $parent_href = $menu[$i]['href'];
-                        ?>
-                        <li class="nav-item menu-nav-item has-treeview parentPageLI menu-close" data-href="<?php echo $parent_href; ?>" style="display:none;">
-                            <a id="parentpageurl<?php echo $parent_id; ?>"
-                                class="parent_menu nav-link"
-                                href="#">
-                                <i class="<?php echo $parent_icon; ?> nav-icon"></i>
-                                <p>
-                                    {{ __($parent_title) }}
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <?php
-                                $submenu = $menu[$i]['children'];
-                                $countsubmenu = count($submenu);
-                                for ($j=0; $j < $countsubmenu; $j++) {
-                                    $url = $submenu[$j]['url'];
-                                    $href = $submenu[$j]['href'];
-                                    $title = $submenu[$j]['title'];
-                                    $icon = $submenu[$j]['icon'];
-                                    ?>
-                                    <li class="nav-item menu-nav-item" data-href="<?php echo $href; ?>" style="display:none;">
-                                        <router-link id="pageurl<?php echo $url; ?>"
-                                            class="child_menu nav-link"
-                                            to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>"
-                                            data-parent-url="<?php echo $parent_id; ?>">
-                                            <i class="<?php echo $icon; ?> nav-icon"></i>
-                                            <p>{{ __($title) }}</p>
-                                        </router-link>
-                                    </li>
+                        if (empty($menu[$i]['children'])) {
+                            $url = $menu[$i]['url'];
+                            $href = $menu[$i]['href'];
+                            $title = $menu[$i]['title'];
+                            $icon = $menu[$i]['icon'];
+
+                            if ($href == 'logout') {
+                                $logoutMenu = $menu[$i];
+                                continue;
+                            } // if ($href == 'logout') {
+                            ?>
+                            <li class="nav-item menu-nav-item" data-href="<?php echo $href; ?>" style="display:none;">
+                                <router-link id="pageurl<?php echo $url; ?>"
+                                    class="nav-link"
+                                    to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >
+                                    <i class="<?php echo $icon; ?> nav-icon"></i>
+                                    <p>
+                                        {{ __($title) }}
+                                        <!-- <span class="badge badge-info right">2</span> -->
+                                    </p>
+                                </router-link>
+                            </li>
+                            <?php
+                        } else {
+                            $parent_id = $menu[$i]['id'];
+                            $parent_title = $menu[$i]['title'];
+                            $parent_icon = $menu[$i]['icon'];
+                            $parent_href = $menu[$i]['href'];
+                            ?>
+                            <li class="nav-item menu-nav-item has-treeview parentPageLI menu-close" data-href="<?php echo $parent_href; ?>" style="display:none;">
+                                <a id="parentpageurl<?php echo $parent_id; ?>"
+                                    class="parent_menu nav-link"
+                                    href="#">
+                                    <i class="<?php echo $parent_icon; ?> nav-icon"></i>
+                                    <p>
+                                        {{ __($parent_title) }}
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
                                     <?php
-                                } // for ($j=0; $j < $countsubmenu; $j++) {
-                                ?>
-                            </ul>
-                        </li>
-                        <?php
-                    } // if (empty($menu[$i]['children'])) {
+                                    $submenu = $menu[$i]['children'];
+                                    $countsubmenu = count($submenu);
+                                    for ($j=0; $j < $countsubmenu; $j++) {
+                                        $url = $submenu[$j]['url'];
+                                        $href = $submenu[$j]['href'];
+                                        $title = $submenu[$j]['title'];
+                                        $icon = $submenu[$j]['icon'];
+                                        ?>
+                                        <li class="nav-item menu-nav-item" data-href="<?php echo $href; ?>" style="display:none;">
+                                            <router-link id="pageurl<?php echo $url; ?>"
+                                                class="child_menu nav-link"
+                                                to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>"
+                                                data-parent-url="<?php echo $parent_id; ?>">
+                                                <i class="<?php echo $icon; ?> nav-icon"></i>
+                                                <p>{{ __($title) }}</p>
+                                            </router-link>
+                                        </li>
+                                        <?php
+                                    } // for ($j=0; $j < $countsubmenu; $j++) {
+                                    ?>
+                                </ul>
+                            </li>
+                            <?php
+                        } // if (empty($menu[$i]['children'])) {
+                    } // if (1 == $menu[$i]['__group']) {
                     ?>
                     <?php
                 } // for ($i=0; $i < $countMenuArray; $i++) { 
