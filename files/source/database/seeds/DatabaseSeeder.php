@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
     	/* {{@snippet:begin_run_method}} */
 
         $this->updateAdminLTEModelMenu();
+        $this->updateAdminLTEPluginMenu();
 
     	/* {{@snippet:end_run_method}} */         
     }
@@ -29,6 +30,14 @@ class DatabaseSeeder extends Seeder
 
         $adminLTE = new AdminLTE();
         $adminLTE->updateAdminLTEMenu($menu);
+    }
+
+    public function updateAdminLTEPluginMenu() {
+        $menu = [];
+
+        /* {{@snippet:begin_plugin_menu_definitions}} */ 
+        
+        /* {{@snippet:end_plugin_menu_definitions}} */
     }
 
     /* {{@snippet:end_methods}} */
