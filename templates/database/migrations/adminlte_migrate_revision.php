@@ -442,6 +442,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->timestamps();
                 $table->boolean('deleted')->default(0);
                 $table->smallInteger('visibility')->default(0);
+                $table->smallInteger('__group')->default(0);
                 $table->bigInteger('__order')->default(0);
                 $table->bigInteger('parent_id')->default(0);
                 $table->string('text')->nullable();
@@ -456,6 +457,12 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     if (in_array('adminltemenutable_visibility_foreign', $foreignKeys)) {
                         $table->dropForeign('adminltemenutable_visibility_foreign');
                         $table->dropIndex('adminltemenutable_visibility_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminltemenutable', '__group')) {                    
+                    if (in_array('adminltemenutable___group_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminltemenutable___group_foreign');
+                        $table->dropIndex('adminltemenutable___group_foreign');
                     }
                 }
                 if (Schema::hasColumn('adminltemenutable', '__order')) {                    
@@ -496,6 +503,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->smallInteger('visibility')->default(0)->change();
                 } else {
                     $table->smallInteger('visibility')->default(0);
+                }
+                if (Schema::hasColumn('adminltemenutable', '__group')) { 
+                    $table->smallInteger('__group')->default(0)->change();
+                } else {
+                    $table->smallInteger('__group')->default(0);
                 }
                 if (Schema::hasColumn('adminltemenutable', '__order')) { 
                     $table->bigInteger('__order')->default(0)->change();
