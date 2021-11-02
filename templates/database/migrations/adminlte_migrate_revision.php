@@ -28,9 +28,6 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->string('pagename');
                 $table->text('widgets');
             });
-
-            $adminLTE = new AdminLTE();
-            $adminLTE->setAdminLTEDefaultLayout();
         } else {
             Schema::table('adminltelayouttable', function (Blueprint $table) {
                 if (Schema::hasColumn('adminltelayouttable', 'pagename')) { 

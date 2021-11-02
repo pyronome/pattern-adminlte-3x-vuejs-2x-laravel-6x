@@ -30,9 +30,11 @@ class AdminLTE
 		'AdminLTEMeta',
 		'AdminLTEModelDisplayText',
 		'AdminLTEModelOption',
+		'AdminLTEPermission',
+		'AdminLTEUser',
+		'AdminLTEUserGroup',
 		'AdminLTEUserLayout',
 		'AdminLTEVariable',
-		'AdminLTEPermission',
 		'User'
 	];
 
@@ -1875,9 +1877,132 @@ class AdminLTE
 
 	}
 
+	public function getWidgetInfobox($model, $index) {
+		return [
+            'type' => 'infobox',
+            'model' => $model,
+            'text' => $model,
+            'href' => strtolower($model),
+            'size' => '12,12,12',
+            'visibility' => 0,
+            'order' => $index,
+            'icon' => 'fas fa-cog',
+            'iconbackground' => '#17a2b8',
+            'limit' => 0,
+            'onlylastrecord' => 0,
+            'columns' => '',
+            'values' => '',
+            'graphtype' => '',
+            'graphperiod' => 0
+        ];
+	}
+
+	public function getWidgetRecordGraph($model, $index) {
+		return [
+            'type' => 'recordgraph',
+            'model' => $model,
+            'href' => '',
+            'text' => $model . ' Graph',
+            'size' => '12,12,12',
+            'visibility' => 0,
+            'order' => $index,
+            'icon' => 'empty',
+            'iconbackground' => '',
+            'limit' => 0,
+            'onlylastrecord' => 0,
+            'columns' => '',
+            'values' => '',
+            'graphtype' => 'daily',
+            'graphperiod' => 6
+        ];
+	}
+
+	public function getWidgetRecordList($model, $index) {
+		return [
+            'type' => 'recordlist',
+            'model' => $model,
+            'href' => strtolower($model),
+            'text' => $model . ' Records',
+            'size' => '12,12,12',
+            'visibility' => 0,
+            'order' => $index,
+            'icon' => 'empty',
+            'iconbackground' => '',
+            'limit' => '5',
+            'onlylastrecord' => 0,
+            'columns' => 'Id,Creation,Last Update',
+            'values' => 'id,created_at__displaytext__,updated_at__displaytext__',
+            'graphtype' => '',
+            'graphperiod' => 0
+        ];
+	}
+
+	public function getWidgetEmpty($index) {
+		return [
+            'type' => 'empty',
+            'model' => '',
+            'href' => '',
+            'text' => '',
+            'size' => '12,12,12',
+            'visibility' => 0,
+            'order' => $index,
+            'icon' => '',
+            'iconbackground' => '',
+            'limit' => 0,
+            'onlylastrecord' => 0,
+            'columns' => '',
+            'values' => '',
+            'graphtype' => '',
+            'graphperiod' => 0
+        ];
+	}
+
+	public function getModelDefaultWidgets($widgets) {
+		$models = $this->getModelList();
+		$widget_index = 0;
+
+		foreach ($models as $model) {
+			$widgets[] = $this->getWidgetInfobox($model, $widget_index);
+			$widget_index++;
+			$widgets[] = $this->getWidgetRecordGraph($model, $widget_index);
+			$widget_index++;
+			$widgets[] = $this->getWidgetRecordList($model, $widget_index);
+			$widget_index++;
+			$widgets[] = $this->getWidgetEmpty($widget_index);
+			$widget_index++;
+		}
+		
+		return $widgets;
+	}
+
+	public function getAdminLTEDefaultWidgets($widgets) {
+		$models = [
+			'AdminLTEUser',
+			'AdminLTEUserGroup',
+		];
+
+		$widget_index = 0;
+
+		foreach ($models as $model) {
+			$widgets[] = $this->getWidgetInfobox($model, $widget_index);
+			$widget_index++;
+			$widgets[] = $this->getWidgetRecordGraph($model, $widget_index);
+			$widget_index++;
+			$widgets[] = $this->getWidgetRecordList($model, $widget_index);
+			$widget_index++;
+			$widgets[] = $this->getWidgetEmpty($widget_index);
+			$widget_index++;
+		}
+		
+		return $widgets;
+	}
+
 	public function setAdminLTEDefaultLayout()
 	{
-		$widgets = json_decode(config('adminlte_widget_json'), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+		$widgets = [];
+		$widgets = $this->getModelDefaultWidgets($widgets);
+		$widgets = $this->getAdminLTEDefaultWidgets($widgets);
+		
 		$countWidgets = count($widgets);
 		
 		try {
@@ -1938,6 +2063,8 @@ class AdminLTE
 			'AdminLTEMenu',
 			'AdminLTEMeta',
 			'AdminLTEModelDisplayText',
+			'AdminLTEModelOption',
+			'AdminLTEPermission',
 			'AdminLTEUser',
 			'AdminLTEUserGroup',
 			'AdminLTEUserLayout',
