@@ -432,6 +432,111 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         }
         /* {{@snippet:end_adminltemodeloptiontable_migration}} */
 
+        /* {{@snippet:begin_adminlteconfigtable_migration}} */        
+        if (!Schema::hasTable('adminlteconfigtable')) {
+            Schema::create('adminlteconfigtable', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->timestamps();
+                $table->boolean('deleted')->default(0);
+                $table->smallInteger('enabled')->default(0);
+                $table->smallInteger('required')->default(0);
+                $table->bigInteger('__order')->default(0);
+                $table->string('type')->nullable();
+                $table->longText('__key')->nullable();
+                $table->longText('title')->nullable();
+                $table->longText('meta_data')->nullable();
+            });
+        } else {
+            Schema::table('adminlteconfigtable', function (Blueprint $table) {
+                $foreignKeys = $this->listTableForeignKeys('adminlteconfigtable');
+                //Schema::disableForeignKeyConstraints();
+                if (Schema::hasColumn('adminlteconfigtable', 'enabled')) {                    
+                    if (in_array('adminlteconfigtable_enabled_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminlteconfigtable_enabled_foreign');
+                        $table->dropIndex('adminlteconfigtable_enabled_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'required')) {                    
+                    if (in_array('adminlteconfigtable_required_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminlteconfigtable_required_foreign');
+                        $table->dropIndex('adminlteconfigtable_required_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminlteconfigtable', '__order')) {                    
+                    if (in_array('adminlteconfigtable___order_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminlteconfigtable___order_foreign');
+                        $table->dropIndex('adminlteconfigtable___order_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'type')) {                    
+                    if (in_array('adminlteconfigtable_type_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminlteconfigtable_type_foreign');
+                        $table->dropIndex('adminlteconfigtable_type_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminlteconfigtable', '__key')) {                    
+                    if (in_array('adminlteconfigtable___key_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminlteconfigtable___key_foreign');
+                        $table->dropIndex('adminlteconfigtable___key_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'title')) {                    
+                    if (in_array('adminlteconfigtable_title_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminlteconfigtable_title_foreign');
+                        $table->dropIndex('adminlteconfigtable_title_foreign');
+                    }
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'meta_data')) {                    
+                    if (in_array('adminlteconfigtable_meta_data_foreign', $foreignKeys)) {
+                        $table->dropForeign('adminlteconfigtable_meta_data_foreign');
+                        $table->dropIndex('adminlteconfigtable_meta_data_foreign');
+                    }
+                }
+                //Schema::enableForeignKeyConstraints();
+            });
+
+            Schema::table('adminlteconfigtable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminlteconfigtable', 'enabled')) { 
+                    $table->smallInteger('enabled')->default(0)->change();
+                } else {
+                    $table->smallInteger('enabled')->default(0);
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'required')) { 
+                    $table->smallInteger('required')->default(0)->change();
+                } else {
+                    $table->smallInteger('required')->default(0);
+                }
+                if (Schema::hasColumn('adminlteconfigtable', '__order')) { 
+                    $table->bigInteger('__order')->default(0)->change();
+                } else {
+                    $table->bigInteger('__order')->default(0);
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'type')) { 
+                    $table->string('type')->nullable()->change();
+                } else {
+                    $table->string('type')->nullable();
+                }
+                if (Schema::hasColumn('adminlteconfigtable', '__key')) { 
+                    $table->longText('__key')->nullable()->change();
+                } else {
+                    $table->longText('__key')->nullable();
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'title')) { 
+                    $table->longText('title')->nullable()->change();
+                } else {
+                    $table->longText('title')->nullable();
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'meta_data')) { 
+                    $table->longText('meta_data')->nullable()->change();
+                } else {
+                    $table->longText('meta_data')->nullable();
+                }
+            });
+            
+        } // if (!Schema::hasTable('adminlteconfigtable')) {
+
+        /* {{@snippet:end_adminlteconfigtable_migration}} */
+
         /* {{@snippet:begin_adminltemenutable_migration}} */        
         if (!Schema::hasTable('adminltemenutable')) {
             Schema::create('adminltemenutable', function (Blueprint $table) {
@@ -630,6 +735,14 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $menu_item['text'] = 'User Groups';
         $menu_item['href'] = 'adminlteusergroup';
         $menu_item['icon'] = 'fas fa-users-cog';
+        $menu_item['visibility'] = 1;
+        $menu_item['parent'] = 'configuration';
+        array_push($menu, $menu_item);
+
+        $menu_item = [];
+        $menu_item['text'] = 'Config Parameters';
+        $menu_item['href'] = 'adminlteconfig';
+        $menu_item['icon'] = 'fas fa-cogs';
         $menu_item['visibility'] = 1;
         $menu_item['parent'] = 'configuration';
         array_push($menu, $menu_item);

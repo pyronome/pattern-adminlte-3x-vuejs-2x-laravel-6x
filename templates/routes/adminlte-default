@@ -99,6 +99,14 @@ Route::namespace('API')
         Route::post('/post_permission_data', 'AdminLTEUserController@post_permission_data');
     });
 
+    Route::prefix('adminlteconfig')->group(function () {
+        Route::get('/get/{id}', 'AdminLTEConfigController@get');
+		Route::get('/get_typelist', 'AdminLTEConfigController@get_typelist');
+        Route::get('/get_parentlist/{id}', 'AdminLTEConfigController@get_parentlist');
+        Route::post('/delete', 'AdminLTEConfigController@delete');
+		Route::post('/post', 'AdminLTEConfigController@post');
+    });
+
     Route::prefix('__layout')->group(function () {
         Route::get('/get/{pageName}', 'AdminLTELayoutController@get_widgetconfig');
         Route::get('/get_attributes', 'AdminLTELayoutController@get_attributes');

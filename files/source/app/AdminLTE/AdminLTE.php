@@ -25,6 +25,7 @@ class AdminLTE
 	/* {{@snippet:begin_properties}} */
 	public $system_models = [
 		'AdminLTE',
+		'AdminLTEConfig',
 		'AdminLTELayout',
 		'AdminLTEMenu',
 		'AdminLTEMeta',
@@ -109,6 +110,71 @@ class AdminLTE
 		$strReturnValue = str_replace('#', '_', $strReturnValue);
 		$strReturnValue = str_replace(' ', '_', $strReturnValue);
 		$strReturnValue = str_replace('__', '_', $strReturnValue);
+		$strReturnValue = strtolower($strReturnValue);
+	    
+	    return $strReturnValue;
+	}
+
+	public function convertTitleToConfigName($strName) {
+
+	    $urlbrackets    = '\[\]\(\)';
+	    $urlspacebefore = ':;\'_\*%@&?!' . $urlbrackets;
+	    $urlspaceafter  = '\.,:;\'\-_\*@&\/\\\\\?!#' . $urlbrackets;
+	    $urlall         = '\.,:;\'\-_\*%@&\/\\\\\?!#' . $urlbrackets;
+	 
+	    $specialquotes  = '\'"\*<>';
+	 
+	    $fullstop       = '\x{002E}\x{FE52}\x{FF0E}';
+	    $comma          = '\x{002C}\x{FE50}\x{FF0C}';
+	    $arabsep        = '\x{066B}\x{066C}';
+	    $numseparators  = $fullstop . $comma . $arabsep;
+	 
+	    $numbersign     = '\x{0023}\x{FE5F}\x{FF03}';
+	    $percent        = '\x{066A}\x{0025}\x{066A}\x{FE6A}\x{FF05}\x{2030}\x{2031}';
+	    $prime          = '\x{2032}\x{2033}\x{2034}\x{2057}';
+	    $nummodifiers   = $numbersign . $percent . $prime;
+	 
+		$strReturnValue = $strName;
+
+		$strReturnValue = str_replace('<br>', '', $strReturnValue);
+		$strReturnValue = str_replace('<br/>', '', $strReturnValue);
+		$strReturnValue = str_replace('<BR/>', '', $strReturnValue);
+		$strReturnValue = str_replace('<BR>', '', $strReturnValue);
+		$strReturnValue = str_replace('Ç', 'c', $strReturnValue);
+		$strReturnValue = str_replace('ç', 'c', $strReturnValue);
+		$strReturnValue = str_replace('Ý', 'i', $strReturnValue);
+		$strReturnValue = str_replace('ý', 'i', $strReturnValue);
+		$strReturnValue = str_replace('I', 'i', $strReturnValue);
+		$strReturnValue = str_replace('İ', 'i', $strReturnValue);
+		$strReturnValue = str_replace('ı', 'i', $strReturnValue);
+		$strReturnValue = str_replace('Ð', 'g', $strReturnValue);
+		$strReturnValue = str_replace('ð', 'g', $strReturnValue);
+		$strReturnValue = str_replace('Ğ', 'g', $strReturnValue);
+		$strReturnValue = str_replace('ğ', 'g', $strReturnValue);
+		$strReturnValue = str_replace('Ö', 'o', $strReturnValue);
+		$strReturnValue = str_replace('ö', 'o', $strReturnValue);
+		$strReturnValue = str_replace('Þ', 's', $strReturnValue);
+		$strReturnValue = str_replace('þ', 's', $strReturnValue);
+		$strReturnValue = str_replace('ş', 's', $strReturnValue);
+		$strReturnValue = str_replace('Ş', 's', $strReturnValue);
+		$strReturnValue = str_replace('Ü', 'u', $strReturnValue);
+		$strReturnValue = str_replace('ü', 'u', $strReturnValue);
+		$strReturnValue = str_replace('"', '', $strReturnValue);
+		$strReturnValue = str_replace('\'', '', $strReturnValue);
+		$strReturnValue = str_replace('?', '', $strReturnValue);
+		$strReturnValue = str_replace(':', '', $strReturnValue);
+		$strReturnValue = str_replace('/', '', $strReturnValue);
+		$strReturnValue = str_replace('!', '', $strReturnValue);
+		$strReturnValue = str_replace(',', '', $strReturnValue);
+		$strReturnValue = str_replace('(', '', $strReturnValue);
+		$strReturnValue = str_replace(')', '', $strReturnValue);
+		$strReturnValue = str_replace('-', '', $strReturnValue);
+		$strReturnValue = str_replace('.', '', $strReturnValue);
+		$strReturnValue = str_replace('+', '', $strReturnValue);
+		$strReturnValue = str_replace('*', '', $strReturnValue);
+		$strReturnValue = str_replace('#', '', $strReturnValue);
+		$strReturnValue = str_replace(' ', '', $strReturnValue);
+		$strReturnValue = str_replace('__', '', $strReturnValue);
 		$strReturnValue = strtolower($strReturnValue);
 	    
 	    return $strReturnValue;
@@ -2057,8 +2123,22 @@ class AdminLTE
 		$objPDO = $connection->prepare($SQLText);
 		$objPDO->execute();
 
+		// adminlteconfig
+		$temp_widgets = $widgets;
+		for ($w=0; $w < $countWidgets; $w++) {
+			if ('AdminLTEConfig' == $temp_widgets[$w]['model']) {
+				$temp_widgets[$w]['visibility'] = 1;
+			}
+		}
+		
+		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
+		$SQLText = "INSERT INTO adminltelayouttable (deleted, pagename, widgets) VALUES ('0', 'adminlteconfig', '" . $encoded . "');";
+		$objPDO = $connection->prepare($SQLText);
+		$objPDO->execute();
+		
 		$exceptions = [
 			'AdminLTE',
+			'AdminLTEConfig',
 			'AdminLTELayout',
 			'AdminLTEMenu',
 			'AdminLTEMeta',

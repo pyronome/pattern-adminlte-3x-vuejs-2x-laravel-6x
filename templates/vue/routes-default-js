@@ -18,6 +18,9 @@ import AdminLTEUserGroupDetail from "./components/pages/default/adminlteusergrou
 import AdminLTEUserGroupEdit from "./components/pages/default/adminlteusergroup/edit.vue";
 import AdminLTEUserGroupPermission from "./components/pages/default/adminlteusergroup/permission.vue";
 import AdminLTEUserGroupLayout from "./components/pages/default/adminlteusergroup/layout.vue";
+import AdminLTEConfigList from "./components/pages/default/adminlteconfig/list.vue";
+import AdminLTEConfigDetail from "./components/pages/default/adminlteconfig/detail.vue";
+import AdminLTEConfigEdit from "./components/pages/default/adminlteconfig/edit.vue";
 {{ROUTES_MODEL_DEFAULT_IMPORT_DEFINITONS}}
 /* {{@snippet:import_files}} */
 
@@ -43,6 +46,9 @@ export default {
     "/adminlteusergroup/edit/:id": AdminLTEUserGroupEdit,
     "/adminlteusergroup/permission/:id": AdminLTEUserGroupPermission,
     "/adminlteusergroup/layout/:id": AdminLTEUserGroupLayout,
+    "/adminlteconfig": AdminLTEConfigList,
+    "/adminlteconfig/detail/:id": AdminLTEConfigDetail,
+    "/adminlteconfig/edit/:id": AdminLTEConfigEdit,
 {{ROUTES_MODEL_DEFAULT_EXPORT_DEFINITONS}}
 /* {{@snippet:export_files}} */
 };
