@@ -2045,6 +2045,7 @@ class AdminLTE
 		$models = [
 			'AdminLTEUser',
 			'AdminLTEUserGroup',
+			'AdminLTEConfig'
 		];
 
 		$widget_index = 0;
