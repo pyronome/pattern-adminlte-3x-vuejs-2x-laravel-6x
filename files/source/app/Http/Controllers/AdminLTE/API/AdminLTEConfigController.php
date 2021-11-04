@@ -11,8 +11,108 @@ use App\Http\Requests\AdminLTE\API\AdminLTEConfigPOSTRequest;
 
 class AdminLTEConfigController extends Controller
 {
+    public function get_recordlist(Request $request)
+    {
+        $User = auth()->guard('adminlteuser')->user();
+
+        $parameters = $request->route()->parameters();
+
+        $search_text = '';
+        if ($s = \Request::get('s')) {
+            $search_text = $s;
+        }
+
+        $page = 1;
+        if ($p = \Request::get('p')) {
+            $page = $p;
+        }
+
+        $sort_variable = '__key';
+        if ($v = \Request::get('v')) {
+            $sort_variable = $v;
+        }
+
+        $sort_direction = 'desc';
+        if ($d = \Request::get('d')) {
+            $sort_direction = $d;
+        }
+
+        $limit = 10;
+        $show_pagination = true;
+
+        
+        $list = [];
+        $current_page = 0;
+        $last_page = 0;
+        $per_page = 0;
+        $from = 0;
+        $to = 0;
+        $total = 0;
+        $next_page_url = null;
+        $prev_page_url = null;
+
+        $objectList = AdminLTEConfig::defaultQuery($search_text, $sort_variable, $sort_direction)->paginate($limit, ['*'], 'page', $page);
+
+        $current_page = $objectList->currentPage();
+        $last_page = $objectList->lastPage();
+        $per_page = $objectList->perPage();
+        $from = (($current_page - 1) * $per_page) + 1;
+        $to = ($current_page * $per_page);
+        $total = $objectList->total();
+        $next_page_url = ($last_page == $current_page) ? null : 'get_recordlist?p=' . ($current_page + 1);
+        $prev_page_url = (1 == $current_page) ? null : 'get_recordlist?p=' . ($current_page - 1);
+                    
+        $index = 0;
+
+        foreach ($objectList as $object) {
+            $user_can_view = $User->can('view', $object);
+
+            if ($user_can_view) {
+                $list[$index] = array();
+                $list[$index]['user_can_create'] = $User->can('create', $object);
+                $list[$index]['user_can_read'] = $user_can_view;
+                $list[$index]['user_can_update'] = $User->can('update', $object);
+                $list[$index]['user_can_delete'] = $User->can('delete', $object);
+                $list[$index]['user_can_view'] = $User->can('viewAny', $object);
+                $list[$index]['id'] = $object->id;
+                $list[$index]['deleted'] = $object->deleted;
+                $list[$index]['created_at'] = $object->created_at;
+                $list[$index]['updated_at'] = $object->updated_at;
+                $list[$index]['enabled'] = $object->enabled;
+                $list[$index]['required'] = $object->required;
+                $list[$index]['__order'] = $object->__order;
+                $list[$index]['type'] = $object->type;
+                $list[$index]['parent'] = $this->getParent($object->__key);
+                $list[$index]['__key'] = $object->__key;
+                $list[$index]['title'] = $object->title;
+                $list[$index]['meta_data'] = $object->meta_data;
+            }
+
+            $index++;
+        } // foreach ($objectList as $object)
+
+        $data = [
+            'list' => $list
+        ];
+
+        return [
+            'search_text' => $search_text,
+            'sort_variable' => $sort_variable,
+            'sort_direction' => $sort_direction,
+            'current_page' => $current_page,
+            'last_page' => $last_page,
+            'per_page' => $per_page,
+            'from' => $from,
+            'to' => $to,
+            'total' => $total,
+            'next_page_url' => $next_page_url,
+            'prev_page_url' => $prev_page_url,
+            'show_pagination' => $show_pagination,
+            'data' => $data
+        ];
+    }
+
 	public function get(Request $request)
-    
     {    
         $data = [];
         
@@ -45,33 +145,18 @@ class AdminLTEConfigController extends Controller
             $data['user_can_delete'] = $User->can('delete', $objectAdminLTEConfig);
             $data['user_can_view'] = $User->can('viewAny', $objectAdminLTEConfig);
 
-            $objectAdminLTE = new AdminLTE();
-            $displayTexts = $objectAdminLTE->getObjectDisplayTexts('AdminLTEConfig', $objectAdminLTEConfig);
-
             $data['id'] = $objectAdminLTEConfig->id;
-            $data['id__displaytext__'] = $displayTexts['id'];
             $data['deleted'] = $objectAdminLTEConfig->deleted;
-            $data['deleted__displaytext__'] = $displayTexts['deleted'];
             $data['created_at'] = $objectAdminLTEConfig->created_at;
-            $data['created_at__displaytext__'] = $displayTexts['created_at'];
             $data['updated_at'] = $objectAdminLTEConfig->updated_at;
-            $data['updated_at__displaytext__'] = $displayTexts['updated_at'];
-                $data['enabled'] = $objectAdminLTEConfig->enabled;
-            $data['enabled__displaytext__'] = $displayTexts['enabled'];
+            $data['enabled'] = $objectAdminLTEConfig->enabled;
             $data['required'] = $objectAdminLTEConfig->required;
-            $data['required__displaytext__'] = $displayTexts['required'];
             $data['__order'] = $objectAdminLTEConfig->__order;
-            $data['__order__displaytext__'] = $displayTexts['__order'];
             $data['type'] = $objectAdminLTEConfig->type;
-            $data['type__displaytext__'] = $objectAdminLTEConfig->type;//$displayTexts['type'];
             $data['parent'] = $this->getParent($objectAdminLTEConfig->__key);
-            $data['parent__displaytext__'] = '';//$displayTexts['parent'];
             $data['__key'] = $objectAdminLTEConfig->__key;
-            $data['__key__displaytext__'] = '';//$displayTexts['__key'];
             $data['title'] = $objectAdminLTEConfig->title;
-            $data['title__displaytext__'] = $displayTexts['title'];
             $data['meta_data'] = $objectAdminLTEConfig->meta_data;
-            $data['meta_data__displaytext__'] = $displayTexts['meta_data'];
         }
 
         return [

@@ -100,6 +100,7 @@ Route::namespace('API')
     });
 
     Route::prefix('adminlteconfig')->group(function () {
+        Route::get('/get_recordlist', 'AdminLTEConfigController@get_recordlist');
         Route::get('/get/{id}', 'AdminLTEConfigController@get');
 		Route::get('/get_typelist', 'AdminLTEConfigController@get_typelist');
         Route::get('/get_parentlist/{id}', 'AdminLTEConfigController@get_parentlist');
