@@ -777,7 +777,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         array_push($menu, $menu_item);
 
         $menu_item = [];
-        $menu_item['text'] = 'Forn';
+        $menu_item['text'] = 'Form';
         $menu_item['href'] = 'adminlteconfig';
         $menu_item['icon'] = 'fab fa-wpforms';
         $menu_item['visibility'] = 1;
