@@ -761,11 +761,27 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         array_push($menu, $menu_item);
 
         $menu_item = [];
-        $menu_item['text'] = 'Config Parameters';
-        $menu_item['href'] = 'adminlteconfig';
+        $menu_item['text'] = 'Configuration Parameters';
+        $menu_item['href'] = 'configuration_parameters';
         $menu_item['icon'] = 'fas fa-cogs';
         $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
+        $menu_item['parent'] = '';
+        array_push($menu, $menu_item);
+
+        $menu_item = [];
+        $menu_item['text'] = 'Settings';
+        $menu_item['href'] = 'adminlteconfigsettings';
+        $menu_item['icon'] = 'fab fa-connectdevelop';
+        $menu_item['visibility'] = 1;
+        $menu_item['parent'] = 'configuration_parameters';
+        array_push($menu, $menu_item);
+
+        $menu_item = [];
+        $menu_item['text'] = 'Forn';
+        $menu_item['href'] = 'adminlteconfig';
+        $menu_item['icon'] = 'fab fa-wpforms';
+        $menu_item['visibility'] = 1;
+        $menu_item['parent'] = 'configuration_parameters';
         array_push($menu, $menu_item);
 
         $menu_item = [];
