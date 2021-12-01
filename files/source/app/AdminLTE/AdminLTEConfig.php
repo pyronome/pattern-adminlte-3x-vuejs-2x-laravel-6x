@@ -23,7 +23,10 @@ class AdminLTEConfig extends Model
 		'__order',
 		'type',
 		'__key',
+        'parent_id',
 		'title',
+        'default_value',
+		'value',
 		'meta_data'
 	];
 
@@ -88,18 +91,39 @@ class AdminLTEConfig extends Model
             'title' => 'Type'
         ],
         [
-            'name' => 'name',
+            'name' => '__key',
             'type' => 'text',
             'belongs_to' => 'AdminLTEConfig',
             'display_property' => '__key',
             'title' => 'Key'
         ],
         [
+			'name' => 'parent_id',
+			'type' => 'integer',
+			'belongs_to' => 'AdminLTEConfig',
+			'display_property' => 'parent_id',
+			'title' => 'Parent'
+		],
+        [
             'name' => 'title',
             'type' => 'text',
             'belongs_to' => 'AdminLTEConfig',
             'display_property' => 'title',
             'title' => 'Title'
+        ],
+        [
+            'name' => 'default_value',
+            'type' => 'text',
+            'belongs_to' => 'AdminLTEConfig',
+            'display_property' => 'default_value',
+            'title' => 'Default Value'
+        ],
+        [
+            'name' => 'value',
+            'type' => 'text',
+            'belongs_to' => 'AdminLTEConfig',
+            'display_property' => 'value',
+            'title' => 'Value'
         ],
         [
             'name' => 'meta_data',
@@ -117,8 +141,6 @@ class AdminLTEConfig extends Model
 		$query = $objectAdminLTE->getQuery($query, 'AdminLTEConfig', $this::$property_list, $search_text, $sort_variable, $sort_direction);
 		return $query;
 	}
-
-
 
 	/* {{@snippet:end_methods}} */
 }

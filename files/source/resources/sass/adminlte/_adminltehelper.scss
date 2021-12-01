@@ -671,6 +671,14 @@ label > .hint-text {
     min-height: 175px;
 }
 
+.text-btn {
+    border: none;
+    background: none;
+    text-decoration: underline;
+    font-size: 15px;
+    color: #007bff;
+}
+
 .label-with-btn {
     display: inline-block;
     color: #6c757d!important;
@@ -1331,6 +1339,53 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
 .select2-container.select2-readonly .select2-selection__arrow, 
 .select2-container.select2-readonly .select2-selection__clear {
     display: none;
+}
+
+.editor-title-container {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.editor-title-container.disabled {
+    opacity: 0.6;
+}
+
+.editor-title-container > .title {
+    margin-right: 0px;
+    color: #6c757d;
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: middle;
+    line-height: 0;
+}
+
+.editor-title-container > .required {
+    font-size: 20px;
+    vertical-align: inherit;
+    line-height: 0;
+    color: #dc3545;
+}
+
+.editor-title-container > .type {
+    color: #6c757d!important;
+    font-size: 12px;
+}
+
+button.use-parameter-default-value {
+    background: none;
+    border: none;
+    font-size: 12px;
+    text-decoration: underline;
+    color: #007bff;
+    vertical-align: super;
+}
+
+.sticky-btn {
+    width: 200px;
+    position: fixed;
+    bottom: 30px;
+    right: 65px;
 }
 
 /* {{@snippet:end}} */

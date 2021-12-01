@@ -6,12 +6,12 @@
 
 <script>
 export default {
-    props: ['options', 'value', 'readonly'],
+    props: ['options', 'value', 'readonly', 'allowClear'],
     data() {
         return {
             initial_value: undefined,
             value_initialized: false,
-            options_initialized: false,
+            options_initialized: false
         }
     },
     mounted() {
@@ -32,10 +32,13 @@ export default {
             if (undefined !== options && 0 != options.length) {
                 if ($(this.$el).children().length > 1) {
                     $(this.$el).children().detach();
-                    this.$el.innerHTML = "<option></option>";
+                  
+                    if (!this.$el.hasAttribute("multiple")) {
+                        this.$el.innerHTML = "<option></option>";
+                    }
                 }
 
-                $(this.$el).select2({ data: options }).trigger('change');
+                $(this.$el).select2({ data: options, allowClear: this.allowClear }).trigger('change');
                 this.options_initialized = true;
 
                 if ((!this.value_initialized) && (undefined !== this.initial_value)) {
@@ -48,6 +51,11 @@ export default {
                 $(this.$el).closest('div').find('.select2-container:first').addClass('select2-readonly')
             }
         },
+        allowClear: function(allowClear) {
+            if (!allowClear) {
+                this.allowClear = false;
+            }
+        }
     },
     methods: {
         setValue: function(value) {

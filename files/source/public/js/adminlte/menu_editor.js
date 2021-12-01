@@ -99,7 +99,7 @@
 
             // Is +/- ikon to open/close nested lists
             opener = $( '<span />' )
-                .addClass( 'sortableListsOpener ' + setting.opener.openerClass )
+                .addClass( 'openerStyle sortableListsOpener ' + setting.opener.openerClass )
                 .css( setting.opener.openerCss )
                 .on( 'mousedown touchstart', function( e )
                 {
@@ -1079,7 +1079,7 @@ function MenuEditor(idSelector, options) {
     var $main = $("#" + idSelector);
     var settings = {
         labelEdit: '<i class="fas fa-pen clickable"></i>',
-        labelRemove: '<i class="fas fa-trash-alt clickable"></i>',
+        labelRemove: '<i class="fas fa-times clickable"></i>',
         textConfirmDelete: 'This item will be deleted. Are you sure?',
         iconPicker: { cols: 4, rows: 4, footer: false, iconset: "fontawesome5" },
         listOptions: { 
@@ -1311,7 +1311,7 @@ function MenuEditor(idSelector, options) {
     }
 
     function TOpener(li){
-        var opener = $('<span>').addClass('sortableListsOpener ' + options.opener.openerClass).css(options.opener.openerCss)
+        var opener = $('<span>').addClass('openerStyle sortableListsOpener ' + options.opener.openerClass).css(options.opener.openerCss)
                 .on('mousedown touchstart', function (e){
                     var li = $(this).closest('li');
                     if (li.hasClass('sortableListsClosed')) {

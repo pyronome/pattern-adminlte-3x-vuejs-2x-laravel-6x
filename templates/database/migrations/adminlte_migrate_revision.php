@@ -442,59 +442,14 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->smallInteger('required')->default(0);
                 $table->bigInteger('__order')->default(0);
                 $table->string('type')->nullable();
+                $table->bigInteger('parent_id')->default(0);
                 $table->longText('__key')->nullable();
                 $table->longText('title')->nullable();
+                $table->longText('default_value')->nullable();
+                $table->longText('value')->nullable();
                 $table->longText('meta_data')->nullable();
             });
         } else {
-            Schema::table('adminlteconfigtable', function (Blueprint $table) {
-                $foreignKeys = $this->listTableForeignKeys('adminlteconfigtable');
-                //Schema::disableForeignKeyConstraints();
-                if (Schema::hasColumn('adminlteconfigtable', 'enabled')) {                    
-                    if (in_array('adminlteconfigtable_enabled_foreign', $foreignKeys)) {
-                        $table->dropForeign('adminlteconfigtable_enabled_foreign');
-                        $table->dropIndex('adminlteconfigtable_enabled_foreign');
-                    }
-                }
-                if (Schema::hasColumn('adminlteconfigtable', 'required')) {                    
-                    if (in_array('adminlteconfigtable_required_foreign', $foreignKeys)) {
-                        $table->dropForeign('adminlteconfigtable_required_foreign');
-                        $table->dropIndex('adminlteconfigtable_required_foreign');
-                    }
-                }
-                if (Schema::hasColumn('adminlteconfigtable', '__order')) {                    
-                    if (in_array('adminlteconfigtable___order_foreign', $foreignKeys)) {
-                        $table->dropForeign('adminlteconfigtable___order_foreign');
-                        $table->dropIndex('adminlteconfigtable___order_foreign');
-                    }
-                }
-                if (Schema::hasColumn('adminlteconfigtable', 'type')) {                    
-                    if (in_array('adminlteconfigtable_type_foreign', $foreignKeys)) {
-                        $table->dropForeign('adminlteconfigtable_type_foreign');
-                        $table->dropIndex('adminlteconfigtable_type_foreign');
-                    }
-                }
-                if (Schema::hasColumn('adminlteconfigtable', '__key')) {                    
-                    if (in_array('adminlteconfigtable___key_foreign', $foreignKeys)) {
-                        $table->dropForeign('adminlteconfigtable___key_foreign');
-                        $table->dropIndex('adminlteconfigtable___key_foreign');
-                    }
-                }
-                if (Schema::hasColumn('adminlteconfigtable', 'title')) {                    
-                    if (in_array('adminlteconfigtable_title_foreign', $foreignKeys)) {
-                        $table->dropForeign('adminlteconfigtable_title_foreign');
-                        $table->dropIndex('adminlteconfigtable_title_foreign');
-                    }
-                }
-                if (Schema::hasColumn('adminlteconfigtable', 'meta_data')) {                    
-                    if (in_array('adminlteconfigtable_meta_data_foreign', $foreignKeys)) {
-                        $table->dropForeign('adminlteconfigtable_meta_data_foreign');
-                        $table->dropIndex('adminlteconfigtable_meta_data_foreign');
-                    }
-                }
-                //Schema::enableForeignKeyConstraints();
-            });
-
             Schema::table('adminlteconfigtable', function (Blueprint $table) {
                 if (Schema::hasColumn('adminlteconfigtable', 'enabled')) { 
                     $table->smallInteger('enabled')->default(0)->change();
@@ -516,6 +471,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 } else {
                     $table->string('type')->nullable();
                 }
+                if (Schema::hasColumn('adminlteconfigtable', 'parent_id')) { 
+                    $table->bigInteger('parent_id')->default(0)->change();
+                } else {
+                    $table->bigInteger('parent_id')->default(0);
+                }
                 if (Schema::hasColumn('adminlteconfigtable', '__key')) { 
                     $table->longText('__key')->nullable()->change();
                 } else {
@@ -525,6 +485,16 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->longText('title')->nullable()->change();
                 } else {
                     $table->longText('title')->nullable();
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'default_value')) { 
+                    $table->longText('default_value')->nullable()->change();
+                } else {
+                    $table->longText('default_value')->nullable();
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'value')) { 
+                    $table->longText('value')->nullable()->change();
+                } else {
+                    $table->longText('value')->nullable();
                 }
                 if (Schema::hasColumn('adminlteconfigtable', 'meta_data')) { 
                     $table->longText('meta_data')->nullable()->change();
@@ -536,6 +506,57 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         } // if (!Schema::hasTable('adminlteconfigtable')) {
 
         /* {{@snippet:end_adminlteconfigtable_migration}} */
+
+        /* {{@snippet:begin_adminlteconfigfiletable_migration}} */        
+        if (!Schema::hasTable('adminlteconfigfiletable')) {
+            Schema::create('adminlteconfigfiletable', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->timestamps();
+                $table->boolean('deleted')->default(0);
+                $table->longText('parameter')->nullable();
+                $table->longText('file_name')->nullable();
+                $table->longText('description')->nullable();
+                $table->longText('mime_type')->nullable();
+                $table->bigInteger('file_size')->default(0);
+                $table->longBlob('file')->nullable();
+            });
+        } else {
+            Schema::table('adminlteconfigfiletable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminlteconfigfiletable', 'parameter')) { 
+                    $table->longText('parameter')->nullable()->change();
+                } else {
+                    $table->longText('parameter')->nullable();
+                }
+                if (Schema::hasColumn('adminlteconfigfiletable', 'file_name')) { 
+                    $table->longText('file_name')->nullable()->change();
+                } else {
+                    $table->longText('file_name')->nullable();
+                }
+                if (Schema::hasColumn('adminlteconfigfiletable', 'description')) { 
+                    $table->longText('description')->nullable()->change();
+                } else {
+                    $table->longText('description')->nullable();
+                }
+                if (Schema::hasColumn('adminlteconfigfiletable', 'mime_type')) { 
+                    $table->longText('mime_type')->nullable()->change();
+                } else {
+                    $table->longText('mime_type')->nullable();
+                }
+                if (Schema::hasColumn('adminlteconfigfiletable', 'file_size')) { 
+                    $table->bigInteger('file_size')->default(0)->change();
+                } else {
+                    $table->bigInteger('file_size')->default(0);
+                }
+                if (Schema::hasColumn('adminlteconfigfiletable', 'file')) { 
+                    $table->longBlob('file')->nullable()->change();
+                } else {
+                    $table->longBlob('file')->nullable();
+                }
+            });
+            
+        } // if (!Schema::hasTable('adminlteconfigfiletable')) {
+
+        /* {{@snippet:end_adminlteconfigfiletable_migration}} */
 
         /* {{@snippet:begin_adminltemenutable_migration}} */        
         if (!Schema::hasTable('adminltemenutable')) {
