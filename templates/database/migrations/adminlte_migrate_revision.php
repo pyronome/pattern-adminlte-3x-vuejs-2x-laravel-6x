@@ -518,7 +518,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->longText('description')->nullable();
                 $table->longText('mime_type')->nullable();
                 $table->bigInteger('file_size')->default(0);
-                $table->longBlob('file')->nullable();
+                $table->binary('file')->nullable();
             });
         } else {
             Schema::table('adminlteconfigfiletable', function (Blueprint $table) {
