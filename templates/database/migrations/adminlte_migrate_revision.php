@@ -438,6 +438,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->bigIncrements('id');
                 $table->timestamps();
                 $table->boolean('deleted')->default(0);
+                $table->smallInteger('system')->default(0);
                 $table->smallInteger('enabled')->default(0);
                 $table->smallInteger('required')->default(0);
                 $table->bigInteger('__order')->default(0);
@@ -451,6 +452,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             });
         } else {
             Schema::table('adminlteconfigtable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminlteconfigtable', 'system')) { 
+                    $table->smallInteger('system')->default(0)->change();
+                } else {
+                    $table->smallInteger('system')->default(0);
+                }
                 if (Schema::hasColumn('adminlteconfigtable', 'enabled')) { 
                     $table->smallInteger('enabled')->default(0)->change();
                 } else {
@@ -811,6 +817,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = '';
         $config_item['required'] = 0;
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'AdminLTE';
         $config_item['toggle_elements'] = '';
         $config_item['type'] = 'group';
@@ -832,6 +839,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = '';
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'General Settings';
         $config_item['toggle_elements'] = '';
         $config_item['type'] = 'group';
@@ -853,6 +861,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = ''; 
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'Project Title';
         $config_item['toggle_elements'] = '';
         $config_item['type'] = 'shorttext';
@@ -874,6 +883,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = ''; 
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'Main Folder';
         $config_item['toggle_elements']  = '';
         $config_item['type'] = 'shorttext';
@@ -895,6 +905,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = '';
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'Landing Page';
         $config_item['toggle_elements'] = '';
         $config_item['type'] = 'shorttext';
@@ -916,6 +927,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = "en\ntr";
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'Default Language';
         $config_item['toggle_elements'] = '';
         $config_item['type'] = 'dropdown';
@@ -937,6 +949,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = "Africa/Abidjan\nAfrica/Accra\nAfrica/Addis_Ababa\nAfrica/Algiers\nAfrica/Asmara\nAfrica/Bamako\nAfrica/Bangui\nAfrica/Banjul\nAfrica/Bissau\nAfrica/Blantyre\nAfrica/Brazzaville\nAfrica/Bujumbura\nAfrica/Cairo\nAfrica/Casablanca\nAfrica/Ceuta\nAfrica/Conakry\nAfrica/Dakar\nAfrica/Dar_es_Salaam\nAfrica/Djibouti\nAfrica/Douala\nAfrica/El_Aaiun\nAfrica/Freetown\nAfrica/Gaborone\nAfrica/Harare\nAfrica/Johannesburg\nAfrica/Juba\nAfrica/Kampala\nAfrica/Khartoum\nAfrica/Kigali\nAfrica/Kinshasa\nAfrica/Lagos\nAfrica/Libreville\nAfrica/Lome\nAfrica/Luanda\nAfrica/Lubumbashi\nAfrica/Lusaka\nAfrica/Malabo\nAfrica/Maputo\nAfrica/Maseru\nAfrica/Mbabane\nAfrica/Mogadishu\nAfrica/Monrovia\nAfrica/Nairobi\nAfrica/Ndjamena\nAfrica/Niamey\nAfrica/Nouakchott\nAfrica/Ouagadougou\nAfrica/Porto-Novo\nAfrica/Sao_Tome\nAfrica/Tripoli\nAfrica/Tunis\nAfrica/Windhoek\nAmerica/Adak\nAmerica/Anchorage\nAmerica/Anguilla\nAmerica/Antigua\nAmerica/Araguaina\nAmerica/Argentina/Buenos_Aires\nAmerica/Argentina/Catamarca\nAmerica/Argentina/Cordoba\nAmerica/Argentina/Jujuy\nAmerica/Argentina/La_Rioja\nAmerica/Argentina/Mendoza\nAmerica/Argentina/Rio_Gallegos\nAmerica/Argentina/Salta\nAmerica/Argentina/San_Juan\nAmerica/Argentina/San_Luis\nAmerica/Argentina/Tucuman\nAmerica/Argentina/Ushuaia\nAmerica/Aruba\nAmerica/Asuncion\nAmerica/Atikokan\nAmerica/Bahia\nAmerica/Bahia_Banderas\nAmerica/Barbados\nAmerica/Belem\nAmerica/Belize\nAmerica/Blanc-Sablon\nAmerica/Boa_Vista\nAmerica/Bogota\nAmerica/Boise\nAmerica/Cambridge_Bay\nAmerica/Campo_Grande\nAmerica/Cancun\nAmerica/Caracas\nAmerica/Cayenne\nAmerica/Cayman\nAmerica/Chicago\nAmerica/Chihuahua\nAmerica/Costa_Rica\nAmerica/Creston\nAmerica/Cuiaba\nAmerica/Curacao\nAmerica/Danmarkshavn\nAmerica/Dawson\nAmerica/Dawson_Creek\nAmerica/Denver\nAmerica/Detroit\nAmerica/Dominica\nAmerica/Edmonton\nAmerica/Eirunepe\nAmerica/El_Salvador\nAmerica/Fort_Nelson\nAmerica/Fortaleza\nAmerica/Glace_Bay\nAmerica/Goose_Bay\nAmerica/Grand_Turk\nAmerica/Grenada\nAmerica/Guadeloupe\nAmerica/Guatemala\nAmerica/Guayaquil\nAmerica/Guyana\nAmerica/Halifax\nAmerica/Havana\nAmerica/Hermosillo\nAmerica/Indiana/Indianapolis\nAmerica/Indiana/Knox\nAmerica/Indiana/Marengo\nAmerica/Indiana/Petersburg\nAmerica/Indiana/Tell_City\nAmerica/Indiana/Vevay\nAmerica/Indiana/Vincennes\nAmerica/Indiana/Winamac\nAmerica/Inuvik\nAmerica/Iqaluit\nAmerica/Jamaica\nAmerica/Juneau\nAmerica/Kentucky/Louisville\nAmerica/Kentucky/Monticello\nAmerica/Kralendijk\nAmerica/La_Paz\nAmerica/Lima\nAmerica/Los_Angeles\nAmerica/Lower_Princes\nAmerica/Maceio\nAmerica/Managua\nAmerica/Manaus\nAmerica/Marigot\nAmerica/Martinique\nAmerica/Matamoros\nAmerica/Mazatlan\nAmerica/Menominee\nAmerica/Merida\nAmerica/Metlakatla\nAmerica/Mexico_City\nAmerica/Miquelon\nAmerica/Moncton\nAmerica/Monterrey\nAmerica/Montevideo\nAmerica/Montserrat\nAmerica/Nassau\nAmerica/New_York\nAmerica/Nipigon\nAmerica/Nome\nAmerica/Noronha\nAmerica/North_Dakota/Beulah\nAmerica/North_Dakota/Center\nAmerica/North_Dakota/New_Salem\nAmerica/Nuuk\nAmerica/Ojinaga\nAmerica/Panama\nAmerica/Pangnirtung\nAmerica/Paramaribo\nAmerica/Phoenix\nAmerica/Port-au-Prince\nAmerica/Port_of_Spain\nAmerica/Porto_Velho\nAmerica/Puerto_Rico\nAmerica/Punta_Arenas\nAmerica/Rainy_River\nAmerica/Rankin_Inlet\nAmerica/Recife\nAmerica/Regina\nAmerica/Resolute\nAmerica/Rio_Branco\nAmerica/Santarem\nAmerica/Santiago\nAmerica/Santo_Domingo\nAmerica/Sao_Paulo\nAmerica/Scoresbysund\nAmerica/Sitka\nAmerica/St_Barthelemy\nAmerica/St_Johns\nAmerica/St_Kitts\nAmerica/St_Lucia\nAmerica/St_Thomas\nAmerica/St_Vincent\nAmerica/Swift_Current\nAmerica/Tegucigalpa\nAmerica/Thule\nAmerica/Thunder_Bay\nAmerica/Tijuana\nAmerica/Toronto\nAmerica/Tortola\nAmerica/Vancouver\nAmerica/Whitehorse\nAmerica/Winnipeg\nAmerica/Yakutat\nAmerica/Yellowknife\nAntarctica/Casey\nAntarctica/Davis\nAntarctica/DumontDUrville\nAntarctica/Macquarie\nAntarctica/Mawson\nAntarctica/McMurdo\nAntarctica/Palmer\nAntarctica/Rothera\nAntarctica/Syowa\nAntarctica/Troll\nAntarctica/Vostok\nArctic/Longyearbyen\nAsia/Aden\nAsia/Almaty\nAsia/Amman\nAsia/Anadyr\nAsia/Aqtau\nAsia/Aqtobe\nAsia/Ashgabat\nAsia/Atyrau\nAsia/Baghdad\nAsia/Bahrain\nAsia/Baku\nAsia/Bangkok\nAsia/Barnaul\nAsia/Beirut\nAsia/Bishkek\nAsia/Brunei\nAsia/Chita\nAsia/Choibalsan\nAsia/Colombo\nAsia/Damascus\nAsia/Dhaka\nAsia/Dili\nAsia/Dubai\nAsia/Dushanbe\nAsia/Famagusta\nAsia/Gaza\nAsia/Hebron\nAsia/Ho_Chi_Minh\nAsia/Hong_Kong\nAsia/Hovd\nAsia/Irkutsk\nAsia/Jakarta\nAsia/Jayapura\nAsia/Jerusalem\nAsia/Kabul\nAsia/Kamchatka\nAsia/Karachi\nAsia/Kathmandu\nAsia/Khandyga\nAsia/Kolkata\nAsia/Krasnoyarsk\nAsia/Kuala_Lumpur\nAsia/Kuching\nAsia/Kuwait\nAsia/Macau\nAsia/Magadan\nAsia/Makassar\nAsia/Manila\nAsia/Muscat\nAsia/Nicosia\nAsia/Novokuznetsk\nAsia/Novosibirsk\nAsia/Omsk\nAsia/Oral\nAsia/Phnom_Penh\nAsia/Pontianak\nAsia/Pyongyang\nAsia/Qatar\nAsia/Qostanay\nAsia/Qyzylorda\nAsia/Riyadh\nAsia/Sakhalin\nAsia/Samarkand\nAsia/Seoul\nAsia/Shanghai\nAsia/Singapore\nAsia/Srednekolymsk\nAsia/Taipei\nAsia/Tashkent\nAsia/Tbilisi\nAsia/Tehran\nAsia/Thimphu\nAsia/Tokyo\nAsia/Tomsk\nAsia/Ulaanbaatar\nAsia/Urumqi\nAsia/Ust-Nera\nAsia/Vientiane\nAsia/Vladivostok\nAsia/Yakutsk\nAsia/Yangon\nAsia/Yekaterinburg\nAsia/Yerevan\nAtlantic/Azores\nAtlantic/Bermuda\nAtlantic/Canary\nAtlantic/Cape_Verde\nAtlantic/Faroe\nAtlantic/Madeira\nAtlantic/Reykjavik\nAtlantic/South_Georgia\nAtlantic/St_Helena\nAtlantic/Stanley\nAustralia/Adelaide\nAustralia/Brisbane\nAustralia/Broken_Hill\nAustralia/Darwin\nAustralia/Eucla\nAustralia/Hobart\nAustralia/Lindeman\nAustralia/Lord_Howe\nAustralia/Melbourne\nAustralia/Perth\nAustralia/Sydney\nEurope/Amsterdam\nEurope/Andorra\nEurope/Astrakhan\nEurope/Athens\nEurope/Belgrade\nEurope/Berlin\nEurope/Bratislava\nEurope/Brussels\nEurope/Bucharest\nEurope/Budapest\nEurope/Busingen\nEurope/Chisinau\nEurope/Copenhagen\nEurope/Dublin\nEurope/Gibraltar\nEurope/Guernsey\nEurope/Helsinki\nEurope/Isle_of_Man\nEurope/Istanbul\nEurope/Jersey\nEurope/Kaliningrad\nEurope/Kiev\nEurope/Kirov\nEurope/Lisbon\nEurope/Ljubljana\nEurope/London\nEurope/Luxembourg\nEurope/Madrid\nEurope/Malta\nEurope/Mariehamn\nEurope/Minsk\nEurope/Monaco\nEurope/Moscow\nEurope/Oslo\nEurope/Paris\nEurope/Podgorica\nEurope/Prague\nEurope/Riga\nEurope/Rome\nEurope/Samara\nEurope/San_Marino\nEurope/Sarajevo\nEurope/Saratov\nEurope/Simferopol\nEurope/Skopje\nEurope/Sofia\nEurope/Stockholm\nEurope/Tallinn\nEurope/Tirane\nEurope/Ulyanovsk\nEurope/Uzhgorod\nEurope/Vaduz\nEurope/Vatican\nEurope/Vienna\nEurope/Vilnius\nEurope/Volgograd\nEurope/Warsaw\nEurope/Zagreb\nEurope/Zaporozhye\nEurope/Zurich\nIndian/Antananarivo\nIndian/Chagos\nIndian/Christmas\nIndian/Cocos\nIndian/Comoro\nIndian/Kerguelen\nIndian/Mahe\nIndian/Maldives\nIndian/Mauritius\nIndian/Mayotte\nIndian/Reunion\nPacific/Apia\nPacific/Auckland\nPacific/Bougainville\nPacific/Chatham\nPacific/Chuuk\nPacific/Easter\nPacific/Efate\nPacific/Enderbury\nPacific/Fakaofo\nPacific/Fiji\nPacific/Funafuti\nPacific/Galapagos\nPacific/Gambier\nPacific/Guadalcanal\nPacific/Guam\nPacific/Honolulu\nPacific/Kiritimati\nPacific/Kosrae\nPacific/Kwajalein\nPacific/Majuro\nPacific/Marquesas\nPacific/Midway\nPacific/Nauru\nPacific/Niue\nPacific/Norfolk\nPacific/Noumea\nPacific/Pago_Pago\nPacific/Palau\nPacific/Pitcairn\nPacific/Pohnpei\nPacific/Port_Moresby\nPacific/Rarotonga\nPacific/Saipan\nPacific/Tahiti\nPacific/Tarawa\nPacific/Tongatapu\nPacific/Wake\nPacific/Wallis\nUTC";
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'Timezone';
         $config_item['toggle_elements'] = '';
         $config_item['type'] = 'dropdown';
@@ -958,6 +971,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = "d/m/Y\nj/n/Y\nd/m/y\nj/n/y\nd-m-Y\nj-n-Y\nd-m-y\nj-n-y\nd.m.Y\nj.n.Y\nd.m.y\nj.n.y\nm/d/Y\nn/j/Y\nm/d/y\nn/j/y\nm-d-Y\nn-j-Y\nm-d-y\nn-j-y\nm.d.Y\nn.j.Y\nm.d.y\nn.j.y\nY/m/d\nY/n/j\ny/m/d\ny/n/j\nY-m-d\nY-n-j\ny-m-d\ny-n-j\nY.m.d\nY.n.j\ny.m.d\ny.n.j\nj F Y\nj F y\nj M Y\nj M y\nF j, Y\nF j, y\nF j, Y\nM j, y";
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'Date Format';
         $config_item['toggle_elements'] = '';
         $config_item['type'] = 'dropdown';
@@ -979,6 +993,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = "m/Y\nn/Y\nm/y\nn/y\nm-Y\nn-Y\nm-y\nn-y\nm.Y\nn.Y\nm.y\nn.y\nY/m\nY/n\ny/m\ny/n\nY-m\nY-n\ny-m\ny-n\nY.m\nY.n\ny.m\ny.n\nF Y\nF y\nM Y\nM y";
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'Year Month Format';
         $config_item['toggle_elements'] = ''; 
         $config_item['type'] = 'dropdown';
@@ -1000,6 +1015,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = "H:i\nh:i a\nH:i:s\nh:i:s a";
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'Time Format';
         $config_item['toggle_elements'] = '';
         $config_item['type'] = 'dropdown';
@@ -1021,6 +1037,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = "tr\nen";
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'Number Format';
         $config_item['toggle_elements'] = '';
         $config_item['type'] = 'dropdown';
@@ -1042,6 +1059,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $config_item['option_values'] = '';
         $config_item['required'] = 0; 
         $config_item['step'] = 0;
+        $config_item['system'] = 1;
         $config_item['title'] = 'Google Maps API Key';
         $config_item['toggle_elements'] = '';
         $config_item['type'] = 'shorttext';

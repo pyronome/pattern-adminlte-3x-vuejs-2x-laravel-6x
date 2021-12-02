@@ -18,6 +18,7 @@ class AdminLTEConfig extends Model
 	protected $table = 'adminlteconfigtable';
 
 	protected $fillable = [
+        'system',
 		'enabled',
 		'required',
 		'__order',
@@ -62,6 +63,13 @@ class AdminLTEConfig extends Model
 			'display_property' => 'updated_at',
 			'title' => 'Updated at'
 		],
+        [
+            'name' => 'system',
+            'type' => 'checkbox',
+            'belongs_to' => 'AdminLTEConfig',
+            'display_property' => 'system',
+            'title' => 'System'
+        ],
         [
             'name' => 'enabled',
             'type' => 'checkbox',
