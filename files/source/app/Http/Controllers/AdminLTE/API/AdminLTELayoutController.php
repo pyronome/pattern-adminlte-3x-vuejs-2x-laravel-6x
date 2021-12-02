@@ -150,7 +150,7 @@ class AdminLTELayoutController extends Controller
             $list[$index]['type'] = $Widget['type'];
             $list[$index]['model'] = $Widget['model'];
             $list[$index]['text'] = $Widget['text'];
-            $list[$index]['href'] = config('adminlte.main_folder') . '/' . $Widget['href'];
+            $list[$index]['href'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.mainfolder') . '/' . $Widget['href'];
 
             $sizeCSV = $Widget['size'];
             $sizes = explode(',', $sizeCSV);
@@ -235,10 +235,11 @@ class AdminLTELayoutController extends Controller
                 ? htmlspecialchars($parameters['model'])
                 : '';
 
-        $dateFormat = config('adminlte.date_format');
-        $yearMonthFormat = config('adminlte.year_month_format');
-        
         $objectAdminLTE = new AdminLTE();
+
+        $dateFormat = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.dateformat');
+        $yearMonthFormat = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.yearmonthformat');
+        
         $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
 
         $Widgets = $objectAdminLTE->getPageLayout($pageName);
@@ -327,9 +328,10 @@ class AdminLTELayoutController extends Controller
                 ? htmlspecialchars($parameters['model'])
                 : '';
 
-        $dateFormat = config('adminlte.date_format');
-        $timeFormat = config('adminlte.time_format');
         $objectAdminLTE = new AdminLTE();
+
+        $dateFormat = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.dateformat');
+        $timeFormat = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.timeformat');
         $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
         
         $search_text = '';

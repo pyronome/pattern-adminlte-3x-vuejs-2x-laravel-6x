@@ -19,7 +19,13 @@ class LoginController extends Controller
 
         if ($objectAdminLTEUser != null)
         {
-            return redirect($objectAdminLTE->getAdminLTEFolder() . 'home');
+            $landingPage = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.landingpage');
+            
+            if (empty($landingPage)) {
+                $landingPage = 'home';
+            } // if (empty($landingPage)) {
+
+            return redirect($objectAdminLTE->getAdminLTEFolder() . $landingPage);
         }
         else
         {
@@ -32,6 +38,10 @@ class LoginController extends Controller
             } // if (view()->exists('adminlte.custom.' . $this->controllerName))
 
             $viewData['controllerName'] = $this->controllerName;
+
+            $viewData['project_title'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.projecttitle');
+            $viewData['main_folder'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.mainfolder');
+            $viewData['landing_page'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.landingpage');
 
             return view($viewName, $viewData);
 

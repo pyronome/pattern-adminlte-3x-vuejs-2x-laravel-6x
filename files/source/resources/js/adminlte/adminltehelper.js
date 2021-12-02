@@ -71,6 +71,13 @@ var AdminLTEHelper = {
             }
         });
     },
+    "getLandingPage": function () {
+        if (document.body.getAttribute("data-landing-page")) {
+            return document.body.getAttribute("data-landing-page");
+        } else {
+            return "home";
+        }
+    },
     "getMainFolder": function () {
         if (document.body.getAttribute("data-main-folder")) {
             return document.body.getAttribute("data-main-folder");

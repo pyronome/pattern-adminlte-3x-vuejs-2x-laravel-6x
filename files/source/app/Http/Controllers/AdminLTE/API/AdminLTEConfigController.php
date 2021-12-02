@@ -769,7 +769,7 @@ class AdminLTEConfigController extends Controller
 
 		AdminLTEConfig::query()->truncate();
 
-		foreach ($config_data as $__order => $data) {
+        foreach ($config_data as $__order => $data) {
 			$AdminLTEConfig = new AdminLTEConfig();
 
 			$AdminLTEConfig->enabled = $data['enabled'];
@@ -834,7 +834,7 @@ class AdminLTEConfigController extends Controller
             $metaData['file_types'] = $data['file_types'];
 
             $encodedData = $objectAdminLTE->base64encode(json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-            $AdminLTEConfig->meta_data = $encodedData;
+            $AdminLTEConfig->meta_data = $data['option_titles'];
 
 			$AdminLTEConfig->save();
 

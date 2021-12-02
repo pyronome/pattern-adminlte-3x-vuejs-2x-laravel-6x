@@ -1,5 +1,5 @@
 @include('adminlte.head')
-<body class="hold-transition sidebar-mini layout-fixed control-sidebar-slide-open {{ $customization['body'] }}" data-main-folder="{{ config('adminlte.main_folder') }}" template-created="0">
+<body class="hold-transition sidebar-mini layout-fixed control-sidebar-slide-open {{ $customization['body'] }}" data-main-folder="{{ $main_folder }}" template-created="0">
     @include('adminlte.header')
     <div id="mainVueApplication">
         <router-view></router-view>
@@ -85,8 +85,8 @@
     @endif
     <script src="/js/adminlte/custom.js"></script>
 
-    @if('' != config('adminlte.google_maps_api_key'))
-    <script type="text/javascript" src="//maps.google.com/maps/api/js?key={{ config('adminlte.google_maps_api_key') }}&libraries=places"></script>
+    @if('' != $google_maps_api_key)
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?key={{ $google_maps_api_key }}&libraries=places"></script>
     @endif
 </body>
 </html>

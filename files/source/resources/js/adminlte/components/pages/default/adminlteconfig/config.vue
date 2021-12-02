@@ -175,7 +175,8 @@
                     name="__field_key__"
                     class="form-control configselect2__delete__ config-parameter__delete__"
                     data-type="dropdown"
-                    data-key="__field_key__">
+                    data-key="__field_key__"
+                    style="width:100%;">
                 </select>
             </div>
         </script>
@@ -1645,9 +1646,9 @@ export default {
                                 showConfirmButton: false,
                                 timer: 2000,
                                 timerProgressBar: true,
-                                /* onClose: () => {
+                                onClose: () => {
                                     window.location.reload()
-                                } */
+                                }
                             });
                         } else {
                             Vue.swal.fire({

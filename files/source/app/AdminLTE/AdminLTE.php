@@ -15,6 +15,7 @@ use App\AdminLTE\AdminLTEModelOption;
 use App\AdminLTE\AdminLTEPermission;
 use App\AdminLTE\AdminLTEMenu;
 use App\AdminLTE\AdminLTEMeta;
+use App\AdminLTE\AdminLTEConfig;
 use PDO;
 
 /* {{@snippet:begin_class}} */
@@ -527,7 +528,7 @@ class AdminLTE
 
 	public function getAdminLTEFolder()
 	{
-        $adminLTEFolder = config('adminlte.main_folder');
+        $adminLTEFolder = $this->getConfigParameterValue('adminlte.generalsettings.mainfolder');
 
         if ($adminLTEFolder === false
 				|| ('' == $adminLTEFolder))
@@ -1449,6 +1450,7 @@ class AdminLTE
 
 	public function getPropertyDisplayText($displayTextDefinitions, $model, $objectCurrent, $property, $display_text, $type)
 	{
+		$dateFormat = $this->getConfigParameterValue('adminlte.generalsettings.dateformat');
 		$parsed = $this->getStringBetween($display_text, '{{', '}}');
 
 		while (strlen($parsed) > 0) {
@@ -1469,7 +1471,7 @@ class AdminLTE
 				if (0 == $time) {
 					$partResult = '-';
 				} else {
-					$format = config('adminlte.date_format');
+					$format = $dateFormat;
 
 					if (3 == $countPart) {
 						$format = $textPart[2];
@@ -2806,6 +2808,84 @@ class AdminLTE
 		
 		return true;
 	}
+
+	public function getConfigParameterValue($parameter) {
+		$returnVal = '';
+
+		$object = AdminLTEConfig::where('__key', $parameter)
+			->where('deleted', 0)
+			/* ->where('enabled', 1) */
+			->first();
+
+		if (null !== $object) {
+			if (empty($object->value)) {
+				$returnVal = $object->default_value;
+			} else {
+				$returnVal = $object->value;
+			}
+		}
+		
+		return $returnVal;
+	}
+
+	public function updateAdminLTEConfig($config) {
+		$__order = 0;
+
+		foreach ($config as $config_item) {
+			$id = $this->getConfigIdByKey($config_item['__key']);
+
+			if (0 == $id) {
+				$AdminLTEConfig = new AdminLTEConfig();
+				$AdminLTEConfig->enabled = $config_item['enabled'];
+				$AdminLTEConfig->__order = $__order;
+
+				$parent_id = 0;
+				if ('' != $config_item['__parent']) {
+					$parent_id = $this->getConfigIdByKey($config_item['__parent']);
+				}
+
+				$AdminLTEConfig->parent_id = $parent_id;
+
+				$AdminLTEConfig->default_value = $config_item['default_value'];
+				$AdminLTEConfig->required = $config_item['required'];
+				$AdminLTEConfig->title = $config_item['title'];
+				$AdminLTEConfig->__key = $config_item['__key'];
+				$AdminLTEConfig->type = $config_item['type'];
+				$AdminLTEConfig->value = $config_item['value'];
+
+				$metaData = [];
+				$metaData['multiple'] = $config_item['multiple'];
+				$metaData['option_titles'] = $config_item['option_titles'];
+				$metaData['option_values'] = $config_item['option_values'];
+				$metaData['toggle_elements'] = empty($config_item['toggle_elements']) ? [] : $config_item['toggle_elements'];
+				$metaData['url'] = $config_item['url'];
+				$metaData['content'] = $config_item['content'];
+				$metaData['min'] = $config_item['min'];
+				$metaData['max'] = $config_item['max'];
+				$metaData['step'] = $config_item['step'];
+				$metaData['file_types'] = $config_item['file_types'];
+
+				$encodedData = $this->base64encode(json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
+				$AdminLTEConfig->meta_data = $encodedData;
+
+				$AdminLTEConfig->save();
+
+				$__order++;
+			}
+		}
+	}
+
+	public function getConfigIdByKey($__key) {
+		$id = 0;
+
+		$AdminLTEConfigItem = AdminLTEConfig::where('__key', $__key)->first();
+		if (null !== $AdminLTEConfigItem) {
+			$id = $AdminLTEConfigItem->id;
+		}
+
+		return $id;
+	}
+	
     /* {{@snippet:end_methods}} */
 }
 

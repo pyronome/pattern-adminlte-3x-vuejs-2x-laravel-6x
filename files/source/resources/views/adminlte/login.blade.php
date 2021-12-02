@@ -1,5 +1,5 @@
 @include('adminlte.head')
-<body class="hold-transition login-page" data-main-folder="{{ config('adminlte.main_folder') }}">
+<body class="hold-transition login-page" data-main-folder="{{ $main_folder }}" data-landing-page="{{ $landing_page }}">
     <div id="mainVueApplication">
         <login-form></login-form>
     </div>

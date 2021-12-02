@@ -78,7 +78,6 @@
 export default {
     data() {
         return {
-            landing_page: "home",
             brand_data: [],
             form: new Form({
                 email: '',
@@ -141,6 +140,7 @@ export default {
         },
         submitForm: function () {
             var self = this;
+            var landing_page = AdminLTEHelper.getLandingPage();
             self.$Progress.start();
             self.form.post(AdminLTEHelper.getAPIURL("login/post"))
                 .then(({ data }) => {
@@ -151,7 +151,7 @@ export default {
                     self.page.is_post_success = false;
                 }).finally(function() {
                     if (self.page.is_post_success) {
-                        window.location = self.landing_page;
+                        window.location = landing_page;
                     }
                 });
         }

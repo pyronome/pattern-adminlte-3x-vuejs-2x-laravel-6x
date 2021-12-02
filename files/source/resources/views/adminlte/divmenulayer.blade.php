@@ -1,6 +1,7 @@
 <?php
             $adminLTE = new \App\AdminLTE\AdminLTE();
             $menu = $adminLTE->getSideMenu();
+            $main_folder = $adminLTE->getConfigParameterValue('adminlte.generalsettings.mainfolder');
         ?>
 
         <!-- Sidebar Menu -->
@@ -35,7 +36,7 @@
                             <li class="nav-item menu-nav-item" data-href="<?php echo $href; ?>" style="display:none;">
                                 <router-link id="pageurl<?php echo $url; ?>"
                                     class="nav-link"
-                                    to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >
+                                    to="<?php echo ('/' . $main_folder . '/' . $href); ?>" >
                                     <i class="<?php echo $icon; ?> nav-icon"></i>
                                     <p>
                                         {{ __($title) }}
@@ -73,7 +74,7 @@
                                         <li class="nav-item menu-nav-item" data-href="<?php echo $href; ?>" style="display:none;">
                                             <router-link id="pageurl<?php echo $url; ?>"
                                                 class="child_menu nav-link"
-                                                to="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>"
+                                                to="<?php echo ('/' . $main_folder . '/' . $href); ?>"
                                                 data-parent-url="<?php echo $parent_id; ?>">
                                                 <i class="<?php echo $icon; ?> nav-icon"></i>
                                                 <p>{{ __($title) }}</p>
@@ -101,7 +102,7 @@
                 <li class="nav-item menu-nav-item" data-href="logout" style="display:none;">
                     <a id="pageurl<?php echo $url; ?>" 
                         class="nav-link"
-                        href="<?php echo ('/' . config('adminlte.main_folder') . '/' . $href); ?>" >
+                        href="<?php echo ('/' . $main_folder . '/' . $href); ?>" >
                         <i class="<?php echo $icon; ?> nav-icon"></i>
                         <p>
                             {{ __($title) }}

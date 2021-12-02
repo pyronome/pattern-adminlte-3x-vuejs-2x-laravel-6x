@@ -30,7 +30,7 @@ class AdminLTEMiddleware
 
         $adminLTE = new AdminLTE();
 
-        if (!$this->isPagePublic($request))
+        if (!$this->isPagePublic($request, $adminLTE->getConfigParameterValue('adminlte.generalsettings.mainfolder')))
         {
             $adminLTEUser = auth()->guard('adminlteuser')->user();
 
@@ -47,7 +47,7 @@ class AdminLTEMiddleware
         /* {{@snippet:end_handle_method}} */
     }
 
-    private function isPagePublic($request) {
+    private function isPagePublic($request, $adminLTEFolder) {
 
         $adminLTEFolder = config('adminlte.main_folder');
 

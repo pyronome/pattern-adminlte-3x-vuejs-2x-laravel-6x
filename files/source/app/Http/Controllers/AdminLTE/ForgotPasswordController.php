@@ -21,6 +21,8 @@ class ForgotPasswordController extends Controller
         } // if (view()->exists('adminlte.custom.' . $this->controllerName))
 
         $viewData['controllerName'] = $this->controllerName;
+        $viewData['project_title'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.projecttitle');
+        $viewData['main_folder'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.mainfolder');
 
         return view($viewName, $viewData);
     }

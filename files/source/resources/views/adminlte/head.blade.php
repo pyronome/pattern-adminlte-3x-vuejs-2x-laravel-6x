@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>{{ config('adminlte.project_title') }}</title>
+        <title>{{ $project_title }}</title>
         <meta name="theme-color" content="#ffffff">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Tell the browser to be responsive to screen width -->

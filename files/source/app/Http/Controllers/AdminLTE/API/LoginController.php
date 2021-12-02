@@ -29,7 +29,8 @@ class LoginController extends Controller
         $remember = $request->input('remember');
         auth()->guard('adminlteuser')->login($adminLTEUser, $remember);
 
-        $landingPage = config('adminlte.landing_page');
+        $objectAdminLTE = new AdminLTE();
+        $landingPage = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.landingpage');
 
         if ($landingPage === false)
         {
