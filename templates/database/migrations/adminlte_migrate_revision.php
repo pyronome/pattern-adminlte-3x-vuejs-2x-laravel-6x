@@ -554,9 +554,9 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->bigInteger('file_size')->default(0);
                 }
                 if (Schema::hasColumn('adminlteconfigfiletable', 'file')) { 
-                    $table->longBlob('file')->nullable()->change();
+                    $table->binary('file')->nullable()->change();
                 } else {
-                    $table->longBlob('file')->nullable();
+                    $table->binary('file')->nullable();
                 }
             });
             
