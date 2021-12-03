@@ -2836,6 +2836,7 @@ class AdminLTE
 
 			if (0 == $id) {
 				$AdminLTEConfig = new AdminLTEConfig();
+				$AdminLTEConfig->system = $config_item['system'];
 				$AdminLTEConfig->enabled = $config_item['enabled'];
 				$AdminLTEConfig->__order = $__order;
 
