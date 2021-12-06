@@ -995,7 +995,7 @@ export default {
             }); */
         },
         getFileHTML: function(element) {
-            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("dropdownTemplate").innerHTML);
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("fileTemplate").innerHTML);
 
             var fileTypes = "";
             if ("" != element.file_types) {

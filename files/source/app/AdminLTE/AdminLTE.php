@@ -3171,7 +3171,7 @@ class AdminLTE
         array_push($config, $config_item);
 
 		$config_item = [];
-        $config_item['__key'] = 'adminlte.generalsettings.name';
+        $config_item['__key'] = 'adminlte.branding.name';
         $config_item['__parent'] = 'adminlte.branding';
         $config_item['content'] = ''; 
         $config_item['default_value'] = 'AdminLTE 3';
