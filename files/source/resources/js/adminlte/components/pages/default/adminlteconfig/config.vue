@@ -21,10 +21,7 @@
             <section class="content">
                 <div class="container-fluid">
                     <div class="card recordlist-card">
-                        <div class="card-header">
-                            <!-- <h3 class="card-title">Configuration Form</h3>
-                            <div class="card-tools">
-                            </div> -->
+                        <div class="card-body">
                             <div class="">
                                 <div class="input-group input-group-sm divSearchBar float-right" style="">
                                     <input type="text"
@@ -40,32 +37,62 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            
-                            <div class="table-responsive row" id="AdminLTEConfigFormContainer">
-                                
-                            </div>
-                        </div>
-                        <div class="card-footer bg-white">
-                            <div class="col-lg-12 col-md-12 col-xs-12">
-                                <button type="button"
-                                    id="saveConfigForm" 
-                                    @click="submitConfigForm"
-                                    class="btn btn-success btn-md btn-on-card float-right sticky-btn">
-                                    {{ $t('Save') }}
-                                </button>
-                            </div>
-                        </div>            
+                        </div>           
                     </div>  
                 </div>
             </section>
+            <section class="content">
+                <div class="container-fluid"  id="AdminLTEConfigFormContainer" style="padding-bottom:100px;">
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-xs-12">
+                        <button type="button"
+                            id="saveConfigForm" 
+                            @click="submitConfigForm"
+                            class="btn btn-success btn-md btn-on-card float-right sticky-btn">
+                            {{ $t('Save') }}
+                        </button>
+                    </div>
+                </div>  
+            </section>
         </div>
         <input type="hidden" id="controller" value="adminlteconfig">
+
+        <script type="text/html" id="groupTemplateLevel0">
+            <div class="row config-maingroup toggle-able" data-key="__group_key__">
+                <div class="col-lg-4 col-md-4 col-xs-12 ">
+                    <h4 class="form-part-header">{{ $t('__group_title__') }}</h4>
+                    <h6 class="form-part-instructions text-muted">
+                        {{ $t('__description__') }}
+                    </h6>
+                </div>
+                <div class="col-lg-8 col-md-8 col-xs-12" id="groupContainer__group_key__">
+                    
+                </div>
+            </div>
+        </script>
+
+        <script type="text/html" id="groupTemplateLevel1">
+            <div class="card toggle-able" data-key="__group_key__">
+                <div class="card-header">
+                    <h2 class="lead mb-0"><b>{{ $t('__group_title__') }}</b></h2>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="groupContainer__group_key__">
+                    </div>
+                </div>
+            </div>
+        </script>
+
         <script type="text/html" id="groupTemplate">
             <div class="col-lg-12 toggle-able" data-key="__group_key__">
-                <label style="font-size: 1.1rem;font-weight: 400;">{{ $t('__group_title__') }}</label>
-                <div class="col-lg-12 mb-30" id="groupContainer__group_key__">
+                <div style="border-bottom: 1px solid #6c757d;">
+                    <label style="font-size: 1.1rem;font-weight: 400;margin: 0;">{{ $t('__group_title__') }}</label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                </div>
+                <div class="col-lg-12 mt-4 mb-4" id="groupContainer__group_key__">
                 </div>
             </div>
         </script>
@@ -84,11 +111,14 @@
                             class="use-parameter-default-value__delete__"
                             data-type="checkbox"
                             data-key="__field_key__"
-                            default-value="__default_value__">
-                            <span>{{ $t('Use Default Value') }}</span>
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
                         </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                     </label>
                 </div>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
             </div>
         </script>
 
@@ -100,10 +130,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="colorpicker"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <div class="input-group">
                     <input type="text"
                         class="form-control color-picker__delete__ config-parameter__delete__"
@@ -125,10 +158,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="datepicker"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <input type="date"
                     class="form-control config-parameter__delete__"
                     data-type="datepicker"
@@ -145,10 +181,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="datetimepicker"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <input type="datetime-local"
                     class="form-control config-parameter__delete__"
                     data-type="datetimepicker"
@@ -166,10 +205,13 @@
                         data-type="dropdown"
                         data-key="__field_key__"
                         default-value="__default_value__"
-                        data-multiple="__multiple__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        data-multiple="__multiple__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <select __multiple__
                     id="__field_key__"
                     name="__field_key__"
@@ -184,6 +226,7 @@
         <script type="text/html" id="fileTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">{{ $t('__field_title__') }}  </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <div class="input-field">
                     <input type="file" id="__field_key__" name="__field_key__" 
                         accept="__file_types__"
@@ -208,10 +251,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="html_editor"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <textarea id="__field_key__"
                     name="__field_key__"
                     data-type="html_editor"
@@ -228,10 +274,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="iconpicker"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <button type="button" id="__field_key__" class="btn btn-outline-secondary icon-picker__delete__"></button>
                 <input type="hidden" id="__field_key__-value" name="__field_key__-value" data-key="__field_key__" data-type="iconpicker" class="item-widget config-parameter__delete__">
             </div>
@@ -245,10 +294,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="shorttext"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <input type="number"
                     class="form-control config-parameter__delete__"
                     data-type="shorttext"
@@ -266,6 +318,7 @@
                     href="__url__">
                     <span>{{ $t('__field_title__') }}</span>
                 </a>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
             </div>
         </script>
 
@@ -276,6 +329,7 @@
                     href="__url__">
                     <span>{{ $t('__field_title__') }}</span>
                 </a>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
             </div>
         </script>
         <script type="text/html" id="numberTemplate">
@@ -286,10 +340,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="shorttext"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <input type="number"
                     class="form-control config-parameter__delete__"
                     data-type="shorttext"
@@ -308,10 +365,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="shorttext"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <input type="password"
                     class="form-control config-parameter__delete__"
                     data-type="shorttext"
@@ -321,16 +381,19 @@
         </script>
         <script type="text/html" id="radioTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
-                <label class="detail-label col-form-label col-lg-12">
+                <label class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="radio"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <div id="container_radio___field_key__" 
                     class="form-group clearfix config-parameter__delete__"
                     data-type="radio"   
@@ -353,6 +416,7 @@
         <script type="text/html" id="readonly_contentTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
                 <h6>{{ $t('__field_title__') }}</h6>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <p>{{ $t('__content__') }}</p>
             </div>
         </script>
@@ -365,10 +429,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="shorttext"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        v-bindtitle="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <input type="text"
                     class="form-control config-parameter__delete__"
                     data-type="shorttext"
@@ -398,10 +465,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="switch"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
             </div>
         </script>
         <script type="text/html" id="textareaTemplate">
@@ -412,10 +482,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="textarea"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <textarea rows="5"
                     id="__field_key__"
                     name="__field_key__"
@@ -431,10 +504,13 @@
                         class="use-parameter-default-value__delete__"
                         data-type="timepicker"
                         data-key="__field_key__"
-                        default-value="__default_value__">
-                        <span>{{ $t('Use Default Value') }}</span>
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
                     </button>
+                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <input type="time"
                     class="form-control config-parameter__delete__"
                     data-type="timepicker"
@@ -460,8 +536,11 @@
                     </div>
                     {{ $t('__field_title__') }}
                 </label>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
             </div>
         </script>
+
+        <span class="d-none" id="btnUseDefaultTitle">{{ $t('Set default value') }}</span>
 
         <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
@@ -814,6 +893,8 @@ export default {
 
             self.initailizeSelect2();
 
+            $('[data-toggle="tooltip"]').tooltip(); 
+
             setTimeout(function(){
                 $(".use-parameter-default-value").on('click', function(e){
                     self.setDefaultValue(this);
@@ -823,87 +904,43 @@ export default {
             }, 300);
         },
         getGroupHTML: function(element) {
-            var templateHTML = document.getElementById("groupTemplate").innerHTML;
+            var templateHTML = "";
+            if (0 == element.level) {
+                templateHTML = document.getElementById("groupTemplateLevel0").innerHTML
+            } else if (1 == element.level) {
+                templateHTML = document.getElementById("groupTemplateLevel1").innerHTML
+            } else {
+                templateHTML = document.getElementById("groupTemplate").innerHTML
+            }
+
             return templateHTML
                     .replace(/__group_title__/g, element.title)
+                    .replace(/__description__/g, element.description)
                     .replace(/__group_key__/g, element.__key);
         },
         getCheckboxHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-
-            var templateHTML = document.getElementById("checkboxTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("checkboxTemplate").innerHTML);
         },
         getColorPickerHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-
-            var templateHTML = document.getElementById("colorpickerTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("colorpickerTemplate").innerHTML);
         },
         getDatePickerHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-
-            var templateHTML = document.getElementById("datepickerTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("datepickerTemplate").innerHTML);
         },
         getDateTimePickerHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-
-            var templateHTML = document.getElementById("datetimepickerTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("datepickerTemplate").innerHTML);
         },
         getDropdownHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("dropdownTemplate").innerHTML);
 
             var multiple = "";
             if (element.multiple) {
                 multiple = "multiple";
             }
-            
-            var templateHTML = document.getElementById("dropdownTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__multiple__/g, multiple)
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__field_key_converted__/g, element.__key.replace(/\./g, ""))
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+
+            return resultHTML
+                .replace(/__multiple__/g, multiple)
+                .replace(/__field_key_converted__/g, element.__key.replace(/\./g, ""));
         },
         setDropdownOptions(element) {
             //var selectId = element.__key.replace(/\./g, "");
@@ -958,132 +995,56 @@ export default {
             }); */
         },
         getFileHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("dropdownTemplate").innerHTML);
 
             var fileTypes = "";
             if ("" != element.file_types) {
                 fileTypes = element.file_types;
             }
 
-            var templateHTML = document.getElementById("fileTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__value__/g, element.value)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__file_types__/g, fileTypes);
+            return resultHTML
+                .replace(/__file_types__/g, fileTypes)
+                .replace(/__value__/g, element.value);
         },
         getHTMLEditorHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-
-            var templateHTML = document.getElementById("htmlEditorTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("htmlEditorTemplate").innerHTML);
         },
         getIconPickerHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-
-            var templateHTML = document.getElementById("iconPickerTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("iconPickerTemplate").innerHTML);
         },
         getIntegerHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("integerTemplate").innerHTML);
 
-            var templateHTML = document.getElementById("integerTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__min__/g, element.min)
-                    .replace(/__max__/g, element.max)
-                    .replace(/__step__/g, element.step)
-                    .replace(/__default_value__/g, element.default_value);
+            return resultHTML
+                .replace(/__min__/g, element.min)
+                .replace(/__max__/g, element.max)
+                .replace(/__step__/g, element.step);
         },
         getLinkButtonHTML: function(element) {
-            var templateHTML = document.getElementById("link_buttonTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__url__/g, element.url)
-                    .replace(/__delete__/g, "");
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("link_buttonTemplate").innerHTML);
+
+            return resultHTML.replace(/__url__/g, element.url);
         },
         getLinkTextHTML: function(element) {
-            var templateHTML = document.getElementById("link_textTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__url__/g, element.url)
-                    .replace(/__delete__/g, "");
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("link_textTemplate").innerHTML);
+
+            return resultHTML.replace(/__url__/g, element.url);
         },
         getNumberHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("numberTemplate").innerHTML);
 
-            var templateHTML = document.getElementById("numberTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__min__/g, element.min)
-                    .replace(/__max__/g, element.max)
-                    .replace(/__step__/g, element.step)
-                    .replace(/__default_value__/g, element.default_value);
+            return resultHTML
+                .replace(/__min__/g, element.min)
+                .replace(/__max__/g, element.max)
+                .replace(/__step__/g, element.step);
         },
         getPasswordHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-
-            var templateHTML = document.getElementById("passwordTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("passwordTemplate").innerHTML);
         },
         getRadioHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-            
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("radioTemplate").innerHTML);
             var radioOptionsHTML = this.getRadioOptionsHTML(element);
-            var templateHTML = document.getElementById("radioTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__radio_options_html__/g, radioOptionsHTML)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return resultHTML.replace(/__radio_options_html__/g, radioOptionsHTML);
         },
         getRadioOptionsHTML: function(element) {
             var optionsHTML = "";
@@ -1108,72 +1069,26 @@ export default {
             return optionsHTML;
         },
         getReadonlyContentHTML: function(element) {
-            var templateHTML = document.getElementById("readonly_contentTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__content__/g, element.content)
-                    .replace(/__delete__/g, "");
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("readonly_contentTemplate").innerHTML);
+            return resultHTML.replace(/__content__/g, element.content);
         },
         getShorttextHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-
-            var templateHTML = document.getElementById("shorttextTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("shorttextTemplate").innerHTML);
         },
         getSwitchHTML: function(element) {
-            var templateHTML = document.getElementById("switchTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("switchTemplate").innerHTML);
         },
         getTextareaHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-
-            var templateHTML = document.getElementById("textareaTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("textareaTemplate").innerHTML);
         },
         getTimePickerHTML: function(element) {
-            var requiredClass = "d-none";
-            if (element.required) {
-                requiredClass = "required";
-            }
-
-            var templateHTML = document.getElementById("timepickerTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__delete__/g, "")
-                    .replace(/__required_class__/g, requiredClass)
-                    .replace(/__default_value__/g, element.default_value);
+            return this.replaceTemplateHTML(element, document.getElementById("timepickerTemplate").innerHTML);
         },
         getToggleHTML: function(element) {
             this.init_toggles = true;
 
-            var templateHTML = document.getElementById("toggleTemplate").innerHTML;
-            return templateHTML
-                    .replace(/__field_title__/g, element.title)
-                    .replace(/__field_key__/g, element.__key)
-                    .replace(/__toggle_elements__/g, element.toggle_elements)
-                    .replace(/__delete__/g, "");
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("toggleTemplate").innerHTML);
+            return resultHTML.replace(/__toggle_elements__/g, element.toggle_elements);
         },
         initToggleElements: function() {
             if (!this.init_toggles) {
@@ -1208,6 +1123,33 @@ export default {
                 });
             }
         },
+        
+        replaceTemplateHTML: function(element, templateHTML) {
+            var requiredClass = "d-none";
+            if (element.required) {
+                requiredClass = "required";
+            }
+
+            var hintClass = "d-none";
+            var dataToggle = "";
+            if ("" != element.hint) {
+                hintClass = "";
+                dataToggle = "tooltip";
+            }
+
+            return templateHTML
+                .replace(/__data_toggle__/g, dataToggle)
+                .replace(/__default_value__/g, element.default_value)
+                .replace(/__delete__/g, "")
+                .replace(/__description__/g, element.description)
+                .replace(/__field_key__/g, element.__key)
+                .replace(/__field_title__/g, element.title)
+                .replace(/__hint__/g, element.hint)
+                .replace(/__hint_class__/g, hintClass)
+                .replace(/__required_class__/g, requiredClass)
+                .replace(/__use_default_title__/g, document.getElementById("btnUseDefaultTitle").innerHTML);
+        },
+
         setDefaultValue: function(btn) {
             var type = btn.getAttribute("data-type");
             var elementKey = btn.getAttribute("data-key");

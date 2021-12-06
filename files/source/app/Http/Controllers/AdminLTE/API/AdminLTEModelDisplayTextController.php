@@ -45,10 +45,9 @@ class AdminLTEModelDisplayTextController extends Controller
     public function get_model_property_list(Request $request)
     {      
         $list = [];        
-        $exceptions = ['AdminLTE', 'AdminLTELayout', 'AdminLTEMenu', 'AdminLTEMeta', 'AdminLTEModelDisplayText', 'AdminLTEModelOption', 'AdminLTEUserLayout', 'AdminLTEVariable', 'User'];
 
         $objectAdminLTE = new AdminLTE();
-        $Models = $objectAdminLTE->getModelList($exceptions);
+        $Models = $objectAdminLTE->getModelList();
 
         $countModels = count($Models);
         $index = 0;

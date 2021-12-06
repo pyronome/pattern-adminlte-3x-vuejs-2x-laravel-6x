@@ -72,7 +72,6 @@ class AdminLTEConfigController extends Controller
 
         $this->setConfigTree($configList);
 
-
         $keys = array_keys($configList);
         $list = [];
         $index = 0;
@@ -94,13 +93,10 @@ class AdminLTEConfigController extends Controller
             $list[$index]['title'] = $object->title;
             $list[$index]['default_value'] = $object->default_value;
             $list[$index]['value'] = $object->value;
+            $list[$index]['description'] = $object->description;
+            $list[$index]['hint'] = $object->hint;
 
-            $metaData = json_decode(
-                $objectAdminLTE->base64Decode($object->meta_data),
-                (JSON_HEX_QUOT
-                | JSON_HEX_TAG
-                | JSON_HEX_AMP
-                | JSON_HEX_APOS));
+            $metaData = json_decode($object->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
 
             $list[$index]['option_titles'] = isset($metaData['option_titles']) ? $metaData['option_titles'] : '';
             $list[$index]['option_values'] = isset($metaData['option_values']) ? $metaData['option_values'] : '';
@@ -112,6 +108,11 @@ class AdminLTEConfigController extends Controller
             $list[$index]['step'] = isset($metaData['step']) ? $metaData['step'] : 0;
             $list[$index]['multiple'] = isset($metaData['multiple']) ? $metaData['multiple'] : 0;
             $list[$index]['file_types'] = isset($metaData['file_types']) ? $metaData['file_types'] : '';
+
+            $list[$index]['level'] = 0;
+            if ('group' == $object->type) {
+                $list[$index]['level'] = $this->getGroupLevel($object->__key);
+            }
 
             $index++;
         }
@@ -135,6 +136,12 @@ class AdminLTEConfigController extends Controller
             'show_pagination' => $show_pagination,
             'data' => $data
         ];
+    }
+
+    public function getGroupLevel($__key) {
+        $parts = explode('.', $__key);
+        $level = count($parts) - 1;
+        return $level;
     }
 
     public function setConfigTree(&$configList) {
@@ -282,6 +289,18 @@ class AdminLTEConfigController extends Controller
         }
 
         return $parent;
+    }
+
+    public function getBaseKey($key) {
+        $basekey = '';
+
+        if ('' != $key) {
+           $parts = explode('.', $key);
+           $length = count($parts);
+           $basekey = $parts[$length-1];
+        }
+
+        return $basekey;
     }
 
 	public function post(AdminLTEConfigPOSTRequest $request)
@@ -662,7 +681,7 @@ class AdminLTEConfigController extends Controller
     }
 
     public function get_json() {
-        $objectAdminLTE = new AdminLTE();
+        $User = auth()->guard('adminlteuser')->user();
 
         $AdminLTEConfigList = AdminLTEConfig::where('deleted', 0)->where('parent_id', 0)->get();
 		$parent_data = [];
@@ -670,21 +689,35 @@ class AdminLTEConfigController extends Controller
 
 		foreach ($AdminLTEConfigList as $object) {
             $parent_data[$index] = [];
+            $parent_data[$index]['system'] = $object->system;
+            $parent_data[$index]['locked'] = (1 == $object->locked);
+            $parent_data[$index]['owner'] = $object->owner;
+
+            $is_owner = 0;
+            if ($User->id == $object->owner) {
+                $is_owner = 1;
+            }
+            $parent_data[$index]['is_owner'] = $is_owner;
+
+            $editable = 0;
+            if ((0 == $object->system) && ((0 == $object->locked) || $is_owner)) {
+                $editable = 1;
+            }
+            $parent_data[$index]['editable'] = $editable;
+
             $parent_data[$index]['enabled'] = (1 == $object->enabled);
             $parent_data[$index]['required'] = (1 == $object->required);
             $parent_data[$index]['__key'] = $object->__key;
+            $parent_data[$index]['basekey'] = $this->getBaseKey($object->__key);
             $parent_data[$index]['__parent'] = $this->getParentKey($object->__key);
             $parent_data[$index]['type'] = $object->type;
             $parent_data[$index]['title'] = $object->title;
             $parent_data[$index]['default_value'] = $object->default_value;
             $parent_data[$index]['value'] = $object->value;
+            $parent_data[$index]['hint'] = $object->hint;
+            $parent_data[$index]['description'] = $object->description;
 
-            $metaData = json_decode(
-                $objectAdminLTE->base64Decode($object->meta_data),
-                (JSON_HEX_QUOT
-                | JSON_HEX_TAG
-                | JSON_HEX_AMP
-                | JSON_HEX_APOS));
+            $metaData = json_decode($object->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 
             $parent_data[$index]['option_titles'] = isset($metaData['option_titles']) ? $metaData['option_titles'] : '';
             $parent_data[$index]['option_values'] = isset($metaData['option_values']) ? $metaData['option_values'] : '';
@@ -710,7 +743,7 @@ class AdminLTEConfigController extends Controller
 	}
 
     public function getChildren($parent_id) {
-        $objectAdminLTE = new AdminLTE();
+        $User = auth()->guard('adminlteuser')->user();
 
         $AdminLTEConfigList = AdminLTEConfig::where('deleted', 0)->where('parent_id', $parent_id)->get();
         $children_data = [];
@@ -718,21 +751,35 @@ class AdminLTEConfigController extends Controller
 
 		foreach ($AdminLTEConfigList as $object) {
             $children_data[$index] = [];
+            $children_data[$index]['system'] = $object->system;
+            $children_data[$index]['locked'] = (1 == $object->locked);
+            $children_data[$index]['owner'] = $object->owner;
+
+            $is_owner = 0;
+            if ($User->id == $object->owner) {
+                $is_owner = 1;
+            }
+            $children_data[$index]['is_owner'] = $is_owner;
+
+            $editable = 0;
+            if ((0 == $object->system) && ((0 == $object->locked) || $is_owner)) {
+                $editable = 1;
+            }
+            $children_data[$index]['editable'] = $editable;
+
             $children_data[$index]['enabled'] = (1 == $object->enabled);
             $children_data[$index]['required'] = (1 == $object->required);
             $children_data[$index]['__key'] = $object->__key;
+            $children_data[$index]['basekey'] = $this->getBaseKey($object->__key);
             $children_data[$index]['__parent'] = $this->getParentKey($object->__key);
             $children_data[$index]['type'] = $object->type;
             $children_data[$index]['title'] = $object->title;
             $children_data[$index]['default_value'] = $object->default_value;
             $children_data[$index]['value'] = $object->value;
+            $children_data[$index]['hint'] = $object->hint;
+            $children_data[$index]['description'] = $object->description;
             
-            $metaData = json_decode(
-                $objectAdminLTE->base64Decode($object->meta_data),
-                (JSON_HEX_QUOT
-                | JSON_HEX_TAG
-                | JSON_HEX_AMP
-                | JSON_HEX_APOS));
+            $metaData = json_decode($object->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 
             $children_data[$index]['option_titles'] = isset($metaData['option_titles']) ? $metaData['option_titles'] : '';
             $children_data[$index]['option_values'] = isset($metaData['option_values']) ? $metaData['option_values'] : '';
@@ -757,9 +804,23 @@ class AdminLTEConfigController extends Controller
         return $children_data;
     }
 
-	public function post_json(Request $request) {
-        $objectAdminLTE = new AdminLTE();
+    public function getSystemConfigData() {
+        $AdminLTEConfigList = AdminLTEConfig::where('deleted', 0)->where('system', 1)->get();
+		$systemConfigData = [];
 
+		foreach ($AdminLTEConfigList as $object) {
+            $systemConfigData[$object->__key] = $object->value;
+		}
+        
+        return $systemConfigData;
+    }
+
+	public function post_json(Request $request) {
+        /* $systemConfigData = $this->getSystemConfigData(); */
+
+        $User = auth()->guard('adminlteuser')->user();
+
+        $objectAdminLTE = new AdminLTE();
         $config_json = rawurldecode(htmlspecialchars_decode($request->input('config_json')));
         $config_data = json_decode($config_json,
                 (JSON_HEX_QUOT
@@ -772,15 +833,32 @@ class AdminLTEConfigController extends Controller
         foreach ($config_data as $__order => $data) {
 			$AdminLTEConfig = new AdminLTEConfig();
 
+            /* $__key = $objectAdminLTE->convertTitleToConfigName($data['title']);
+            $value = $data['value'];
+            if (isset($systemConfigData[$__key])) {
+
+            } */
+
 			$AdminLTEConfig->enabled = $data['enabled'];
+            $AdminLTEConfig->system = $data['system'];
 			$AdminLTEConfig->required = $data['required'];
+            $AdminLTEConfig->locked = $data['locked'];
+
+            $owner = 0;
+            if (0 == $data['system']) {
+                $owner = ($data['owner'] > 0) ? $data['owner'] : $User->id;
+            }
+            $AdminLTEConfig->owner = $owner;
+            
 			$AdminLTEConfig->__order = $__order;
 			$AdminLTEConfig->parent_id = 0;
 			$AdminLTEConfig->type = $data['type'];
 			$AdminLTEConfig->title = $data['title'];
             $AdminLTEConfig->default_value = $data['default_value'];
             $AdminLTEConfig->value = $data['value'];
-            $AdminLTEConfig->__key = $objectAdminLTE->convertTitleToConfigName($AdminLTEConfig->title);
+            $AdminLTEConfig->hint = $data['hint'];
+            $AdminLTEConfig->description = $data['description'];
+            $AdminLTEConfig->__key = $data['basekey'];//$objectAdminLTE->convertTitleToConfigName($AdminLTEConfig->title);
 
             $metaData = [];
             $metaData['multiple'] = $data['multiple'];
@@ -794,8 +872,8 @@ class AdminLTEConfigController extends Controller
             $metaData['step'] = $data['step'];
             $metaData['file_types'] = $data['file_types'];
 
-            $encodedData = $objectAdminLTE->base64encode(json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-            $AdminLTEConfig->meta_data = $encodedData;
+            $encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+            $AdminLTEConfig->meta_data_json = $encodedData;
 
 			$AdminLTEConfig->save();
 
@@ -806,20 +884,32 @@ class AdminLTEConfigController extends Controller
 	}
 
     public function saveChildren($children, $parent_id, $parent_key) {
+        $User = auth()->guard('adminlteuser')->user();
         $objectAdminLTE = new AdminLTE();
 
 		foreach ($children as $__order => $data) {
             $AdminLTEConfig = new AdminLTEConfig();
 
 			$AdminLTEConfig->enabled = $data['enabled'];
+            $AdminLTEConfig->system = $data['system'];
 			$AdminLTEConfig->required = $data['required'];
-			$AdminLTEConfig->__order = $__order;
+            $AdminLTEConfig->locked = $data['locked'];
+
+            $owner = 0;
+            if (0 == $data['system']) {
+                $owner = ($data['owner'] > 0) ? $data['owner'] : $User->id;
+            }
+            $AdminLTEConfig->owner = $owner;
+
+            $AdminLTEConfig->__order = $__order;
 			$AdminLTEConfig->parent_id = $parent_id;
 			$AdminLTEConfig->type = $data['type'];
 			$AdminLTEConfig->title = $data['title'];
             $AdminLTEConfig->default_value = $data['default_value'];
             $AdminLTEConfig->value = $data['value'];
-            $AdminLTEConfig->__key = $parent_key . '.' . $objectAdminLTE->convertTitleToConfigName($AdminLTEConfig->title);
+            $AdminLTEConfig->hint = $data['hint'];
+            $AdminLTEConfig->description = $data['description'];
+            $AdminLTEConfig->__key = $parent_key . '.' . $data['basekey'];//$objectAdminLTE->convertTitleToConfigName($AdminLTEConfig->title);
 
             $metaData = [];
             $metaData['multiple'] = $data['multiple'];
@@ -833,8 +923,8 @@ class AdminLTEConfigController extends Controller
             $metaData['step'] = $data['step'];
             $metaData['file_types'] = $data['file_types'];
 
-            $encodedData = $objectAdminLTE->base64encode(json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-            $AdminLTEConfig->meta_data = $data['option_titles'];
+            $encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+            $AdminLTEConfig->meta_data_json = $encodedData;
 
 			$AdminLTEConfig->save();
 

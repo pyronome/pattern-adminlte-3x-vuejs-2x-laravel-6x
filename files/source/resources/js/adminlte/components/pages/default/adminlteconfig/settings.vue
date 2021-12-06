@@ -63,292 +63,339 @@
                                 </button>
                             </div>
                             <div class="modal-body">
+                                <input type="hidden" id="system" value="">
+                                <input type="hidden" id="editable" value="">
+                                <input type="hidden" id="owner" value="">
+                                <input type="hidden" id="is_owner" value="" v-model="is_owner">
                                 <input type="hidden" id="currentKey" value="">
                                 <input type="hidden" id="currentParent" value="">
                                 <input type="hidden" id="item_data" v-model="item_data" @click="updateForm" value="">
                                 <input type="hidden" id="exception_key" v-model="exception_key" @click="refreshListByKey" value="">
-                                <div class="form-group col-lg-12">
-                                    <div class="">
-                                        <div class="icheck-primary d-inline">
-                                            <input type="checkbox"
-                                                id="enabled"
-                                                name="enabled"
-                                                class="item-menu"
-                                                v-model="AdminLTEConfigForm.enabled">
-                                            <label for="enabled" class="">
-                                                {{ $t('Enabled') }}  
-                                            </label>
+                                
+                                <div class="row">
+                                    <div class="form-group col-lg-12" v-show="(1 == is_owner)">
+                                        <div class="">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox"
+                                                    id="locked"
+                                                    name="locked"
+                                                    class="item-menu">
+                                                <label for="locked" class="">
+                                                    {{ $t('Locked') }}  
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group col-lg-12" 
-                                    v-show="(
-                                        ('group' != AdminLTEConfigForm.type)
-                                        && ('toggle' != AdminLTEConfigForm.type)
-                                        && ('link_button' != AdminLTEConfigForm.type)
-                                        && ('link_text' != AdminLTEConfigForm.type)
-                                        && ('readonly_content' != AdminLTEConfigForm.type)
-                                    )">
-                                    <div class="">
-                                        <div class="icheck-primary d-inline">
-                                            <input type="checkbox"
-                                                id="required"
-                                                name="required"
-                                                class="item-menu"
-                                                v-model="AdminLTEConfigForm.required">
-                                            <label for="required" class="">
-                                                {{ $t('Required') }}  
-                                            </label>
+                                    <div class="form-group col-lg-12">
+                                        <div class="">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox"
+                                                    id="enabled"
+                                                    name="enabled"
+                                                    class="item-menu">
+                                                <label for="enabled" class="">
+                                                    {{ $t('Enabled') }}  
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group col-lg-12">
-                                    <label for="type">{{ $t('Type') }}</label>
-                                    <select name="type" id="type" class="form-control item-menu" v-model="AdminLTEConfigForm.type">
-                                        <option value="group">{{ $t('Group') }}</option>
-                                        <option value="toggle">{{ $t('Toggle') }}</option>
-                                        <option value="checkbox">{{ $t('Checkbox') }}</option>
-                                        <option value="colorpicker">{{ $t('Color Picker') }}</option>
-                                        <option value="datepicker">{{ $t('Date Picker') }}</option>
-                                        <option value="datetimepicker">{{ $t('Date Time Picker') }}</option>
-                                        <option value="dropdown">{{ $t('Dropdown') }}</option>
-                                        <option value="file">{{ $t('File') }}</option>
-                                        <option value="html_editor">{{ $t('HTML Editor') }}</option>
-                                        <option value="iconpicker">{{ $t('Icon Picker') }}</option>
-                                        <option value="integer">{{ $t('Integer') }}</option>
-                                        <option value="link_button">{{ $t('Link (Button)') }}</option>
-                                        <option value="link_text">{{ $t('Link (Text)') }}</option>
-                                        <option value="number">{{ $t('Number') }}</option>
-                                        <option value="password">{{ $t('Password') }}</option>
-                                        <option value="radio">{{ $t('Radio') }}</option>
-                                        <option value="readonly_content">{{ $t('Readonly Content') }}</option>
-                                        <option value="shorttext">{{ $t('Shorttext') }}</option>
-                                        <option value="switch">{{ $t('Switch') }}</option>
-                                        <option value="textarea">{{ $t('Textarea') }}</option>
-                                        <option value="timepicker">{{ $t('Time Picker') }}</option>
-                                    </select>
-                                    <span class="text-muted d-none" id="groupTypeWarning">
-                                        {{ $t('This element type cannot be changed because its type is a group.') }}
-                                    </span>
-                                </div>
-
-                                <div class="form-group col-lg-12" v-show="('dropdown' == AdminLTEConfigForm.type)">
-                                    <div class="">
-                                        <div class="icheck-primary d-inline">
-                                            <input type="checkbox"
-                                                id="multiple"
-                                                name="multiple"
-                                                class="item-menu"
-                                                v-model="AdminLTEConfigForm.multiple">
-                                            <label for="multiple" class="">
-                                                {{ $t('Multiple') }}  
-                                            </label>
+                                    <div class="form-group col-lg-12" 
+                                        v-show="(
+                                            ('group' != parameter_type)
+                                            && ('toggle' != parameter_type)
+                                            && ('link_button' != parameter_type)
+                                            && ('link_text' != parameter_type)
+                                            && ('readonly_content' != parameter_type)
+                                        )">
+                                        <div class="">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox"
+                                                    id="required"
+                                                    name="required"
+                                                    class="item-menu">
+                                                <label for="required" class="">
+                                                    {{ $t('Required') }}  
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group col-lg-12">
-                                    <label for="__parent">{{ $t('Parent') }}</label>
-                                    <select2-element class="select2-element item-menu"
-                                        data-placeholder=""
-                                        id="__parent"
-                                        name="__parent"
-                                        :options="parentlist"
-                                        allowClear="true"
-                                        v-model="AdminLTEConfigForm.__parent">
-                                        <option></option>
-                                    </select2-element>
-                                </div>
-
-                                <div class="form-group col-lg-12">
-                                    <label for="title">{{ $t('Title') }}</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control item-menu" name="title" id="title" v-model="AdminLTEConfigForm.title">
-                                        <input type="hidden" class="form-control item-menu" name="__key" id="__key" v-model="AdminLTEConfigForm.__key">
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-lg-6"
-                                    v-show="(
-                                        ('dropdown' == AdminLTEConfigForm.type)
-                                        || ('radio' == AdminLTEConfigForm.type)
-                                    )">
-                                    <label for="option_titles">{{ $t('Option Titles') }}  </label>
-                                    <textarea rows="5"
-                                        id="option_titles"
-                                        name="option_titles"
-                                        v-model="AdminLTEConfigForm.option_titles"
-                                        class="form-control item-menu"></textarea>
-                                </div>
-                                <div class="form-group col-lg-6"
-                                    v-show="(
-                                        ('dropdown' == AdminLTEConfigForm.type)
-                                        || ('radio' == AdminLTEConfigForm.type)
-                                    )">
-                                    <label for="option_values">{{ $t('Option Values') }}  </label>
-                                    <textarea rows="5"
-                                        id="option_values"
-                                        name="option_values"
-                                        v-model="AdminLTEConfigForm.option_values"
-                                        class="form-control item-menu"></textarea>
-                                </div>
-
-                                <div class="form-group col-lg-12" v-show="('toggle' == AdminLTEConfigForm.type)">
-                                    <label for="toggle_elements">
-                                        {{  $t('Toggle Elements') }}
-                                    </label>
-                                    <select2-element multiple="multiple"
-                                        id="toggle_elements"
-                                        name="toggle_elements"
-                                        :options="toggle_elements_options"
-                                        v-model="AdminLTEConfigForm.toggle_elements"
-                                        class="select2-element item-menu">
-                                    </select2-element>
-                                    <input type="hidden" id="toggle_elements_data" value="1" :selected-data="AdminLTEConfigForm.toggle_elements">
-                                </div>
-
-                                <div class="form-group col-lg-12" v-show="(('link_button' == AdminLTEConfigForm.type) || ('link_text' == AdminLTEConfigForm.type))">
-                                    <label for="url">{{ $t('URL') }}</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control item-menu" name="url" id="url" v-model="AdminLTEConfigForm.url">
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-lg-12" v-show="('file' == AdminLTEConfigForm.type)">
-                                    <label for="file_types">{{ $t('Acceptable File Types') }}</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control item-menu" name="file_types" id="file_types" v-model="AdminLTEConfigForm.file_types">
-                                        <span class="text-muted">
-                                            {{ $t('This string is a comma-separated list of acceptable file extensions. For example: .jpg, .pdf, .doc') }}
+                                    <div class="form-group col-lg-12">
+                                        <label for="type">{{ $t('Type') }}</label>
+                                        <select name="type" id="type" class="form-control item-menu" v-model="parameter_type">
+                                            <option value="checkbox">{{ $t('Checkbox') }}</option>
+                                            <option value="colorpicker">{{ $t('Color Picker') }}</option>
+                                            <option value="datepicker">{{ $t('Date Picker') }}</option>
+                                            <option value="datetimepicker">{{ $t('Date Time Picker') }}</option>
+                                            <option value="dropdown">{{ $t('Dropdown') }}</option>
+                                            <option value="file">{{ $t('File') }}</option>
+                                            <option value="group">{{ $t('Group') }}</option>
+                                            <option value="html_editor">{{ $t('HTML Editor') }}</option>
+                                            <option value="iconpicker">{{ $t('Icon Picker') }}</option>
+                                            <option value="integer">{{ $t('Integer') }}</option>
+                                            <option value="link_button">{{ $t('Link (Button)') }}</option>
+                                            <option value="link_text">{{ $t('Link (Text)') }}</option>
+                                            <option value="number">{{ $t('Number') }}</option>
+                                            <option value="password">{{ $t('Password') }}</option>
+                                            <option value="radio">{{ $t('Radio') }}</option>
+                                            <option value="readonly_content">{{ $t('Readonly Content') }}</option>
+                                            <option value="shorttext">{{ $t('Shorttext') }}</option>
+                                            <option value="switch">{{ $t('Switch') }}</option>
+                                            <option value="textarea">{{ $t('Textarea') }}</option>
+                                            <option value="timepicker">{{ $t('Time Picker') }}</option>
+                                            <option value="toggle">{{ $t('Toggle') }}</option>
+                                        </select>
+                                        <span class="text-muted d-none" id="groupTypeWarning">
+                                            {{ $t('This element type cannot be changed because its type is a group.') }}
                                         </span>
                                     </div>
-                                </div>
 
-                                <div class="form-group col-lg-4"
-                                    v-show="(
-                                        ('integer' == AdminLTEConfigForm.type)
-                                        || ('number' == AdminLTEConfigForm.type)
-                                    )">
-                                    <label for="min">{{ $t('Min') }}</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control item-menu" name="min" id="min" v-model="AdminLTEConfigForm.min">
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-lg-4"
-                                    v-show="(
-                                        ('integer' == AdminLTEConfigForm.type)
-                                        || ('number' == AdminLTEConfigForm.type)
-                                    )">
-                                    <label for="max">{{ $t('Max') }}</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control item-menu" name="max" id="max" v-model="AdminLTEConfigForm.max">
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-lg-4"
-                                    v-show="(
-                                        ('integer' == AdminLTEConfigForm.type)
-                                        || ('number' == AdminLTEConfigForm.type)
-                                    )">
-                                    <label for="step">{{ $t('Step') }}</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control item-menu" name="step" id="step" v-model="AdminLTEConfigForm.step">
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-lg-12" 
-                                    v-show="('readonly_content' == AdminLTEConfigForm.type)">
-                                    <label for="content">{{ $t('Content') }}  </label>
-                                    <textarea rows="5"
-                                        v-model="AdminLTEConfigForm.content"
-                                        id="content"
-                                        name="content"
-                                        class="form-control item-menu"></textarea>
-                                </div>
-
-                                <div class="form-group col-lg-12" 
-                                    v-show="(
-                                        ('group' != AdminLTEConfigForm.type)
-                                        && ('file' != AdminLTEConfigForm.type)
-                                        && ('link_button' != AdminLTEConfigForm.type)
-                                        && ('link_text' != AdminLTEConfigForm.type)
-                                        && ('readonly_content' != AdminLTEConfigForm.type)
-                                    )">
-                                    <label for="default_value">{{ $t('Default Value') }}  </label>
-                                    <select id="default_value_checkbox" class="form-control"
-                                        v-show="(
-                                            ('toggle' == AdminLTEConfigForm.type)
-                                            || ('checkbox' == AdminLTEConfigForm.type)
-                                            || ('switch' == AdminLTEConfigForm.type)
-                                        )">
-                                        <option value="on">{{ $t('On') }}</option>
-                                        <option value="off">{{ $t('Off') }}</option>
-                                    </select>
-                                    <div class="input-group"
-                                        v-show="(
-                                            ('dropdown' == AdminLTEConfigForm.type)
-                                            || ('password' == AdminLTEConfigForm.type)
-                                            || ('radio' == AdminLTEConfigForm.type)
-                                            || ('shorttext' == AdminLTEConfigForm.type)
-                                        )">
-                                        <input type="text" class="form-control" id="default_value_text">
-                                    </div>
-                                    <div class="input-group"
-                                        v-show="('integer' == AdminLTEConfigForm.type) || ('number' == AdminLTEConfigForm.type)">
-                                        <input type="number" class="form-control" id="default_value_number">
-                                    </div>
-                                    <span class="text-muted" v-show="('dropdown' == AdminLTEConfigForm.type) && (!AdminLTEConfigForm.multiple)">
-                                        {{ $t('This string should be one of option values.') }}
-                                    </span>
-                                    <span class="text-muted" v-show="('dropdown' == AdminLTEConfigForm.type) && (AdminLTEConfigForm.multiple)">
-                                        {{ $t('This string is a comma-separated list of option values.') }}
-                                    </span>
-                                    <span class="text-muted" v-show="('radio' == AdminLTEConfigForm.type)">
-                                        {{ $t('This string should be one of option values.') }}
-                                    </span>
-                                    <div class="input-group" v-show="('datepicker' == AdminLTEConfigForm.type)">
-                                        <input type="date" class="form-control" id="default_value_datepicker">
-                                    </div>
-                                    <div class="input-group" v-show="('datetimepicker' == AdminLTEConfigForm.type)">
-                                        <input type="datetime-local" class="form-control" id="default_value_datetimepicker">
-                                    </div>
-                                    <div class="input-group" v-show="('timepicker' == AdminLTEConfigForm.type)">
-                                        <input type="time" class="form-control" id="default_value_timepicker">
-                                    </div>
-                                    <div v-show="('textarea' == AdminLTEConfigForm.type)">
-                                        <textarea
-                                            id="default_value_textarea"
-                                            class="form-control"
-                                            rows="5"></textarea>
-                                    </div>
-                                    <div v-show="('html_editor' == AdminLTEConfigForm.type)">
-                                        <textarea 
-                                            id="default_value_html_editor"
-                                            class="form-control vue-editor"
-                                            rows="5"></textarea>
-                                    </div>
-                                    <div class="input-group" v-show="('colorpicker' == AdminLTEConfigForm.type)">
-                                        <input type="text"
-                                            class="form-control color-picker"
-                                            id="default_value_colorpicker">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" id="default_value_colorpicker_append" style="padding-left:100px;"></span>
+                                    <div class="form-group col-lg-12" v-show="('dropdown' == parameter_type)">
+                                        <div class="">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox"
+                                                    id="multiple"
+                                                    name="multiple"
+                                                    class="item-menu"
+                                                    v-model="parameter_multiple">
+                                                <label for="multiple" class="">
+                                                    {{ $t('Multiple') }}  
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <button type="button" id="default_value_iconpicker_picker" class="btn btn-outline-secondary icon-picker"
-                                        v-show="('iconpicker' == AdminLTEConfigForm.type)">
-                                    </button>
-                                    <input type="hidden" id="default_value_iconpicker" class="item-widget">
 
-                                    <input type="hidden" class="form-control item-menu" 
-                                        name="default_value" id="default_value" 
-                                        v-model="AdminLTEConfigForm.default_value">
-                                    <input type="hidden" class="form-control item-menu" 
-                                        name="value" id="value" 
-                                        v-model="AdminLTEConfigForm.value">
+                                    <div class="form-group col-lg-12">
+                                        <label for="__parent">{{ $t('Parent') }}</label>
+                                        <select2-element class="select2-element item-menu"
+                                            data-placeholder=""
+                                            id="__parent"
+                                            name="__parent"
+                                            :options="parentlist"
+                                            allowClear="true">
+                                            <option></option>
+                                        </select2-element>
+                                    </div>
+
+                                    <div class="form-group col-lg-12">
+                                        <label for="title">{{ $t('Title') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control item-menu" name="title" id="title">
+                                            <input type="hidden" class="form-control item-menu" name="__key" id="__key">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-12">
+                                        <label for="basekey">{{ $t('Name') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control item-menu" name="basekey" id="basekey">
+                                            <span class="text-muted">
+                                                {{ $t('This value must contain only English letters. You cannot be use special characters and numbers.') }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-12">
+                                        <label for="description">{{ $t('Description') }}  </label>
+                                        <textarea rows="5"
+                                            id="description"
+                                            name="description"
+                                            class="form-control item-menu"></textarea>
+                                    </div>
+
+                                    <div class="form-group col-lg-12" 
+                                        v-show="(
+                                            ('group' != parameter_type)
+                                            && ('link_button' != parameter_type)
+                                            && ('link_text' != parameter_type)
+                                            && ('readonly_content' != parameter_type)
+                                            && ('toggle' != parameter_type)
+                                        )">
+                                        <label for="hint">{{ $t('Hint') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control item-menu" name="hint" id="hint">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-12"
+                                        v-show="(
+                                            ('dropdown' == parameter_type)
+                                            || ('radio' == parameter_type)
+                                        )">
+                                        <label for="option_titles">{{ $t('Option Titles') }}  </label>
+                                        <textarea rows="5"
+                                            id="option_titles"
+                                            name="option_titles"
+                                            class="form-control item-menu"></textarea>
+                                    </div>
+                                    <div class="form-group col-lg-12"
+                                        v-show="(
+                                            ('dropdown' == parameter_type)
+                                            || ('radio' == parameter_type)
+                                        )">
+                                        <label for="option_values">{{ $t('Option Values') }}  </label>
+                                        <textarea rows="5"
+                                            id="option_values"
+                                            name="option_values"
+                                            class="form-control item-menu"></textarea>
+                                    </div>
+
+                                    <div class="form-group col-lg-12" v-show="('toggle' == parameter_type)">
+                                        <label for="toggle_elements">
+                                            {{  $t('Toggle Elements') }}
+                                        </label>
+                                        <select2-element multiple="multiple"
+                                            id="toggle_elements"
+                                            name="toggle_elements"
+                                            :options="toggle_elements_options"
+                                            class="select2-element item-menu">
+                                        </select2-element>
+                                        <!-- <input type="hidden" id="toggle_elements_data" value="1" :selected-data="AdminLTEConfigForm.toggle_elements"> -->
+                                    </div>
+
+                                    <div class="form-group col-lg-12" v-show="(('link_button' == parameter_type) || ('link_text' == parameter_type))">
+                                        <label for="url">{{ $t('URL') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control item-menu" name="url" id="url">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-12" v-show="('file' == parameter_type)">
+                                        <label for="file_types">{{ $t('Acceptable File Types') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control item-menu" name="file_types" id="file_types">
+                                            <span class="text-muted">
+                                                {{ $t('This string is a comma-separated list of acceptable file extensions. For example: .jpg, .pdf, .doc') }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-4"
+                                        v-show="(
+                                            ('integer' == parameter_type)
+                                            || ('number' == parameter_type)
+                                        )">
+                                        <label for="min">{{ $t('Min') }}</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control item-menu" name="min" id="min">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-4"
+                                        v-show="(
+                                            ('integer' == parameter_type)
+                                            || ('number' == parameter_type)
+                                        )">
+                                        <label for="max">{{ $t('Max') }}</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control item-menu" name="max" id="max">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-4"
+                                        v-show="(
+                                            ('integer' == parameter_type)
+                                            || ('number' == parameter_type)
+                                        )">
+                                        <label for="step">{{ $t('Step') }}</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control item-menu" name="step" id="step">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-12" 
+                                        v-show="('readonly_content' == parameter_type)">
+                                        <label for="content">{{ $t('Content') }}  </label>
+                                        <textarea rows="5"
+                                            id="content"
+                                            name="content"
+                                            class="form-control item-menu"></textarea>
+                                    </div>
+
+                                    <div class="form-group col-lg-12" 
+                                        v-show="(
+                                            ('group' != parameter_type)
+                                            && ('file' != parameter_type)
+                                            && ('link_button' != parameter_type)
+                                            && ('link_text' != parameter_type)
+                                            && ('readonly_content' != parameter_type)
+                                        )">
+                                        <label for="default_value" v-show="('' != parameter_type)">
+                                            {{ $t('Default Value') }}
+                                        </label>
+                                        <select id="default_value_checkbox" class="form-control"
+                                            v-show="(
+                                                ('toggle' == parameter_type)
+                                                || ('checkbox' == parameter_type)
+                                                || ('switch' == parameter_type)
+                                            )">
+                                            <option value="on">{{ $t('On') }}</option>
+                                            <option value="off">{{ $t('Off') }}</option>
+                                        </select>
+                                        <div class="input-group"
+                                            v-show="(
+                                                ('dropdown' == parameter_type)
+                                                || ('password' == parameter_type)
+                                                || ('radio' == parameter_type)
+                                                || ('shorttext' == parameter_type)
+                                            )">
+                                            <input type="text" class="form-control" id="default_value_text">
+                                        </div>
+                                        <div class="input-group"
+                                            v-show="('integer' == parameter_type) || ('number' == parameter_type)">
+                                            <input type="number" class="form-control" id="default_value_number">
+                                        </div>
+                                        <span class="text-muted" v-show="('dropdown' == parameter_type) && (!parameter_multiple)">
+                                            {{ $t('This string should be one of option values.') }}
+                                        </span>
+                                        <span class="text-muted" v-show="('dropdown' == parameter_type) && (parameter_multiple)">
+                                            {{ $t('This string is a comma-separated list of option values.') }}
+                                        </span>
+                                        <span class="text-muted" v-show="('radio' == parameter_type)">
+                                            {{ $t('This string should be one of option values.') }}
+                                        </span>
+                                        <div class="input-group" v-show="('datepicker' == parameter_type)">
+                                            <input type="date" class="form-control" id="default_value_datepicker">
+                                        </div>
+                                        <div class="input-group" v-show="('datetimepicker' == parameter_type)">
+                                            <input type="datetime-local" class="form-control" id="default_value_datetimepicker">
+                                        </div>
+                                        <div class="input-group" v-show="('timepicker' == parameter_type)">
+                                            <input type="time" class="form-control" id="default_value_timepicker">
+                                        </div>
+                                        <div v-show="('textarea' == parameter_type)">
+                                            <textarea
+                                                id="default_value_textarea"
+                                                class="form-control"
+                                                rows="5"></textarea>
+                                        </div>
+                                        <div v-show="('html_editor' == parameter_type)">
+                                            <textarea 
+                                                id="default_value_html_editor"
+                                                class="form-control vue-editor"
+                                                rows="5"></textarea>
+                                        </div>
+                                        <div class="input-group" v-show="('colorpicker' == parameter_type)">
+                                            <input type="text"
+                                                class="form-control color-picker"
+                                                id="default_value_colorpicker">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="default_value_colorpicker_append" style="padding-left:100px;"></span>
+                                            </div>
+                                        </div>
+                                        <button type="button" id="default_value_iconpicker_picker" class="btn btn-outline-secondary icon-picker"
+                                            v-show="('iconpicker' == parameter_type)">
+                                        </button>
+                                        <input type="hidden" id="default_value_iconpicker" class="item-widget">
+
+                                        <input type="hidden" class="form-control item-menu" 
+                                            name="default_value" id="default_value">
+                                        <input type="hidden" class="form-control item-menu" 
+                                            name="value" id="value">
+                                    </div>
+                                
                                 </div>
                             </div>
                             <div class="modalfooter justify-content-between ">
@@ -424,30 +471,11 @@ export default {
             listByKey: [],
             item_data: [],
             exception_key: '',
-            AdminLTEConfigForm: new Form({
-                'debug_mode': false,
-                'id': this.id,
-				'enabled': false,
-				'required': false,
-                'multiple': false,
-                'type': '',
-                '__key': '',
-                'title': '',
-                '__parent': 'xxxxx',
-                'option_titles': '',
-                'option_values': '',
-                'toggle_elements': [],
-                'url': '',
-                'min': 0,
-                'max': 0,
-                'step': 0,
-                'file_types': '',
-                'content': '',
-                'default_value': '',
-                'value': '',
-            }),
+            parameter_type: '',
+            parameter_multiple: '',
             parentlist: [],
             toggle_elements_options: [],
+            is_owner: 0,
             page: {
                 is_ready: false,
                 has_server_error: false,
@@ -483,23 +511,40 @@ export default {
     methods: {
         updateForm: function() {
             var current_data = $("#item_data").data("current_data");
-            this.AdminLTEConfigForm = current_data;
-
-            this.AdminLTEConfigForm.enabled = current_data.enabled;
-            document.getElementById("enabled").checked = current_data.enabled;
-
-            this.AdminLTEConfigForm.required = current_data.required;
-            document.getElementById("required").checked = current_data.required;
-
-            this.AdminLTEConfigForm.multiple = current_data.multiple;
-            document.getElementById("multiple").checked = current_data.multiple;
+           
+            document.getElementById("system").value = 0;
+            document.getElementById("editable").value = current_data["editable"];
+            document.getElementById("locked").checked = current_data["locked"];
+            document.getElementById("owner").value = current_data["owner"];
+            this.is_owner = current_data["is_owner"];
+            document.getElementById("enabled").checked = current_data["enabled"];
+            document.getElementById("required").checked = current_data["required"];
+            this.multiple = current_data["multiple"];
+            $("#__parent").val(current_data["__parent"]).trigger('change');
+            document.getElementById("basekey").value = current_data["basekey"];
+            document.getElementById("__key").value = current_data["__key"];
+            this.parameter_type = current_data["type"];
+            document.getElementById("title").value = current_data["title"];
+            document.getElementById("option_titles").value = current_data["option_titles"];
+            document.getElementById("option_values").value = current_data["option_values"];
+            $("#toggle_elements").val(current_data["toggle_elements"]).trigger('change');
+            document.getElementById("url").value = current_data["url"];
+            document.getElementById("min").value = current_data["min"];
+            document.getElementById("max").value = current_data["max"];
+            document.getElementById("step").value = current_data["step"];
+            document.getElementById("file_types").value = current_data["file_types"];
+            document.getElementById("content").value = current_data["content"];
+            document.getElementById("default_value").value = current_data["default_value"];
+            document.getElementById("value").value = current_data["value"];
+            document.getElementById("hint").value = current_data["hint"];
+            document.getElementById("description").value = current_data["description"];
 
             /* if ("toggle" == current_data.type) {
                 this.AdminLTEConfigForm.toggle_elements = current_data.toggle_elements.split(",");
             } */
 
-            var type = current_data.type;
-            var val = current_data.default_value;
+            var type = current_data["type"];
+            var val = current_data["default_value"];
 
             if (
                 ("checkbox" == type)
@@ -746,6 +791,40 @@ export default {
                     }
                 });
         },
+        resetMenuItemForm: function () {
+            document.getElementById("system").value = 0;
+            document.getElementById("owner").value = 0;
+            this.is_owner = 1;
+            document.getElementById("locked").checked = false;
+            document.getElementById("editable").value = 1;
+
+            document.getElementById("enabled").checked = false;
+            document.getElementById("required").checked = false;
+            document.getElementById("multiple").checked = false;
+            $("#__parent").val("").trigger('change');
+            document.getElementById("basekey").value = "";
+            document.getElementById("__key").value = "";
+            $("#type").val("").trigger('change');
+            document.getElementById("title").value = "";
+            document.getElementById("option_titles").value = "";
+            document.getElementById("option_values").value = "";
+            $("#toggle_elements").val("").trigger('change');
+            document.getElementById("url").value = "";
+            document.getElementById("min").value = 0;
+            document.getElementById("max").value = 0;
+            document.getElementById("step").value = 0;
+            document.getElementById("file_types").value = "";
+            document.getElementById("content").value = "";
+            document.getElementById("default_value").value = "";
+            document.getElementById("value").value = "";
+            document.getElementById("hint").value = "";
+            document.getElementById("description").value = "";
+
+            $("#groupTypeWarning").addClass("d-none");
+            document.getElementById("type").disabled = false;
+
+            $("#item_data").removeData("current_data");
+        },
         updateMenuEditor: function () {
             var self = this;
             if (!self.page.is_ready) {
@@ -753,27 +832,10 @@ export default {
             }
 
             $("#buttonNewMenuItem").off("click").on("click", function () {
-                self.AdminLTEConfigForm.enabled = false;
-                self.AdminLTEConfigForm.required = false;
-                self.AdminLTEConfigForm.multiple = false;
-                self.AdminLTEConfigForm.__parent = "";
-                self.AdminLTEConfigForm.type = "";
-                self.AdminLTEConfigForm.title = "";
-                self.AdminLTEConfigForm.option_titles = "";
-                self.AdminLTEConfigForm.option_values = "";
-                self.AdminLTEConfigForm.toggle_elements = "";
-                self.AdminLTEConfigForm.url = "";
-                self.AdminLTEConfigForm.min = 0;
-                self.AdminLTEConfigForm.max = 0;
-                self.AdminLTEConfigForm.step = 0;
-                self.AdminLTEConfigForm.file_types = "";
-                self.AdminLTEConfigForm.content = "";
-                self.AdminLTEConfigForm.default_value = "";
-                self.AdminLTEConfigForm.value = "";
+                self.resetMenuItemForm();
                 
                 $("#buttonUpdateMenuItem").hide();
                 $("#buttonAddMenuItem").show();
-    
                 $("#modalMenuItem").modal();
             });
 
@@ -853,21 +915,36 @@ export default {
                 self.body_loader_active = false;
             }, 500);
         },
+        isKeyValid: function(__key) {
+            var valid = true;
+
+            const alphabet = [
+                "a","b","c","d","e","f",
+                "g","h","i","j","k","l",
+                "m","n","o","p","q","r",
+                "s","t","u","v","w","x","y","z"];
+
+            for (let i = 0; i < __key.length; i++) {
+                let char = __key.charAt(i);
+                console.log("char:" + char);
+                
+                if (!alphabet.includes(char)) {
+                    console.log("invalid")
+                    valid = false;
+                    break;
+                }                
+            }
+            
+            return valid;
+        },
         isValid: function() {
             var self = this;
-            var currentKey = document.getElementById("currentKey").value;
-            var title = self.AdminLTEConfigForm.title;
-            var key = self.convertTitleToConfigName(title);
-            var __parent = self.AdminLTEConfigForm.__parent;
+            var basekey = document.getElementById("basekey").value.toLowerCase();
 
-            if ("" != __parent) {
-                key = __parent + "." + key;
-            }
-
-            if ((key != currentKey) && self.listByKey.hasOwnProperty(key)) {
+            if (!self.isKeyValid(basekey)) {
                 Vue.swal.fire({
                     position: 'top-end',
-                    title: self.$t("This element is in use. Please try different title."),
+                    title: self.$t("Parameter name must contain only English letters. You cannot be use special characters and numbers."),
                     icon: 'error',
                     showConfirmButton: false,
                     timer: 10000,
@@ -876,7 +953,30 @@ export default {
                 return false;
             }
 
-            if ("" == self.AdminLTEConfigForm.type) {
+            document.getElementById("basekey").value = basekey;
+
+            var key = basekey;
+            var currentKey = document.getElementById("currentKey").value;
+            var __parent = document.getElementById("__parent").value;
+            var type = document.getElementById("type").value;
+
+            if ("" != __parent) {
+                key = __parent + "." + key;
+            }
+
+            if ((key != currentKey) && self.listByKey.hasOwnProperty(key)) {
+                Vue.swal.fire({
+                    position: 'top-end',
+                    title: self.$t("This element is in use. Please try different name."),
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 10000,
+                    timerProgressBar: true
+                });
+                return false;
+            }
+
+            if ("" == type) {
                 Vue.swal.fire({
                     position: 'top-end',
                     title: self.$t("Please select a type."),
@@ -888,11 +988,11 @@ export default {
                 return false;
             }
 
-            this.AdminLTEConfigForm.__key = key;
+            document.getElementById("__key").value = key;
             return true;
         },
         refreshListByKey: function() {
-            var exceptionKey = this.exceptionKey;
+            var exceptionKey = this.exception_key;
 
             this.listByKey = {};
             var listByKey = {};
@@ -911,7 +1011,6 @@ export default {
             }
 
             this.listByKey = listByKey;
-
             this.renderSelectElements();
         },
         renderSelectElements: function() {

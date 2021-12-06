@@ -492,9 +492,7 @@ class AdminLTELayoutController extends Controller
         $index++;
 
         $objectAdminLTE = new AdminLTE();
-        $exceptions = $objectAdminLTE->system_models;
-
-		$Models = $objectAdminLTE->getModelList($exceptions);
+		$Models = $objectAdminLTE->getModelList();
 		$countModels = count($Models);
 
 		// get default display texts

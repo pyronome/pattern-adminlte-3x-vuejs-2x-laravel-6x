@@ -19,6 +19,8 @@ class AdminLTEConfig extends Model
 
 	protected $fillable = [
         'system',
+        'locked',
+        'owner',
 		'enabled',
 		'required',
 		'__order',
@@ -28,7 +30,9 @@ class AdminLTEConfig extends Model
 		'title',
         'default_value',
 		'value',
-		'meta_data'
+        'hint',
+        'description',
+		'meta_data_json'
 	];
 
 	public static $property_list = [
@@ -70,6 +74,20 @@ class AdminLTEConfig extends Model
             'display_property' => 'system',
             'title' => 'System'
         ],
+        [
+            'name' => 'locked',
+            'type' => 'checkbox',
+            'belongs_to' => 'AdminLTEConfig',
+            'display_property' => 'locked',
+            'title' => 'Locked'
+        ],
+        [
+			'name' => 'owner',
+			'type' => 'integer',
+			'belongs_to' => 'AdminLTEConfig',
+			'display_property' => 'owner',
+			'title' => 'Owner'
+		],
         [
             'name' => 'enabled',
             'type' => 'checkbox',
@@ -134,11 +152,25 @@ class AdminLTEConfig extends Model
             'title' => 'Value'
         ],
         [
-            'name' => 'meta_data',
+            'name' => 'hint',
             'type' => 'text',
             'belongs_to' => 'AdminLTEConfig',
-            'display_property' => 'meta_data',
-            'title' => 'Meta Data'
+            'display_property' => 'hint',
+            'title' => 'Hint'
+        ],
+        [
+            'name' => 'description',
+            'type' => 'text',
+            'belongs_to' => 'AdminLTEConfig',
+            'display_property' => 'description',
+            'title' => 'Description'
+        ],
+        [
+            'name' => 'meta_data_json',
+            'type' => 'text',
+            'belongs_to' => 'AdminLTEConfig',
+            'display_property' => 'meta_data_json',
+            'title' => 'Meta Data JSON'
         ]
 	];
 

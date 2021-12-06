@@ -1006,6 +1006,12 @@
         $(this).children('li').each(function () {
             var li = $(this);
             var object = {};
+            object["system"] = li.data("system");
+            object["owner"] = li.data("owner");
+            object["is_owner"] = li.data("is_owner");
+            object["locked"] = li.data("locked");
+            object["editable"] = li.data("editable");
+            object["basekey"] = li.data("basekey");
             object["__key"] = li.data("__key");
             object["__parent"] = li.data("__parent");
             object["content"] = li.data("content");
@@ -1024,6 +1030,8 @@
             object["type"] = li.data("type");
             object["url"] = li.data("url");
             object["value"] = li.data("value");
+            object["hint"] = li.data("hint");
+            object["description"] = li.data("description");
 
             arr.push(object);
             var ch = li.children('ul,ol').sortableListsToJson();
@@ -1283,16 +1291,18 @@ function MenuEditor(idSelector, options) {
         return $("<a>").addClass(attr.classCss).addClass('clickable').attr("href", "#").html(attr.text);
     }
 
-    function TButtonGroup() {
+    function TButtonGroup(editable) {
         var $divbtn = $('<div>').addClass('btn-group item-btn-group float-right');
         var $btnEdit = TButton({classCss: 'btn btn-sm btnEdit', text: settings.labelEdit});
         var $btnRemv = TButton({classCss: 'btn btn-sm btnRemove', text: settings.labelRemove});
-        var $btnUp = TButton({classCss: 'btn btn-sm btnUp btnMove', text: '<i class="fas fa-angle-up clickable"></i>'});
+        /* var $btnUp = TButton({classCss: 'btn btn-sm btnUp btnMove', text: '<i class="fas fa-angle-up clickable"></i>'});
         var $btnDown = TButton({classCss: 'btn btn-sm btnDown btnMove', text: '<i class="fas fa-angle-down clickable"></i>'});
         var $btnOut = TButton({classCss: 'btn btn-sm btnOut btnMove', text: '<i class="fas fa-level-down-alt clickable"></i>'});
-        var $btnIn = TButton({classCss: 'btn btn-sm btnIn btnMove', text: '<i class="fas fa-level-up-alt clickable"></i>'});
+        var $btnIn = TButton({classCss: 'btn btn-sm btnIn btnMove', text: '<i class="fas fa-level-up-alt clickable"></i>'}); */
 
-        $divbtn/* .append($btnUp).append($btnDown).append($btnIn).append($btnOut) */.append($btnEdit).append($btnRemv);
+        if (1 == editable) {
+            $divbtn.append($btnEdit).append($btnRemv);
+        }
 
         return $divbtn;
     }
@@ -1311,6 +1321,12 @@ function MenuEditor(idSelector, options) {
 
             var isParent = (typeof (v.children) !== "undefined") && ($.isArray(v.children));
             var itemObject = {
+                system: 0,
+                owner: 0,
+                is_owner: 0,
+                locked: false,
+                editable: 0,
+                basekey: "",
                 __key: "",
                 __parent: "yyyy",
                 content: "",
@@ -1329,6 +1345,8 @@ function MenuEditor(idSelector, options) {
                 type: "",
                 url: "",
                 value: "",
+                hint: "",
+                description: "",
             };
 
             var temp = $.extend({}, v);
@@ -1348,20 +1366,19 @@ function MenuEditor(idSelector, options) {
             }
             var $titleContainer = $("<div>").addClass(container_class);
 
-            var $spanTitle = $("<span>").addClass("title").append(v.title);
+            var $pTitle = $("<p>").addClass("title").append(v.title);
+            var $pKey = $("<p>").addClass("__key").append(v.__key);
 
-            var required_class = "d-none";
-            if (itemObject.required) {
-                required_class = "required";
+            var $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
+            if (1 == itemObject.editable) {
+                $iconLocked = '';
             }
-            var $spanRequired = $("<span>").addClass(required_class).append("*");
 
-            var $br = $("<br>");
             var typeTitle = getTypeTitle(v.type);
-            var $spanType = $("<span>").addClass("type").append(typeTitle);
-            $titleContainer.append($spanTitle).append($spanRequired).append($br).append($spanType);
+            var $pType = $("<p>").addClass("type").append(typeTitle);
+            $titleContainer.append($pTitle).append($iconLocked).append($pKey).append($pType);
 
-            var $divbtn =  TButtonGroup();
+            var $divbtn =  TButtonGroup(v.editable);
             $div.append("&nbsp;").append($titleContainer).append($divbtn);
             $li.append($div);
             if (isParent) {
@@ -1464,7 +1481,8 @@ function MenuEditor(idSelector, options) {
         var newTitle = document.getElementById("title").value;
 
         var oldKey = document.getElementById("currentKey").value;
-        var newKey = this.convertTitleToConfigName(newTitle);
+        var baseKey = document.getElementById("basekey").value;
+        var newKey = baseKey;//this.convertTitleToConfigName(newTitle);
         if ("" !== newParent) {
             newKey = newParent + "." + newKey;
         }
@@ -1474,6 +1492,12 @@ function MenuEditor(idSelector, options) {
         }
 
         var objectData = {
+            "system" : document.getElementById("system").value,
+            "owner" : document.getElementById("owner").value,
+            "is_owner" : document.getElementById("is_owner").value,
+            "locked" : document.getElementById("locked").checked,
+            "editable" : document.getElementById("editable").value,
+            "basekey" : baseKey,
             "__key" : newKey,
             "__parent" : newParent,
             "content" : document.getElementById("content").value,
@@ -1488,10 +1512,12 @@ function MenuEditor(idSelector, options) {
             "required" : document.getElementById("required").checked,
             "step" : document.getElementById("step").value,
             "title" : newTitle,
-            "toggle_elements" : document.getElementById("toggle_elements_data").getAttribute("selected-data").split(","),
+            "toggle_elements" : $("#toggle_elements").val(),
             "type" : document.getElementById("type").value,
             "url" : document.getElementById("url").value,
             "value" : document.getElementById("value").value,
+            "hint" : document.getElementById("hint").value,
+            "description" : document.getElementById("description").value,
         }
 
         if (oldParent != newParent) {
@@ -1499,6 +1525,9 @@ function MenuEditor(idSelector, options) {
         } else {
             this.update_parentNotChanged($cEl, oldParent, newParent, oldKey, newKey, objectData);
         }
+
+        document.getElementById("exception_key").value = "";
+        $("#exception_key").trigger("click");
     };
 
     this.update_parentChanged = function(currentElement, oldParent, newParent, oldKey, newKey, objectData) {
@@ -1516,7 +1545,7 @@ function MenuEditor(idSelector, options) {
             list.remove();
         }
 
-        var btnGroup = TButtonGroup();
+        var btnGroup = TButtonGroup(objectData.editable);
         
         var container_class = "editor-title-container disabled";
         if (objectData.enabled) {
@@ -1524,18 +1553,17 @@ function MenuEditor(idSelector, options) {
         }
         var $titleContainer = $("<div>").addClass(container_class);
         
-        var $spanTitle = $("<span>").addClass("title").append(objectData.title);
+        var $pTitle = $("<p>").addClass("title").append(objectData.title);
+        var $pKey = $("<p>").addClass("__key").append(objectData.__key);
 
-        var required_class = "d-none";
-        if (objectData.required) {
-            required_class = "required";
+        var $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
+        if (1 == objectData.editable) {
+            $iconLocked = '';
         }
-        var $spanRequired = $("<span>").addClass(required_class).append("*");
 
-        var $br = $("<br>");
         var typeTitle = getTypeTitle(objectData.type);
-        var $spanType = $("<span>").addClass("type").append(typeTitle);
-        $titleContainer.append($spanTitle).append($spanRequired).append($br).append($spanType);
+        var $pType = $("<p>").addClass("type").append(typeTitle);
+        $titleContainer.append($pTitle).append($iconLocked).append($pKey).append($pType);
 
         var div = $('<div>').css({"overflow": "auto"}).append("&nbsp;").append($titleContainer).append(btnGroup);
         var $li = $("<li>").data(objectData);
@@ -1568,9 +1596,6 @@ function MenuEditor(idSelector, options) {
 
         MenuEditor.updateButtons($main);
         resetForm();
-
-        document.getElementById("exception_key").value = "";
-        $("#exception_key").trigger("click");
     }
 
     this.update_parentNotChanged = function(currentElement, oldParent, newParent, oldKey, newKey, objectData) {
@@ -1586,25 +1611,23 @@ function MenuEditor(idSelector, options) {
 
         liDataContainer.attr('class', container_class);
 
-        var $spanTitle = $("<span>").addClass("title").append(objectData.title);
+        var $pTitle = $("<p>").addClass("title").append(objectData.title);
+        var $pKey = $("<p>").addClass("__key").append(objectData.__key);
 
-        var required_class = "d-none";
-        if (objectData.required) {
-            required_class = "required";
+        var $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
+        if (1 == objectData.editable) {
+            $iconLocked = '';
         }
-        var $spanRequired = $("<span>").addClass(required_class).append("*");
 
-        var $br = $("<br>");
         var typeTitle = getTypeTitle(objectData.type);
-        var $spanType = $("<span>").addClass("type").append(typeTitle);
+        var $pType = $("<p>").addClass("type").append(typeTitle);
 
-        liDataContainer.append($spanTitle).append($spanRequired).append($br).append($spanType);
+        liDataContainer.append($pTitle).append($iconLocked).append($pKey).append($pType);
 
         li.id = newKey;
 
-        
         $(li).data(objectData);
-        
+
         return;
     }
 
@@ -1614,6 +1637,12 @@ function MenuEditor(idSelector, options) {
         var arrLi = $('ul:first>li', element);
 
         var tempOpject = {
+            "system": 0,
+            "owner": 0,
+            "is_owner": 0,
+            "locked": false,
+            "editable": 0,
+            "basekey" : "",
             "__key" : "",
             "__parent" : "",
             "content" : "",
@@ -1631,7 +1660,9 @@ function MenuEditor(idSelector, options) {
             "toggle_elements" : [],
             "type" : "",
             "url" : "",
-            "value" : null
+            "value" : null,
+            "hint" : "",
+            "description" : "",
         };
 
         var children = [];
@@ -1671,6 +1702,12 @@ function MenuEditor(idSelector, options) {
 
     this.updateChildren = function(children) {
         var tempOpject = {
+            "system": 0,
+            "owner": 0,
+            "is_owner": 0,
+            "locked": false,
+            "editable": 0,
+            "basekey" : "",
             "__key" : "",
             "__parent" : "",
             "content" : "",
@@ -1688,12 +1725,13 @@ function MenuEditor(idSelector, options) {
             "toggle_elements" : [],
             "type" : "",
             "url" : "",
-            "value" : null
+            "value" : null,
+            "hint" : "",
+            "description" : "",
         };
 
         var objectData = {},
             btnGroup = null,
-            title = "",
             div = null,
             $li = null,
             $parent = null,
@@ -1701,14 +1739,19 @@ function MenuEditor(idSelector, options) {
             subchildren = [],
             container_class = null,
             $titleContainer = null,
-            $spanTitle = null,
-            required_class = null,
-            $spanRequired = null,
-            $spanType = null,
-            $br = $("<br>");
+            $pTitle = null,
+            $pKey = null,
+            $iconLocked = null,
+            $pType = null;
 
         children.forEach(element => {
             objectData = tempOpject;
+            objectData["system"] = element["system"];
+            objectData["owner"] = element["owner"];
+            objectData["is_owner"] = element["is_owner"];
+            objectData["locked"] = element["locked"];
+            objectData["editable"] = element["editable"];
+            objectData["basekey"] = element["basekey"];
             objectData["__key"] = element["__key"];
             objectData["__parent"] = element["__parent"];
             objectData["content"] = element["content"];
@@ -1727,8 +1770,10 @@ function MenuEditor(idSelector, options) {
             objectData["type"] = element["type"];
             objectData["url"] = element["url"];
             objectData["value"] = element["value"];
+            objectData["hint"] = element["hint"];
+            objectData["description"] = element["description"];
             
-            btnGroup = TButtonGroup();
+            btnGroup = TButtonGroup(objectData["editable"]);
 
             container_class = "editor-title-container disabled";
             if (objectData.enabled) {
@@ -1736,17 +1781,17 @@ function MenuEditor(idSelector, options) {
             }
             $titleContainer = $("<div>").addClass(container_class);
             
-            $spanTitle = $("<span>").addClass("title").append(objectData.title);
+            $pTitle = $("<p>").addClass("title").append(objectData.title);
+            $pKey = $("<p>").addClass("__key").append(objectData.__key);
 
-            required_class = "d-none";
-            if (objectData.required) {
-                required_class = "required";
+            $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
+            if (1 == objectData.editable) {
+                $iconLocked = '';
             }
-            $spanRequired = $("<span>").addClass(required_class).append("*");
-            var $br = $("<br>");
+
             var typeTitle = getTypeTitle(objectData.type);
-            $spanType = $("<span>").addClass("type").append(typeTitle);
-            $titleContainer.append($spanTitle).append($spanRequired).append($br).append($spanType);
+            $pType = $("<p>").addClass("type").append(typeTitle);
+            $titleContainer.append($pTitle).append($iconLocked).append($pKey).append($pType);
 
             div = $('<div>').css({"overflow": "auto"}).append("&nbsp;").append($titleContainer).append(btnGroup);
             $li = $("<li>").data(objectData);
@@ -1792,16 +1837,27 @@ function MenuEditor(idSelector, options) {
     }
    
     this.add = function(){
-        var newParent = document.getElementById("__parent").value;
+        setTimeout(function() {
+            const xyz = 4;
+        }, 500);
+        
+        var newParentKey = document.getElementById("__parent").value;
         var newTitle = document.getElementById("title").value;
-        var newKey = this.convertTitleToConfigName(newTitle);
-        if ("" !== newParent) {
-            newKey = newParent + "." + newKey;
+        var baseKey = document.getElementById("basekey").value;
+        var newKey = baseKey;
+        if ("" !== newParentKey) {
+            newKey = newParentKey + "." + newKey;
         }
 
         var objectData = {
+            "system": document.getElementById("system").value,
+            "owner": 0,
+            "is_owner": 1,
+            "locked": document.getElementById("locked").checked,
+            "editable": 1,
+            "basekey": baseKey,
             "__key" : newKey,
-            "__parent" : newParent,
+            "__parent" : newParentKey,
             "content" : document.getElementById("content").value,
             "default_value" : this.getItemDefaultValue(document.getElementById("type").value),
             "enabled" : document.getElementById("enabled").checked,
@@ -1814,13 +1870,15 @@ function MenuEditor(idSelector, options) {
             "required" : document.getElementById("required").checked,
             "step" : document.getElementById("step").value,
             "title" : newTitle,
-            "toggle_elements" : document.getElementById("toggle_elements_data").getAttribute("selected-data").split(","),
+            "toggle_elements" : $("#toggle_elements").val(),
             "type" : document.getElementById("type").value,
             "url" : document.getElementById("url").value,
             "value" : document.getElementById("value").value,
-        }
+            "hint" : document.getElementById("hint").value,
+            "description" : document.getElementById("description").value,
+        };
 
-        var btnGroup = TButtonGroup();
+        var btnGroup = TButtonGroup(objectData.editable);
 
         var container_class = "editor-title-container disabled";
         if (objectData.enabled) {
@@ -1828,35 +1886,39 @@ function MenuEditor(idSelector, options) {
         }
         var $titleContainer = $("<div>").addClass(container_class);
         
-        var $spanTitle = $("<span>").addClass("title").append(newTitle);
+        var $pTitle = $("<p>").addClass("title").append(newTitle);
+        var $pKey = $("<p>").addClass("__key").append(newKey);
 
-        var required_class = "d-none";
-        if (objectData.required) {
-            required_class = "required";
+        var $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
+        if (1 == objectData.editable) {
+            $iconLocked = '';
         }
-        var $spanRequired = $("<span>").addClass(required_class).append("*");
 
-        var $br = $("<br>");
         var typeTitle = getTypeTitle(objectData.type);
-        var $spanType = $("<span>").addClass("type").append(typeTitle);
-        $titleContainer.append($spanTitle).append($spanRequired).append($br).append($spanType);
+        var $pType = $("<p>").addClass("type").append(typeTitle);
+        $titleContainer.append($pTitle).append($iconLocked).append($pKey).append($pType);
 
         var div = $('<div>').css({"overflow": "auto"}).append("&nbsp;").append($titleContainer).append(btnGroup);
-        var $li = $("<li>").data(objectData);
+
+        var $li = $("<li>");
+        $li.data(objectData);
+
         $li.attr("id", newKey);
+
         $li.addClass('list-group-item').append(div);
 
-        if ("" == newParent) {
+        if ("" == newParentKey) {
             $main.append($li);
         } else {
-            $parent = $(document.getElementById(newParent));
+            $parent = $(document.getElementById(newParentKey));
             $ul = $parent.children('ul');
-            if ($ul.length > 0)
+            if ($ul.length > 0) {
                 $ul.append($li);
-            else {
+            } else {
                 $ul = $('<ul>').addClass('pl-0').css('padding-top', '10px');
-                $parent.append($ul);
                 $ul.append($li);
+                $parent.append($ul);
+                
                 $parent.addClass('sortableListsOpen');
                 TOpener($parent);
 
@@ -1864,6 +1926,8 @@ function MenuEditor(idSelector, options) {
                 $ul.disableSelection();
             }
         }
+
+        $li = null;
         
         MenuEditor.updateButtons($main);
         resetForm();

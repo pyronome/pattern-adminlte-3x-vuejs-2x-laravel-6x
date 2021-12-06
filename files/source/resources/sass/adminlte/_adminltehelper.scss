@@ -1352,7 +1352,8 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
 }
 
 .editor-title-container > .title {
-    margin-right: 0px;
+    display:inline-block;
+    margin: 0px;
     color: #6c757d;
     font-size: 16px;
     font-weight: bold;
@@ -1367,9 +1368,22 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
     color: #dc3545;
 }
 
+.editor-title-container > .__key {
+    margin: 0px;
+    font-size: 14px;
+    color: #555;
+}
+
 .editor-title-container > .type {
+    margin: 0px;
     color: #6c757d!important;
-    font-size: 12px;
+    font-size: 14px;
+}
+
+.editor-lock-icon {
+    margin-left: 5px;
+    color: #dc3545;
+    font-size: 14px;
 }
 
 button.use-parameter-default-value {
@@ -1378,7 +1392,17 @@ button.use-parameter-default-value {
     font-size: 12px;
     text-decoration: underline;
     color: #007bff;
-    vertical-align: super;
+    line-height: 20px;
+}
+
+.config-desc {
+    margin-bottom: 5px!important;
+}
+
+.row.config-maingroup.toggle-able {
+    margin-top: 30px;
+    border-bottom: 1px dashed #6c757d;
+    padding-bottom: 15px;
 }
 
 .sticky-btn {
