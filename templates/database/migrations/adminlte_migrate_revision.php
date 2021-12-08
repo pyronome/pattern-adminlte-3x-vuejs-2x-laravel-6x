@@ -719,14 +719,6 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         array_push($menu, $menu_item);
 
         $menu_item = [];
-        $menu_item['text'] = 'Form';
-        $menu_item['href'] = 'adminlteconfig';
-        $menu_item['icon'] = 'fab fa-wpforms';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
-        array_push($menu, $menu_item);
-
-        $menu_item = [];
         $menu_item['text'] = 'Logout';
         $menu_item['href'] = 'logout';
         $menu_item['icon'] = 'fas fa-power-off';
