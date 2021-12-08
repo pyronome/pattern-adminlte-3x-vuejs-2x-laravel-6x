@@ -719,99 +719,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         array_push($menu, $menu_item);
 
         $menu_item = [];
-        $menu_item['text'] = 'Server Information';
-        $menu_item['href'] = 'server_information';
-        $menu_item['icon'] = 'fas fa-server';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
-        array_push($menu, $menu_item);
-
-        $menu_item = [];
-        $menu_item['text'] = 'Preferences';
-        $menu_item['href'] = 'preferences';
-        $menu_item['icon'] = 'fas fa-asterisk';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
-        array_push($menu, $menu_item);
-            
-        $menu_item = [];
-        $menu_item['text'] = 'General Settings';
-        $menu_item['href'] = 'general_settings';
-        $menu_item['icon'] = 'fas fa-atom';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
-        array_push($menu, $menu_item);
-            
-        $menu_item = [];
-        $menu_item['text'] = 'Branding';
-        $menu_item['href'] = 'branding';
-        $menu_item['icon'] = 'fas fa-bold';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
-        array_push($menu, $menu_item);
-            
-        $menu_item = [];
-        $menu_item['text'] = 'Mail (SMTP) Server';
-        $menu_item['href'] = 'email_server';
-        $menu_item['icon'] = 'fas fa-mail-bulk';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
-        array_push($menu, $menu_item);
-            
-        $menu_item = [];
-        $menu_item['text'] = 'Menu Configuration';
-        $menu_item['href'] = 'menu_configuration';
-        $menu_item['icon'] = 'fas fa-list-ol';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
-        array_push($menu, $menu_item);
-            
-        $menu_item = [];
-        $menu_item['text'] = 'Model Display Settings';
-        $menu_item['href'] = 'adminltemodeldisplaytext';
-        $menu_item['icon'] = 'fas fa-sort-alpha-down';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
-        array_push($menu, $menu_item);
-            
-        $menu_item = [];
-        $menu_item['text'] = 'Users';
-        $menu_item['href'] = 'adminlteuser';
-        $menu_item['icon'] = 'fas fa-user-cog';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
-        array_push($menu, $menu_item);
-            
-        $menu_item = [];
-        $menu_item['text'] = 'User Groups';
-        $menu_item['href'] = 'adminlteusergroup';
-        $menu_item['icon'] = 'fas fa-users-cog';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration';
-        array_push($menu, $menu_item);
-
-        $menu_item = [];
-        $menu_item['text'] = 'Configuration Parameters';
-        $menu_item['href'] = 'configuration_parameters';
-        $menu_item['icon'] = 'fas fa-cogs';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = '';
-        array_push($menu, $menu_item);
-
-        $menu_item = [];
-        $menu_item['text'] = 'Settings';
-        $menu_item['href'] = 'adminlteconfigsettings';
-        $menu_item['icon'] = 'fab fa-connectdevelop';
-        $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration_parameters';
-        array_push($menu, $menu_item);
-
-        $menu_item = [];
         $menu_item['text'] = 'Form';
         $menu_item['href'] = 'adminlteconfig';
         $menu_item['icon'] = 'fab fa-wpforms';
         $menu_item['visibility'] = 1;
-        $menu_item['parent'] = 'configuration_parameters';
+        $menu_item['parent'] = 'configuration';
         array_push($menu, $menu_item);
 
         $menu_item = [];

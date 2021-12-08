@@ -30,6 +30,19 @@ var AdminLTEHelper = {
             return;
         }
 
+        if (
+            ("server_information" == strPageURL)
+            || ("preferences" == strPageURL)
+            || ("email_server" == strPageURL)
+            || ("menu_configuration" == strPageURL)
+            || ("adminltemodeldisplaytext" == strPageURL)
+            || ("adminlteuser" == strPageURL)
+            || ("adminlteusergroup" == strPageURL)
+        ) {
+            $("#pageurlconfiguration").addClass("active");
+            return;
+        }
+
         var PageURL = document.getElementById("pageurl" + strPageURL);
         if (PageURL == undefined) {
             return;

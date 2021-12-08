@@ -1382,8 +1382,13 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
 
 .editor-lock-icon {
     margin-left: 5px;
+    font-size: 0.8rem;
+}
+
+.editor-required-icon {
+    margin-left: 5px;
+    font-size: 0.8rem;
     color: #dc3545;
-    font-size: 14px;
 }
 
 button.use-parameter-default-value {

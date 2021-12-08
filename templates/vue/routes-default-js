@@ -2,11 +2,11 @@ import HomePage from "./components/pages/default/Home.vue";
 import ProfileDetail from "./components/pages/default/profile/detail.vue";
 import ProfileEdit from "./components/pages/default/profile/edit.vue";
 import ProfileChangePassword from "./components/pages/default/profile/changepassword.vue";
+import Configuration from "./components/pages/default/Configuration.vue";
+import ParameterSettings from "./components/pages/default/ParameterSettings.vue";
 import ServerInformationPage from "./components/pages/default/ServerInformation.vue";
 import PreferencesPage from "./components/pages/default/Preferences.vue";
 import EmailServerPage from "./components/pages/default/EmailServer.vue";
-import GeneralSettingsPage from "./components/pages/default/GeneralSettings.vue";
-import BrandingPage from "./components/pages/default/Branding.vue";
 import MenuConfigurationPage from "./components/pages/default/MenuConfiguration.vue";
 import AdminLTEModelDisplayTextPage from "./components/pages/default/AdminLTEModelDisplayText.vue";
 import AdminLTEUserList from "./components/pages/default/adminlteuser/list.vue";
@@ -18,8 +18,6 @@ import AdminLTEUserGroupDetail from "./components/pages/default/adminlteusergrou
 import AdminLTEUserGroupEdit from "./components/pages/default/adminlteusergroup/edit.vue";
 import AdminLTEUserGroupPermission from "./components/pages/default/adminlteusergroup/permission.vue";
 import AdminLTEUserGroupLayout from "./components/pages/default/adminlteusergroup/layout.vue";
-import AdminLTEConfig from "./components/pages/default/adminlteconfig/config.vue";
-import AdminLTESettings from "./components/pages/default/adminlteconfig/settings.vue";
 {{ROUTES_MODEL_DEFAULT_IMPORT_DEFINITONS}}
 /* {{@snippet:import_files}} */
 
@@ -29,11 +27,11 @@ export default {
     "/profile/detail": ProfileDetail,
     "/profile/edit": ProfileEdit,
     "/profile/changepassword": ProfileChangePassword,
+    "/configuration": Configuration,
+    "/parameter_settings": ParameterSettings,
     "/server_information": ServerInformationPage,
     "/preferences": PreferencesPage,
     "/email_server": EmailServerPage,
-    "/general_settings": GeneralSettingsPage,
-    "/branding": BrandingPage,
     "/menu_configuration": MenuConfigurationPage,
     "/adminltemodeldisplaytext": AdminLTEModelDisplayTextPage,
     "/adminlteuser": AdminLTEUserList,
@@ -45,8 +43,6 @@ export default {
     "/adminlteusergroup/edit/:id": AdminLTEUserGroupEdit,
     "/adminlteusergroup/permission/:id": AdminLTEUserGroupPermission,
     "/adminlteusergroup/layout/:id": AdminLTEUserGroupLayout,
-    "/adminlteconfig": AdminLTEConfig,
-    "/adminlteconfigsettings": AdminLTESettings,
 {{ROUTES_MODEL_DEFAULT_EXPORT_DEFINITONS}}
 /* {{@snippet:export_files}} */
 };

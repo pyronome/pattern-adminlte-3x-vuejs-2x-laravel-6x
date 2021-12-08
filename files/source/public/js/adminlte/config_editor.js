@@ -1005,33 +1005,34 @@
         var arr = [];
         $(this).children('li').each(function () {
             var li = $(this);
-            var object = {};
-            object["system"] = li.data("system");
-            object["owner"] = li.data("owner");
-            object["is_owner"] = li.data("is_owner");
-            object["locked"] = li.data("locked");
-            object["editable"] = li.data("editable");
-            object["basekey"] = li.data("basekey");
-            object["__key"] = li.data("__key");
-            object["__parent"] = li.data("__parent");
-            object["content"] = li.data("content");
-            object["default_value"] = li.data("default_value");
-            object["enabled"] = li.data("enabled");
-            object["file_types"] = li.data("file_types");
-            object["max"] = li.data("max");
-            object["min"] = li.data("min");
-            object["multiple"] = li.data("multiple");
-            object["option_titles"] = li.data("option_titles");
-            object["option_values"] = li.data("option_values");
-            object["required"] = li.data("required");
-            object["step"] = li.data("step");
-            object["title"] = li.data("title");
-            object["toggle_elements"] = li.data("toggle_elements");
-            object["type"] = li.data("type");
-            object["url"] = li.data("url");
-            object["value"] = li.data("value");
-            object["hint"] = li.data("hint");
-            object["description"] = li.data("description");
+            var object = {
+                "system" : li.data("system"),
+                "owner" : li.data("owner"),
+                "is_owner" : li.data("is_owner"),
+                "locked" : li.data("locked"),
+                "editable" : li.data("editable"),
+                "basekey" : li.data("basekey"),
+                "__key" : li.data("__key"),
+                "__parent" : li.data("__parent"),
+                "content" : li.data("content"),
+                "default_value" : li.data("default_value"),
+                "enabled" : li.data("enabled"),
+                "file_types" : li.data("file_types"),
+                "max" : li.data("max"),
+                "min" : li.data("min"),
+                "multiple" : li.data("multiple"),
+                "option_titles" : li.data("option_titles"),
+                "option_values" : li.data("option_values"),
+                "required" : li.data("required"),
+                "step" : li.data("step"),
+                "title" : li.data("title"),
+                "toggle_elements" : li.data("toggle_elements"),
+                "type" : li.data("type"),
+                "url" : li.data("url"),
+                "value" : li.data("value"),
+                "hint" : li.data("hint"),
+                "description" : li.data("description"),
+            };
 
             arr.push(object);
             var ch = li.children('ul,ol').sortableListsToJson();
@@ -1320,7 +1321,7 @@ function MenuEditor(idSelector, options) {
             v = arrayItem[__key];
 
             var isParent = (typeof (v.children) !== "undefined") && ($.isArray(v.children));
-            var itemObject = {
+            var objectData = {
                 system: 0,
                 owner: 0,
                 is_owner: 0,
@@ -1353,15 +1354,15 @@ function MenuEditor(idSelector, options) {
             if (isParent){ 
                 delete temp['children'];
             }
-            $.extend(itemObject, temp);
+            $.extend(objectData, temp);
 
             var $li = $('<li>').addClass('list-group-item');
             $li.attr("id", v.__key);
-            $li.data(itemObject);
+            $li.data(objectData);
             var $div = $('<div>').css('overflow', 'auto');
 
             var container_class = "editor-title-container disabled";
-            if (itemObject.enabled) {
+            if (objectData.enabled) {
                 container_class = "editor-title-container";
             }
             var $titleContainer = $("<div>").addClass(container_class);
@@ -1370,13 +1371,18 @@ function MenuEditor(idSelector, options) {
             var $pKey = $("<p>").addClass("__key").append(v.__key);
 
             var $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
-            if (1 == itemObject.editable) {
+            if (1 == objectData.editable) {
                 $iconLocked = '';
+            }
+
+            var $iconRequired = '<i class="fa fa-asterisk editor-required-icon"></i>';
+            if (0 == objectData.required) {
+                $iconRequired = '';
             }
 
             var typeTitle = getTypeTitle(v.type);
             var $pType = $("<p>").addClass("type").append(typeTitle);
-            $titleContainer.append($pTitle).append($iconLocked).append($pKey).append($pType);
+            $titleContainer.append($pTitle).append($iconRequired).append($iconLocked).append($pKey).append($pType);
 
             var $divbtn =  TButtonGroup(v.editable);
             $div.append("&nbsp;").append($titleContainer).append($divbtn);
@@ -1393,28 +1399,29 @@ function MenuEditor(idSelector, options) {
     }
 
     function getTypeTitle(key) {
-        var options = {};
-        options["group"] = "Group";
-        options["toggle"] = "Toggle";
-        options["checkbox"] = "Checkbox";
-        options["colorpicker"] = "Color Picker";
-        options["datepicker"] = "Date Picker";
-        options["datetimepicker"] = "Date Time Picker";
-        options["dropdown"] = "Dropdown";
-        options["file"] = "File";
-        options["html_editor"] = "HTML Editor";
-        options["iconpicker"] = "Icon Picker";
-        options["integer"] = "Integer";
-        options["link_button"] = "Link (Button)";
-        options["link_text"] = "Link (Text)";
-        options["number"] = "Number";
-        options["password"] = "Password";
-        options["radio"] = "Radio";
-        options["readonly_content"] = "Readonly Content";
-        options["shorttext"] = "Shorttext";
-        options["switch"] = "Switch";
-        options["textarea"] = "Textarea";
-        options["timepicker"] = "Time Picker";
+        var options = {
+            "group" : "Group",
+            "toggle" : "Toggle",
+            "checkbox" : "Checkbox",
+            "colorpicker" : "Color Picker",
+            "datepicker" : "Date Picker",
+            "datetimepicker" : "Date Time Picker",
+            "dropdown" : "Dropdown",
+            "file" : "File",
+            "html_editor" : "HTML Editor",
+            "iconpicker" : "Icon Picker",
+            "integer" : "Integer",
+            "link_button" : "Link (Button)",
+            "link_text" : "Link (Text)",
+            "number" : "Number",
+            "password" : "Password",
+            "radio" : "Radio",
+            "readonly_content" : "Readonly Content",
+            "shorttext" : "Shorttext",
+            "switch" : "Switch",
+            "textarea" : "Textarea",
+            "timepicker" : "Time Picker",
+        };
 
         return options[key];
     }
@@ -1561,9 +1568,14 @@ function MenuEditor(idSelector, options) {
             $iconLocked = '';
         }
 
+        var $iconRequired = '<i class="fa fa-asterisk editor-required-icon"></i>';
+        if (0 == objectData.required) {
+            $iconRequired = '';
+        }
+
         var typeTitle = getTypeTitle(objectData.type);
         var $pType = $("<p>").addClass("type").append(typeTitle);
-        $titleContainer.append($pTitle).append($iconLocked).append($pKey).append($pType);
+        $titleContainer.append($pTitle).append($iconRequired).append($iconLocked).append($pKey).append($pType);
 
         var div = $('<div>').css({"overflow": "auto"}).append("&nbsp;").append($titleContainer).append(btnGroup);
         var $li = $("<li>").data(objectData);
@@ -1619,10 +1631,15 @@ function MenuEditor(idSelector, options) {
             $iconLocked = '';
         }
 
+        var $iconRequired = '<i class="fa fa-asterisk editor-required-icon"></i>';
+        if (0 == objectData.required) {
+            $iconRequired = '';
+        }
+
         var typeTitle = getTypeTitle(objectData.type);
         var $pType = $("<p>").addClass("type").append(typeTitle);
 
-        liDataContainer.append($pTitle).append($iconLocked).append($pKey).append($pType);
+        liDataContainer.append($pTitle).append($iconRequired).append($iconLocked).append($pKey).append($pType);
 
         li.id = newKey;
 
@@ -1741,7 +1758,6 @@ function MenuEditor(idSelector, options) {
             $titleContainer = null,
             $pTitle = null,
             $pKey = null,
-            $iconLocked = null,
             $pType = null;
 
         children.forEach(element => {
@@ -1784,14 +1800,19 @@ function MenuEditor(idSelector, options) {
             $pTitle = $("<p>").addClass("title").append(objectData.title);
             $pKey = $("<p>").addClass("__key").append(objectData.__key);
 
-            $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
+            var $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
             if (1 == objectData.editable) {
                 $iconLocked = '';
             }
 
+            var $iconRequired = '<i class="fa fa-asterisk editor-required-icon"></i>';
+            if (0 == objectData.required) {
+                $iconRequired = '';
+            }
+
             var typeTitle = getTypeTitle(objectData.type);
             $pType = $("<p>").addClass("type").append(typeTitle);
-            $titleContainer.append($pTitle).append($iconLocked).append($pKey).append($pType);
+            $titleContainer.append($pTitle).append($iconRequired).append($iconLocked).append($pKey).append($pType);
 
             div = $('<div>').css({"overflow": "auto"}).append("&nbsp;").append($titleContainer).append(btnGroup);
             $li = $("<li>").data(objectData);
@@ -1894,9 +1915,14 @@ function MenuEditor(idSelector, options) {
             $iconLocked = '';
         }
 
+        var $iconRequired = '<i class="fa fa-asterisk editor-required-icon"></i>';
+        if (0 == objectData.required) {
+            $iconRequired = '';
+        }
+
         var typeTitle = getTypeTitle(objectData.type);
         var $pType = $("<p>").addClass("type").append(typeTitle);
-        $titleContainer.append($pTitle).append($iconLocked).append($pKey).append($pType);
+        $titleContainer.append($pTitle).append($iconRequired).append($iconLocked).append($pKey).append($pType);
 
         var div = $('<div>').css({"overflow": "auto"}).append("&nbsp;").append($titleContainer).append(btnGroup);
 

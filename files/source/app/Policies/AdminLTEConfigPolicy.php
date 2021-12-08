@@ -31,9 +31,9 @@ class AdminLTEConfigPolicy
 
         if (isset($permissions['__adminlte_menu']))
         {
-            if (isset($permissions['__adminlte_menu']['adminlteconfig']))
+            if (isset($permissions['__adminlte_menu']['configuration']))
             {
-                $has_permission = $permissions['__adminlte_menu']['adminlteconfig'];
+                $has_permission = $permissions['__adminlte_menu']['configuration'];
             }
         }
 

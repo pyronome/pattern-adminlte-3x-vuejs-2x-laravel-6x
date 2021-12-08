@@ -18,9 +18,7 @@ class AdminLTEConfigController extends Controller
     public function getlist(Request $request)
     {
         $objectAdminLTE = new AdminLTE();
-
         $User = auth()->guard('adminlteuser')->user();
-
         $parameters = $request->route()->parameters();
 
         $search_text = '';
@@ -62,7 +60,7 @@ class AdminLTEConfigController extends Controller
         $configList = [];
 
         foreach ($objectList as $object) {
-            $user_can_view = $User->can('view', $object);
+            $user_can_view = $User->can('viewAny', $object);
 
             if ($user_can_view && (1 == $object->enabled)) {
                 $configList[$object->__key]['object'] = $object;
@@ -73,6 +71,35 @@ class AdminLTEConfigController extends Controller
         $this->setConfigTree($configList);
 
         $keys = array_keys($configList);
+        
+        $basekeyOrders = $this->getBasekeyOrders($configList);
+        
+        
+        $keyOrders = [];
+
+        foreach ($configList as $key => $data) {
+            $object = $data['object'];
+
+            if (!isset($keyOrders[$key])) {
+                $orderedKey = '';
+                $keyParts = explode('.', $key);
+                foreach ($keyParts as $part) {
+                    $tempStr = str_replace($part, $basekeyOrders[$part], $part);
+
+                    if ('' != $orderedKey) {
+                        $orderedKey .= '.';
+                    }
+
+                    $orderedKey .= $tempStr;
+                }
+
+                $keyOrders[$key] = $orderedKey;
+            }
+        }
+
+        natsort($keyOrders);
+
+        $keys = array_keys($keyOrders);
         $list = [];
         $index = 0;
 
@@ -138,6 +165,21 @@ class AdminLTEConfigController extends Controller
         ];
     }
 
+    public function getBasekeyOrders($configList) {
+        $basekeyOrders = [];
+
+        foreach ($configList as $key => $data) {
+            $object = $data['object'];
+            $basekey = $this->getBasekey($key);
+
+            if (!isset($basekeyOrders[$basekey])) {
+                $basekeyOrders[$basekey] = $object->__order;
+            }
+        }
+
+        return $basekeyOrders;
+    }
+
     public function getGroupLevel($__key) {
         $parts = explode('.', $__key);
         $level = count($parts) - 1;
@@ -149,9 +191,11 @@ class AdminLTEConfigController extends Controller
         $list = $configList;
         foreach ($list as $__key => $item) {
             $object = $item['object'];
+            //echo 'objectKey:' . $object->__key . '<br>';
             $parentKey = $this->getParentKey($object->__key);
+            //echo 'parentKey:' . $parentKey . '<br>';
 
-             if ( ('' != $parentKey) && isset($configList[$parentKey]) ) {
+             if ( ('' != $parentKey) && !isset($configList[$parentKey]) ) {
                 $parentObject = $this->getConfigObject($parentKey);
 
                 if ((null !== $parentObject) && (1 == $parentObject->enabled)) {
@@ -166,6 +210,10 @@ class AdminLTEConfigController extends Controller
             }
         }
 
+        if ($need_search) {
+            $this->setConfigTree($configList);
+        }
+
         return;
     }
 
@@ -175,7 +223,6 @@ class AdminLTEConfigController extends Controller
                 unset($configList[$__key]);
             }
         }
-
         return;
     }
 
@@ -291,7 +338,7 @@ class AdminLTEConfigController extends Controller
         return $parent;
     }
 
-    public function getBaseKey($key) {
+    public function getBasekey($key) {
         $basekey = '';
 
         if ('' != $key) {
@@ -380,11 +427,6 @@ class AdminLTEConfigController extends Controller
 
 		$objectAdminLTEConfig->save();
 		
-
-
-
-
-
         $return_data['id'] = $objectAdminLTEConfig->id;
         $return_data['has_error'] = false;
         $return_data['error_msg'] = '';
@@ -708,7 +750,7 @@ class AdminLTEConfigController extends Controller
             $parent_data[$index]['enabled'] = (1 == $object->enabled);
             $parent_data[$index]['required'] = (1 == $object->required);
             $parent_data[$index]['__key'] = $object->__key;
-            $parent_data[$index]['basekey'] = $this->getBaseKey($object->__key);
+            $parent_data[$index]['basekey'] = $this->getBasekey($object->__key);
             $parent_data[$index]['__parent'] = $this->getParentKey($object->__key);
             $parent_data[$index]['type'] = $object->type;
             $parent_data[$index]['title'] = $object->title;
@@ -770,7 +812,7 @@ class AdminLTEConfigController extends Controller
             $children_data[$index]['enabled'] = (1 == $object->enabled);
             $children_data[$index]['required'] = (1 == $object->required);
             $children_data[$index]['__key'] = $object->__key;
-            $children_data[$index]['basekey'] = $this->getBaseKey($object->__key);
+            $children_data[$index]['basekey'] = $this->getBasekey($object->__key);
             $children_data[$index]['__parent'] = $this->getParentKey($object->__key);
             $children_data[$index]['type'] = $object->type;
             $children_data[$index]['title'] = $object->title;

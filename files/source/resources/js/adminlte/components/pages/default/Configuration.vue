@@ -6,15 +6,21 @@
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>{{ $t("Form") }}</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
-                            <li class="breadcrumb-item active">{{ $t("Configuration Parameters") }}</li>
-                        </ol>
-                    </div>
+                        <div class="col-sm-6">
+                            <h1>{{ $t("Configuration") }}</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
+                                <li class="breadcrumb-item active">{{ $t("Configuration") }}</li>
+                            </ol>
+                            
+                        </div>
+                        <div class="col-sm-12" v-show="page.variables.is_admin">
+                            <a class="btn btn-primary btn-md btn-on-card text-white float-sm-right" href="parameter_settings">
+                                <span>Edit Parameters</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -57,7 +63,7 @@
                 </div>  
             </section>
         </div>
-        <input type="hidden" id="controller" value="adminlteconfig">
+        <input type="hidden" id="controller" value="configuration">
 
         <script type="text/html" id="groupTemplateLevel0">
             <div class="row config-maingroup toggle-able" data-key="__group_key__">
@@ -222,17 +228,20 @@
                 </select>
             </div>
         </script>
-
         <script type="text/html" id="fileTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">{{ $t('__field_title__') }}  </label>
+                <label for="__field_key__" class="detail-label">{{ $t('__field_title__') }} <span class="__required_class__">*</span></label>
                 <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <div class="input-field">
                     <input type="file" id="__field_key__" name="__field_key__" 
                         accept="__file_types__"
                         data-type="file" 
                         class="form-input config-file__delete__ config-parameter__delete__"
-                        style="display:block;">
+                        style="display:none;">
+                    <button class="btn btn-primary btn-file-trigger__delete__" data-triggered-id="__field_key__">
+                        {{ $t('Browse...') }}
+                    </button>
+                    <span id="spanFileName__field_key__"></span>
                     <input type="hidden" id="__field_key__-file_name">
                     <input type="hidden" id="__field_key__-file_value">
                     <button type="button" class="text-btn file_download__delete__"
@@ -242,7 +251,6 @@
                 </div>
             </div>
         </script>
-
         <script type="text/html" id="htmlEditorTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
@@ -265,7 +273,6 @@
                     rows="5"></textarea>
             </div>
         </script>
-
         <script type="text/html" id="iconPickerTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
@@ -285,7 +292,6 @@
                 <input type="hidden" id="__field_key__-value" name="__field_key__-value" data-key="__field_key__" data-type="iconpicker" class="item-widget config-parameter__delete__">
             </div>
         </script>
-        
         <script type="text/html" id="integerTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
@@ -321,7 +327,6 @@
                 <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
             </div>
         </script>
-
         <script type="text/html" id="link_textTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
                 <a class=""
@@ -412,7 +417,6 @@
                 <label for="__field_key____option_index__" class="detail-label">{{ $t('__option_title__') }}</label>
             </div>
         </script>
-
         <script type="text/html" id="readonly_contentTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
                 <h6>{{ $t('__field_title__') }}</h6>
@@ -420,7 +424,6 @@
                 <p>{{ $t('__content__') }}</p>
             </div>
         </script>
-        
         <script type="text/html" id="shorttextTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
@@ -520,28 +523,23 @@
         </script>
         <script type="text/html" id="toggleTemplate">
             <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
-                <input type="checkbox"
-                    id="__field_key__"
-                    name="__field_key__"
-                    class="vue-switch__delete__ config-toggle__delete__"
-                    data-toggle-elements="__toggle_elements__"
-                    data-bootstrap-switch>
-                <label for="__field_key__" class="switch-label">
-                    <div class="bootstrap-switch bootstrap-switch-wrapper fake-switch-container" style="width: 88px;">
-                        <div class="bootstrap-switch-container" style="width: 129px; margin-left: 0px;">
-                            <span class="bootstrap-switch-handle-on bootstrap-switch-primary" style="width: 43px;">{{ $t('ON') }}</span>
-                            <span class="bootstrap-switch-label" style="width: 43px;">&nbsp;</span>
-                            <span class="bootstrap-switch-handle-off bootstrap-switch-default" style="width: 43px;">{{ $t('OFF') }}</span>
-                        </div>
-                    </div>
-                    {{ $t('__field_title__') }}
-                </label>
+                <div class="icheck-primary d-inline">
+                    <input type="checkbox"
+                        id="__field_key__"
+                        name="__field_key__"
+                        class="config-parameter__delete__ config-toggle__delete__"
+                        data-toggle-elements="__toggle_elements__"
+                        data-type="toggle">
+                    <label for="__field_key__" class="detail-label">
+                        {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                </div>
                 <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
             </div>
         </script>
 
         <span class="d-none" id="btnUseDefaultTitle">{{ $t('Set default value') }}</span>
-
         <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
 </template>
@@ -837,8 +835,8 @@ export default {
                 AdminLTEHelper.updateSwitch(switchInput);
             });
 
-            $(".config-toggle").off('switchChange.bootstrapSwitch').on('switchChange.bootstrapSwitch', function (event, state) {
-                self.doConfigToggleChange(this, state);
+            $(".config-toggle").off('change').on('change', function () {
+                self.doConfigToggleChange(this);
             });
 
             self.initToggleElements();
@@ -881,6 +879,10 @@ export default {
             var iconPicker = $(".icon-picker").iconpicker(iconPickerOptions);
             iconPicker.on("change", function (e) {
                 document.getElementById(this.id + "-value").value = e.icon;
+            });
+
+            $(".btn-file-trigger").on('click', function(e){
+                document.getElementById(this.getAttribute("data-triggered-id")).click();
             });
 
             $(".config-file").on('change', function(e){
@@ -1110,10 +1112,10 @@ export default {
             parts.pop();
             return parts.join(".");
         },
-        doConfigToggleChange: function(toggleButton, state) {
-            var toggle_elements = toggleButton.getAttribute("data-toggle-elements").split(",");
-
-            if (state) {
+        doConfigToggleChange: function(toggleCheckbox) {
+            var toggle_elements = toggleCheckbox.getAttribute("data-toggle-elements").split(",");
+            
+            if (toggleCheckbox.checked) {
                 toggle_elements.forEach(element => {
                    $(".toggle-able[data-key='" + element + "']").removeClass("d-none")
                 });
@@ -1209,7 +1211,7 @@ export default {
                 document.getElementById(elementKey).value = val;
             } else if ("toggle" == type) {
                 if ("on" == val) {
-                    $(document.getElementById(elementKey)).bootstrapSwitch("state", val).trigger("change");
+                    $(document.getElementById(elementKey)).attr("checked", true).trigger("change");
                 }
             }  
         },
@@ -1376,8 +1378,8 @@ export default {
                     }
 
                     if ("on" == val) {
-                        $(document.getElementById(elementKey)).bootstrapSwitch("state", val).trigger("change");
-                        /* sender.dispatchEvent(new Event('change')); */
+                        /* document.getElementById(elementKey).checked = true; */
+                        $(document.getElementById(elementKey)).attr("checked", true).trigger("change");
                     }
                 }  
             });
@@ -1395,7 +1397,7 @@ export default {
 
             self.page.is_variables_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_page_variables/adminlteconfig"))
+            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_page_variables/configuration"))
                 .then(({ data }) => {
                     self.page.is_variables_loaded = true;
                     self.page.is_variables_loading = false;
@@ -1408,7 +1410,7 @@ export default {
                     self.processLoadQueue();
                 }).finally(function() {
                    AdminLTEHelper.initializePermissions(self.page.variables, true);
-                   let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, "adminlteconfig");
+                   let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, "configuration");
                    self.page.is_authorized = authorize.status;
                    self.page.unauthorized_type = authorize.type;
                    self.processLoadQueue();
@@ -1686,8 +1688,9 @@ export default {
             self.uploadedFiles[__key] = file;
 
             document.getElementById(__key + "-file_name").value = file.name;
+            document.getElementById("spanFileName" + __key).innerHTML = file.name;
 
-            let reader = new FileReader();
+let reader = new FileReader();
 
             let limit = 1024 * 1024 * 2;
             if(file['size'] > limit){

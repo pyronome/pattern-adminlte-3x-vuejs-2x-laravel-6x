@@ -14,6 +14,7 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
+                                <li class="breadcrumb-item"><a href="configuration">{{ $t('Configuration') }}</a></li>
                                 <li class="breadcrumb-item enabled">{{ $t('Mail (SMTP) Server') }}</li>
                             </ol>
                         </div>
