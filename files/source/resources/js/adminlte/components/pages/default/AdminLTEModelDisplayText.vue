@@ -535,7 +535,7 @@ export default {
         saveFormEditDisplayText: function () {
             var index = document.getElementById("formEditDisplayText-index").value;
             var property = document.getElementById("formEditDisplayText-property").value;
-            var display_text = document.getElementById("formEditDisplayText-display_text").value;
+            var display_text = $("#formEditDisplayText-display_text").summernote('code');
 
             document.getElementById("property_" + index).innerHTML = property;
             document.getElementById("display_text_" + index).innerHTML = display_text;

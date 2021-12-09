@@ -124,6 +124,18 @@
                                     </div>
 
                                     <div class="form-group col-lg-12">
+                                        <label for="__parent">{{ $t('Parent') }}</label>
+                                        <select2-element class="select2-element item-menu"
+                                            data-placeholder=""
+                                            id="__parent"
+                                            name="__parent"
+                                            :options="parentlist"
+                                            allowClear="true">
+                                            <option></option>
+                                        </select2-element>
+                                    </div>
+
+                                    <div class="form-group col-lg-12">
                                         <label for="type">{{ $t('Type') }}</label>
                                         <select name="type" id="type" class="form-control item-menu" v-model="parameter_type">
                                             <option value="checkbox">{{ $t('Checkbox') }}</option>
@@ -169,18 +181,6 @@
                                     </div>
 
                                     <div class="form-group col-lg-12">
-                                        <label for="__parent">{{ $t('Parent') }}</label>
-                                        <select2-element class="select2-element item-menu"
-                                            data-placeholder=""
-                                            id="__parent"
-                                            name="__parent"
-                                            :options="parentlist"
-                                            allowClear="true">
-                                            <option></option>
-                                        </select2-element>
-                                    </div>
-
-                                    <div class="form-group col-lg-12">
                                         <label for="title">{{ $t('Title') }}</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control item-menu" name="title" id="title">
@@ -192,18 +192,78 @@
                                         <label for="basekey">{{ $t('Name') }}</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control item-menu" name="basekey" id="basekey">
-                                            <span class="text-muted">
-                                                {{ $t('This value must contain only English letters. You cannot be use special characters and numbers.') }}
-                                            </span>
                                         </div>
+                                        <span class="text-muted">
+                                            {{ $t('This value must contain only English letters or numbers.') }}
+                                        </span>
                                     </div>
+                                </div>
+                                
+                                <div class="row mb-4" v-show="(('group' != parameter_type) && ('selection_group' != parameter_type))">
+                                    <div class="col-md-12">
+                                        <label style="margin:0;">{{ $t('Screen Sizes') }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="large_screen_size">{{ $t('Large') }}</label>
+                                        <select id="large_screen_size" name="large_screen_size"  class="form-control">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12" selected>12</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="medium_screen_size">{{ $t('Medium') }}</label>
+                                        <select id="medium_screen_size" name="medium_screen_size"  class="form-control">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12" selected>12</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="small_screen_size">{{ $t('Small') }}</label>
+                                        <select id="small_screen_size" name="small_screen_size"  class="form-control">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12" selected>12</option>
+                                        </select>
+                                    </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="form-group col-lg-12">
                                         <label for="description">{{ $t('Description') }}  </label>
-                                        <textarea rows="5"
-                                            id="description"
+                                        <textarea id="description"
                                             name="description"
-                                            class="form-control item-menu"></textarea>
+                                            data-type="html_editor"
+                                            class="textarea vue-editor item-menu"
+                                            rows="5"></textarea>
                                     </div>
 
                                     <div class="form-group col-lg-12" 
@@ -219,30 +279,26 @@
                                             <input type="text" class="form-control item-menu" name="hint" id="hint">
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="form-group col-lg-12"
-                                        v-show="(
-                                            ('dropdown' == parameter_type)
-                                            || ('radio' == parameter_type)
-                                        )">
+                                <div class="row" v-show="(('dropdown' == parameter_type) || ('radio' == parameter_type))">
+                                    <div class="form-group col-lg-6">
                                         <label for="option_titles">{{ $t('Option Titles') }}  </label>
                                         <textarea rows="5"
                                             id="option_titles"
                                             name="option_titles"
                                             class="form-control item-menu"></textarea>
                                     </div>
-                                    <div class="form-group col-lg-12"
-                                        v-show="(
-                                            ('dropdown' == parameter_type)
-                                            || ('radio' == parameter_type)
-                                        )">
+                                    <div class="form-group col-lg-6">
                                         <label for="option_values">{{ $t('Option Values') }}  </label>
                                         <textarea rows="5"
                                             id="option_values"
                                             name="option_values"
                                             class="form-control item-menu"></textarea>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="form-group col-lg-12" v-show="('toggle' == parameter_type)">
                                         <label for="toggle_elements">
                                             {{  $t('Toggle Elements') }}
@@ -267,54 +323,49 @@
                                         <label for="file_types">{{ $t('Acceptable File Types') }}</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control item-menu" name="file_types" id="file_types">
-                                            <span class="text-muted">
-                                                {{ $t('This string is a comma-separated list of acceptable file extensions. For example: .jpg, .pdf, .doc') }}
-                                            </span>
                                         </div>
+                                        <span class="text-muted">
+                                            {{ $t('This string is a comma-separated list of acceptable file extensions. Ex: .jpg, .pdf, .doc') }}
+                                        </span>
                                     </div>
+                                </div>
 
-                                    <div class="form-group col-lg-4"
-                                        v-show="(
-                                            ('integer' == parameter_type)
-                                            || ('number' == parameter_type)
-                                        )">
+                                <div class="row" v-show="(('integer' == parameter_type) || ('number' == parameter_type))">
+                                    <div class="form-group col-lg-4">
                                         <label for="min">{{ $t('Min') }}</label>
                                         <div class="input-group">
                                             <input type="number" class="form-control item-menu" name="min" id="min">
                                         </div>
                                     </div>
 
-                                    <div class="form-group col-lg-4"
-                                        v-show="(
-                                            ('integer' == parameter_type)
-                                            || ('number' == parameter_type)
-                                        )">
+                                    <div class="form-group col-lg-4">
                                         <label for="max">{{ $t('Max') }}</label>
                                         <div class="input-group">
                                             <input type="number" class="form-control item-menu" name="max" id="max">
                                         </div>
                                     </div>
 
-                                    <div class="form-group col-lg-4"
-                                        v-show="(
-                                            ('integer' == parameter_type)
-                                            || ('number' == parameter_type)
-                                        )">
+                                    <div class="form-group col-lg-4">
                                         <label for="step">{{ $t('Step') }}</label>
                                         <div class="input-group">
                                             <input type="number" class="form-control item-menu" name="step" id="step">
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="form-group col-lg-12" 
                                         v-show="('readonly_content' == parameter_type)">
                                         <label for="content">{{ $t('Content') }}  </label>
-                                        <textarea rows="5"
-                                            id="content"
+                                        <textarea id="content"
                                             name="content"
-                                            class="form-control item-menu"></textarea>
+                                            data-type="html_editor"
+                                            class="textarea vue-editor item-menu"
+                                            rows="5"></textarea>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="form-group col-lg-12" 
                                         v-show="(
                                             ('group' != parameter_type)
@@ -373,9 +424,10 @@
                                                 rows="5"></textarea>
                                         </div>
                                         <div v-show="('html_editor' == parameter_type)">
-                                            <textarea 
-                                                id="default_value_html_editor"
-                                                class="form-control vue-editor"
+                                            <textarea id="default_value_html_editor"
+                                                name="default_value_html_editor"
+                                                data-type="html_editor"
+                                                class="textarea vue-editor"
                                                 rows="5"></textarea>
                                         </div>
                                         <div class="input-group" v-show="('colorpicker' == parameter_type)">
@@ -386,9 +438,10 @@
                                                 <span class="input-group-text" id="default_value_colorpicker_append" style="padding-left:100px;"></span>
                                             </div>
                                         </div>
-                                        <button type="button" id="default_value_iconpicker_picker" class="btn btn-outline-secondary icon-picker"
-                                            v-show="('iconpicker' == parameter_type)">
-                                        </button>
+                                        <div class="input-group" v-show="('iconpicker' == parameter_type)">
+                                            <button type="button" id="default_value_iconpicker_picker" class="btn btn-outline-secondary icon-picker">
+                                            </button>
+                                        </div>
                                         <input type="hidden" id="default_value_iconpicker" class="item-widget">
 
                                         <input type="hidden" class="form-control item-menu" 
@@ -526,6 +579,9 @@ export default {
             document.getElementById("__key").value = current_data["__key"];
             this.parameter_type = current_data["type"];
             document.getElementById("title").value = current_data["title"];
+            $("#large_screen_size").val(current_data["large_screen_size"]).trigger('change');
+            $("#medium_screen_size").val(current_data["medium_screen_size"]).trigger('change');
+            $("#small_screen_size").val(current_data["small_screen_size"]).trigger('change');
             document.getElementById("option_titles").value = current_data["option_titles"];
             document.getElementById("option_values").value = current_data["option_values"];
             $("#toggle_elements").val(current_data["toggle_elements"]).trigger('change');
@@ -534,11 +590,11 @@ export default {
             document.getElementById("max").value = current_data["max"];
             document.getElementById("step").value = current_data["step"];
             document.getElementById("file_types").value = current_data["file_types"];
-            document.getElementById("content").value = current_data["content"];
+            $("#content").summernote("code", current_data["content"]);
             document.getElementById("default_value").value = current_data["default_value"];
             document.getElementById("value").value = current_data["value"];
             document.getElementById("hint").value = current_data["hint"];
-            document.getElementById("description").value = current_data["description"];
+            $("#description").summernote("code", current_data["description"]);
 
             /* if ("toggle" == current_data.type) {
                 this.AdminLTEConfigForm.toggle_elements = current_data.toggle_elements.split(",");
@@ -569,7 +625,7 @@ export default {
             } else if ("timepicker" == type){
                 document.getElementById("default_value_timepicker").value = val;
             } else if ("html_editor" == type) {
-                $(document.getElementById("default_value_html_editor")).summernote("code", val);
+                $("#default_value_html_editor").summernote("code", val);
             } else if ("textarea" == type) {
                 $(document.getElementById("default_value_textarea")).val(val);
             } else if ("colorpicker" == type) {
@@ -807,6 +863,9 @@ export default {
             document.getElementById("__key").value = "";
             $("#type").val("").trigger('change');
             document.getElementById("title").value = "";
+            $("#large_screen_size").val("12").trigger('change');
+            $("#medium_screen_size").val("12").trigger('change');
+            $("#small_screen_size").val("12").trigger('change');
             document.getElementById("option_titles").value = "";
             document.getElementById("option_values").value = "";
             $("#toggle_elements").val("").trigger('change');
@@ -815,11 +874,12 @@ export default {
             document.getElementById("max").value = 0;
             document.getElementById("step").value = 0;
             document.getElementById("file_types").value = "";
-            document.getElementById("content").value = "";
+            $("#content").summernote("code", "");
             document.getElementById("default_value").value = "";
             document.getElementById("value").value = "";
             document.getElementById("hint").value = "";
-            document.getElementById("description").value = "";
+            $("#description").summernote("code", "");
+            $("#default_value_html_editor").summernote("code", "");
 
             $("#groupTypeWarning").addClass("d-none");
             document.getElementById("type").disabled = false;
@@ -923,14 +983,13 @@ export default {
                 "a","b","c","d","e","f",
                 "g","h","i","j","k","l",
                 "m","n","o","p","q","r",
-                "s","t","u","v","w","x","y","z"];
+                "s","t","u","v","w","x","y","z",
+                "0","1","2","3","4","5","6","7","8","9"];
 
             for (let i = 0; i < __key.length; i++) {
                 let char = __key.charAt(i);
-                console.log("char:" + char);
                 
                 if (!alphabet.includes(char)) {
-                    console.log("invalid")
                     valid = false;
                     break;
                 }                

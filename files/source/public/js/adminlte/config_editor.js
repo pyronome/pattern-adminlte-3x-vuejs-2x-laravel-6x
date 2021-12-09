@@ -1032,6 +1032,9 @@
                 "value" : li.data("value"),
                 "hint" : li.data("hint"),
                 "description" : li.data("description"),
+                "large_screen_size" : li.data("large_screen_size"),
+                "medium_screen_size" : li.data("medium_screen_size"),
+                "small_screen_size" : li.data("small_screen_size"),
             };
 
             arr.push(object);
@@ -1348,6 +1351,9 @@ function MenuEditor(idSelector, options) {
                 value: "",
                 hint: "",
                 description: "",
+                large_screen_size: 12,
+                medium_screen_size: 12,
+                small_screen_size: 12,
             };
 
             var temp = $.extend({}, v);
@@ -1524,7 +1530,10 @@ function MenuEditor(idSelector, options) {
             "url" : document.getElementById("url").value,
             "value" : document.getElementById("value").value,
             "hint" : document.getElementById("hint").value,
-            "description" : document.getElementById("description").value,
+            "description" : $("#description").summernote('code'),
+            "large_screen_size" : document.getElementById("large_screen_size").value,
+            "medium_screen_size" : document.getElementById("medium_screen_size").value,
+            "small_screen_size" : document.getElementById("small_screen_size").value,
         }
 
         if (oldParent != newParent) {
@@ -1680,6 +1689,9 @@ function MenuEditor(idSelector, options) {
             "value" : null,
             "hint" : "",
             "description" : "",
+            "large_screen_size": 12,
+            "medium_screen_size": 12,
+            "small_screen_size": 12,
         };
 
         var children = [];
@@ -1745,6 +1757,9 @@ function MenuEditor(idSelector, options) {
             "value" : null,
             "hint" : "",
             "description" : "",
+            "large_screen_size": 12,
+            "medium_screen_size": 12,
+            "small_screen_size": 12,
         };
 
         var objectData = {},
@@ -1788,6 +1803,11 @@ function MenuEditor(idSelector, options) {
             objectData["value"] = element["value"];
             objectData["hint"] = element["hint"];
             objectData["description"] = element["description"];
+            objectData["large_screen_size"] = element["large_screen_size"];
+            objectData["medium_screen_size"] = element["medium_screen_size"];
+            objectData["small_screen_size"] = element["small_screen_size"];
+
+            
             
             btnGroup = TButtonGroup(objectData["editable"]);
 
@@ -1896,7 +1916,10 @@ function MenuEditor(idSelector, options) {
             "url" : document.getElementById("url").value,
             "value" : document.getElementById("value").value,
             "hint" : document.getElementById("hint").value,
-            "description" : document.getElementById("description").value,
+            "description" : $("#description").summernote('code'),
+            "large_screen_size" : document.getElementById("large_screen_size").value,
+            "medium_screen_size" : document.getElementById("medium_screen_size").value,
+            "small_screen_size" : document.getElementById("small_screen_size").value,
         };
 
         var btnGroup = TButtonGroup(objectData.editable);
@@ -1987,7 +2010,7 @@ function MenuEditor(idSelector, options) {
         } else if ("timepicker" == type){
             default_val = document.getElementById("default_value_timepicker").value;
         } else if ("html_editor" == type) {
-            default_val = $(document.getElementById("default_value_html_editor")).val();
+            default_val = $("#default_value_html_editor").summernote('code');
         } else if ("textarea" == type) {
             default_val = $(document.getElementById("default_value_textarea")).val();
         } else if ("colorpicker" == type) {

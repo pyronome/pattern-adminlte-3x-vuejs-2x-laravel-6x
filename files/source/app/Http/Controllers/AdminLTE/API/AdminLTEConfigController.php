@@ -136,6 +136,14 @@ class AdminLTEConfigController extends Controller
             $list[$index]['multiple'] = isset($metaData['multiple']) ? $metaData['multiple'] : 0;
             $list[$index]['file_types'] = isset($metaData['file_types']) ? $metaData['file_types'] : '';
 
+            $large_screen_size = isset($metaData['large_screen_size']) ? intval($metaData['large_screen_size']) : 12;
+            $medium_screen_size = isset($metaData['medium_screen_size']) ? intval($metaData['medium_screen_size']) : 12;
+            $small_screen_size = isset($metaData['small_screen_size']) ? intval($metaData['small_screen_size']) : 12;
+            $list[$index]['grid_class'] = 
+                ' col-lg-'.$large_screen_size // desktop
+                . ' col-md-'.$medium_screen_size . ' col-sm-'.$medium_screen_size // tablet
+                . ' col-'.$small_screen_size; // mobile
+
             $list[$index]['level'] = 0;
             if ('group' == $object->type) {
                 $list[$index]['level'] = $this->getGroupLevel($object->__key);
@@ -254,67 +262,6 @@ class AdminLTEConfigController extends Controller
         ];
     }
 
-	public function get(Request $request)
-    {    
-        $data = [];
-        
-        $parameters = $request->route()->parameters();
-
-        $id = isset($parameters['id'])
-            ? intval($parameters['id'])
-            : 0;
-
-
-        if ($id <= 0) {
-            return;
-        } // if ($id <= 0) {
-        
-        // is new ?
-        if ('new' == htmlspecialchars($parameters['id'])) {
-            return;
-        } // if (isset($parameters['id']) && ('new' == htmlspecialchars($parameters['id']))) {
-
-        if ($id > 0) {
-            $objectAdminLTEConfig = AdminLTEConfig::where('id', $id)->where('deleted', 0)->first();
-        }
-        
-        $User = auth()->guard('adminlteuser')->user();
-
-        if ($User->can('view', $objectAdminLTEConfig)) {
-            $data['user_can_create'] = $User->can('create', AdminLTEConfig::class);
-            $data['user_can_read'] = $User->can('view', $objectAdminLTEConfig);
-            $data['user_can_update'] = $User->can('update', $objectAdminLTEConfig);
-            $data['user_can_delete'] = $User->can('delete', $objectAdminLTEConfig);
-            $data['user_can_view'] = $User->can('viewAny', $objectAdminLTEConfig);
-
-            $data['id'] = $objectAdminLTEConfig->id;
-            $data['deleted'] = $objectAdminLTEConfig->deleted;
-            $data['created_at'] = $objectAdminLTEConfig->created_at;
-            $data['updated_at'] = $objectAdminLTEConfig->updated_at;
-            $data['enabled'] = $objectAdminLTEConfig->enabled;
-            $data['required'] = $objectAdminLTEConfig->required;
-            $data['__order'] = $objectAdminLTEConfig->__order;
-            $data['type'] = $objectAdminLTEConfig->type;
-            $data['parent'] = $this->getParentKey($objectAdminLTEConfig->__key);
-            $data['__key'] = $objectAdminLTEConfig->__key;
-            $data['title'] = $objectAdminLTEConfig->title;
-            $data['option_titles'] = $objectAdminLTEConfig->option_titles;
-            $data['option_values'] = $objectAdminLTEConfig->option_values;
-            $data['toggle_elements'] = ('' == $objectAdminLTEConfig->toggle_elements) ? [] : explode(',', $objectAdminLTEConfig->toggle_elements);
-            $data['url'] = $objectAdminLTEConfig->url;
-            $data['content'] = $objectAdminLTEConfig->content;
-            $data['min'] = $objectAdminLTEConfig->min;
-            $data['max'] = $objectAdminLTEConfig->max;
-            $data['step'] = $objectAdminLTEConfig->step;
-            $data['default_value'] = $objectAdminLTEConfig->default_value;
-            $data['value'] = $objectAdminLTEConfig->value;
-        }
-
-        return [
-            'object' => $data
-        ];
-    }
-
     public function getConfigObject($key) {
         return AdminLTEConfig::where('__key', $key)
             ->where('deleted', 0)
@@ -348,90 +295,6 @@ class AdminLTEConfigController extends Controller
         }
 
         return $basekey;
-    }
-
-	public function post(AdminLTEConfigPOSTRequest $request)
-    {
-        $User = auth()->guard('adminlteuser')->user();
-        $has_error = false;
-        $error_msg = '';
-        $return_data = [];
-
-        $id = intval($request->input('id'));
-
-        if ($id > 0) {
-            $objectAdminLTEConfig = AdminLTEConfig::find($id);
-            if (!$User->can('update', $objectAdminLTEConfig)) {
-                $has_error = true;
-                $error_msg = __('You can not update this object. Contact your system administrator for more information.');
-            }
-        } else {
-            $objectAdminLTEConfig = new AdminLTEConfig();
-            if (!$User->can('create', AdminLTEConfig::class)) {
-                $has_error = true;
-                $error_msg = __('You can not create any object. Contact your system administrator for more information.');
-            }
-        } // if ($id > 0) {
-
-        if ($has_error) {
-            $return_data['id'] = $id;
-            $return_data['has_error'] = $has_error;
-            $return_data['error_msg'] = $error_msg;
-
-            return $return_data;
-        }
-        
-        $objectAdminLTEConfig->deleted = 0;
-        $objectAdminLTEConfig->enabled = ('' != $request->input('enabled'))
-                ? intval($request->input('enabled'))
-                : 0;
-        $objectAdminLTEConfig->required = ('' != $request->input('required'))
-                ? intval($request->input('required'))
-                : 0;
-        $objectAdminLTEConfig->__order = ('' != $request->input('__order'))
-                ? intval($request->input('__order'))
-                : 0;
-        $objectAdminLTEConfig->type = $request->input('type');
-       
-        $parent = $request->input('parent');
-        
-        $objectAdminLTEConfig->title = $request->input('title');
-
-        $objectAdminLTE = new AdminLTE();
-        $key = $objectAdminLTE->convertTitleToConfigName($objectAdminLTEConfig->title);
-
-        if ('' != $parent) {
-            $key = $parent . '.' . $key;
-        }
-
-        $objectAdminLTEConfig->__key = $key;
-
-
-        $objectAdminLTEConfig->option_titles = $request->input('option_titles');
-        $objectAdminLTEConfig->option_values = $request->input('option_values');
-
-        $toggle_elements = '';
-        if (!empty($request->input('toggle_elements'))) {
-            $toggle_elements = implode(',' , $request->input('toggle_elements'));
-        }
-
-
-        $objectAdminLTEConfig->toggle_elements = $toggle_elements;
-        $objectAdminLTEConfig->url = $request->input('url');
-        $objectAdminLTEConfig->content = $request->input('content');
-        $objectAdminLTEConfig->min = floatval($request->input('min'));
-        $objectAdminLTEConfig->max = floatval($request->input('max'));
-        $objectAdminLTEConfig->step = floatval($request->input('step'));
-        $objectAdminLTEConfig->default_value = $request->input('default_value');
-        $objectAdminLTEConfig->value = $request->input('value');
-
-		$objectAdminLTEConfig->save();
-		
-        $return_data['id'] = $objectAdminLTEConfig->id;
-        $return_data['has_error'] = false;
-        $return_data['error_msg'] = '';
-
-        return $return_data;
     }
 
     public function post_config_data(Request $request)
@@ -597,43 +460,6 @@ class AdminLTEConfigController extends Controller
 
         return $return_data;
     }
-    
-	public function get_typelist(Request $request) {
-        $list = [];
-        $index = 0;
-
-        $list[$index]['id'] = 'group';
-        $list[$index]['text'] = 'Group';
-        $index++;
-    
-        $list[$index]['id'] = 'toggle';
-        $list[$index]['text'] = 'Toggle';
-        $index++;
-    
-        $list[$index]['id'] = 'checkbox';
-        $list[$index]['text'] = 'Checkbox';
-        $index++;
-
-        $list[$index]['id'] = 'dropdown';
-        $list[$index]['text'] = 'Dropdown';
-        $index++;
-        
-        $list[$index]['id'] = 'number';
-        $list[$index]['text'] = 'Number';
-        $index++;
-
-        $list[$index]['id'] = 'shorttext';
-        $list[$index]['text'] = 'Shorttext';
-        $index++;
-
-        $list[$index]['id'] = 'textarea';
-        $list[$index]['text'] = 'Textarea';
-        $index++;
-
-        return [
-            'list' => $list
-        ];
-    }
 
     public function get_parentlist(Request $request) {
         $parameters = $request->route()->parameters();
@@ -771,6 +597,10 @@ class AdminLTEConfigController extends Controller
             $parent_data[$index]['step'] = isset($metaData['step']) ? $metaData['step'] : 0;
             $parent_data[$index]['multiple'] = isset($metaData['multiple']) ? $metaData['multiple'] : 0;
             $parent_data[$index]['file_types'] = isset($metaData['file_types']) ? $metaData['file_types'] : '';
+            $parent_data[$index]['large_screen_size'] = isset($metaData['large_screen_size']) ? intval($metaData['large_screen_size']) : 12;
+            $parent_data[$index]['medium_screen_size'] = isset($metaData['medium_screen_size']) ? intval($metaData['medium_screen_size']) : 12;
+            $parent_data[$index]['small_screen_size'] = isset($metaData['small_screen_size']) ? intval($metaData['small_screen_size']) : 12;
+            
 
             $children = $this->getChildren($object->id);
 
@@ -833,6 +663,9 @@ class AdminLTEConfigController extends Controller
             $children_data[$index]['step'] = isset($metaData['step']) ? $metaData['step'] : 0;
             $children_data[$index]['multiple'] = isset($metaData['multiple']) ? $metaData['multiple'] : 0;
             $children_data[$index]['file_types'] = isset($metaData['file_types']) ? $metaData['file_types'] : '';
+            $children_data[$index]['large_screen_size'] = isset($metaData['large_screen_size']) ? intval($metaData['large_screen_size']) : 12;
+            $children_data[$index]['medium_screen_size'] = isset($metaData['medium_screen_size']) ? intval($metaData['medium_screen_size']) : 12;
+            $children_data[$index]['small_screen_size'] = isset($metaData['small_screen_size']) ? intval($metaData['small_screen_size']) : 12;
 
             $children = $this->getChildren($object->id);;
 
@@ -913,6 +746,9 @@ class AdminLTEConfigController extends Controller
             $metaData['max'] = $data['max'];
             $metaData['step'] = $data['step'];
             $metaData['file_types'] = $data['file_types'];
+            $metaData['large_screen_size'] = $data['large_screen_size'];
+            $metaData['medium_screen_size'] = $data['medium_screen_size'];
+            $metaData['small_screen_size'] = $data['small_screen_size'];
 
             $encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
             $AdminLTEConfig->meta_data_json = $encodedData;
@@ -964,6 +800,9 @@ class AdminLTEConfigController extends Controller
             $metaData['max'] = $data['max'];
             $metaData['step'] = $data['step'];
             $metaData['file_types'] = $data['file_types'];
+            $metaData['large_screen_size'] = $data['large_screen_size'];
+            $metaData['medium_screen_size'] = $data['medium_screen_size'];
+            $metaData['small_screen_size'] = $data['small_screen_size'];
 
             $encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
             $AdminLTEConfig->meta_data_json = $encodedData;

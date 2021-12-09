@@ -73,8 +73,9 @@
                         {{ $t('__description__') }}
                     </h6>
                 </div>
-                <div class="col-lg-8 col-md-8 col-xs-12" id="groupContainer__group_key__">
-                    
+                <div class="col-lg-8 col-md-8 col-xs-12">
+                    <div class="row" id="groupContainer__group_key__">
+                    </div>                    
                 </div>
             </div>
         </script>
@@ -98,13 +99,13 @@
                     <label style="font-size: 1.1rem;font-weight: 400;margin: 0;">{{ $t('__group_title__') }}</label>
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 </div>
-                <div class="col-lg-12 mt-4 mb-4" id="groupContainer__group_key__">
+                <div class="row mt-4 mb-4" id="groupContainer__group_key__">
                 </div>
             </div>
         </script>
         
         <script type="text/html" id="checkboxTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <div class="icheck-primary d-inline">
                     <input type="checkbox"
                         id="__field_key__"
@@ -129,7 +130,7 @@
         </script>
 
         <script type="text/html" id="colorpickerTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -157,7 +158,7 @@
         </script>
 
         <script type="text/html" id="datepickerTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -180,7 +181,7 @@
         </script>
 
         <script type="text/html" id="datetimepickerTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -203,7 +204,7 @@
         </script>
 
         <script type="text/html" id="dropdownTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -229,7 +230,7 @@
             </div>
         </script>
         <script type="text/html" id="fileTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">{{ $t('__field_title__') }} <span class="__required_class__">*</span></label>
                 <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <div class="input-field">
@@ -252,7 +253,7 @@
             </div>
         </script>
         <script type="text/html" id="htmlEditorTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -274,7 +275,7 @@
             </div>
         </script>
         <script type="text/html" id="iconPickerTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -293,7 +294,7 @@
             </div>
         </script>
         <script type="text/html" id="integerTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -318,7 +319,7 @@
             </div>
         </script>
         <script type="text/html" id="link_buttonTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <a class="btn btn-primary btn-md btn-on-card text-white"
                     target="_blank"
                     href="__url__">
@@ -328,7 +329,7 @@
             </div>
         </script>
         <script type="text/html" id="link_textTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <a class=""
                     target="_blank"
                     href="__url__">
@@ -338,7 +339,7 @@
             </div>
         </script>
         <script type="text/html" id="numberTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -363,7 +364,7 @@
             </div>
         </script>
         <script type="text/html" id="passwordTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -385,7 +386,7 @@
             </div>
         </script>
         <script type="text/html" id="radioTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -418,14 +419,14 @@
             </div>
         </script>
         <script type="text/html" id="readonly_contentTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <h6>{{ $t('__field_title__') }}</h6>
                 <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <p>{{ $t('__content__') }}</p>
             </div>
         </script>
         <script type="text/html" id="shorttextTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -447,7 +448,7 @@
             </div>
         </script>
         <script type="text/html" id="switchTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <input type="checkbox"
                     id="__field_key__"
                     name="__field_key__"
@@ -478,7 +479,7 @@
             </div>
         </script>
         <script type="text/html" id="textareaTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -500,7 +501,7 @@
             </div>
         </script>
         <script type="text/html" id="timepickerTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     {{ $t('__field_title__') }} <span class="__required_class__">*</span>
                     <button type="button"
@@ -522,7 +523,7 @@
             </div>
         </script>
         <script type="text/html" id="toggleTemplate">
-            <div class="col-lg-12 mb-20 toggle-able" data-key="__field_key__">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <div class="icheck-primary d-inline">
                     <input type="checkbox"
                         id="__field_key__"
@@ -1140,6 +1141,7 @@ export default {
             }
 
             return templateHTML
+                .replace(/__grid_class__/g, element.grid_class)
                 .replace(/__data_toggle__/g, dataToggle)
                 .replace(/__default_value__/g, element.default_value)
                 .replace(/__delete__/g, "")
@@ -1642,6 +1644,10 @@ export default {
 
                     formData.append(parameter_data["val"], self.uploadedFiles[element.id])
                     
+                } else if ("html_editor" == element.getAttribute("data-type")) {
+                    parameter_data["type"] = "iconpicker";
+                    parameter_data["key"] = element.getAttribute("data-key");
+                    parameter_data["val"] = $(element).summernote('code');
                 } else if ("iconpicker" == element.getAttribute("data-type")) {
                     parameter_data["type"] = "iconpicker";
                     parameter_data["key"] = element.getAttribute("data-key");
@@ -1690,7 +1696,7 @@ export default {
             document.getElementById(__key + "-file_name").value = file.name;
             document.getElementById("spanFileName" + __key).innerHTML = file.name;
 
-let reader = new FileReader();
+            let reader = new FileReader();
 
             let limit = 1024 * 1024 * 2;
             if(file['size'] > limit){

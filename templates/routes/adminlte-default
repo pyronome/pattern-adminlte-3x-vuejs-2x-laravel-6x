@@ -104,11 +104,9 @@ Route::namespace('API')
         Route::get('/getlist', 'AdminLTEConfigController@getlist');
         Route::get('/get_recordlist', 'AdminLTEConfigController@get_recordlist');
         Route::get('/download_file/{key}', 'AdminLTEConfigController@download');
-		Route::get('/get_typelist', 'AdminLTEConfigController@get_typelist');
         Route::get('/get_parentlist/{id}', 'AdminLTEConfigController@get_parentlist');
         Route::get('/get_toggle_elements_options/{id}', 'AdminLTEConfigController@get_toggle_elements_options');
         Route::post('/delete', 'AdminLTEConfigController@delete');
-		Route::post('/post', 'AdminLTEConfigController@post');
         Route::post('/post_config_data', 'AdminLTEConfigController@post_config_data');
         Route::post('/post_json', 'AdminLTEConfigController@post_json');
     });

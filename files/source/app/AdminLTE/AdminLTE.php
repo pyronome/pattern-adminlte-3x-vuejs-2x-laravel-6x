@@ -2852,6 +2852,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -2878,6 +2881,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -2904,6 +2910,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -2930,6 +2939,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -2956,6 +2968,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -2982,6 +2997,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3008,6 +3026,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3034,6 +3055,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3060,6 +3084,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3086,6 +3113,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3112,6 +3142,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3138,6 +3171,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3164,6 +3200,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3190,6 +3229,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3216,6 +3258,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3242,6 +3287,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3268,6 +3316,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3294,6 +3345,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3320,6 +3374,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3346,6 +3403,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3372,6 +3432,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3398,6 +3461,9 @@ class AdminLTE
 		$config_item['owner'] = 0;
 		$config_item['hint'] = '';
 		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 12;
+		$config_item['medium_screen_size'] = 12;
+		$config_item['small_screen_size'] = 12;
         array_push($config, $config_item);
 
 		$__order = 0;
