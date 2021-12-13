@@ -145,9 +145,12 @@ class AdminLTEConfigController extends Controller
                 . ' col-'.$small_screen_size; // mobile
 
             $list[$index]['level'] = 0;
-            if ('group' == $object->type) {
+            if (('group' == $object->type) || ('selection_group' == $object->type)) {
                 $list[$index]['level'] = $this->getGroupLevel($object->__key);
             }
+
+            $list[$index]['min_selection'] = isset($metaData['min_selection']) ? $metaData['min_selection'] : 0;
+            $list[$index]['max_selection'] = isset($metaData['max_selection']) ? $metaData['max_selection'] : 0;
 
             $index++;
         }
@@ -600,6 +603,8 @@ class AdminLTEConfigController extends Controller
             $parent_data[$index]['large_screen_size'] = isset($metaData['large_screen_size']) ? intval($metaData['large_screen_size']) : 12;
             $parent_data[$index]['medium_screen_size'] = isset($metaData['medium_screen_size']) ? intval($metaData['medium_screen_size']) : 12;
             $parent_data[$index]['small_screen_size'] = isset($metaData['small_screen_size']) ? intval($metaData['small_screen_size']) : 12;
+            $parent_data[$index]['min_selection'] = isset($metaData['min_selection']) ? $metaData['min_selection'] : 0;
+            $parent_data[$index]['max_selection'] = isset($metaData['max_selection']) ? $metaData['max_selection'] : 0;
             
 
             $children = $this->getChildren($object->id);
@@ -666,6 +671,8 @@ class AdminLTEConfigController extends Controller
             $children_data[$index]['large_screen_size'] = isset($metaData['large_screen_size']) ? intval($metaData['large_screen_size']) : 12;
             $children_data[$index]['medium_screen_size'] = isset($metaData['medium_screen_size']) ? intval($metaData['medium_screen_size']) : 12;
             $children_data[$index]['small_screen_size'] = isset($metaData['small_screen_size']) ? intval($metaData['small_screen_size']) : 12;
+            $children_data[$index]['min_selection'] = isset($metaData['min_selection']) ? $metaData['min_selection'] : 0;
+            $children_data[$index]['max_selection'] = isset($metaData['max_selection']) ? $metaData['max_selection'] : 0;
 
             $children = $this->getChildren($object->id);;
 
@@ -749,6 +756,8 @@ class AdminLTEConfigController extends Controller
             $metaData['large_screen_size'] = $data['large_screen_size'];
             $metaData['medium_screen_size'] = $data['medium_screen_size'];
             $metaData['small_screen_size'] = $data['small_screen_size'];
+            $metaData['min_selection'] = $data['min_selection'];
+            $metaData['max_selection'] = $data['max_selection'];
 
             $encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
             $AdminLTEConfig->meta_data_json = $encodedData;
@@ -803,6 +812,8 @@ class AdminLTEConfigController extends Controller
             $metaData['large_screen_size'] = $data['large_screen_size'];
             $metaData['medium_screen_size'] = $data['medium_screen_size'];
             $metaData['small_screen_size'] = $data['small_screen_size'];
+            $metaData['min_selection'] = $data['min_selection'];
+            $metaData['max_selection'] = $data['max_selection'];
 
             $encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
             $AdminLTEConfig->meta_data_json = $encodedData;

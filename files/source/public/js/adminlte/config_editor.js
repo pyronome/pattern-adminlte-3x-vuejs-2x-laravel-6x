@@ -1035,6 +1035,8 @@
                 "large_screen_size" : li.data("large_screen_size"),
                 "medium_screen_size" : li.data("medium_screen_size"),
                 "small_screen_size" : li.data("small_screen_size"),
+                "max_selection" : li.data("max_selection"),
+                "min_selection" : li.data("min_selection"),
             };
 
             arr.push(object);
@@ -1151,7 +1153,7 @@ function MenuEditor(idSelector, options) {
         var title = $(li).data("title");
         var type = $(li).data("type");
 
-        if ("group" == type) {
+        if (("group" == type) || ("selection_group" == type)) {
             if (li.children('ul').children("li").length > 0) {
                 $("#deleteWarning").addClass("d-none");
                 $("#groupDeleteWarning").removeClass("d-none");
@@ -1183,6 +1185,15 @@ function MenuEditor(idSelector, options) {
 
         document.getElementById("exception_key").value = exceptionKey;
         $("#exception_key").trigger("click");
+    });
+
+    $(document).on('click', '#ulConfigEditor .btnCopy', function (e) {
+        e.preventDefault();
+        copyItem($(this).closest('li'));
+
+        /* $("#buttonAddMenuItem").hide();
+        $("#buttonUpdateMenuItem").show();
+        $("#modalMenuItem").modal(); */
     });
 
     $(document).on('click', '#ulConfigEditor .btnEdit', function (e) {
@@ -1252,6 +1263,106 @@ function MenuEditor(idSelector, options) {
     });
 
     /* PRIVATE METHODS */
+    function copyItem($item) {
+        var copyingData = $item.data();
+
+        var objectData = {
+            "system" : copyingData["system"],
+            "owner" : copyingData["owner"],
+            "is_owner" : copyingData["is_owner"],
+            "locked" : copyingData["locked"],
+            "editable" : copyingData["editable"],
+            "basekey" : copyingData["basekey"] + "copy",
+            "__key" : copyingData["__key"] + "copy",
+            "__parent" : copyingData["__parent"],
+            "content" : copyingData["content"],
+            "default_value" : copyingData["default_value"],
+            "enabled" : copyingData["enabled"],
+            "file_types" : copyingData["file_types"],
+            "max" : copyingData["max"],
+            "min" : copyingData["min"],
+            "multiple" : copyingData["multiple"],
+            "option_titles" : copyingData["option_titles"],
+            "option_values" : copyingData["option_values"],
+            "required" : copyingData["required"],
+            "step" : copyingData["step"],
+            "title" : copyingData["title"] + " (Copy)",
+            "toggle_elements" : copyingData["toggle_elements"],
+            "type" : copyingData["type"],
+            "url" : copyingData["url"],
+            "value" : copyingData["value"],
+            "hint" : copyingData["hint"],
+            "description" : copyingData["description"],
+            "large_screen_size" : copyingData["large_screen_size"],
+            "medium_screen_size" : copyingData["medium_screen_size"],
+            "small_screen_size" : copyingData["small_screen_size"],
+            "max_selection" : copyingData["max_selection"],
+            "min_selection" : copyingData["min_selection"],
+        }
+
+        var btnGroup = TButtonGroup(objectData.editable);
+
+        var container_class = "editor-title-container disabled";
+        if (objectData.enabled) {
+            container_class = "editor-title-container";
+        }
+        var $titleContainer = $("<div>").addClass(container_class);
+        
+        var $pTitle = $("<p>").addClass("title").append(objectData["title"]);
+        var $pKey = $("<p>").addClass("__key").append(objectData["basekey"]);
+
+        var $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
+        if (1 == objectData.editable) {
+            $iconLocked = '';
+        }
+
+        var $iconRequired = '<i class="fa fa-asterisk editor-required-icon"></i>';
+        if (0 == objectData.required) {
+            $iconRequired = '';
+        }
+
+        var typeTitle = getTypeTitle(objectData.type);
+        var $pType = $("<p>").addClass("type").append(typeTitle);
+        $titleContainer.append($pTitle).append($iconRequired).append($iconLocked).append($pKey).append($pType);
+
+        var div = $('<div>').css({"overflow": "auto"}).append("&nbsp;").append($titleContainer).append(btnGroup);
+
+        var $li = $("<li>");
+        $li.data(objectData);
+
+        $li.attr("id", objectData["basekey"]);
+
+        $li.addClass('list-group-item').append(div);
+
+        if ("" == objectData["__parent"]) {
+            $main.append($li);
+        } else {
+            $parent = $(document.getElementById(objectData["__parent"]));
+            $ul = $parent.children('ul');
+            if ($ul.length > 0) {
+                $ul.append($li);
+            } else {
+                $ul = $('<ul>').addClass('pl-0').css('padding-top', '10px');
+                $ul.append($li);
+                $parent.append($ul);
+                
+                $parent.addClass('sortableListsOpen');
+                TOpener($parent);
+
+                $ul.sortable();
+                $ul.disableSelection();
+            }
+        }
+
+        $li = null;
+        
+        MenuEditor.updateButtons($main);
+        resetForm();
+
+        document.getElementById("exception_key").value = "";
+        $("#exception_key").trigger("click");
+    }
+
     function editItem($item) {
         var data = $item.data();
 
@@ -1262,8 +1373,8 @@ function MenuEditor(idSelector, options) {
 
         $("#groupTypeWarning").addClass("d-none");
         document.getElementById("type").disabled = false;
-
-        if ("group" == data["type"]) {
+        
+        if (("group" == data["type"]) || ("selection_group" == data["type"])) {
             $("#groupTypeWarning").removeClass("d-none");
             document.getElementById("type").disabled = true;
         }
@@ -1297,6 +1408,7 @@ function MenuEditor(idSelector, options) {
 
     function TButtonGroup(editable) {
         var $divbtn = $('<div>').addClass('btn-group item-btn-group float-right');
+        var $btnCopy = TButton({classCss: 'btn btn-sm btnCopy', text: '<i class="fas fa-copy clickable"></i>'});
         var $btnEdit = TButton({classCss: 'btn btn-sm btnEdit', text: settings.labelEdit});
         var $btnRemv = TButton({classCss: 'btn btn-sm btnRemove', text: settings.labelRemove});
         /* var $btnUp = TButton({classCss: 'btn btn-sm btnUp btnMove', text: '<i class="fas fa-angle-up clickable"></i>'});
@@ -1305,7 +1417,7 @@ function MenuEditor(idSelector, options) {
         var $btnIn = TButton({classCss: 'btn btn-sm btnIn btnMove', text: '<i class="fas fa-level-up-alt clickable"></i>'}); */
 
         if (1 == editable) {
-            $divbtn.append($btnEdit).append($btnRemv);
+            $divbtn.append($btnCopy).append($btnEdit).append($btnRemv);
         }
 
         return $divbtn;
@@ -1354,6 +1466,8 @@ function MenuEditor(idSelector, options) {
                 large_screen_size: 12,
                 medium_screen_size: 12,
                 small_screen_size: 12,
+                min_selection: 0,
+                max_selection: 0,
             };
 
             var temp = $.extend({}, v);
@@ -1423,6 +1537,8 @@ function MenuEditor(idSelector, options) {
             "password" : "Password",
             "radio" : "Radio",
             "readonly_content" : "Readonly Content",
+            "selection_group" : "Selection Group",
+            "selection_item" : "Selection Item",
             "shorttext" : "Shorttext",
             "switch" : "Switch",
             "textarea" : "Textarea",
@@ -1534,6 +1650,8 @@ function MenuEditor(idSelector, options) {
             "large_screen_size" : document.getElementById("large_screen_size").value,
             "medium_screen_size" : document.getElementById("medium_screen_size").value,
             "small_screen_size" : document.getElementById("small_screen_size").value,
+            "max_selection" : document.getElementById("max_selection").value,
+            "min_selection" : document.getElementById("min_selection").value,
         }
 
         if (oldParent != newParent) {
@@ -1692,6 +1810,8 @@ function MenuEditor(idSelector, options) {
             "large_screen_size": 12,
             "medium_screen_size": 12,
             "small_screen_size": 12,
+            "max_selection": 0,
+            "min_selection": 0,
         };
 
         var children = [];
@@ -1760,6 +1880,8 @@ function MenuEditor(idSelector, options) {
             "large_screen_size": 12,
             "medium_screen_size": 12,
             "small_screen_size": 12,
+            "max_selection": 0,
+            "min_selection": 0,
         };
 
         var objectData = {},
@@ -1806,6 +1928,8 @@ function MenuEditor(idSelector, options) {
             objectData["large_screen_size"] = element["large_screen_size"];
             objectData["medium_screen_size"] = element["medium_screen_size"];
             objectData["small_screen_size"] = element["small_screen_size"];
+            objectData["max_selection"] = element["max_selection"];
+            objectData["min_selection"] = element["min_selection"];
 
             
             
@@ -1920,6 +2044,8 @@ function MenuEditor(idSelector, options) {
             "large_screen_size" : document.getElementById("large_screen_size").value,
             "medium_screen_size" : document.getElementById("medium_screen_size").value,
             "small_screen_size" : document.getElementById("small_screen_size").value,
+            "max_selection" : document.getElementById("max_selection").value,
+            "min_selection" : document.getElementById("min_selection").value,
         };
 
         var btnGroup = TButtonGroup(objectData.editable);
@@ -1999,6 +2125,7 @@ function MenuEditor(idSelector, options) {
             || ("password" == type)
             || ("radio" == type)
             || ("shorttext" == type)
+            || ("selection_group" == type)
             ) {
             default_val = document.getElementById("default_value_text").value;
         } else if (("integer" == type) || ("number" == type)){

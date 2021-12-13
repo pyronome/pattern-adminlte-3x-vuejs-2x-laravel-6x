@@ -2824,8 +2824,6 @@ class AdminLTE
 		return $Permissions;
 	}
 
-	
-
 	public function updateAdminLTEConfig() {
 		$config = [];
         $config_item = [];
@@ -2855,6 +2853,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+        $config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -2884,6 +2884,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -2913,6 +2915,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -2942,6 +2946,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -2971,6 +2977,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3000,6 +3008,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3029,6 +3039,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3058,6 +3070,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3087,6 +3101,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3116,6 +3132,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3145,6 +3163,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3174,6 +3194,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3203,6 +3225,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
         $config_item = [];
@@ -3232,6 +3256,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3261,6 +3287,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3290,6 +3318,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3319,15 +3349,17 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$config_item = [];
-        $config_item['__key'] = 'adminlte.emailserver';
+        $config_item['__key'] = 'adminlte.mailserver';
         $config_item['__parent'] = 'adminlte';
         $config_item['content'] = ''; 
         $config_item['default_value'] = '';
         $config_item['enabled'] = 1;
-        $config_item['file_types'] = '';
+        $config_item['file_types'] = ''; 
         $config_item['max'] = 0;
         $config_item['min'] = 0;
         $config_item['multiple'] = '';
@@ -3338,8 +3370,8 @@ class AdminLTE
         $config_item['system'] = 1;
         $config_item['title'] = 'Mail (SMTP) Server';
         $config_item['toggle_elements'] = '';
-        $config_item['type'] = 'link_button';
-        $config_item['url'] = 'email_server';
+        $config_item['type'] = 'group';
+        $config_item['url'] = '';
         $config_item['value'] = '';
 		$config_item['locked'] = 1;
 		$config_item['owner'] = 0;
@@ -3348,6 +3380,225 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
+        array_push($config, $config_item);
+
+		$config_item = [];
+        $config_item['__key'] = 'adminlte.mailserver.fromname';
+        $config_item['__parent'] = 'adminlte.mailserver';
+        $config_item['content'] = ''; 
+        $config_item['default_value'] = '';
+        $config_item['enabled'] = 1;
+        $config_item['file_types'] = ''; 
+        $config_item['max'] = 0;
+        $config_item['min'] = 0;
+        $config_item['multiple'] = '';
+        $config_item['option_titles'] = '';
+        $config_item['option_values'] = '';
+        $config_item['required'] = 0; 
+        $config_item['step'] = 0;
+        $config_item['system'] = 1;
+        $config_item['title'] = 'Email From Name';
+        $config_item['toggle_elements'] = '';
+        $config_item['type'] = 'shorttext';
+        $config_item['url'] = '';
+        $config_item['value'] = '';
+		$config_item['locked'] = 1;
+		$config_item['owner'] = 0;
+		$config_item['hint'] = '';
+		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 6;
+		$config_item['medium_screen_size'] = 6;
+		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
+        array_push($config, $config_item);
+
+		$config_item = [];
+        $config_item['__key'] = 'adminlte.mailserver.fromaddress';
+        $config_item['__parent'] = 'adminlte.mailserver';
+        $config_item['content'] = ''; 
+        $config_item['default_value'] = '';
+        $config_item['enabled'] = 1;
+        $config_item['file_types'] = ''; 
+        $config_item['max'] = 0;
+        $config_item['min'] = 0;
+        $config_item['multiple'] = '';
+        $config_item['option_titles'] = '';
+        $config_item['option_values'] = '';
+        $config_item['required'] = 0; 
+        $config_item['step'] = 0;
+        $config_item['system'] = 1;
+        $config_item['title'] = 'Email Reply To';
+        $config_item['toggle_elements'] = '';
+        $config_item['type'] = 'shorttext';
+        $config_item['url'] = '';
+        $config_item['value'] = '';
+		$config_item['locked'] = 1;
+		$config_item['owner'] = 0;
+		$config_item['hint'] = '';
+		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 6;
+		$config_item['medium_screen_size'] = 6;
+		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
+        array_push($config, $config_item);
+
+		$config_item = [];
+        $config_item['__key'] = 'adminlte.mailserver.host';
+        $config_item['__parent'] = 'adminlte.mailserver';
+        $config_item['content'] = ''; 
+        $config_item['default_value'] = '';
+        $config_item['enabled'] = 1;
+        $config_item['file_types'] = ''; 
+        $config_item['max'] = 0;
+        $config_item['min'] = 0;
+        $config_item['multiple'] = '';
+        $config_item['option_titles'] = '';
+        $config_item['option_values'] = '';
+        $config_item['required'] = 0; 
+        $config_item['step'] = 0;
+        $config_item['system'] = 1;
+        $config_item['title'] = 'SMTP Host';
+        $config_item['toggle_elements'] = '';
+        $config_item['type'] = 'shorttext';
+        $config_item['url'] = '';
+        $config_item['value'] = '';
+		$config_item['locked'] = 1;
+		$config_item['owner'] = 0;
+		$config_item['hint'] = '';
+		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 4;
+		$config_item['medium_screen_size'] = 4;
+		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
+        array_push($config, $config_item);
+
+		$config_item = [];
+        $config_item['__key'] = 'adminlte.mailserver.user';
+        $config_item['__parent'] = 'adminlte.mailserver';
+        $config_item['content'] = ''; 
+        $config_item['default_value'] = '';
+        $config_item['enabled'] = 1;
+        $config_item['file_types'] = ''; 
+        $config_item['max'] = 0;
+        $config_item['min'] = 0;
+        $config_item['multiple'] = '';
+        $config_item['option_titles'] = '';
+        $config_item['option_values'] = '';
+        $config_item['required'] = 0; 
+        $config_item['step'] = 0;
+        $config_item['system'] = 1;
+        $config_item['title'] = 'SMTP User';
+        $config_item['toggle_elements'] = '';
+        $config_item['type'] = 'shorttext';
+        $config_item['url'] = '';
+        $config_item['value'] = '';
+		$config_item['locked'] = 1;
+		$config_item['owner'] = 0;
+		$config_item['hint'] = '';
+		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 4;
+		$config_item['medium_screen_size'] = 4;
+		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
+        array_push($config, $config_item);
+
+		$config_item = [];
+        $config_item['__key'] = 'adminlte.mailserver.password';
+        $config_item['__parent'] = 'adminlte.mailserver';
+        $config_item['content'] = ''; 
+        $config_item['default_value'] = '';
+        $config_item['enabled'] = 1;
+        $config_item['file_types'] = ''; 
+        $config_item['max'] = 0;
+        $config_item['min'] = 0;
+        $config_item['multiple'] = '';
+        $config_item['option_titles'] = '';
+        $config_item['option_values'] = '';
+        $config_item['required'] = 0; 
+        $config_item['step'] = 0;
+        $config_item['system'] = 1;
+        $config_item['title'] = 'SMTP Password';
+        $config_item['toggle_elements'] = '';
+        $config_item['type'] = 'password';
+        $config_item['url'] = '';
+        $config_item['value'] = '';
+		$config_item['locked'] = 1;
+		$config_item['owner'] = 0;
+		$config_item['hint'] = '';
+		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 4;
+		$config_item['medium_screen_size'] = 4;
+		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
+        array_push($config, $config_item);
+		
+		$config_item = [];
+        $config_item['__key'] = 'adminlte.mailserver.encryption';
+        $config_item['__parent'] = 'adminlte.mailserver';
+        $config_item['content'] = ''; 
+        $config_item['default_value'] = '';
+        $config_item['enabled'] = 1;
+        $config_item['file_types'] = ''; 
+        $config_item['max'] = 0;
+        $config_item['min'] = 0;
+        $config_item['multiple'] = '';
+        $config_item['option_titles'] = "TLS\nSSL";
+        $config_item['option_values'] = "tls\nssl";
+        $config_item['required'] = 0; 
+        $config_item['step'] = 0;
+        $config_item['system'] = 1;
+        $config_item['title'] = 'Encryption';
+        $config_item['toggle_elements'] = '';
+        $config_item['type'] = 'dropdown';
+        $config_item['url'] = '';
+        $config_item['value'] = '';
+		$config_item['locked'] = 1;
+		$config_item['owner'] = 0;
+		$config_item['hint'] = '';
+		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 6;
+		$config_item['medium_screen_size'] = 6;
+		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
+        array_push($config, $config_item);
+
+		$config_item = [];
+        $config_item['__key'] = 'adminlte.mailserver.port';
+        $config_item['__parent'] = 'adminlte.mailserver';
+        $config_item['content'] = ''; 
+        $config_item['default_value'] = '';
+        $config_item['enabled'] = 1;
+        $config_item['file_types'] = ''; 
+        $config_item['max'] = 0;
+        $config_item['min'] = 0;
+        $config_item['multiple'] = '';
+        $config_item['option_titles'] = '';
+        $config_item['option_values'] = '';
+        $config_item['required'] = 0; 
+        $config_item['step'] = 0;
+        $config_item['system'] = 1;
+        $config_item['title'] = 'Port';
+        $config_item['toggle_elements'] = '';
+        $config_item['type'] = 'integer';
+        $config_item['url'] = '';
+        $config_item['value'] = '';
+		$config_item['locked'] = 1;
+		$config_item['owner'] = 0;
+		$config_item['hint'] = '';
+		$config_item['description'] = '';
+		$config_item['large_screen_size'] = 6;
+		$config_item['medium_screen_size'] = 6;
+		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3377,6 +3628,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3406,6 +3659,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3435,6 +3690,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$config_item = [];
@@ -3464,6 +3721,8 @@ class AdminLTE
 		$config_item['large_screen_size'] = 12;
 		$config_item['medium_screen_size'] = 12;
 		$config_item['small_screen_size'] = 12;
+		$config_item['max_selection'] = 0;
+		$config_item['min_selection'] = 0;
         array_push($config, $config_item);
 
 		$__order = 0;
@@ -3506,6 +3765,11 @@ class AdminLTE
 				$metaData['max'] = $config_item['max'];
 				$metaData['step'] = $config_item['step'];
 				$metaData['file_types'] = $config_item['file_types'];
+				$metaData['large_screen_size'] = $config_item['large_screen_size'];
+				$metaData['medium_screen_size'] = $config_item['medium_screen_size'];
+				$metaData['small_screen_size'] = $config_item['small_screen_size'];
+				$metaData['min_selection'] = $config_item['min_selection'];
+				$metaData['max_selection'] = $config_item['max_selection'];
 
 				$encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 				$AdminLTEConfig->meta_data_json = $encodedData;
@@ -3542,8 +3806,35 @@ class AdminLTE
 			} else {
 				$returnVal = $object->value;
 			}
+
+			if ('selection_group' == $object->type) {
+				$returnVal = $this->getSelectionGroupVal($returnVal);
+			}
 		}
 		
+		return $returnVal;
+	}
+	
+	public function getSelectionGroupVal($selectionGroupValue) {
+		if ('' == $selectionGroupValue) {
+			return $selectionGroupValue;
+		}
+
+		$parts = explode(',', $selectionGroupValue);
+		$returnVal = '';
+
+		foreach ($parts as $key) {
+			$partValue = $this->getConfigParameterValue($key);
+			
+			if ('' != $partValue) {
+				if ('' != $returnVal) {
+					$returnVal .= ',';
+				}
+
+				$returnVal .= $partValue;
+			}
+		}
+
 		return $returnVal;
 	}
 	

@@ -109,6 +109,7 @@
                                             && ('link_button' != parameter_type)
                                             && ('link_text' != parameter_type)
                                             && ('readonly_content' != parameter_type)
+                                            && ('selection_item' != parameter_type)
                                         )">
                                         <div class="">
                                             <div class="icheck-primary d-inline">
@@ -154,6 +155,8 @@
                                             <option value="password">{{ $t('Password') }}</option>
                                             <option value="radio">{{ $t('Radio') }}</option>
                                             <option value="readonly_content">{{ $t('Readonly Content') }}</option>
+                                            <option value="selection_group">{{ $t('Selection Group') }}</option>
+                                            <option value="selection_item">{{ $t('Selection Item') }}</option>
                                             <option value="shorttext">{{ $t('Shorttext') }}</option>
                                             <option value="switch">{{ $t('Switch') }}</option>
                                             <option value="textarea">{{ $t('Textarea') }}</option>
@@ -161,7 +164,10 @@
                                             <option value="toggle">{{ $t('Toggle') }}</option>
                                         </select>
                                         <span class="text-muted d-none" id="groupTypeWarning">
-                                            {{ $t('This element type cannot be changed because its type is a group.') }}
+                                            {{ $t('This element type cannot be changed because it\'s type is a group.') }}
+                                        </span>
+                                        <span class="text-muted d-none" id="parenSelectionGroupTypeWarning">
+                                            {{ $t('This element can be "Selection Item" only, beacuse parent element type is "Selection Group"') }}
                                         </span>
                                     </div>
 
@@ -330,6 +336,26 @@
                                     </div>
                                 </div>
 
+                                <div class="row" v-show="('selection_group' == parameter_type)">
+                                    <div class="form-group col-lg-6">
+                                        <label for="min_selection">{{ $t('Min Selection Count') }}</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control item-menu"
+                                                name="min_selection" id="min_selection"
+                                                min="0" step="1">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        <label for="max_selection">{{ $t('Max Selection Count') }}</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control item-menu"
+                                                name="max_selection" id="max_selection"
+                                                min="0" step="1">
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row" v-show="(('integer' == parameter_type) || ('number' == parameter_type))">
                                     <div class="form-group col-lg-4">
                                         <label for="min">{{ $t('Min') }}</label>
@@ -369,6 +395,7 @@
                                     <div class="form-group col-lg-12" 
                                         v-show="(
                                             ('group' != parameter_type)
+                                            && ('selection_item' != parameter_type)
                                             && ('file' != parameter_type)
                                             && ('link_button' != parameter_type)
                                             && ('link_text' != parameter_type)
@@ -392,6 +419,7 @@
                                                 || ('password' == parameter_type)
                                                 || ('radio' == parameter_type)
                                                 || ('shorttext' == parameter_type)
+                                                || ('selection_group' == parameter_type)
                                             )">
                                             <input type="text" class="form-control" id="default_value_text">
                                         </div>
@@ -407,6 +435,9 @@
                                         </span>
                                         <span class="text-muted" v-show="('radio' == parameter_type)">
                                             {{ $t('This string should be one of option values.') }}
+                                        </span>
+                                        <span class="text-muted" v-show="'selection_group' == parameter_type">
+                                            {{ $t('This string is a comma-separated list of selection item keys.') }}
                                         </span>
                                         <div class="input-group" v-show="('datepicker' == parameter_type)">
                                             <input type="date" class="form-control" id="default_value_datepicker">
@@ -446,8 +477,13 @@
 
                                         <input type="hidden" class="form-control item-menu" 
                                             name="default_value" id="default_value">
-                                        <input type="hidden" class="form-control item-menu" 
-                                            name="value" id="value">
+                                    </div>
+
+                                    <div class="form-group col-lg-12" v-show="'selection_item' == parameter_type">
+                                        <label for="value">{{ $t('Value') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control item-menu" name="value" id="value">
+                                        </div>
                                     </div>
                                 
                                 </div>
@@ -595,6 +631,8 @@ export default {
             document.getElementById("value").value = current_data["value"];
             document.getElementById("hint").value = current_data["hint"];
             $("#description").summernote("code", current_data["description"]);
+            document.getElementById("min_selection").value = current_data["min_selection"];
+            document.getElementById("max_selection").value = current_data["max_selection"];
 
             /* if ("toggle" == current_data.type) {
                 this.AdminLTEConfigForm.toggle_elements = current_data.toggle_elements.split(",");
@@ -614,6 +652,7 @@ export default {
                 || ("password" == type)
                 || ("radio" == type)
                 || ("shorttext" == type)
+                || ("selection_group" == type)
                 ) {
                 document.getElementById("default_value_text").value = val;
             } else if (("integer" == type) || ("number" == type)){
@@ -880,6 +919,8 @@ export default {
             document.getElementById("hint").value = "";
             $("#description").summernote("code", "");
             $("#default_value_html_editor").summernote("code", "");
+            document.getElementById("min_selection").value = 0;
+            document.getElementById("max_selection").value = 0;
 
             $("#groupTypeWarning").addClass("d-none");
             document.getElementById("type").disabled = false;
@@ -1081,9 +1122,11 @@ export default {
             // parent selection
             var parentList = [];
             var option = {};
+            var type = "";
 
             for (var __key in this.listByKey) {
-                if ("group" == this.listByKey[__key].type) {
+                type = this.listByKey[__key].type;
+                if (("group" == type) ||("selection_group" == type)) {
                     option = {};
                     option["id"] = __key;
                     option["text"] = this.getOptionTitle(__key);
@@ -1092,6 +1135,12 @@ export default {
             }
 
             this.parentlist = parentList;
+
+            var self = this;
+            
+            $("#__parent").off("change").on("change", function (e) {
+                self.parentChanged(this.value);
+            });
 
             // toggle selection
             var toggleList = [];
@@ -1108,6 +1157,22 @@ export default {
             if ($("#toggle_elements").find('option').get(0)) {
                 $("#toggle_elements").find('option').get(0).remove();
             }
+        },
+        parentChanged: function(selectedParentKey) {
+            $("#parenSelectionGroupTypeWarning").addClass("d-none");
+            document.getElementById("type").disabled = false;
+
+            if ("" == selectedParentKey) {
+                return;
+            }
+
+            if ("selection_group" != this.listByKey[selectedParentKey].type) {
+                return;
+            }
+
+            $("#parenSelectionGroupTypeWarning").removeClass("d-none");
+            $("#type").val("selection_item").trigger('change');
+            document.getElementById("type").disabled = true;
         },
         getOptionTitle: function(key) {
             var self = this;

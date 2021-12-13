@@ -69,7 +69,7 @@
             <div class="row config-maingroup toggle-able" data-key="__group_key__">
                 <div class="col-lg-4 col-md-4 col-xs-12 ">
                     <h4 class="form-part-header">{{ $t('__group_title__') }}</h4>
-                    <h6 class="form-part-instructions text-muted">
+                    <h6 class="form-part-instructions">
                         {{ $t('__description__') }}
                     </h6>
                 </div>
@@ -101,6 +101,108 @@
                 </div>
                 <div class="row mt-4 mb-4" id="groupContainer__group_key__">
                 </div>
+            </div>
+        </script>
+
+        <script type="text/html" id="selection_groupTemplateLevel0">
+            <div class="row config-maingroup toggle-able" data-key="__group_key__">
+                <div class="col-lg-4 col-md-4 col-xs-12 ">
+                    <h4 class="form-part-header">
+                        {{ $t('__group_title__') }}
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="selection_group"
+                            data-key="__group_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                    </h4>
+                    <h6 class="form-part-instructions">
+                        {{ $t('__description__') }}
+                    </h6>
+                </div>
+                <div class="col-lg-8 col-md-8 col-xs-12">
+                    <div class="row config-parameter__delete__ config-selection-group"
+                        data-type="selection_group"
+                        data-key="__group_key__"
+                        data-min-selection="__min_selection__"
+                        data-max-selection="__max_selection__"
+                        id="groupContainer__group_key__">
+                    </div>                    
+                </div>
+            </div>
+        </script>
+
+        <script type="text/html" id="selection_groupTemplateLevel1">
+            <div class="card toggle-able" data-key="__group_key__">
+                <div class="card-header">
+                    <h2 class="lead mb-0">
+                        <b>{{ $t('__group_title__') }}</b>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="selection_group"
+                            data-key="__group_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                    </h2>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="row config-parameter__delete__ config-selection-group"
+                        data-type="selection_group"
+                        data-key="__group_key__"
+                        data-min-selection="__min_selection__"
+                        data-max-selection="__max_selection__"
+                        id="groupContainer__group_key__">
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/html" id="selection_groupTemplate">
+            <div class="col-lg-12 toggle-able" data-key="__group_key__">
+                <div style="border-bottom: 1px solid #6c757d;">
+                    <label style="font-size: 1.1rem;font-weight: 400;margin: 0;">
+                        {{ $t('__group_title__') }}
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="selection_group"
+                            data-key="__group_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                </div>
+                <div class="row mt-4 mb-4 config-parameter__delete__ config-selection-group"
+                    data-type="selection_group"
+                    data-key="__group_key__"
+                    data-min-selection="__min_selection__"
+                    data-max-selection="__max_selection__"
+                    id="groupContainer__group_key__">
+                </div>
+            </div>
+        </script>
+
+        <script type="text/html" id="selection_itemTemplate">
+            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                <div class="icheck-primary d-inline">
+                    <input type="checkbox"
+                        id="__field_key__"
+                        name="__field_key__"
+                        class="selection-item__delete__ __parent_key__-selection_item"
+                        data-parentkey="__parent_key__"
+                        data-type="checkbox">
+                    <label for="__field_key__" class="detail-label">
+                        {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                </div>
+                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
             </div>
         </script>
         
@@ -646,6 +748,24 @@ export default {
                     } else {
                         document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
                     }
+                } else if ("selection_group" == element.type) {
+                    elementHTML = self.getSelectionGroupHTML(element);
+
+                    if (element.__key.includes(".")) {
+                        parentKey = self.getParentKey(element.__key);
+                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                    } else {
+                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                    }
+                } else if ("selection_item" == element.type) {
+                    elementHTML = self.getSelectionItemHTML(element);
+
+                    if (element.__key.includes(".")) {
+                        parentKey = self.getParentKey(element.__key);
+                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                    } else {
+                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                    }
                 } else if ("checkbox" == element.type) {
                     elementHTML = self.getCheckboxHTML(element);
 
@@ -898,6 +1018,10 @@ export default {
 
             $('[data-toggle="tooltip"]').tooltip(); 
 
+            $(".selection-item").off('change').on('change', function () {
+                self.selectionItemChanged(this);
+            });
+
             setTimeout(function(){
                 $(".use-parameter-default-value").on('click', function(e){
                     self.setDefaultValue(this);
@@ -905,6 +1029,45 @@ export default {
 
                 self.setValues();
             }, 300);
+        },
+        selectionItemChanged: function(changedItem) {
+            var parentkey = changedItem.getAttribute("data-parentkey");
+            var parentContainer = document.getElementById("groupContainer" + parentkey);
+            var min_selection = parentContainer.getAttribute("data-min-selection");
+            var max_selection = parentContainer.getAttribute("data-max-selection");
+            var selectorText = "." + parentkey + "-selection_item";
+            var selectionItems = $(selectorText, parentContainer);
+            for (let index = 0; index < selectionItems.length; index++) {
+                const selectionItem = selectionItems[index];
+
+                if (selectionItem.id == changedItem.id) {
+                    console.log("selectionItem_id:" + selectionItem.id)
+                }                
+            }
+        },
+        getSelectionGroupHTML: function(element) {
+            var templateHTML = "";
+            if (0 == element.level) {
+                templateHTML = document.getElementById("selection_groupTemplateLevel0").innerHTML
+            } else if (1 == element.level) {
+                templateHTML = document.getElementById("selection_groupTemplateLevel1").innerHTML
+            } else {
+                templateHTML = document.getElementById("selection_groupTemplate").innerHTML
+            }
+
+            return templateHTML
+                    .replace(/__delete__/g, "")
+                    .replace(/__group_title__/g, element.title)
+                    .replace(/__description__/g, element.description)
+                    .replace(/__group_key__/g, element.__key)
+                    .replace(/__min_selection__/g, element.min_selection)
+                    .replace(/__max_selection__/g, element.max_selection)
+                    .replace(/__default_value__/g, element.default_value)
+                    .replace(/__use_default_title__/g, document.getElementById("btnUseDefaultTitle").innerHTML);
+        },
+        getSelectionItemHTML: function(element) {
+            var resultHTML = this.replaceTemplateHTML(element, document.getElementById("selection_itemTemplate").innerHTML);
+            return resultHTML.replace(/__parent_key__/g, element.parent);
         },
         getGroupHTML: function(element) {
             var templateHTML = "";
@@ -1155,6 +1318,7 @@ export default {
         },
 
         setDefaultValue: function(btn) {
+            var self = this;
             var type = btn.getAttribute("data-type");
             var elementKey = btn.getAttribute("data-key");
             var val = btn.getAttribute("default-value");
@@ -1215,7 +1379,9 @@ export default {
                 if ("on" == val) {
                     $(document.getElementById(elementKey)).attr("checked", true).trigger("change");
                 }
-            }  
+            } else if ("selection_group" == type) {
+                self.setSelectionGroupValue(elementKey, val);
+            }
         },
 
         resetValues: function() {
@@ -1383,7 +1549,15 @@ export default {
                         /* document.getElementById(elementKey).checked = true; */
                         $(document.getElementById(elementKey)).attr("checked", true).trigger("change");
                     }
-                }  
+                } else if ("selection_group" == element.type) {
+                    val = element.default_value;
+
+                    if ("" != element.value) {
+                        val = element.value;
+                    }
+
+                    self.setSelectionGroupValue(elementKey, val);
+                }
             });
 
             setTimeout(function() {
@@ -1559,7 +1733,7 @@ export default {
             let formData = new FormData();
             
             self.collectConfigData(formData);
-            
+
             formData.append('config_data', JSON.stringify(this.formConfig.config_data));
 
             self.$Progress.start();
@@ -1656,6 +1830,10 @@ export default {
                     parameter_data["type"] = "switch";
                     parameter_data["key"] = element.getAttribute("data-key");
                     parameter_data["val"] = element.checked ? 'on' : 'off';
+                } else if ("selection_group" == element.getAttribute("data-type")) {
+                    parameter_data["type"] = "selection_group";
+                    parameter_data["key"] = element.getAttribute("data-key");
+                    parameter_data["val"] = self.getSelectionGroupValue(parameter_data["key"])
                 } else {
                     parameter_data["type"] = "other";
                     parameter_data["key"] = element.id;
@@ -1714,6 +1892,55 @@ export default {
 
             reader.readAsDataURL(file);
         },
+        getSelectionGroupValue: function(selectionGroupKey) {
+            var selectedValues = "";
+
+            var parentkey = selectionGroupKey;
+            var parentContainer = document.getElementById("groupContainer" + parentkey);
+            var min_selection = parentContainer.getAttribute("data-min-selection");
+            var max_selection = parentContainer.getAttribute("data-max-selection");
+            var selectorText = "." + parentkey + "-selection_item";
+            var selectionItems = $(selectorText, parentContainer);
+            for (let index = 0; index < selectionItems.length; index++) {
+                const selectionItem = selectionItems[index];
+
+                if (selectionItem.checked) {
+                    if ("" != selectedValues) {
+                        selectedValues += ",";
+                    }
+
+                    selectedValues += selectionItem.id;
+                }                
+            }
+
+            return selectedValues;
+        },
+        setSelectionGroupValue: function(elementKey, value) {
+            var parentContainer = document.getElementById("groupContainer" + elementKey);
+            var selectorText = "." + elementKey + "-selection_item";
+            var selectionItems = $(selectorText, parentContainer);
+
+            if ("" == value) {
+                for (let index = 0; index < selectionItems.length; index++) {
+                    const selectionItem = selectionItems[index];
+                    document.getElementById(selectionItem.id).checked = false;               
+                }
+
+                return;
+            }
+
+
+            var values = value.split(",");
+
+            for (let index = 0; index < selectionItems.length; index++) {
+                const selectionItem = selectionItems[index];
+                if (values.includes(selectionItem.id)) {
+                    document.getElementById(selectionItem.id).checked = true;               
+                } else {
+                    document.getElementById(selectionItem.id).checked = false; 
+                }
+            }
+        }
     },
     mounted() {
         var self = this;
