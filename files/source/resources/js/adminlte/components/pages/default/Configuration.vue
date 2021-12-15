@@ -108,7 +108,7 @@
             <div class="row config-maingroup toggle-able" data-key="__group_key__">
                 <div class="col-lg-4 col-md-4 col-xs-12 ">
                     <h4 class="form-part-header">
-                        {{ $t('__group_title__') }}
+                        <span id="__group_key__-label" class="field-label">{{ $t('__group_title__') }}</span> <span class="__required_class__">*</span>
                         <button type="button"
                             class="use-parameter-default-value__delete__"
                             data-type="selection_group"
@@ -129,7 +129,13 @@
                         data-min-selection="__min_selection__"
                         data-max-selection="__max_selection__"
                         id="groupContainer__group_key__">
-                    </div>                    
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-muted small">__selection_hint__</div>
+                    </div>
+                    <div class="row config-parameter-error" id="__group_key__-error">
+                        <span class="col-12 error invalid-feedback"></span>
+                    </div>                
                 </div>
             </div>
         </script>
@@ -138,7 +144,7 @@
             <div class="card toggle-able" data-key="__group_key__">
                 <div class="card-header">
                     <h2 class="lead mb-0">
-                        <b>{{ $t('__group_title__') }}</b>
+                        <b><span id="__group_key__-label" class="field-label">{{ $t('__group_title__') }}</span></b> <span class="__required_class__">*</span>
                         <button type="button"
                             class="use-parameter-default-value__delete__"
                             data-type="selection_group"
@@ -158,6 +164,12 @@
                         data-max-selection="__max_selection__"
                         id="groupContainer__group_key__">
                     </div>
+                    <div class="row">
+                        <div class="col-12 text-muted small">__selection_hint__</div>
+                    </div>
+                    <div class="row config-parameter-error" id="__group_key__-error">
+                        <span class="col-12 error invalid-feedback"></span>
+                    </div>
                 </div>
             </div>
         </script>
@@ -166,7 +178,7 @@
             <div class="col-lg-12 toggle-able" data-key="__group_key__">
                 <div style="border-bottom: 1px solid #6c757d;">
                     <label style="font-size: 1.1rem;font-weight: 400;margin: 0;">
-                        {{ $t('__group_title__') }}
+                        <span id="__group_key__-label" class="field-label">{{ $t('__group_title__') }}</span> <span class="__required_class__">*</span>
                         <button type="button"
                             class="use-parameter-default-value__delete__"
                             data-type="selection_group"
@@ -178,12 +190,18 @@
                     </label>
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 </div>
-                <div class="row mt-4 mb-4 config-parameter__delete__ config-selection-group"
+                <div class="row mt-4 config-parameter__delete__ config-selection-group"
                     data-type="selection_group"
                     data-key="__group_key__"
                     data-min-selection="__min_selection__"
                     data-max-selection="__max_selection__"
                     id="groupContainer__group_key__">
+                </div>
+                <div class="row">
+                    <div class="col-12 text-muted small">__selection_hint__</div>
+                </div>
+                <div class="row mb-4 config-parameter-error" id="__group_key__-error">
+                    <span class="col-12 error invalid-feedback"></span>
                 </div>
             </div>
         </script>
@@ -234,7 +252,7 @@
         <script type="text/html" id="colorpickerTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="colorpicker"
@@ -256,13 +274,16 @@
                         <span class="input-group-text" id="__field_key__append" style="padding-left:100px;"></span>
                     </div>
                 </div>
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
 
         <script type="text/html" id="datepickerTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="datepicker"
@@ -279,13 +300,16 @@
                     data-type="datepicker"
                     id="__field_key__"
                     name="__field_key__">
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
 
         <script type="text/html" id="datetimepickerTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="datetimepicker"
@@ -302,13 +326,16 @@
                     data-type="datetimepicker"
                     id="__field_key__"
                     name="__field_key__">
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
 
         <script type="text/html" id="dropdownTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="dropdown"
@@ -329,11 +356,16 @@
                     data-key="__field_key__"
                     style="width:100%;">
                 </select>
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
         <script type="text/html" id="fileTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">{{ $t('__field_title__') }} <span class="__required_class__">*</span></label>
+                <label for="__field_key__" class="detail-label">
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                </label>
                 <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <div class="input-field">
                     <input type="file" id="__field_key__" name="__field_key__" 
@@ -341,23 +373,38 @@
                         data-type="file" 
                         class="form-input config-file__delete__ config-parameter__delete__"
                         style="display:none;">
-                    <button class="btn btn-primary btn-file-trigger__delete__" data-triggered-id="__field_key__">
+                    <button type="button" class="btn btn-primary btn-file-trigger__delete__" data-triggered-id="__field_key__">
                         {{ $t('Browse...') }}
                     </button>
                     <span id="spanFileName__field_key__"></span>
                     <input type="hidden" id="__field_key__-file_name">
                     <input type="hidden" id="__field_key__-file_value">
-                    <button type="button" class="text-btn file_download__delete__"
+                    <button type="button" id="__field_key__-download_btn" class="text-btn file_download__delete__"
                         data-key="__field_key__">
                         <span>{{ $t('__value__') }}</span>
                     </button>
+                    <!-- <button type="button" id="__field_key__-download_default_btn" class="text-btn default_file_download__delete__"
+                        data-key="__field_key__">
+                        <span>{{ $t('__default_value__') }}</span>
+                    </button>
+                    <button type="button"
+                        class="use-parameter-default-value__delete__"
+                        data-type="file"
+                        data-key="__field_key__"
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
+                    </button> -->
+                </div>
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
                 </div>
             </div>
         </script>
         <script type="text/html" id="htmlEditorTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="html_editor"
@@ -374,12 +421,15 @@
                     data-type="html_editor"
                     class="textarea vue-editor__delete__ config-parameter__delete__"
                     rows="5"></textarea>
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
         <script type="text/html" id="iconPickerTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="iconpicker"
@@ -393,12 +443,15 @@
                 <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <button type="button" id="__field_key__" class="btn btn-outline-secondary icon-picker__delete__"></button>
                 <input type="hidden" id="__field_key__-value" name="__field_key__-value" data-key="__field_key__" data-type="iconpicker" class="item-widget config-parameter__delete__">
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
         <script type="text/html" id="integerTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="shorttext"
@@ -418,6 +471,9 @@
                     min="__min__"
                     max="__max__"
                     step="__step__">
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
         <script type="text/html" id="link_buttonTemplate">
@@ -443,7 +499,7 @@
         <script type="text/html" id="numberTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="shorttext"
@@ -463,12 +519,15 @@
                     min="__min__"
                     max="__max__"
                     step="__step__">
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
         <script type="text/html" id="passwordTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="shorttext"
@@ -485,12 +544,15 @@
                     data-type="shorttext"
                     id="__field_key__"
                     name="__field_key__">
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
         <script type="text/html" id="radioTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="radio"
@@ -503,10 +565,13 @@
                 </label>
                 <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <div id="container_radio___field_key__" 
-                    class="form-group clearfix config-parameter__delete__"
+                    class="clearfix config-parameter__delete__"
                     data-type="radio"   
                     data-key="__field_key__">
                     __radio_options_html__
+                </div>
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
                 </div>
             </div>
         </script>
@@ -530,7 +595,7 @@
         <script type="text/html" id="shorttextTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="shorttext"
@@ -547,6 +612,9 @@
                     data-type="shorttext"
                     id="__field_key__"
                     name="__field_key__">
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
         <script type="text/html" id="switchTemplate">
@@ -583,7 +651,7 @@
         <script type="text/html" id="textareaTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="textarea"
@@ -600,12 +668,15 @@
                     name="__field_key__"
                     class="form-control config-parameter__delete__"
                     data-type="textarea"></textarea>
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
         <script type="text/html" id="timepickerTemplate">
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
-                    {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                     <button type="button"
                         class="use-parameter-default-value__delete__"
                         data-type="timepicker"
@@ -622,6 +693,9 @@
                     data-type="timepicker"
                     id="__field_key__"
                     name="__field_key__">
+                <div class="config-parameter-error" id="__field_key__-error">
+                    <span class="error invalid-feedback"></span>
+                </div>
             </div>
         </script>
         <script type="text/html" id="toggleTemplate">
@@ -670,6 +744,7 @@ export default {
                 has_error: false,
                 error_msg: ''
             },
+            listByKey: [],
             init_toggles:false,
             page: {
                 is_ready: false,
@@ -729,6 +804,17 @@ export default {
                     );
                 }
             }
+        },
+        setListByKey: function() {
+            var listByKey = {};
+            var elements = this.list;
+
+            for (let index = 0; index < elements.length; index++) {
+                const element = elements[index];
+                listByKey[element.__key] = element;
+            }
+
+            this.listByKey = listByKey;
         },
         renderForm: function() {
             document.getElementById("AdminLTEConfigFormContainer").innerHTML = "";
@@ -1055,14 +1141,33 @@ export default {
                 templateHTML = document.getElementById("selection_groupTemplate").innerHTML
             }
 
+            var requiredClass = "d-none";
+            if (element.required) {
+                requiredClass = "required";
+            }
+
+            var min_selection = element.min_selection;
+            var max_selection = element.max_selection;
+
+            var selectionHint = "";
+            if ((0 == min_selection) && (max_selection > 0)) {
+                selectionHint = "You can choose maximum " + max_selection + " option(s).";
+            } else if ((min_selection > 0) && (max_selection > 0)) {
+                selectionHint = "You must choose minimum " + min_selection + " option(s). You can choose maximum " + max_selection + " option(s).";
+            } else if ((min_selection > 0) && (0 == max_selection)) {
+                selectionHint = "You must choose minimum " + min_selection + " option(s).";
+            }
+
             return templateHTML
                     .replace(/__delete__/g, "")
                     .replace(/__group_title__/g, element.title)
                     .replace(/__description__/g, element.description)
                     .replace(/__group_key__/g, element.__key)
-                    .replace(/__min_selection__/g, element.min_selection)
-                    .replace(/__max_selection__/g, element.max_selection)
+                    .replace(/__min_selection__/g, min_selection)
+                    .replace(/__max_selection__/g, max_selection)
                     .replace(/__default_value__/g, element.default_value)
+                    .replace(/__required_class__/g, requiredClass)
+                    .replace(/__selection_hint__/g, selectionHint)
                     .replace(/__use_default_title__/g, document.getElementById("btnUseDefaultTitle").innerHTML);
         },
         getSelectionItemHTML: function(element) {
@@ -1094,7 +1199,7 @@ export default {
             return this.replaceTemplateHTML(element, document.getElementById("datepickerTemplate").innerHTML);
         },
         getDateTimePickerHTML: function(element) {
-            return this.replaceTemplateHTML(element, document.getElementById("datepickerTemplate").innerHTML);
+            return this.replaceTemplateHTML(element, document.getElementById("datetimepickerTemplate").innerHTML);
         },
         getDropdownHTML: function(element) {
             var resultHTML = this.replaceTemplateHTML(element, document.getElementById("dropdownTemplate").innerHTML);
@@ -1327,7 +1432,7 @@ export default {
                 if ("on" == val) {
                     document.getElementById(elementKey).checked = true;
                 }
-            } else if ("colorpicker" == type) {
+            } else if (("colorpicker" == type ) && ("" != val)) {
                 var colorPicker = document.getElementById(elementKey);
                 $(colorPicker).val(val);
                 $(colorPicker).trigger('change');
@@ -1346,7 +1451,8 @@ export default {
                 $(document.getElementById(elementKey)).summernote("code", val);
             } else if ("iconpicker" == type) {
                 if ("" == val || undefined === val) {
-                    $(document.getElementById(elementKey)).iconpicker('setIcon', 'empty');
+                    console.log("empty icon")
+                    /* $(document.getElementById(elementKey)).iconpicker('setIcon', 'empty'); */
                 } else{
                     $(document.getElementById(elementKey)).iconpicker('setIcon', val);
                 }
@@ -1396,166 +1502,61 @@ export default {
             self.list.forEach(element => {
                 elementKey = element.__key;
 
+                val = ("" != element.value) ? element.value : element.default_value;
+
                 if ("checkbox" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     if ("on" == val) {
                         document.getElementById(elementKey).checked = true;
                     }
-                } else if ("colorpicker" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
+                } else if (("colorpicker" == element.type ) && ("" != val)) {
                     var colorPicker = document.getElementById(elementKey);
                     $(colorPicker).val(val);
                     $(colorPicker).trigger('change');
                 } else if ("datepicker" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     document.getElementById(elementKey).value = val;
                 } else if ("datetimepicker" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     document.getElementById(elementKey).value = val;
                 } else if ("dropdown" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     if (element.multiple) {
                         $(document.getElementById(elementKey)).val(val.split(",")).trigger('change');
                     } else {
                         $(document.getElementById(elementKey)).val(val).trigger('change');
                     }
-                } /* else if ("file" == element.type) {
-                } */ else if ("html_editor" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
+                } else if ("html_editor" == element.type) {
                     $(document.getElementById(elementKey)).summernote("code", val);
                 } else if ("iconpicker" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     if ("" == val || undefined === val) {
-                        $(document.getElementById(elementKey)).iconpicker('setIcon', 'empty');
+                        console.log("empty icon")
+                        /* $(document.getElementById(elementKey)).iconpicker('setIcon', 'empty'); */
                     } else{
                         $(document.getElementById(elementKey)).iconpicker('setIcon', val);
                     }
                 } else if ("integer" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     document.getElementById(elementKey).value = val;
-                } /* else if ("link_button" == element.type) {
-                } else if ("link_text" == element.type) {
-                } */ else if ("number" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
+                } else if ("number" == element.type) {
                     document.getElementById(elementKey).value = val;
                 } else if ("password" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     document.getElementById(elementKey).value = val;
                 } else if ("radio" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     var selectorText = 'input[name="' + elementKey + '"][value="' + val + '"]';
                     $(selectorText).prop('checked', true);
-
-                }/*  else if ("readonly_content" == element.type) {
-                } */ else if ("shorttext" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
+                } else if ("shorttext" == element.type) {
                     document.getElementById(elementKey).value = val;
                 } else if ("switch" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     if ("on" == val) {
                         $(document.getElementById(elementKey)).bootstrapSwitch("state", true);
                     } else {
                         $(document.getElementById(elementKey)).bootstrapSwitch("state", false);
                     }
                 } else if ("textarea" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     $(document.getElementById(elementKey)).val(val);
                 } else if ("timepicker" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     document.getElementById(elementKey).value = val;
                 } else if ("toggle" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     if ("on" == val) {
-                        /* document.getElementById(elementKey).checked = true; */
                         $(document.getElementById(elementKey)).attr("checked", true).trigger("change");
                     }
                 } else if ("selection_group" == element.type) {
-                    val = element.default_value;
-
-                    if ("" != element.value) {
-                        val = element.value;
-                    }
-
                     self.setSelectionGroupValue(elementKey, val);
                 }
             });
@@ -1601,7 +1602,7 @@ export default {
 
             self.page.is_variables_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/download_file/" + __key))
+            axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/download_file/uploaded/" + __key))
                 .then(({ data }) => {
                     var a = document.createElement("a"); //Create <a>
                     a.href = data.url; //Image Base64 Goes here
@@ -1628,11 +1629,12 @@ export default {
                     self.data = data;
                     self.list = data.data.list;
                     self.show_pagination = data.show_pagination;
+                    self.setListByKey();
                 }).catch(({ data }) => {
                     self.page.is_configlist_loaded = true;
                     self.page.is_configlist_loading = false;
                     self.$Progress.fail();
-                     self.page.has_server_error = true;
+                    self.page.has_server_error = true;
                     self.processLoadQueue();
                 }).finally(function() {
                     callback();
@@ -1730,6 +1732,9 @@ export default {
         submitConfigForm: function () {
             var self = this;
 
+            $(".config-parameter-error > span").hide();
+            $(".field-label.text-danger").removeClass("text-danger");
+
             let formData = new FormData();
             
             self.collectConfigData(formData);
@@ -1767,21 +1772,33 @@ export default {
                                 timer: 2000,
                                 timerProgressBar: true,
                                 onClose: () => {
-                                    window.location.reload()
+                                    /* window.location.reload() */
                                 }
                             });
                         } else {
-                            Vue.swal.fire({
-                                position: 'top-end',
-                                title: self.page.post_error_msg,
-                                icon: 'error',
-                                showConfirmButton: false,
-                                timer: 10000,
-                                timerProgressBar: true
-                            });
+                            self.renderFormErrors(self.page.post_error_msg);
                         }
                     }
                 });
+        },
+        renderFormErrors: function(errors) {
+            var firstErrorContainer = null;
+            for (const [__key, msg] of Object.entries(errors)) {
+                let errorContainer = null;
+                if (errorContainer = document.getElementById(__key + "-error")) {
+                    $("span", errorContainer).html(msg).show();
+                    document.getElementById(__key + "-label").className = "field-label text-danger";
+                    if (null === firstErrorContainer) {
+                        firstErrorContainer = errorContainer;
+                    }
+                }
+            }
+
+            if (null !== firstErrorContainer) {
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: $(firstErrorContainer.parentNode).offset().top - 20
+                }, 2000);
+            }
         },
         collectConfigData: function(formData) {
             var self = this;
@@ -1819,8 +1836,8 @@ export default {
                     formData.append(parameter_data["val"], self.uploadedFiles[element.id])
                     
                 } else if ("html_editor" == element.getAttribute("data-type")) {
-                    parameter_data["type"] = "iconpicker";
-                    parameter_data["key"] = element.getAttribute("data-key");
+                    parameter_data["type"] = "html_editor";
+                    parameter_data["key"] = element.id;
                     parameter_data["val"] = $(element).summernote('code');
                 } else if ("iconpicker" == element.getAttribute("data-type")) {
                     parameter_data["type"] = "iconpicker";
@@ -1840,7 +1857,11 @@ export default {
                     parameter_data["val"] = element.value;
                 }
 
-                console.log(parameter_data)
+                const key = parameter_data["key"];
+                parameter_data["required"] = self.listByKey[key]["required"];
+                parameter_data["title"] = self.listByKey[key]["title"];
+
+                /* console.log(parameter_data) */
 
                 config_data.push(parameter_data);
             });

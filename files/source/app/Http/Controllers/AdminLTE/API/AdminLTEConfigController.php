@@ -300,6 +300,99 @@ class AdminLTEConfigController extends Controller
         return $basekey;
     }
 
+    public function validateSelectionGroup($key, $val) {
+        $result = [
+            'has_error' => false,
+            'error_msg' => ''
+        ];
+
+        $selected_options = [];
+        if ('' != $val) {
+            $selection_options = explode(',', $val);
+        }
+        $selectedCount = count($selection_options);
+
+        $selectionGroup = $this->getConfigObject($key);
+        $metaData = json_decode($selectionGroup->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+        $min_selection = isset($metaData['min_selection']) ? $metaData['min_selection'] : 0;
+        $max_selection = isset($metaData['max_selection']) ? $metaData['max_selection'] : 0;
+
+        if ((0 == $min_selection) && ($max_selection > 0)) {
+            if ($selectedCount > $max_selection) {
+                $result['has_error'] = true;
+                $result['error_msg'] = "You can choose maximum " . $max_selection . " option(s).";
+            }
+        } else if (($min_selection > 0) && ($max_selection > 0)) {
+            if (($selectedCount < $min_selection) && ($selectedCount > $max_selection)) {
+                $result['has_error'] = true;
+                $result['error_msg'] = "You must choose minimum " . $min_selection . " option(s). You can choose maximum " . $max_selection . " option(s).";
+            } else if ($selectedCount < $min_selection) {
+                $result['has_error'] = true;
+                $result['error_msg'] = "You must choose minimum " . $min_selection . " option(s).";
+            } else if ($selectedCount > $max_selection) {
+                $result['has_error'] = true;
+                $result['error_msg'] = "You can choose maximum " . $max_selection . " option(s).";
+            }
+        } else if (($min_selection > 0) && (0 == $max_selection)) {
+            if ($selectedCount < $min_selection) {
+                $result['has_error'] = true;
+                $result['error_msg'] = "You must choose minimum " . $min_selection . " option(s).";
+            }
+        }
+
+        return $result;
+    }
+
+    public function validation($request, $config_data) {
+        $result = [
+            'error_msg' => '',
+            'error_count' => 0
+        ];
+
+        $errors = [];
+        $index = 0;
+        
+        foreach ($config_data as $__order => $data) {
+            if ($data['required']) {
+                $type = $data['type'];
+                $key = $data['key'];
+                $title = $data['title'];
+                $val = isset($data['val']) ? $data['val'] : '';
+
+                if ('file' == $type) {
+                    if (empty($val)) {
+                        $result['error_count']++;
+                        $errors[$key] = 'The <b>' . $title . '</b> field is required.';
+                    } else if (!$request->hasFile($val)) {
+                        $result['error_count']++;
+                        $errors[$key] = 'The <b>' . $title . '</b> field is required.';
+                    }
+                } else if ('selection_group' == $type) {
+                    if (empty($val)) {
+                        $result['error_count']++;
+                        $errors[$key] = 'The <b>' . $title . '</b> field is required.';
+                    } else {
+                        $selectionGroupError = $this->validateSelectionGroup($key, $val);
+
+                        if ($selectionGroupError['has_error']) {
+                            $result['error_count']++;
+                            $errors[$key] = $selectionGroupError['error_msg'];
+                        }
+                    }
+                } else {
+                    if (empty($val)) {
+                        $result['error_count']++;
+                        $errors[$key] = 'The <b>' . $title . '</b> field is required.';
+                    }
+                }
+            }
+        }
+
+        $result['error_msg'] = $errors;
+
+        return $result;
+    }
+
     public function post_config_data(Request $request)
     {
         $User = auth()->guard('adminlteuser')->user();
@@ -313,6 +406,15 @@ class AdminLTEConfigController extends Controller
             $config_dataJSON,
             (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)
         );
+
+        $validationResult = $this->validation($request, $config_data);
+        if ($validationResult['error_count'] > 0) {
+            $return_data['id'] = 1;
+            $return_data['has_error'] = true;
+            $return_data['error_msg'] = $validationResult['error_msg'];
+
+            return $return_data;
+        }
 
         $files = [];
         $file_index = 0;
@@ -372,7 +474,7 @@ class AdminLTEConfigController extends Controller
         //Display File Mime Type
         echo $file->getMimeType() . '<br>'; */
        
-        $object = AdminLTEConfigFile::where('deleted', 0)->where('parameter', $parameter)->first();
+        $object = AdminLTEConfigFile::where('deleted', 0)->where('description', '!=', 'default')->where('parameter', $parameter)->first();
 
         if (null === $object) {
             $object = new AdminLTEConfigFile();
@@ -383,6 +485,7 @@ class AdminLTEConfigController extends Controller
         $object->mime_type = $file->getMimeType();
         $object->file_size = $file->getSize();
         $object->file = base64_encode(file_get_contents($file->getRealPath()));
+        $object->description = 'uploaded';
         $object->save();
 
         $configObject = $this->getConfigObject($parameter);
@@ -395,19 +498,31 @@ class AdminLTEConfigController extends Controller
     public function download(Request $request) {
         $parameters = $request->route()->parameters();
 
+        $type = isset($parameters['type'])
+            ? htmlspecialchars($parameters['type'])
+            : '';
+
         $key = isset($parameters['key'])
             ? htmlspecialchars($parameters['key'])
             : '';
 
-        if ('' == $key) {
+        if (('' == $type) ||('' == $key)) {
             header('HTTP/1.0 404 Not Found');
             header('Status: 404 Not Found');
             die();
         } // if (0 == $id) {
 
-        $item = AdminLTEConfigFile::where('parameter', $key)
+        if ('default' == $type) {
+            $item = AdminLTEConfigFile::where('parameter', $key)
             ->where('deleted', 0)
+            ->where('description', 'default')
             ->first();
+        } else {
+            $item = AdminLTEConfigFile::where('parameter', $key)
+            ->where('deleted', 0)
+            ->where('description', 'uploaded')
+            ->first();
+        }
 
         if (is_null($item)) {
             header('HTTP/1.0 404 Not Found');
@@ -697,6 +812,45 @@ class AdminLTEConfigController extends Controller
         return $systemConfigData;
     }
 
+    public function saveDefaultFile($parameter, $file) {
+        /* //File Name
+        echo $file->getClientOriginalName() . '<br>';
+    
+        //Display File Extension
+        echo $file->getClientOriginalExtension() . '<br>';
+
+        //Display File Real Path
+        echo $file->getRealPath() . '<br>';
+
+        //Display File Size
+        echo $file->getSize() . '<br>';
+
+        //Display File Mime Type
+        echo $file->getMimeType() . '<br>';
+
+        die(); */
+       
+        $object = AdminLTEConfigFile::where('deleted', 0)->where('parameter', $parameter)->first();
+
+        if (null === $object) {
+            $object = new AdminLTEConfigFile();
+        }
+
+        $object->parameter = $parameter;
+        $object->file_name = $file->getClientOriginalName();
+        $object->mime_type = $file->getMimeType();
+        $object->file_size = $file->getSize();
+        $object->file = base64_encode(file_get_contents($file->getRealPath()));
+        $object->description = 'default';
+        $object->save();
+
+        $configObject = $this->getConfigObject($parameter);
+        if (null !== $configObject) {
+            $configObject->default_value = $object->file_name;
+            $configObject->save();
+        }
+    }
+
 	public function post_json(Request $request) {
         /* $systemConfigData = $this->getSystemConfigData(); */
 
@@ -764,13 +918,20 @@ class AdminLTEConfigController extends Controller
 
 			$AdminLTEConfig->save();
 
+            if ('file' == $AdminLTEConfig->type) {
+                if ($request->hasFile($AdminLTEConfig->__key)) {
+                    $file = $request->file($AdminLTEConfig->__key);
+                    $this->saveDefaultFile($AdminLTEConfig->__key, $file);
+                }
+            }
+
 			if (isset($data['children'])) {
-                $this->saveChildren($data['children'], $AdminLTEConfig->id, $AdminLTEConfig->__key);
+                $this->saveChildren($request, $data['children'], $AdminLTEConfig->id, $AdminLTEConfig->__key);
 			}
 		}
 	}
 
-    public function saveChildren($children, $parent_id, $parent_key) {
+    public function saveChildren($request, $children, $parent_id, $parent_key) {
         $User = auth()->guard('adminlteuser')->user();
         $objectAdminLTE = new AdminLTE();
 
@@ -820,8 +981,15 @@ class AdminLTEConfigController extends Controller
 
 			$AdminLTEConfig->save();
 
+            if ('file' == $AdminLTEConfig->type) {
+                if ($request->hasFile($AdminLTEConfig->__key)) {
+                    $file = $request->file($AdminLTEConfig->__key);
+                    $this->saveDefaultFile($AdminLTEConfig->__key, $file);
+                }
+            }
+
 			if (isset($data['children'])) {
-                $this->saveChildren($data['children'], $AdminLTEConfig->id, $AdminLTEConfig->__key);
+                $this->saveChildren($request, $data['children'], $AdminLTEConfig->id, $AdminLTEConfig->__key);
 			}
 		}
 	}

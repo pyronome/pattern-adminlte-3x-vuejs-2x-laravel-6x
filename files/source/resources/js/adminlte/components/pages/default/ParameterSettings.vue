@@ -105,6 +105,8 @@
                                     <div class="form-group col-lg-12" 
                                         v-show="(
                                             ('group' != parameter_type)
+                                            && ('checkbox' != parameter_type)
+                                            && ('switch' != parameter_type)
                                             && ('toggle' != parameter_type)
                                             && ('link_button' != parameter_type)
                                             && ('link_text' != parameter_type)
@@ -396,7 +398,6 @@
                                         v-show="(
                                             ('group' != parameter_type)
                                             && ('selection_item' != parameter_type)
-                                            && ('file' != parameter_type)
                                             && ('link_button' != parameter_type)
                                             && ('link_text' != parameter_type)
                                             && ('readonly_content' != parameter_type)
@@ -404,6 +405,21 @@
                                         <label for="default_value" v-show="('' != parameter_type)">
                                             {{ $t('Default Value') }}
                                         </label>
+                                        <div class="input-field" v-show="('file' == parameter_type)">
+                                            <input type="file" id="default_value_file" name="default_value_file" 
+                                                data-type="file" 
+                                                class="form-input"
+                                                style="display:none;">
+                                            <button type="button" class="btn btn-primary" id="btn-file-trigger">
+                                                {{ $t('Browse...') }}
+                                            </button>
+                                            
+                                            <input type="hidden" id="default_value_file-file_name">
+                                            <input type="hidden" id="default_value_file-file_value">
+                                            <button type="button" class="text-btn" id="file_download" data-current-key="">
+                                                <span id="spanFileNamedefault_value_file"></span>
+                                            </button>
+                                        </div>
                                         <select id="default_value_checkbox" class="form-control"
                                             v-show="(
                                                 ('toggle' == parameter_type)
@@ -556,7 +572,8 @@ export default {
             main_folder: '',
             pagename: '',
             form: new Form({
-                'config_json': ''
+                'config_json': '',
+                'files': [],
             }),
             listByKey: [],
             item_data: [],
@@ -566,6 +583,7 @@ export default {
             parentlist: [],
             toggle_elements_options: [],
             is_owner: 0,
+            uploadedFiles: {},  
             page: {
                 is_ready: false,
                 has_server_error: false,
@@ -647,6 +665,9 @@ export default {
                 || ("toggle" == type)
                 ) {
                 document.getElementById("default_value_checkbox").value = val;
+            } else if ("file" == type){
+                document.getElementById("spanFileNamedefault_value_file").innerHTML = val;
+                document.getElementById("spanFileNamedefault_value_file").parentNode.setAttribute("data-current-key", current_data["__key"])
             } else if (
                 ("dropdown" == type)
                 || ("password" == type)
@@ -841,11 +862,35 @@ export default {
         },
         submitForm: function () {
             var self = this;
-            self.$Progress.start();
+            /* self.$Progress.start();
             var str = self.page.editor.getString();
             self.form.config_json = str;
+            self.form.files = self.uploadedFiles;
 
-            self.form.post(AdminLTEHelper.getAPIURL("adminlteconfig/post_json"))
+            self.form.post(AdminLTEHelper.getAPIURL("adminlteconfig/post_json")) */
+
+
+
+            let formData = new FormData();
+            
+            formData.append('config_json', self.page.editor.getString());
+            
+            for (const [__key, file] of Object.entries(self.uploadedFiles)) {
+                formData.append(__key, file);
+            }
+
+
+            self.$Progress.start();
+
+            axios.post( 
+                    AdminLTEHelper.getAPIURL("adminlteconfig/post_json"),
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }
+                )
                 .then(({ data }) => {
                     self.$Progress.finish();
                     self.page.has_post_error = data.has_error;
@@ -894,7 +939,7 @@ export default {
             document.getElementById("locked").checked = false;
             document.getElementById("editable").value = 1;
 
-            document.getElementById("enabled").checked = false;
+            document.getElementById("enabled").checked = true;
             document.getElementById("required").checked = false;
             document.getElementById("multiple").checked = false;
             $("#__parent").val("").trigger('change');
@@ -1013,9 +1058,93 @@ export default {
                 document.getElementById("default_value_iconpicker").value = e.icon;
             });
 
+            $("#btn-file-trigger").on('click', function(e){
+                document.getElementById("default_value_file").click();
+            });
+
+            $("#default_value_file").on('change', function(e){
+                self.updateFile(this); 
+            });
+
+            $("#file_download").on('click', function(e){
+                self.downloadFile(this.getAttribute("data-current-key"));
+            });
+
             setTimeout(function() {
                 self.body_loader_active = false;
             }, 500);
+        },
+        updateFile(e) {
+            var self = this;
+            var basekey = document.getElementById("basekey").value;
+            var __key = basekey;
+            var __parent = document.getElementById("__parent").value;
+
+            if ("" != __parent) {
+                __key = __parent + "." + __key;
+            }
+
+            let file = e.files[0];
+
+            /* let extension = file.name.split('.').pop();
+
+            let acceptableTypeCSV = e.getAttribute("accept");
+            let acceptableTypes = acceptableTypeCSV.split(",");
+
+            if (!acceptableTypes.includes(extension)) {
+                Vue.swal.fire({
+                    position: 'top-end',
+                    title: self.$t("Acceptable file types: " + acceptableTypeCSV),
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 10000,
+                    timerProgressBar: true
+                });
+            } */
+
+            self.uploadedFiles[__key] = file;
+
+            document.getElementById("default_value_file-file_name").value = file.name;
+            document.getElementById("spanFileNamedefault_value_file").innerHTML = file.name;
+
+            let reader = new FileReader();
+
+            let limit = 1024 * 1024 * 2;
+            if(file['size'] > limit){
+                swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'You are uploading a large file',
+                })
+                return false;
+            }
+
+            reader.onloadend = (file) => {
+                document.getElementById("default_value_file-file_value").value = reader.result;
+            }
+
+            reader.readAsDataURL(file);
+        },
+        downloadFile: function (__key) {
+            var self = this;
+
+            if (self.page.is_variables_loading) {
+                return;
+            }
+
+            self.page.is_variables_loading = true;
+
+            axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/download_file/default/" + __key))
+                .then(({ data }) => {
+                    var a = document.createElement("a"); //Create <a>
+                    a.href = data.url; //Image Base64 Goes here
+                    a.download = data.filename; //File name Here
+                    a.click(); //Downloaded file
+                }).catch(({ data }) => {
+                    console.log("hata var")
+                }).finally(function() {
+                   self.processLoadQueue();
+                });
         },
         isKeyValid: function(__key) {
             var valid = true;

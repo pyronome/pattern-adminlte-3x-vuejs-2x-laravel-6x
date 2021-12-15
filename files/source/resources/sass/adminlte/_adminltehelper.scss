@@ -429,6 +429,9 @@ transform: scale(1, 1);
     border: 1px solid #dddddd;
     padding: 10px;
 }
+.note-editor.card {
+    margin-bottom:0;
+}
 .note-editable.card-block {
     min-height: 134px;
 }
@@ -1412,7 +1415,7 @@ button.use-parameter-default-value {
 
 .row.config-maingroup.toggle-able {
     margin-top: 30px;
-    border-bottom: 1px dashed #6c757d;
+    /* border-bottom: 1px dashed #6c757d; */
     padding-bottom: 15px;
 }
 
