@@ -365,6 +365,14 @@
             <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                 <label for="__field_key__" class="detail-label">
                     <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                    <button type="button"
+                        class="use-parameter-default-value__delete__"
+                        data-type="file"
+                        data-key="__field_key__"
+                        default-value="__default_value__"
+                        title="__use_default_title__">
+                        <span>{{ $t('Default') }}</span>
+                    </button>
                 </label>
                 <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 <div class="input-field">
@@ -379,22 +387,21 @@
                     <span id="spanFileName__field_key__"></span>
                     <input type="hidden" id="__field_key__-file_name">
                     <input type="hidden" id="__field_key__-file_value">
+                    <input type="hidden" id="__field_key__-file_process_type">
                     <button type="button" id="__field_key__-download_btn" class="text-btn file_download__delete__"
                         data-key="__field_key__">
                         <span>{{ $t('__value__') }}</span>
                     </button>
-                    <!-- <button type="button" id="__field_key__-download_default_btn" class="text-btn default_file_download__delete__"
+                    <button type="button" id="__field_key__-download_default_btn" class="text-btn default_file_download__delete__"
                         data-key="__field_key__">
                         <span>{{ $t('__default_value__') }}</span>
                     </button>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="file"
+                    <button type="button" id="__field_key__-file_remove_btn" 
+                        class="text-btn text-danger file_remove__delete__" 
                         data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button> -->
+                        title="__remove_file_title__">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
                 </div>
                 <div class="config-parameter-error" id="__field_key__-error">
                     <span class="error invalid-feedback"></span>
@@ -717,6 +724,7 @@
         </script>
 
         <span class="d-none" id="btnUseDefaultTitle">{{ $t('Set default value') }}</span>
+        <span class="d-none" id="btnRemoveFileTitle">{{ $t('Remove file') }}</span>
         <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
 </template>
@@ -818,11 +826,11 @@ export default {
         },
         renderForm: function() {
             document.getElementById("AdminLTEConfigFormContainer").innerHTML = "";
-
             
             var self = this;
             var elementHTML = "";
             var parentKey = "";
+            var temp = "";
             self.list.forEach(element => {
                 elementHTML = "";
                 if ("group" == element.type) {
@@ -907,6 +915,17 @@ export default {
                         document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
                     } else {
                         document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                    }
+
+                    if ("" != element.value) {
+                        document.getElementById(element.__key + "-download_default_btn").style.display = "none";
+                    } else {
+                        document.getElementById(element.__key + "-download_btn").style.display = "none";
+                        document.getElementById(element.__key + "-file_remove_btn").style.display = "none";
+
+                        if ("" == element.default_value) {
+                            document.getElementById(element.__key + "-download_default_btn").style.display = "none";
+                        }
                     }
                 } else if ("html_editor" == element.type) {
                     elementHTML = self.getHTMLEditorHTML(element);
@@ -1100,6 +1119,14 @@ export default {
                 self.downloadFile(this.getAttribute("data-key"));
             });
 
+            $(".default_file_download").on('click', function(e){
+                self.downloadDefaultFile(this.getAttribute("data-key"));
+            });
+
+            $(".file_remove").on('click', function(e){
+                self.removeFile(this.getAttribute("data-key"));
+            });
+
             self.initailizeSelect2();
 
             $('[data-toggle="tooltip"]').tooltip(); 
@@ -1275,7 +1302,8 @@ export default {
 
             return resultHTML
                 .replace(/__file_types__/g, fileTypes)
-                .replace(/__value__/g, element.value);
+                .replace(/__value__/g, element.value)
+                .replace(/__remove_file_title__/g, document.getElementById("btnRemoveFileTitle").innerHTML);
         },
         getHTMLEditorHTML: function(element) {
             return this.replaceTemplateHTML(element, document.getElementById("htmlEditorTemplate").innerHTML);
@@ -1446,8 +1474,12 @@ export default {
                 } else {
                     $(document.getElementById(elementKey)).val(val).trigger('change');
                 }
-            } /* else if ("file" == type) {
-            } */ else if ("html_editor" == type) {
+            } else if ("file" == type) {
+                document.getElementById(elementKey + "-file_process_type").value = "set_default";
+                document.getElementById(elementKey + "-download_btn").style.display = "none";
+                document.getElementById(elementKey + "-file_remove_btn").style.display = "none";
+                document.getElementById(elementKey + "-download_default_btn").style.display = "inline-block";
+            } else if ("html_editor" == type) {
                 $(document.getElementById(elementKey)).summernote("code", val);
             } else if ("iconpicker" == type) {
                 if ("" == val || undefined === val) {
@@ -1594,25 +1626,33 @@ export default {
                 });
         },
         downloadFile: function (__key) {
-            var self = this;
-
-            if (self.page.is_variables_loading) {
-                return;
-            }
-
-            self.page.is_variables_loading = true;
-
             axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/download_file/uploaded/" + __key))
                 .then(({ data }) => {
                     var a = document.createElement("a"); //Create <a>
                     a.href = data.url; //Image Base64 Goes here
                     a.download = data.filename; //File name Here
                     a.click(); //Downloaded file
+                    URL.revokeObjectURL(a.href)
                 }).catch(({ data }) => {
-                    console.log("hata var")
-                }).finally(function() {
-                   self.processLoadQueue();
+                    console.log("error!")
                 });
+        },
+        downloadDefaultFile: function (__key) {
+            axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/download_file/default/" + __key))
+                .then(({ data }) => {
+                    var a = document.createElement("a"); //Create <a>
+                    a.href = data.url; //Image Base64 Goes here
+                    a.download = data.filename; //File name Here
+                    a.click(); //Downloaded file
+                    URL.revokeObjectURL(a.href)
+                }).catch(({ data }) => {
+                    console.log("error!")
+                });
+        },
+        removeFile: function (__key) {
+            document.getElementById(__key + "-file_process_type").value = "removed";
+            document.getElementById(__key + "-download_btn").style.display = "none";
+            document.getElementById(__key + "-file_remove_btn").style.display = "none";
         },
         loadData: function (callback) {
             var self = this;
@@ -1833,7 +1873,8 @@ export default {
 
                     parameter_data["val"] = element.id.replace(/\./g, "");
 
-                    formData.append(parameter_data["val"], self.uploadedFiles[element.id])
+                    formData.append(parameter_data["val"], self.uploadedFiles[element.id]);
+                    formData.append((parameter_data["key"] + "processtype"), document.getElementById(parameter_data["key"] + "-file_process_type").value);
                     
                 } else if ("html_editor" == element.getAttribute("data-type")) {
                     parameter_data["type"] = "html_editor";
@@ -1909,6 +1950,10 @@ export default {
 
             reader.onloadend = (file) => {
                 document.getElementById(__key + "-file_value").value = reader.result;
+                document.getElementById(__key + "-file_process_type").value = "uploaded";
+                document.getElementById(__key + "-download_btn").style.display = "none";
+                document.getElementById(__key + "-download_default_btn").style.display = "none";
+                document.getElementById(__key + "-file_remove_btn").style.display = "none";
             }
 
             reader.readAsDataURL(file);

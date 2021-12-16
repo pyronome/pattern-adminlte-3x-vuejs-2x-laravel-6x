@@ -23,7 +23,7 @@ class AdminLTEConfigFile extends Model
         'description',
 		'mime_type',
         'file_size',
-        'guid',
+        'file_type',
 		'file'
 	];
 
@@ -95,11 +95,11 @@ class AdminLTEConfigFile extends Model
             'title' => 'Meta Data'
         ],
         [
-            'name' => 'guid',
+            'name' => 'file_type',
             'type' => 'text',
             'belongs_to' => 'AdminLTEConfigFile',
-            'display_property' => 'guid',
-            'title' => 'Value'
+            'display_property' => 'file_type',
+            'title' => 'File Type'
         ],
         [
             'name' => 'file',

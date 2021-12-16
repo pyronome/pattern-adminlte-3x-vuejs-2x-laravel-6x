@@ -548,6 +548,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->longText('description')->nullable();
                 $table->longText('mime_type')->nullable();
                 $table->bigInteger('file_size')->default(0);
+                $table->string('file_type')->nullable();
                 $table->binary('file')->nullable();
             });
         } else {
@@ -576,6 +577,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->bigInteger('file_size')->default(0)->change();
                 } else {
                     $table->bigInteger('file_size')->default(0);
+                }
+                if (Schema::hasColumn('adminlteconfigfiletable', 'file_type')) { 
+                    $table->string('file_type')->nullable()->change();
+                } else {
+                    $table->string('file_type')->nullable();
                 }
                 if (Schema::hasColumn('adminlteconfigfiletable', 'file')) { 
                     $table->binary('file')->nullable()->change();

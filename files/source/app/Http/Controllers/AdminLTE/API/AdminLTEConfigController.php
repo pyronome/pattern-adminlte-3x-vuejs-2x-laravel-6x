@@ -424,16 +424,19 @@ class AdminLTEConfigController extends Controller
                 if ('file' == $element_data['type']) {
                     $files[$file_index]['parameter'] = $element_data['key'];
                     $files[$file_index]['id'] = $element_data['val'];
+                    $files[$file_index]['processtype'] = $request->input($element_data['key'] . 'processtype');
                 } else {
                     $this->saveConfigParameter($element_data);
                 }
             }
         }
 
-        foreach ($files as $key => $fileData) {
+        foreach ($files as $index => $fileData) {
             if ($request->hasFile($fileData['id'])) {
                 $file = $request->file($fileData['id']);
                 $this->saveFile($fileData['parameter'], $file);
+            } else {
+                $this->updateFile($fileData);
             }
         }
 
@@ -442,6 +445,23 @@ class AdminLTEConfigController extends Controller
         $return_data['error_msg'] = '';
 
         return $return_data;
+    }
+
+    public function updateFile($file_data) {
+        $processtype = $file_data['processtype'];
+        if ('' == $processtype) {
+            return;
+        }
+
+        if (('set_default' == $processtype) || ('removed' == $processtype)) {
+            AdminLTEConfigFile::where('file_type', 'uploaded')->where('parameter', $file_data['parameter'])->delete();
+
+            $configObject = $this->getConfigObject($file_data['parameter']);
+            if (null !== $configObject) {
+                $configObject->value = '';
+                $configObject->save();
+            }
+        }
     }
 
     public function saveConfigParameter($element_data)
@@ -474,7 +494,7 @@ class AdminLTEConfigController extends Controller
         //Display File Mime Type
         echo $file->getMimeType() . '<br>'; */
        
-        $object = AdminLTEConfigFile::where('deleted', 0)->where('description', '!=', 'default')->where('parameter', $parameter)->first();
+        $object = AdminLTEConfigFile::where('deleted', 0)->where('file_type', '!=', 'default')->where('parameter', $parameter)->first();
 
         if (null === $object) {
             $object = new AdminLTEConfigFile();
@@ -485,7 +505,7 @@ class AdminLTEConfigController extends Controller
         $object->mime_type = $file->getMimeType();
         $object->file_size = $file->getSize();
         $object->file = base64_encode(file_get_contents($file->getRealPath()));
-        $object->description = 'uploaded';
+        $object->file_type = 'uploaded';
         $object->save();
 
         $configObject = $this->getConfigObject($parameter);
@@ -515,12 +535,12 @@ class AdminLTEConfigController extends Controller
         if ('default' == $type) {
             $item = AdminLTEConfigFile::where('parameter', $key)
             ->where('deleted', 0)
-            ->where('description', 'default')
+            ->where('file_type', 'default')
             ->first();
         } else {
             $item = AdminLTEConfigFile::where('parameter', $key)
             ->where('deleted', 0)
-            ->where('description', 'uploaded')
+            ->where('file_type', 'uploaded')
             ->first();
         }
 
@@ -841,7 +861,7 @@ class AdminLTEConfigController extends Controller
         $object->mime_type = $file->getMimeType();
         $object->file_size = $file->getSize();
         $object->file = base64_encode(file_get_contents($file->getRealPath()));
-        $object->description = 'default';
+        $object->file_type = 'default';
         $object->save();
 
         $configObject = $this->getConfigObject($parameter);

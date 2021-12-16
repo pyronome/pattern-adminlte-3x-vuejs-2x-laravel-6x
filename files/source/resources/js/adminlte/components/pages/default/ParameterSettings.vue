@@ -416,7 +416,7 @@
                                             
                                             <input type="hidden" id="default_value_file-file_name">
                                             <input type="hidden" id="default_value_file-file_value">
-                                            <button type="button" class="text-btn" id="file_download" data-current-key="">
+                                            <button type="button" class="text-btn" ref="file_download" @click="downloadFile"  data-current-key="">
                                                 <span id="spanFileNamedefault_value_file"></span>
                                             </button>
                                         </div>
@@ -945,7 +945,7 @@ export default {
             $("#__parent").val("").trigger('change');
             document.getElementById("basekey").value = "";
             document.getElementById("__key").value = "";
-            $("#type").val("").trigger('change');
+            this.parameter_type = "";
             document.getElementById("title").value = "";
             $("#large_screen_size").val("12").trigger('change');
             $("#medium_screen_size").val("12").trigger('change');
@@ -1066,9 +1066,9 @@ export default {
                 self.updateFile(this); 
             });
 
-            $("#file_download").on('click', function(e){
+            /* $("#file_download").off('click').on('click', function(e){
                 self.downloadFile(this.getAttribute("data-current-key"));
-            });
+            }); */
 
             setTimeout(function() {
                 self.body_loader_active = false;
@@ -1125,14 +1125,9 @@ export default {
 
             reader.readAsDataURL(file);
         },
-        downloadFile: function (__key) {
-            var self = this;
-
-            if (self.page.is_variables_loading) {
-                return;
-            }
-
-            self.page.is_variables_loading = true;
+        downloadFile: function () {
+            const btn = this.$refs.file_download;
+            var __key = btn.getAttribute("data-current-key");
 
             axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/download_file/default/" + __key))
                 .then(({ data }) => {
@@ -1140,10 +1135,9 @@ export default {
                     a.href = data.url; //Image Base64 Goes here
                     a.download = data.filename; //File name Here
                     a.click(); //Downloaded file
+                    URL.revokeObjectURL(a.href)
                 }).catch(({ data }) => {
-                    console.log("hata var")
-                }).finally(function() {
-                   self.processLoadQueue();
+                    console.log("error!")
                 });
         },
         isKeyValid: function(__key) {
@@ -1300,7 +1294,7 @@ export default {
             }
 
             $("#parenSelectionGroupTypeWarning").removeClass("d-none");
-            $("#type").val("selection_item").trigger('change');
+            this.parameter_type = "selection_item";
             document.getElementById("type").disabled = true;
         },
         getOptionTitle: function(key) {
