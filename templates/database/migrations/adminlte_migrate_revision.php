@@ -735,9 +735,6 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         $adminLTE = new AdminLTE();
         $adminLTE->updateAdminLTEMenu($menu);
 
-        // AdminLTE Config
-        $adminLTE->updateAdminLTEConfig();
-        
         Artisan::call('db:seed', ['--force' => true]);
 
         /* {{@snippet:end_up_method}} */

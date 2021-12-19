@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
     }
 
     public function updateAdminLTEConfigParameters() {
-        require_once(__DIR__ . '\ConfigParameters.php');
+        require(__DIR__ . '\ConfigParameters.php');
         $adminLTE = new AdminLTE();
         $adminLTE->updateAdminLTEConfig($config);
     }

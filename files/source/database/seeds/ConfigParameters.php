@@ -4557,3 +4557,4 @@ $config_item['small_screen_size'] = 12;
 $config_item['min_selection'] = 0;
 $config_item['max_selection'] = 0;
 array_push($config, $config_item);
+?>
