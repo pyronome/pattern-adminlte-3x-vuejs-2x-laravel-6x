@@ -353,12 +353,12 @@ class AdminLTEConfigController extends Controller
         $index = 0;
         
         foreach ($config_data as $__order => $data) {
-            if ($data['required']) {
-                $type = $data['type'];
-                $key = $data['key'];
-                $title = $data['title'];
-                $val = isset($data['val']) ? $data['val'] : '';
+            $type = $data['type'];
+            $key = $data['key'];
+            $title = $data['title'];
+            $val = isset($data['val']) ? $data['val'] : '';
 
+            if ($data['required']) {
                 if ('file' == $type) {
                     if (empty($val)) {
                         $result['error_count']++;
@@ -367,7 +367,7 @@ class AdminLTEConfigController extends Controller
                         $result['error_count']++;
                         $errors[$key] = 'The <b>' . $title . '</b> field is required.';
                     }
-                } else if ('selection_group' == $type) {
+                } /* else if ('selection_group' == $type) {
                     if (empty($val)) {
                         $result['error_count']++;
                         $errors[$key] = 'The <b>' . $title . '</b> field is required.';
@@ -379,13 +379,22 @@ class AdminLTEConfigController extends Controller
                             $errors[$key] = $selectionGroupError['error_msg'];
                         }
                     }
-                } else {
+                } */ else {
                     if (empty($val)) {
                         $result['error_count']++;
                         $errors[$key] = 'The <b>' . $title . '</b> field is required.';
                     }
                 }
             }
+            
+            if (('selection_group' == $type) && ('' != $val)) {
+                $selectionGroupError = $this->validateSelectionGroup($key, $val);
+
+                if ($selectionGroupError['has_error']) {
+                    $result['error_count']++;
+                    $errors[$key] = $selectionGroupError['error_msg'];
+                }
+            } 
         }
 
         $result['error_msg'] = $errors;

@@ -1309,7 +1309,7 @@ function MenuEditor(idSelector, options) {
         var $titleContainer = $("<div>").addClass(container_class);
         
         var $pTitle = $("<p>").addClass("title").append(objectData["title"]);
-        var $pKey = $("<p>").addClass("__key").append(objectData["basekey"]);
+        var $pKey = $("<p>").addClass("__key").append(objectData["__key"]);
 
         var $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
         if (1 == objectData.editable) {
@@ -1330,7 +1330,7 @@ function MenuEditor(idSelector, options) {
         var $li = $("<li>");
         $li.data(objectData);
 
-        $li.attr("id", objectData["basekey"]);
+        $li.attr("id", objectData["__key"]);
 
         $li.addClass('list-group-item').append(div);
 
@@ -1361,6 +1361,139 @@ function MenuEditor(idSelector, options) {
 
         document.getElementById("exception_key").value = "";
         $("#exception_key").trigger("click");
+
+        var children = $('ul:first>li', $item);
+        var __key = objectData["__key"];
+        if (children.length > 0) {
+            copyChildren(children, __key);
+        }
+    }
+
+    function copyChildren(children, parentKey) {
+        var currentLi = null;
+        var copyingData = {};
+        var objectData = {};
+        var btnGroup = null;
+        var container_class = "";
+        var $titleContainer = null;
+        var $pTitle = null;
+        var $pKey = null;
+        var $iconLocked = null;
+        var $iconRequired = null;
+        var typeTitle = "";
+        var $pType = null;
+        var div = null;
+        var $newLi = null;
+        var $parent = null;
+        var $ul = null;
+        var subchildren = null
+        var __key = "";
+
+        for (let index = 0; index < children.length; index++) {
+            currentLi = children[index];
+            copyingData = $(currentLi).data();
+            objectData = {
+                "system" : copyingData["system"],
+                "owner" : copyingData["owner"],
+                "is_owner" : copyingData["is_owner"],
+                "locked" : copyingData["locked"],
+                "editable" : copyingData["editable"],
+                "basekey" : copyingData["basekey"],
+                "__key" : (parentKey + "." + copyingData["basekey"]),
+                "__parent" : parentKey,
+                "content" : copyingData["content"],
+                "default_value" : copyingData["default_value"],
+                "enabled" : copyingData["enabled"],
+                "file_types" : copyingData["file_types"],
+                "max" : copyingData["max"],
+                "min" : copyingData["min"],
+                "multiple" : copyingData["multiple"],
+                "option_titles" : copyingData["option_titles"],
+                "option_values" : copyingData["option_values"],
+                "required" : copyingData["required"],
+                "step" : copyingData["step"],
+                "title" : copyingData["title"],
+                "toggle_elements" : copyingData["toggle_elements"],
+                "type" : copyingData["type"],
+                "url" : copyingData["url"],
+                "value" : copyingData["value"],
+                "hint" : copyingData["hint"],
+                "description" : copyingData["description"],
+                "large_screen_size" : copyingData["large_screen_size"],
+                "medium_screen_size" : copyingData["medium_screen_size"],
+                "small_screen_size" : copyingData["small_screen_size"],
+                "max_selection" : copyingData["max_selection"],
+                "min_selection" : copyingData["min_selection"],
+            }
+    
+            btnGroup = TButtonGroup(objectData.editable);
+    
+            container_class = "editor-title-container disabled";
+            if (objectData.enabled) {
+                container_class = "editor-title-container";
+            }
+            $titleContainer = $("<div>").addClass(container_class);
+            
+            $pTitle = $("<p>").addClass("title").append(objectData["title"]);
+            $pKey = $("<p>").addClass("__key").append(objectData["__key"]);
+    
+            $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
+            if (1 == objectData.editable) {
+                $iconLocked = '';
+            }
+    
+            $iconRequired = '<i class="fa fa-asterisk editor-required-icon"></i>';
+            if (0 == objectData.required) {
+                $iconRequired = '';
+            }
+    
+            typeTitle = getTypeTitle(objectData.type);
+            $pType = $("<p>").addClass("type").append(typeTitle);
+            $titleContainer.append($pTitle).append($iconRequired).append($iconLocked).append($pKey).append($pType);
+    
+            div = $('<div>').css({"overflow": "auto"}).append("&nbsp;").append($titleContainer).append(btnGroup);
+    
+            $newLi = $("<li>");
+            $newLi.data(objectData);
+    
+            $newLi.attr("id", objectData["__key"]);
+    
+            $newLi.addClass('list-group-item').append(div);
+            if ("" == objectData["__parent"]) {
+                $main.append($newLi);
+            } else {
+                $parent = $(document.getElementById(objectData["__parent"]));
+                
+                $ul = $parent.children('ul');
+                if ($ul.length > 0) {
+                    $ul.append($newLi);
+                } else {
+                    $ul = $('<ul>').addClass('pl-0').css('padding-top', '10px');
+                    $ul.append($newLi);
+                    $parent.append($ul);
+                    
+                    $parent.addClass('sortableListsOpen');
+                    TOpener($parent);
+    
+                    $ul.sortable();
+                    $ul.disableSelection();
+                }
+            }
+    
+            $newLi = null;
+            
+            MenuEditor.updateButtons($main);
+            resetForm();
+    
+            document.getElementById("exception_key").value = "";
+            $("#exception_key").trigger("click");
+    
+            subchildren = $('ul:first>li', currentLi);
+            __key = objectData["__key"];
+            if (subchildren.length > 0) {
+                copyChildren(subchildren, __key);
+            }
+        }
     }
 
     function editItem($item) {
@@ -1844,6 +1977,8 @@ function MenuEditor(idSelector, options) {
             const liNewKey = liOldKey.replace((oldParentKey + "."), (newParentKey + "."));
             $(li).data("__key", liNewKey);
             $(li).data("__parent", newParentKey);
+
+            $("div>div>p.__key:first", li).html(liNewKey);
             
             this.updateChildrenKeys(li, liOldKey, liNewKey);
         }

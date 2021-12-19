@@ -17,17 +17,31 @@ class DatabaseSeeder extends Seeder
     {
     	/* {{@snippet:begin_run_method}} */
 
+        $this->updateAdminLTEConfigParameters();
         $this->updateAdminLTEModelMenu();
         $this->updateAdminLTEPluginMenu();
         $this->updateLayout();
 
-    	/* {{@snippet:end_run_method}} */         
+		$this->seedModelOptions();
+
+    }
+
+    public function updateAdminLTEConfigParameters() {
+        require_once(__DIR__ . '\ConfigParameters.php');
+        $adminLTE = new AdminLTE();
+        $adminLTE->updateAdminLTEConfig($config);
     }
 
     public function updateAdminLTEModelMenu() {
         $menu = [];
 
-        /* {{@snippet:model_menu_definitions}} */ 
+		$menu[] = [
+			'text' => 'Student List',
+			'href' => 'student',
+			'icon' => 'far fa-list-alt',
+			'visibility' => 1,
+			'parent' => 'contents'
+        ];
 
         $adminLTE = new AdminLTE();
         $adminLTE->updateAdminLTEMenu($menu);
@@ -46,5 +60,12 @@ class DatabaseSeeder extends Seeder
 		$AdminLTE->setAdminLTEDefaultLayout();
     }
 
-    /* {{@snippet:end_methods}} */
+	public function seedModelOptions() {
+		$AdminLTE = new AdminLTE();
+		$option_data_list = [];
+
+
+		
+		$AdminLTE->seedModelDropdownOptions($option_data_list);
+    }
 }

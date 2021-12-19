@@ -1144,19 +1144,18 @@ export default {
             }, 300);
         },
         selectionItemChanged: function(changedItem) {
-            var parentkey = changedItem.getAttribute("data-parentkey");
+            /* var parentkey = changedItem.getAttribute("data-parentkey");
             var parentContainer = document.getElementById("groupContainer" + parentkey);
             var min_selection = parentContainer.getAttribute("data-min-selection");
             var max_selection = parentContainer.getAttribute("data-max-selection");
-            var selectorText = "." + parentkey + "-selection_item";
-            var selectionItems = $(selectorText, parentContainer);
+            var selectionItems = $(".selection-item", parentContainer);
             for (let index = 0; index < selectionItems.length; index++) {
                 const selectionItem = selectionItems[index];
 
                 if (selectionItem.id == changedItem.id) {
                     console.log("selectionItem_id:" + selectionItem.id)
                 }                
-            }
+            } */
         },
         getSelectionGroupHTML: function(element) {
             var templateHTML = "";
@@ -1812,7 +1811,7 @@ export default {
                                 timer: 2000,
                                 timerProgressBar: true,
                                 onClose: () => {
-                                    /* window.location.reload() */
+                                    window.location.reload()
                                 }
                             });
                         } else {
@@ -1892,6 +1891,10 @@ export default {
                     parameter_data["type"] = "selection_group";
                     parameter_data["key"] = element.getAttribute("data-key");
                     parameter_data["val"] = self.getSelectionGroupValue(parameter_data["key"])
+                } else if ("checkbox" == element.getAttribute("data-type")) {
+                    parameter_data["type"] = "other";
+                    parameter_data["key"] = element.id;
+                    parameter_data["val"] = element.checked ? 'on' : 'off';
                 } else {
                     parameter_data["type"] = "other";
                     parameter_data["key"] = element.id;
@@ -1963,10 +1966,7 @@ export default {
 
             var parentkey = selectionGroupKey;
             var parentContainer = document.getElementById("groupContainer" + parentkey);
-            var min_selection = parentContainer.getAttribute("data-min-selection");
-            var max_selection = parentContainer.getAttribute("data-max-selection");
-            var selectorText = "." + parentkey + "-selection_item";
-            var selectionItems = $(selectorText, parentContainer);
+            var selectionItems = $(".selection-item", parentContainer);
             for (let index = 0; index < selectionItems.length; index++) {
                 const selectionItem = selectionItems[index];
 
@@ -1983,8 +1983,7 @@ export default {
         },
         setSelectionGroupValue: function(elementKey, value) {
             var parentContainer = document.getElementById("groupContainer" + elementKey);
-            var selectorText = "." + elementKey + "-selection_item";
-            var selectionItems = $(selectorText, parentContainer);
+            var selectionItems = $(".selection-item", parentContainer);
 
             if ("" == value) {
                 for (let index = 0; index < selectionItems.length; index++) {

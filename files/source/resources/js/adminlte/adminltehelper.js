@@ -32,7 +32,7 @@ var AdminLTEHelper = {
 
         if (
             ("server_information" == strPageURL)
-            || ("preferences" == strPageURL)
+            || ("parameter_settings" == strPageURL)
             || ("email_server" == strPageURL)
             || ("menu_configuration" == strPageURL)
             || ("adminltemodeldisplaytext" == strPageURL)

@@ -1,6 +1,6 @@
 <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand {{ $customization['main-header'] }}">
+        <nav class="main-header navbar navbar-expand {{ $customization['navbar'] }}">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li>
@@ -22,7 +22,7 @@
         <aside id="mainMenuVueApplication" class="main-sidebar {{ $customization['main-sidebar'] }} elevation-4">
             <!-- Brand Logo -->
             <router-link to="/{{ $main_folder }}/home"
-                    class="brand-link {{ $customization['brand-link'] }}">
+                    class="brand-link {{ $customization['brand'] }}">
                 <img src="{{ $brand['logo']}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
                 <span class="brand-text font-weight-light">{{ $brand['name']}}</span>
             </router-link>
