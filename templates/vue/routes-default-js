@@ -5,8 +5,6 @@ import ProfileChangePassword from "./components/pages/default/profile/changepass
 import Configuration from "./components/pages/default/Configuration.vue";
 import ParameterSettings from "./components/pages/default/ParameterSettings.vue";
 import ServerInformationPage from "./components/pages/default/ServerInformation.vue";
-import PreferencesPage from "./components/pages/default/Preferences.vue";
-import EmailServerPage from "./components/pages/default/EmailServer.vue";
 import MenuConfigurationPage from "./components/pages/default/MenuConfiguration.vue";
 import AdminLTEModelDisplayTextPage from "./components/pages/default/AdminLTEModelDisplayText.vue";
 import AdminLTEUserList from "./components/pages/default/adminlteuser/list.vue";
@@ -30,8 +28,6 @@ export default {
     "/configuration": Configuration,
     "/parameter_settings": ParameterSettings,
     "/server_information": ServerInformationPage,
-    "/preferences": PreferencesPage,
-    "/email_server": EmailServerPage,
     "/menu_configuration": MenuConfigurationPage,
     "/adminltemodeldisplaytext": AdminLTEModelDisplayTextPage,
     "/adminlteuser": AdminLTEUserList,
