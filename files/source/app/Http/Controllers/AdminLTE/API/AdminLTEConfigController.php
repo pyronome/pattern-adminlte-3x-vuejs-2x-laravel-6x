@@ -74,7 +74,6 @@ class AdminLTEConfigController extends Controller
         
         $basekeyOrders = $this->getBasekeyOrders($configList);
         
-        
         $keyOrders = [];
 
         foreach ($configList as $key => $data) {
@@ -82,7 +81,7 @@ class AdminLTEConfigController extends Controller
 
             if (!isset($keyOrders[$key])) {
                 $orderedKey = '';
-                $keyParts = explode('.', $key);
+                $keyParts = $this->getKeyPartsForOrder($key);
                 foreach ($keyParts as $part) {
                     $tempStr = str_replace($part, $basekeyOrders[$part], $part);
 
@@ -176,15 +175,32 @@ class AdminLTEConfigController extends Controller
         ];
     }
 
+    public function getKeyPartsForOrder($key) {
+        $configuredParts = [];
+        $index = 0;
+        $parts = explode('.', $key);
+        foreach ($parts as $part) {
+            if (0 == $index) {
+                $configuredParts[$index] = $part;
+            } else {
+                $configuredParts[$index] = $configuredParts[$index-1] . '.' . $part;
+            }
+
+            $index++;
+        }
+
+        return $configuredParts;
+    }
+
     public function getBasekeyOrders($configList) {
         $basekeyOrders = [];
 
         foreach ($configList as $key => $data) {
             $object = $data['object'];
-            $basekey = $this->getBasekey($key);
+            /* $basekey = $this->getBasekey($key); */
 
-            if (!isset($basekeyOrders[$basekey])) {
-                $basekeyOrders[$basekey] = $object->__order;
+            if (!isset($basekeyOrders[$key])) {
+                $basekeyOrders[$key] = $object->__order;
             }
         }
 
