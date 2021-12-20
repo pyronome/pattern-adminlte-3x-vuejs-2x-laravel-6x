@@ -1687,7 +1687,7 @@ $config_item['__key'] = 'adminlte.preferences.navbar.variants';
 $config_item['title'] = 'Variants';
 $config_item['default_value'] = '';
 $config_item['value'] = 'adminlte.preferences.navbar.variants.white';
-$config_item['description'] = '<div class="bg-white elevation-2 preferences-button"></div>';
+$config_item['description'] = '';
 $config_item['hint'] = '';
 $config_item['option_titles'] = "";
 $config_item['option_values'] = "";
