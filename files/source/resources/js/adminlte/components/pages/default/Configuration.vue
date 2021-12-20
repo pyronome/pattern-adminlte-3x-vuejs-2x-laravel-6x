@@ -1811,7 +1811,7 @@ export default {
                                 timer: 2000,
                                 timerProgressBar: true,
                                 onClose: () => {
-                                    window.location.reload()
+                                    self.reloadPage();
                                 }
                             });
                         } else {
@@ -1819,6 +1819,24 @@ export default {
                         }
                     }
                 });
+        },
+        reloadPage: function() {
+            var mainFolder = this.main_folder;
+            var newMainFolder = "";
+            var currentURL = window.location.href;
+            var newURL = "";
+
+            if (null !== document.getElementById("adminlte.generalsettings.mainfolder")) {
+                newMainFolder = document.getElementById("adminlte.generalsettings.mainfolder").value;
+                newURL = currentURL.replace(
+                    ("/" + mainFolder + "/"),
+                    ("/" + newMainFolder + "/")
+                );
+            } else {
+                newURL = currentURL;
+            }
+
+            window.location.href = newURL;
         },
         renderFormErrors: function(errors) {
             var firstErrorContainer = null;
