@@ -1504,13 +1504,14 @@ function MenuEditor(idSelector, options) {
         document.getElementById("currentKey").value = data["__key"];
         document.getElementById("currentParent").value = data["__parent"];
 
-        $("#groupTypeWarning").addClass("d-none");
+        /* $("#groupTypeWarning").addClass("d-none");
         document.getElementById("type").disabled = false;
         
         if (("group" == data["type"]) || ("selection_group" == data["type"])) {
+            console.log("gh2")
             $("#groupTypeWarning").removeClass("d-none");
             document.getElementById("type").disabled = true;
-        }
+        } */
 
         /* $.each(data, function (p, v) {
             $form.find("[name=" + p + "]").val(v);
@@ -1554,6 +1555,17 @@ function MenuEditor(idSelector, options) {
         }
 
         return $divbtn;
+    }
+
+    function getButtonCopyKey(__key) {
+        return '<button type="button" class="copyKey" '
+            + 'title="' + document.getElementById("copyBtnTitle").innerHTML + '"'
+            + 'data-key="' + __key + '"'
+            + 'default-text="' + document.getElementById("copyBtnDefaultText").innerHTML + '"'
+            + 'copied-text="' + document.getElementById("copyBtnCopiedText").innerHTML + '"'
+            + '>'
+            + document.getElementById("copyBtnDefaultText").innerHTML
+            + '</button>';
     }
 
     /**
@@ -1621,7 +1633,8 @@ function MenuEditor(idSelector, options) {
             var $titleContainer = $("<div>").addClass(container_class);
 
             var $pTitle = $("<p>").addClass("title").append(v.title);
-            var $pKey = $("<p>").addClass("__key").append(v.__key);
+            
+            var $pKey = $("<p>").addClass("__key").append(v.__key).append(getButtonCopyKey(v.__key));
 
             var $iconLocked = '<i class="fas fa-lock editor-lock-icon"></i>';
             if (1 == objectData.editable) {

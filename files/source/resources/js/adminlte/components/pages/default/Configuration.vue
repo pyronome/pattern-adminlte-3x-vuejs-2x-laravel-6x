@@ -48,6 +48,38 @@
                 </div>
             </section>
             <section class="content">
+                <!-- <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 class="form-part-header">AdminLTe</h4>
+                        </div>
+                        <div class="col-5 col-sm-3">
+                            <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
+                                <a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill" href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home" aria-selected="true">Home</a>
+                                <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill" href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile" aria-selected="false">Profile</a>
+                                <a class="nav-link" id="vert-tabs-messages-tab" data-toggle="pill" href="#vert-tabs-messages" role="tab" aria-controls="vert-tabs-messages" aria-selected="false">Messages</a>
+                                <a class="nav-link" id="vert-tabs-settings-tab" data-toggle="pill" href="#vert-tabs-settings" role="tab" aria-controls="vert-tabs-settings" aria-selected="false">Settings</a>
+                            </div>
+                        </div>
+                        <div class="col-7 col-sm-9">
+                            <div class="tab-content" id="vert-tabs-tabContent">
+                                <div class="tab-pane text-left fade show active" id="vert-tabs-home" role="tabpanel" aria-labelledby="vert-tabs-home-tab">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
+                                </div>
+                                <div class="tab-pane fade" id="vert-tabs-profile" role="tabpanel" aria-labelledby="vert-tabs-profile-tab">
+                                    Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam.
+                                </div>
+                                <div class="tab-pane fade" id="vert-tabs-messages" role="tabpanel" aria-labelledby="vert-tabs-messages-tab">
+                                    Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna.
+                                </div>
+                                <div class="tab-pane fade" id="vert-tabs-settings" role="tabpanel" aria-labelledby="vert-tabs-settings-tab">
+                                    Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
                 <div class="container-fluid"  id="AdminLTEConfigFormContainer" style="padding-bottom:100px;">
                 </div>
 
@@ -65,7 +97,43 @@
         </div>
         <input type="hidden" id="controller" value="configuration">
 
-        <script type="text/html" id="groupTemplateLevel0">
+        <script type="text/html" id="noResultTemplate">
+            <div class="alert alert-warning" role="alert">
+                {{ $t('No results found.') }}
+            </div>
+        </script>
+        
+        <script type="text/html" id="groupMainTemplate">
+            <div class="card config-maingroup toggle-able" data-key="__group_key__">
+                <div class="card-header">
+                    <h2 class="lead mb-0"><b>{{ $t('__group_title__') }}</b></h2>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12" id="groupContainer__group_key__">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-3 col-sm-12">
+                            <div class="nav flex-column nav-tabs__delete__ h-100 hide-on-mobile" 
+                                id="groupTabContainer__group_key__" 
+                                role="tablist" 
+                                aria-orientation="vertical">
+                            </div>
+                            <select class="dropdownTabGroup show-on-mobile" 
+                                id="groupDropdownTabContainer__group_key__" 
+                                data-tab-container-id="groupTabContentContainer__group_key__"></select>
+                        </div>
+                        <div class="col-lg-8 col-md-9 col-sm-12">
+                            <div class="tab-content" id="groupTabContentContainer__group_key__">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <!-- <script type="text/html" id="groupTemplateLevel0">
             <div class="row config-maingroup toggle-able" data-key="__group_key__">
                 <div class="col-lg-4 col-md-4 col-xs-12 ">
                     <h4 class="form-part-header">{{ $t('__group_title__') }}</h4>
@@ -78,9 +146,39 @@
                     </div>                    
                 </div>
             </div>
+        </script> -->
+
+
+        <script type="text/html" id="groupTabTemplate">
+            <a class="nav-link toggle-able" 
+                data-key="__group_key__" 
+                id="__group_key_converted__-tab" 
+                data-toggle="pill" 
+                href="#__group_key_converted__-content" 
+                role="tab" 
+                aria-controls="__group_key_converted__-content" 
+                aria-selected="false">
+                {{ $t('__group_title__') }}
+            </a>
+        </script>
+        <script type="text/html" id="groupDropdownTabTemplate">
+            <option value="__group_key_converted__-tab">
+                {{ $t('__group_title__') }}
+            </option>
         </script>
 
-        <script type="text/html" id="groupTemplateLevel1">
+        <script type="text/html" id="groupContentTemplate">
+            <div class="tab-pane fade toggle-able" 
+                data-key="__group_key__" 
+                id="__group_key_converted__-content" 
+                role="tabpanel" 
+                aria-labelledby="__group_key_converted__-tab">
+                <div class="row" id="groupContainer__group_key__">
+                </div>
+            </div>
+        </script>
+
+        <script type="text/html" id="groupCardTemplate">
             <div class="card toggle-able" data-key="__group_key__">
                 <div class="card-header">
                     <h2 class="lead mb-0"><b>{{ $t('__group_title__') }}</b></h2>
@@ -831,16 +929,36 @@ export default {
             var elementHTML = "";
             var parentKey = "";
             var temp = "";
+
+            if (0 == self.list.length) {
+                document.getElementById("AdminLTEConfigFormContainer").innerHTML = document.getElementById("noResultTemplate").innerHTML;
+            }
+
             self.list.forEach(element => {
                 elementHTML = "";
                 if ("group" == element.type) {
-                    elementHTML = self.getGroupHTML(element);
-
-                    if (element.__key.includes(".")) {
+                    if (0 == element.level) {
+                        elementHTML = self.getGroupMainHTML(element);
+                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                    } else if (1 == element.level) {
                         parentKey = self.getParentKey(element.__key);
+                        
+                        elementHTML = self.getGroupTabHTML(element);
+                        document.getElementById("groupTabContainer" + parentKey).innerHTML += elementHTML;
+
+                        elementHTML = self.getGroupDropdownTabHTML(element);
+                        document.getElementById("groupDropdownTabContainer" + parentKey).innerHTML += elementHTML;
+                        
+                        elementHTML = self.getGroupContentHTML(element);
+                        document.getElementById("groupTabContentContainer" + parentKey).innerHTML += elementHTML;
+                    } else if (2 == element.level) {
+                        parentKey = self.getParentKey(element.__key);
+                        elementHTML = self.getGroupCardHTML(element);
                         document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        parentKey = self.getParentKey(element.__key);
+                        elementHTML = self.getGroupHTML(element);
+                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
                     }
                 } else if ("selection_group" == element.type) {
                     elementHTML = self.getSelectionGroupHTML(element);
@@ -1135,6 +1253,12 @@ export default {
                 self.selectionItemChanged(this);
             });
 
+            $('.nav-tabs > .nav-link:first-child').trigger('click')
+
+            $(".dropdownTabGroup").off('change').on('change', function () {
+                self.dropdownTabGroupChanged(this);
+            });
+
             setTimeout(function(){
                 $(".use-parameter-default-value").on('click', function(e){
                     self.setDefaultValue(this);
@@ -1142,6 +1266,12 @@ export default {
 
                 self.setValues();
             }, 300);
+        },
+        dropdownTabGroupChanged: function(select) {
+            /* var tabContentContainer = document.getElementById(select.getAttribute("data-tab-container-id"));
+            $(".tab-pane", tabContentContainer).hide();
+            $(document.getElementById(select.value)).show(); */
+            document.getElementById(select.value).click();
         },
         selectionItemChanged: function(changedItem) {
             /* var parentkey = changedItem.getAttribute("data-parentkey");
@@ -1200,16 +1330,47 @@ export default {
             var resultHTML = this.replaceTemplateHTML(element, document.getElementById("selection_itemTemplate").innerHTML);
             return resultHTML.replace(/__parent_key__/g, element.parent);
         },
+        getGroupMainHTML: function(element) {
+            var templateHTML = document.getElementById("groupMainTemplate").innerHTML
+            return templateHTML
+                    .replace(/__delete__/g, "")
+                    .replace(/__group_title__/g, element.title)
+                    .replace(/__description__/g, element.description)
+                    .replace(/__group_key__/g, element.__key);
+        },
+        getGroupTabHTML: function(element) {
+            var templateHTML = document.getElementById("groupTabTemplate").innerHTML
+            return templateHTML
+                    .replace(/__group_title__/g, element.title)
+                    .replace(/__description__/g, element.description)
+                    .replace(/__group_key__/g, element.__key)
+                    .replace(/__group_key_converted__/g, element.__key.replace(/\./g, ""));
+        },
+        getGroupDropdownTabHTML: function(element) {
+            var templateHTML = document.getElementById("groupDropdownTabTemplate").innerHTML
+            return templateHTML
+                    .replace(/__group_title__/g, element.title)
+                    .replace(/__description__/g, element.description)
+                    .replace(/__group_key__/g, element.__key)
+                    .replace(/__group_key_converted__/g, element.__key.replace(/\./g, ""));
+        },
+        getGroupContentHTML: function(element) {
+            var templateHTML = document.getElementById("groupContentTemplate").innerHTML
+            return templateHTML
+                    .replace(/__group_title__/g, element.title)
+                    .replace(/__description__/g, element.description)
+                    .replace(/__group_key__/g, element.__key)
+                    .replace(/__group_key_converted__/g, element.__key.replace(/\./g, ""));
+        },
+        getGroupCardHTML: function(element) {
+            var templateHTML = document.getElementById("groupCardTemplate").innerHTML;
+            return templateHTML
+                    .replace(/__group_title__/g, element.title)
+                    .replace(/__description__/g, element.description)
+                    .replace(/__group_key__/g, element.__key);
+        },
         getGroupHTML: function(element) {
-            var templateHTML = "";
-            if (0 == element.level) {
-                templateHTML = document.getElementById("groupTemplateLevel0").innerHTML
-            } else if (1 == element.level) {
-                templateHTML = document.getElementById("groupTemplateLevel1").innerHTML
-            } else {
-                templateHTML = document.getElementById("groupTemplate").innerHTML
-            }
-
+            var templateHTML = document.getElementById("groupTemplate").innerHTML;
             return templateHTML
                     .replace(/__group_title__/g, element.title)
                     .replace(/__description__/g, element.description)

@@ -166,9 +166,9 @@
                                             <option value="toggle">{{ $t('Toggle') }}</option>
                                         </select>
                                         <span class="text-muted d-none" id="groupTypeWarning">
-                                            {{ $t('This element type cannot be changed because it\'s type is a group.') }}
+                                            {{ $t('This element type cannot be changed because it has children.') }}
                                         </span>
-                                        <span class="text-muted d-none" id="parenSelectionGroupTypeWarning">
+                                        <span class="text-muted d-none" id="parentSelectionGroupTypeWarning">
                                             {{ $t('This element can be "Selection Item" only, beacuse parent element type is "Selection Group"') }}
                                         </span>
                                     </div>
@@ -561,6 +561,9 @@
                 </div>
             </div>
         </div>
+        <span class="d-none" id="copyBtnTitle">{{ $t('Copy Key') }}</span>
+        <span class="d-none" id="copyBtnDefaultText">{{ $t('Copy') }}</span>
+        <span class="d-none" id="copyBtnCopiedText">{{ $t('Copied!') }}</span>
         <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
 </template>
@@ -618,6 +621,9 @@ export default {
     },
     methods: {
         updateForm: function() {
+            document.getElementById("type").disabled = false;
+            $("#groupTypeWarning").addClass("d-none");
+
             var current_data = $("#item_data").data("current_data");
            
             document.getElementById("system").value = 0;
@@ -655,6 +661,13 @@ export default {
             /* if ("toggle" == current_data.type) {
                 this.AdminLTEConfigForm.toggle_elements = current_data.toggle_elements.split(",");
             } */
+
+            var $li = $(document.getElementById(current_data["__key"]));
+            var $ul = $li.children('ul');
+            if ($ul.length > 0) {
+                $("#groupTypeWarning").removeClass("d-none");
+                document.getElementById("type").disabled = true;
+            }
 
             var type = current_data["type"];
             var val = current_data["default_value"];
@@ -945,7 +958,8 @@ export default {
             $("#__parent").val("").trigger('change');
             document.getElementById("basekey").value = "";
             document.getElementById("__key").value = "";
-            this.parameter_type = "";
+            this.parameter_type = "group";
+            document.getElementById("type").disabled = true;
             document.getElementById("title").value = "";
             $("#large_screen_size").val("12").trigger('change');
             $("#medium_screen_size").val("12").trigger('change');
@@ -1066,13 +1080,26 @@ export default {
                 self.updateFile(this); 
             });
 
-            /* $("#file_download").off('click').on('click', function(e){
-                self.downloadFile(this.getAttribute("data-current-key"));
-            }); */
+            $(".copyKey").off('click').on('click', function(e){
+                self.copyKeyToClipboard(this);
+            });
 
             setTimeout(function() {
                 self.body_loader_active = false;
             }, 500);
+        },
+        copyKeyToClipboard: function(btn) {
+            btn.innerHTML = btn.getAttribute("copied-text");
+            var __key = btn.getAttribute("data-key");
+            var $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val(__key).select();
+            document.execCommand("copy");
+            $temp.remove();
+
+            setTimeout(function () {
+                btn.innerHTML = btn.getAttribute("default-text");
+            }, 1000);
         },
         updateFile(e) {
             var self = this;
@@ -1282,18 +1309,20 @@ export default {
             }
         },
         parentChanged: function(selectedParentKey) {
-            $("#parenSelectionGroupTypeWarning").addClass("d-none");
+            $("#parentSelectionGroupTypeWarning").addClass("d-none");
             document.getElementById("type").disabled = false;
 
             if ("" == selectedParentKey) {
+                this.parameter_type = "group";
+                document.getElementById("type").disabled = true;
                 return;
             }
-
+            
             if ("selection_group" != this.listByKey[selectedParentKey].type) {
                 return;
             }
 
-            $("#parenSelectionGroupTypeWarning").removeClass("d-none");
+            $("#parentSelectionGroupTypeWarning").removeClass("d-none");
             this.parameter_type = "selection_item";
             document.getElementById("type").disabled = true;
         },
