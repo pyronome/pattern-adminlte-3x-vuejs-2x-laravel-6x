@@ -410,7 +410,18 @@ class AdminLTEConfigController extends Controller
                     $result['error_count']++;
                     $errors[$key] = $selectionGroupError['error_msg'];
                 }
-            } 
+            }
+
+            $configObject = $this->getConfigObject($key);
+            $metaData = json_decode($configObject->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $expression = $metaData['expression'];
+            if ('' != $expression) {
+                if (0 == preg_match($expression, $val)) {
+                    $result['error_count']++;
+                    $errors[$key] = $metaData['message'];
+                }
+            }
+
         }
 
         $result['error_msg'] = $errors;
@@ -765,7 +776,8 @@ class AdminLTEConfigController extends Controller
             $parent_data[$index]['small_screen_size'] = isset($metaData['small_screen_size']) ? intval($metaData['small_screen_size']) : 12;
             $parent_data[$index]['min_selection'] = isset($metaData['min_selection']) ? $metaData['min_selection'] : 0;
             $parent_data[$index]['max_selection'] = isset($metaData['max_selection']) ? $metaData['max_selection'] : 0;
-            
+            $parent_data[$index]['expression'] = isset($metaData['expression']) ? $metaData['expression'] : '';
+            $parent_data[$index]['message'] = isset($metaData['message']) ? $metaData['message'] : '';
 
             $children = $this->getChildren($object->id);
 
@@ -833,6 +845,8 @@ class AdminLTEConfigController extends Controller
             $children_data[$index]['small_screen_size'] = isset($metaData['small_screen_size']) ? intval($metaData['small_screen_size']) : 12;
             $children_data[$index]['min_selection'] = isset($metaData['min_selection']) ? $metaData['min_selection'] : 0;
             $children_data[$index]['max_selection'] = isset($metaData['max_selection']) ? $metaData['max_selection'] : 0;
+            $children_data[$index]['expression'] = isset($metaData['expression']) ? $metaData['expression'] : '';
+            $children_data[$index]['message'] = isset($metaData['message']) ? $metaData['message'] : '';
 
             $children = $this->getChildren($object->id);;
 
@@ -896,6 +910,23 @@ class AdminLTEConfigController extends Controller
         }
     }
 
+    public function validate_item(Request $request) {
+        $return_data = [];
+        $return_data['has_error'] = false;
+        $return_data['errors'] = [];
+
+        $expression = $request->input('expression');
+
+        if (@preg_match($expression, '') === false) {
+            $return_data['has_error'] = true;
+            $return_data['errors']['expression'] = __('Invalid expression.');
+
+            return $return_data;
+        }
+
+        return $return_data;
+    }
+
 	public function post_json(Request $request) {
         /* $systemConfigData = $this->getSystemConfigData(); */
 
@@ -957,6 +988,8 @@ class AdminLTEConfigController extends Controller
             $metaData['small_screen_size'] = $data['small_screen_size'];
             $metaData['min_selection'] = $data['min_selection'];
             $metaData['max_selection'] = $data['max_selection'];
+            $metaData['expression'] = $data['expression'];
+            $metaData['message'] = $data['message'];
 
             $encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
             $AdminLTEConfig->meta_data_json = $encodedData;
@@ -1020,6 +1053,8 @@ class AdminLTEConfigController extends Controller
             $metaData['small_screen_size'] = $data['small_screen_size'];
             $metaData['min_selection'] = $data['min_selection'];
             $metaData['max_selection'] = $data['max_selection'];
+            $metaData['expression'] = $data['expression'];
+            $metaData['message'] = $data['message'];
 
             $encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
             $AdminLTEConfig->meta_data_json = $encodedData;

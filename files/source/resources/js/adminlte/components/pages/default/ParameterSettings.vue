@@ -503,6 +503,33 @@
                                     </div>
                                 
                                 </div>
+
+                                <div class="row"
+                                    v-show="(
+                                        ('html_editor' == parameter_type)
+                                        || ('integer' == parameter_type)
+                                        || ('number' == parameter_type)
+                                        || ('password' == parameter_type)
+                                        || ('readonly_content' == parameter_type)
+                                        || ('shorttext' == parameter_type)
+                                        || ('textarea' == parameter_type)
+                                    )">
+                                    <div class="form-group col-lg-12">
+                                        <label for="expression">{{ $t('Expression') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control item-menu" name="expression" id="expression">
+                                        </div>
+                                        <div class="item-error-container" id="expression-error">
+                                            <span class="error invalid-feedback"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label for="message">{{ $t('Message') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control item-menu" name="message" id="message">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="modalfooter justify-content-between ">
                                 <div class="row">
@@ -587,6 +614,9 @@ export default {
             toggle_elements_options: [],
             is_owner: 0,
             uploadedFiles: {},  
+            validationForm: new Form({
+                'expression': '',
+            }),
             page: {
                 is_ready: false,
                 has_server_error: false,
@@ -657,6 +687,8 @@ export default {
             $("#description").summernote("code", current_data["description"]);
             document.getElementById("min_selection").value = current_data["min_selection"];
             document.getElementById("max_selection").value = current_data["max_selection"];
+            document.getElementById("expression").value = current_data["expression"];
+            document.getElementById("message").value = current_data["message"];
 
             /* if ("toggle" == current_data.type) {
                 this.AdminLTEConfigForm.toggle_elements = current_data.toggle_elements.split(",");
@@ -980,6 +1012,8 @@ export default {
             $("#default_value_html_editor").summernote("code", "");
             document.getElementById("min_selection").value = 0;
             document.getElementById("max_selection").value = 0;
+            document.getElementById("expression").value = "";
+            document.getElementById("message").value = "";
 
             $("#groupTypeWarning").addClass("d-none");
             document.getElementById("type").disabled = false;
@@ -1019,8 +1053,10 @@ export default {
 
             $("#buttonUpdateMenuItem").off("click").on("click", function(){
                 if (self.isValid()) {
-                    self.page.editor.update();
-                    $("#modalMenuItem").modal('hide');
+                    self.parameterFormIsValid(function(){
+                        self.page.editor.update();
+                        $("#modalMenuItem").modal('hide');
+                    });
                 }
             });
 
@@ -1029,8 +1065,10 @@ export default {
                 document.getElementById("currentParent").value = "";
 
                 if (self.isValid()) {
-                    self.page.editor.add();
-                    $("#modalMenuItem").modal('hide');
+                    self.parameterFormIsValid(function(){
+                        self.page.editor.add();
+                        $("#modalMenuItem").modal('hide');
+                    });
                 }
             });
 
@@ -1087,6 +1125,58 @@ export default {
             setTimeout(function() {
                 self.body_loader_active = false;
             }, 500);
+        },
+        parameterFormIsValid: function(callback) {
+            $(".item-error-container > span").hide();
+
+            var expression = document.getElementById("expression").value;
+            if ("" == expression) {
+                return true;
+            }
+
+            var self = this;
+            var has_error = false;
+            var errors = [];
+            
+            self.validationForm.expression = expression;
+            
+            self.$Progress.start();
+            
+            self.validationForm.post(AdminLTEHelper.getAPIURL("adminlteconfig/validate_item"))
+                .then(({ data }) => {
+                    self.$Progress.finish();
+                    has_error = data.has_error;
+                    errors = data.errors;
+                }).catch(({ data }) => {
+                    self.$Progress.fail();
+                    return false;
+                }).finally(function() {
+                    if (!self.page.has_server_error) {
+                        if (!has_error) {
+                            callback();
+                        } else {
+                            self.showValidationFormErrors(errors);
+                        }
+                    }
+                });
+        },
+        showValidationFormErrors: function(errors) {
+            var firstErrorContainer = null;
+            for (const [field, msg] of Object.entries(errors)) {
+                let errorContainer = null;
+                if (errorContainer = document.getElementById(field + "-error")) {
+                    $("span", errorContainer).html(msg).show();
+                    if (null === firstErrorContainer) {
+                        firstErrorContainer = errorContainer;
+                    }
+                }
+            }
+
+            if (null !== firstErrorContainer) {
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: $(firstErrorContainer.parentNode).offset().top - 20
+                }, 2000);
+            }
         },
         copyKeyToClipboard: function(btn) {
             btn.innerHTML = btn.getAttribute("copied-text");
@@ -1191,6 +1281,18 @@ export default {
         isValid: function() {
             var self = this;
             var basekey = document.getElementById("basekey").value.toLowerCase();
+
+            if ("" == basekey) {
+                Vue.swal.fire({
+                    position: 'top-end',
+                    title: self.$t("Parameter name is required."),
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 10000,
+                    timerProgressBar: true
+                });
+                return false;
+            }
 
             if (!self.isKeyValid(basekey)) {
                 Vue.swal.fire({

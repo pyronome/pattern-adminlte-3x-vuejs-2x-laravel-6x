@@ -109,6 +109,7 @@ Route::namespace('API')
         Route::post('/delete', 'AdminLTEConfigController@delete');
         Route::post('/post_config_data', 'AdminLTEConfigController@post_config_data');
         Route::post('/post_json', 'AdminLTEConfigController@post_json');
+        Route::post('/validate_item', 'AdminLTEConfigController@validate_item');
     });
 
     Route::prefix('__layout')->group(function () {

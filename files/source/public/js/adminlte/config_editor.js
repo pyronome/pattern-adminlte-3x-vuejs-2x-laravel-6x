@@ -1037,6 +1037,8 @@
                 "small_screen_size" : li.data("small_screen_size"),
                 "max_selection" : li.data("max_selection"),
                 "min_selection" : li.data("min_selection"),
+                "expression" : li.data("expression"),
+                "message" : li.data("message"),
             };
 
             arr.push(object);
@@ -1298,6 +1300,8 @@ function MenuEditor(idSelector, options) {
             "small_screen_size" : copyingData["small_screen_size"],
             "max_selection" : copyingData["max_selection"],
             "min_selection" : copyingData["min_selection"],
+            "expression" : copyingData["expression"],
+            "message" : copyingData["message"],
         }
 
         var btnGroup = TButtonGroup(objectData.editable);
@@ -1424,6 +1428,8 @@ function MenuEditor(idSelector, options) {
                 "small_screen_size" : copyingData["small_screen_size"],
                 "max_selection" : copyingData["max_selection"],
                 "min_selection" : copyingData["min_selection"],
+                "expression" : copyingData["expression"],
+                "message" : copyingData["message"],
             }
     
             btnGroup = TButtonGroup(objectData.editable);
@@ -1613,6 +1619,8 @@ function MenuEditor(idSelector, options) {
                 small_screen_size: 12,
                 min_selection: 0,
                 max_selection: 0,
+                expression: "",
+                message: "",
             };
 
             var temp = $.extend({}, v);
@@ -1798,6 +1806,8 @@ function MenuEditor(idSelector, options) {
             "small_screen_size" : document.getElementById("small_screen_size").value,
             "max_selection" : document.getElementById("max_selection").value,
             "min_selection" : document.getElementById("min_selection").value,
+            "expression" : document.getElementById("expression").value,
+            "message" : document.getElementById("message").value,
         }
 
         if (oldParent != newParent) {
@@ -1958,6 +1968,8 @@ function MenuEditor(idSelector, options) {
             "small_screen_size": 12,
             "max_selection": 0,
             "min_selection": 0,
+            "expression" : "",
+            "message" : "",
         };
 
         var children = [];
@@ -2030,6 +2042,8 @@ function MenuEditor(idSelector, options) {
             "small_screen_size": 12,
             "max_selection": 0,
             "min_selection": 0,
+            "expression" : "",
+            "message" : "",
         };
 
         var objectData = {},
@@ -2078,6 +2092,8 @@ function MenuEditor(idSelector, options) {
             objectData["small_screen_size"] = element["small_screen_size"];
             objectData["max_selection"] = element["max_selection"];
             objectData["min_selection"] = element["min_selection"];
+            objectData["expression"] = element["expression"];
+            objectData["message"] = element["message"];
 
             
             
@@ -2194,6 +2210,8 @@ function MenuEditor(idSelector, options) {
             "small_screen_size" : document.getElementById("small_screen_size").value,
             "max_selection" : document.getElementById("max_selection").value,
             "min_selection" : document.getElementById("min_selection").value,
+            "expression" : document.getElementById("expression").value,
+            "message" : document.getElementById("message").value,
         };
 
         var btnGroup = TButtonGroup(objectData.editable);
