@@ -39,10 +39,26 @@ Route::namespace('API')
 
     Route::post('forgotpassword', 'ForgotPasswordController@post');
 
+    Route::prefix('adminlteconfig')->group(function () {
+        Route::get('/get_json', 'AdminLTEConfigController@get_json');
+        Route::get('/getlist', 'AdminLTEConfigController@getlist');
+        Route::get('/get_recordlist', 'AdminLTEConfigController@get_recordlist');
+        Route::get('/download_file/{type}/{key}', 'AdminLTEConfigController@download');
+        Route::get('/get_parentlist', 'AdminLTEConfigController@get_parentlist');
+        Route::get('/get_toggle_elements_options/{id}', 'AdminLTEConfigController@get_toggle_elements_options');
+        Route::post('/delete', 'AdminLTEConfigController@delete');
+        Route::post('/post_config_data', 'AdminLTEConfigController@post_config_data');
+        Route::post('/post_json', 'AdminLTEConfigController@post_json');
+        Route::post('/validate_item', 'AdminLTEConfigController@validate_item');
+    });
+
     Route::prefix('profile')->group(function () {
         Route::get('/get', 'ProfileController@get');
         Route::get('/get_files', 'ProfileController@get_files');
         Route::post('/post', 'ProfileController@post');
+        Route::get('/get_config_data', 'ProfileController@get_config_data');
+        Route::post('/post_config_data', 'ProfileController@post_config_data');
+        Route::get('/download_file/{type}/{key}', 'ProfileController@download_file');
     });
 
     Route::prefix('server_information')->group(function () {
@@ -88,6 +104,9 @@ Route::namespace('API')
         Route::post('/post_permission_data', 'AdminLTEUserGroupController@post_permission_data');
         Route::get('/get_layout_data/{id}', 'AdminLTEUserGroupController@get_layout_data');
         Route::post('/post_layout_data', 'AdminLTEUserGroupController@post_layout_data');
+        Route::get('/get_config_data', 'AdminLTEUserGroupController@get_config_data');
+        Route::post('/post_config_data', 'AdminLTEUserGroupController@post_config_data');
+        Route::get('/download_file/{type}/{key}/{current_id}', 'AdminLTEUserGroupController@download_file');
     });
 
     Route::prefix('adminlteuser')->group(function () {
@@ -97,19 +116,17 @@ Route::namespace('API')
         Route::post('/post', 'AdminLTEUserController@post');
         Route::get('/get_permission_data/{id}', 'AdminLTEUserController@get_permission_data');
         Route::post('/post_permission_data', 'AdminLTEUserController@post_permission_data');
+        Route::get('/get_config_data', 'AdminLTEUserController@get_config_data');
+        Route::post('/post_config_data', 'AdminLTEUserController@post_config_data');
+        Route::get('/download_file/{type}/{key}/{current_id}', 'AdminLTEUserController@download_file');
     });
 
-    Route::prefix('adminlteconfig')->group(function () {
-        Route::get('/get_json', 'AdminLTEConfigController@get_json');
-        Route::get('/getlist', 'AdminLTEConfigController@getlist');
-        Route::get('/get_recordlist', 'AdminLTEConfigController@get_recordlist');
-        Route::get('/download_file/{type}/{key}', 'AdminLTEConfigController@download');
-        Route::get('/get_parentlist', 'AdminLTEConfigController@get_parentlist');
-        Route::get('/get_toggle_elements_options/{id}', 'AdminLTEConfigController@get_toggle_elements_options');
-        Route::post('/delete', 'AdminLTEConfigController@delete');
-        Route::post('/post_config_data', 'AdminLTEConfigController@post_config_data');
-        Route::post('/post_json', 'AdminLTEConfigController@post_json');
-        Route::post('/validate_item', 'AdminLTEConfigController@validate_item');
+    Route::prefix('adminlteuserconfig')->group(function () {
+        Route::get('/get_json/{owner_group}', 'AdminLTEUserConfigController@get_json');
+        Route::get('/get_recordlist/{owner_group}', 'AdminLTEUserConfigController@get_recordlist');
+        Route::get('/download_file/{type}/{key}', 'AdminLTEUserConfigController@download_file');
+        Route::post('/post_json', 'AdminLTEUserConfigController@post_json');
+        Route::post('/validate_item', 'AdminLTEUserConfigController@validate_item');
     });
 
     Route::prefix('__layout')->group(function () {

@@ -16,6 +16,11 @@
                                 <li class="breadcrumb-item active">{{ $t("AdminLTEUserGroup Edit") }}</li>
                             </ol>
                         </div>
+                        <div class="col-sm-12">
+                            <a class="btn btn-primary btn-md btn-on-card text-white float-sm-right" :href="configurationURL">
+                                <span>Configuration</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -181,7 +186,14 @@ export default {
                 URL = URL + '/detail/' + this.id;
             }
             return URL;
-        }
+        },
+        configurationURL() {
+            let URL = '/' + this.main_folder + '/adminlteusergroup';
+            if (this.id > 0) {
+                URL = URL + '/configuration/' + this.id;
+            }
+            return URL;
+        },
     },
     methods: {
         processLoadQueue: function () {

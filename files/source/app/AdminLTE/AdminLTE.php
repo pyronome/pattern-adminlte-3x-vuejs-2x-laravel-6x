@@ -36,6 +36,8 @@ class AdminLTE
 		'AdminLTEPermission',
 		'AdminLTEUser',
 		'AdminLTEUserGroup',
+		'AdminLTEUserConfig',
+		'AdminLTEUserConfigFile',
 		'AdminLTEUserLayout',
 		'AdminLTEVariable',
 		'User'
@@ -2062,8 +2064,7 @@ class AdminLTE
 	public function getAdminLTEDefaultWidgets($widgets) {
 		$models = [
 			'AdminLTEUser',
-			'AdminLTEUserGroup',
-			'AdminLTEConfig'
+			'AdminLTEUserGroup'
 		];
 
 		$widget_index = 0;
@@ -2167,6 +2168,8 @@ class AdminLTE
 			'AdminLTEPermission',
 			'AdminLTEUser',
 			'AdminLTEUserGroup',
+			'AdminLTEUserConfig',
+			'AdminLTEUserConfigFile',
 			'AdminLTEUserLayout',
 			'AdminLTEVariable',
 			'User'

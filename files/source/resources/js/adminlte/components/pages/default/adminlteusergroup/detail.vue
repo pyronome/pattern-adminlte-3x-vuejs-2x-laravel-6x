@@ -41,6 +41,11 @@
                                             :to="'/' + main_folder + '/adminlteusergroup/layout/' + id">
                                             <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Layout Settings') }}</span>
                                         </router-link>
+                                        <router-link tag="a" v-show="page.variables.is_admin"
+                                            class="btn btn-primary btn-md btn-on-card text-white"
+                                            :to="'/' + main_folder + '/adminlteusergroup/parametersettings/' + id">
+                                            <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Parameter Settings') }}</span>
+                                        </router-link>
                                     </div>
                                 </div>
                                 <div class="card-body p-0">

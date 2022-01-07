@@ -12,14 +12,9 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
+                                <li class="breadcrumb-item"><a :href="backbuttonURL">{{ $t('User') }}</a></li>
                                 <li class="breadcrumb-item active">{{ $t("Configuration") }}</li>
                             </ol>
-                            
-                        </div>
-                        <div class="col-sm-12" v-show="page.variables.is_admin">
-                            <a class="btn btn-primary btn-md btn-on-card text-white float-sm-right" href="parameter_settings">
-                                <span>Edit Parameters</span>
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -80,7 +75,7 @@
                     </div>
                 </div> -->
 
-                <div class="container-fluid"  id="AdminLTEConfigFormContainer" style="padding-bottom:100px;">
+                <div class="container-fluid"  id="AdminLTEUserConfigFormContainer" style="padding-bottom:100px;">
                 </div>
 
                 <div class="row">
@@ -121,7 +116,7 @@
                                 role="tablist" 
                                 aria-orientation="vertical">
                             </div>
-                            <select class="dropdownTabGroup show-on-mobile" 
+                            <select class="dropdownTabGroup__delete__ show-on-mobile" 
                                 id="groupDropdownTabContainer__group_key__" 
                                 data-tab-container-id="groupTabContentContainer__group_key__"></select>
                         </div>
@@ -832,6 +827,7 @@
 export default {
     data() {
         return {
+            current_id: 0,
             main_folder: '',
             list: [],
             search_text: '',
@@ -874,6 +870,15 @@ export default {
             },
             body_loader_active: false,
         };
+    },
+    computed: {
+        backbuttonURL() {
+            let URL = '/' + this.main_folder + '/adminlteuser';
+            if (this.current_id > 0) {
+                URL = URL + '/detail/' + this.current_id;
+            }
+            return URL;
+        }
     },
     methods: {
         processLoadQueue: function () {
@@ -923,7 +928,7 @@ export default {
             this.listByKey = listByKey;
         },
         renderForm: function() {
-            document.getElementById("AdminLTEConfigFormContainer").innerHTML = "";
+            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML = "";
             
             var self = this;
             var elementHTML = "";
@@ -931,7 +936,7 @@ export default {
             var temp = "";
 
             if (0 == self.list.length) {
-                document.getElementById("AdminLTEConfigFormContainer").innerHTML = document.getElementById("noResultTemplate").innerHTML;
+                document.getElementById("AdminLTEUserConfigFormContainer").innerHTML = document.getElementById("noResultTemplate").innerHTML;
             }
 
             self.list.forEach(element => {
@@ -939,7 +944,7 @@ export default {
                 if ("group" == element.type) {
                     if (0 == element.level) {
                         elementHTML = self.getGroupMainHTML(element);
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     } else if (1 == element.level) {
                         parentKey = self.getParentKey(element.__key);
                         
@@ -954,74 +959,110 @@ export default {
                     } else if (2 == element.level) {
                         parentKey = self.getParentKey(element.__key);
                         elementHTML = self.getGroupCardHTML(element);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
                         parentKey = self.getParentKey(element.__key);
                         elementHTML = self.getGroupHTML(element);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     }
                 } else if ("selection_group" == element.type) {
                     elementHTML = self.getSelectionGroupHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("selection_item" == element.type) {
                     elementHTML = self.getSelectionItemHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("checkbox" == element.type) {
                     elementHTML = self.getCheckboxHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("colorpicker" == element.type) {
                     elementHTML = self.getColorPickerHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("datepicker" == element.type) {
                     elementHTML = self.getDatePickerHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("datetimepicker" == element.type) {
                     elementHTML = self.getDateTimePickerHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("dropdown" == element.type) {
                     elementHTML = self.getDropdownHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
 
                     self.setDropdownOptions(element);
@@ -1030,9 +1071,13 @@ export default {
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
 
                     if ("" != element.value) {
@@ -1050,126 +1095,182 @@ export default {
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("iconpicker" == element.type) {
                     elementHTML = self.getIconPickerHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("integer" == element.type) {
                     elementHTML = self.getIntegerHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("link_button" == element.type) {
                     elementHTML = self.getLinkButtonHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("link_text" == element.type) {
                     elementHTML = self.getLinkTextHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("number" == element.type) {
                     elementHTML = self.getNumberHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("password" == element.type) {
                     elementHTML = self.getPasswordHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("radio" == element.type) {
                     elementHTML = self.getRadioHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("readonly_content" == element.type) {
                     elementHTML = self.getReadonlyContentHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("shorttext" == element.type) {
                     elementHTML = self.getShorttextHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("switch" == element.type) {
                     elementHTML = self.getSwitchHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("textarea" == element.type) {
                     elementHTML = self.getTextareaHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("timepicker" == element.type) {
                     elementHTML = self.getTimePickerHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 } else if ("toggle" == element.type) {
                     elementHTML = self.getToggleHTML(element);
 
                     if (element.__key.includes(".")) {
                         parentKey = self.getParentKey(element.__key);
-                        document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        if (document.getElementById("groupContainer" + parentKey)) {
+                            document.getElementById("groupContainer" + parentKey).innerHTML += elementHTML;
+                        } else {
+                            document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
+                        }
                     } else {
-                        document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
+                        document.getElementById("AdminLTEUserConfigFormContainer").innerHTML += elementHTML;
                     }
                 }  
             });
@@ -1258,6 +1359,16 @@ export default {
             $(".dropdownTabGroup").off('change').on('change', function () {
                 self.dropdownTabGroupChanged(this);
             });
+
+            var dropdownTabs = $(".dropdownTabGroup");
+            for (let index = 0; index < dropdownTabs.length; index++) {
+                let elementKey = dropdownTabs[index].id.replace("groupDropdownTabContainer", "");
+                if (0 == $("option", dropdownTabs[index]).length) {
+                    document.getElementById("groupTabContainer" + elementKey).style.display = "none";
+                    document.getElementById("groupDropdownTabContainer" + elementKey).style.display = "none";
+                    document.getElementById("groupTabContentContainer" + elementKey).style.display = "none";
+                }
+            }
 
             setTimeout(function(){
                 $(".use-parameter-default-value").on('click', function(e){
@@ -1786,7 +1897,7 @@ export default {
                 });
         },
         downloadFile: function (__key) {
-            axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/download_file/uploaded/" + __key))
+            axios.get(AdminLTEHelper.getAPIURL("adminlteuser/download_file/uploaded/" + __key + "/" + this.current_id))
                 .then(({ data }) => {
                     var a = document.createElement("a"); //Create <a>
                     a.href = data.url; //Image Base64 Goes here
@@ -1798,7 +1909,7 @@ export default {
                 });
         },
         downloadDefaultFile: function (__key) {
-            axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/download_file/default/" + __key))
+            axios.get(AdminLTEHelper.getAPIURL("adminlteuser/download_file/default/" + __key + "/0"))
                 .then(({ data }) => {
                     var a = document.createElement("a"); //Create <a>
                     a.href = data.url; //Image Base64 Goes here
@@ -1822,7 +1933,8 @@ export default {
             }
 
             var query = AdminLTEHelper.getURLQuery(self);
-            axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/getlist/" + query))
+            query = query + "&o=" + self.current_id;
+            axios.get(AdminLTEHelper.getAPIURL("adminlteuser/get_config_data/" + query))
                 .then(({ data }) => {
                     self.page.is_configlist_loaded = true;
                     self.page.is_configlist_loading = false;
@@ -1838,7 +1950,7 @@ export default {
                     self.processLoadQueue();
                 }).finally(function() {
                     callback();
-                    AdminLTEHelper.cleanCheckedBoxes('AdminLTEConfig');
+                    AdminLTEHelper.cleanCheckedBoxes('AdminLTEUserConfig');
                 });
         },
         search_list: _.debounce(function (e) {
@@ -1860,7 +1972,7 @@ export default {
             this.loadData(function(){});
         },
         sort: function (variable) {
-            AdminLTEHelper.activateSortLoader(`button_sort_AdminLTEConfig_${variable}`);
+            AdminLTEHelper.activateSortLoader(`button_sort_AdminLTEUserConfig_${variable}`);
 
             this.sort_variable = variable;
             this.sort_direction = ('asc' == this.sort_direction) ? 'desc' : 'asc';
@@ -1868,7 +1980,7 @@ export default {
 
             var self = this;
             this.loadData(function() {
-                AdminLTEHelper.deactivateSortLoader(`button_sort_AdminLTEConfig_${self.sort_variable}`, self.sort_direction)
+                AdminLTEHelper.deactivateSortLoader(`button_sort_AdminLTEUserConfig_${self.sort_variable}`, self.sort_direction)
             });
         },
         select_all_row: function(target) {
@@ -1876,58 +1988,6 @@ export default {
         },
         select_row: function(target) {
             AdminLTEHelper.doCheckboxClick(target);
-        },
-        deleteSelectedRows: function(sender, model) {
-            var self = this;
-            Vue.swal.fire({
-                title: self.$t("Selected records will be deleted."),
-                text: self.$t("Do you confirm?"),
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: self.$t("Continue"),
-                cancelButtonText: self.$t("Cancel")
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    self.formDelete.selected_ids = AdminLTEHelper.getTableSelectedRowIds("AdminLTEConfig");
-                    self.submitDeleteForm();
-                }
-            });
-        },
-        submitDeleteForm: function () {
-            var self = this;
-            self.$Progress.start();
-            self.formDelete.post(AdminLTEHelper.getAPIURL("adminlteconfig/delete"))
-                .then(({ data }) => {
-                    self.$Progress.finish();
-                    self.delete_form.has_error = data.has_error;
-                    self.delete_form.error_msg = data.error_msg;
-                }).catch(({ data }) => {
-                    self.$Progress.fail();
-                }).finally(function(){
-                    if (!self.delete_form.has_error) {
-                        self.loadData(function(){
-                            Vue.swal.fire({
-                                position: 'top-end',
-                                title: self.$t("Selected records have been deleted."),
-                                icon: 'success',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                timerProgressBar: true,
-                            });
-                        });
-                    } else {
-                        Vue.swal.fire({
-                            position: 'top-end',
-                            title: self.delete_form.error_msg,
-                            icon: 'error',
-                            showConfirmButton: false,
-                            timer: 10000,
-                            timerProgressBar: true
-                        });
-                    }
-                });
         },
         submitConfigForm: function () {
             var self = this;
@@ -1939,12 +1999,14 @@ export default {
             
             self.collectConfigData(formData);
 
+            formData.append('page_type', 'group');
+            formData.append('model_id', self.current_id);
             formData.append('config_data', JSON.stringify(this.formConfig.config_data));
 
             self.$Progress.start();
 
             axios.post( 
-                    AdminLTEHelper.getAPIURL("adminlteconfig/post_config_data"),
+                    AdminLTEHelper.getAPIURL("adminlteuser/post_config_data"),
                     formData,
                     {
                         headers: {
@@ -1971,9 +2033,9 @@ export default {
                                 showConfirmButton: false,
                                 timer: 2000,
                                 timerProgressBar: true,
-                                onClose: () => {
+                                /* onClose: () => {
                                     self.reloadPage();
-                                }
+                                } */
                             });
                         } else {
                             self.renderFormErrors(self.page.post_error_msg);
@@ -2188,6 +2250,7 @@ export default {
     },
     mounted() {
         var self = this;
+        self.current_id = self.$route.params.current_id;
         self.body_loader_active = true;
         self.main_folder = AdminLTEHelper.getMainFolder();
         self.page.is_ready = false;

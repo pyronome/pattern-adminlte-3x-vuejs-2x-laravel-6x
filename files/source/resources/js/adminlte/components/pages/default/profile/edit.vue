@@ -18,6 +18,11 @@
                                 <li class="breadcrumb-item active">{{ $t("Profile Edit") }}</li>
                             </ol>
                         </div>
+                        <div class="col-sm-12">
+                            <a class="btn btn-primary btn-md btn-on-card text-white float-sm-right" :href="'/' + main_folder + '/profile/configuration'">
+                                <span>Configuration</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -179,6 +184,15 @@ export default {
             }
         };
     },
+    /* computed: {
+        configurationURL() {
+            let URL = '/' + this.main_folder + '/profile';
+            if (this.id > 0) {
+                URL = URL + '/configuration/' + this.id;
+            }
+            return URL;
+        },
+    }, */
     methods: {
         processLoadQueue: function () {
             if (this.page.has_server_error) {

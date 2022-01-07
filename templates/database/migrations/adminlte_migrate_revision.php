@@ -594,6 +594,207 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
 
         /* {{@snippet:end_adminlteconfigfiletable_migration}} */
 
+        /* {{@snippet:begin_adminlteuserconfigtable_migration}} */        
+        if (!Schema::hasTable('adminlteuserconfigtable')) {
+            Schema::create('adminlteuserconfigtable', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->timestamps();
+                $table->boolean('deleted')->default(0);
+                $table->smallInteger('system')->default(0);
+                $table->smallInteger('enabled')->default(0);
+                $table->smallInteger('required')->default(0);
+                $table->smallInteger('locked')->default(0);
+                $table->smallInteger('owner')->default(0);
+                $table->bigInteger('__order')->default(0);
+                $table->string('type')->nullable();
+                $table->bigInteger('parent_id')->default(0);
+                $table->longText('__key')->nullable();
+                $table->longText('title')->nullable();
+                $table->longText('default_value')->nullable();
+                $table->longText('value')->nullable();
+                $table->longText('hint')->nullable();
+                $table->longText('description')->nullable();
+                $table->longText('meta_data_json')->nullable();
+            });
+        } else {
+            Schema::table('adminlteuserconfigtable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminlteuserconfigtable', 'system')) { 
+                    $table->smallInteger('system')->default(0)->change();
+                } else {
+                    $table->smallInteger('system')->default(0);
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'enabled')) { 
+                    $table->smallInteger('enabled')->default(0)->change();
+                } else {
+                    $table->smallInteger('enabled')->default(0);
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'required')) { 
+                    $table->smallInteger('required')->default(0)->change();
+                } else {
+                    $table->smallInteger('required')->default(0);
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'locked')) { 
+                    $table->smallInteger('locked')->default(0)->change();
+                } else {
+                    $table->smallInteger('locked')->default(0);
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'owner')) { 
+                    $table->bigInteger('owner')->default(0)->change();
+                } else {
+                    $table->bigInteger('owner')->default(0);
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', '__order')) { 
+                    $table->bigInteger('__order')->default(0)->change();
+                } else {
+                    $table->bigInteger('__order')->default(0);
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'type')) { 
+                    $table->string('type')->nullable()->change();
+                } else {
+                    $table->string('type')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'parent_id')) { 
+                    $table->bigInteger('parent_id')->default(0)->change();
+                } else {
+                    $table->bigInteger('parent_id')->default(0);
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', '__key')) { 
+                    $table->longText('__key')->nullable()->change();
+                } else {
+                    $table->longText('__key')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'title')) { 
+                    $table->longText('title')->nullable()->change();
+                } else {
+                    $table->longText('title')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'default_value')) { 
+                    $table->longText('default_value')->nullable()->change();
+                } else {
+                    $table->longText('default_value')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'value')) { 
+                    $table->longText('value')->nullable()->change();
+                } else {
+                    $table->longText('value')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'hint')) { 
+                    $table->longText('hint')->nullable()->change();
+                } else {
+                    $table->longText('hint')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'description')) { 
+                    $table->longText('description')->nullable()->change();
+                } else {
+                    $table->longText('description')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigtable', 'meta_data_json')) { 
+                    $table->longText('meta_data_json')->nullable()->change();
+                } else {
+                    $table->longText('meta_data_json')->nullable();
+                }
+            });
+            
+        } // if (!Schema::hasTable('adminlteuserconfigtable')) {
+
+        Schema::table('adminlteuserconfigtable', function(Blueprint $table) {
+            if (Schema::hasColumn('adminlteuserconfigtable', 'owner_group')) { 
+                $table->unsignedBigInteger('owner_group')->nullable()->unsigned()->change();
+            } else {
+                $table->unsignedBigInteger('owner_group')->nullable()->unsigned();
+            }
+
+            $foreignKeys = $this->listTableForeignKeys('adminlteuserconfigtable');
+
+            if (!in_array('adminlteuserconfigtable_owner_group_foreign', $foreignKeys)) {
+                $table->foreign('owner_group')->references('id')->on('adminlteusergrouptable'); 
+            }     
+        });
+        /* {{@snippet:end_adminlteuserconfigtable_migration}} */
+
+        /* {{@snippet:begin_adminlteuserconfigvaltable_migration}} */        
+        if (!Schema::hasTable('adminlteuserconfigvaltable')) {
+            Schema::create('adminlteuserconfigvaltable', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->timestamps();
+                $table->boolean('deleted')->default(0);
+                $table->longText('__key')->nullable();
+                $table->longText('value')->nullable();
+            });
+        } else {
+            Schema::table('adminlteuserconfigvaltable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminlteuserconfigvaltable', '__key')) { 
+                    $table->longText('__key')->nullable()->change();
+                } else {
+                    $table->longText('__key')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigvaltable', 'value')) { 
+                    $table->longText('value')->nullable()->change();
+                } else {
+                    $table->longText('value')->nullable();
+                }
+            });
+            
+        } // if (!Schema::hasTable('adminlteuserconfigvaltable')) {
+        /* {{@snippet:end_adminlteuserconfigvaltable_migration}} */
+
+        /* {{@snippet:begin_adminlteuserconfigfiletable_migration}} */        
+        if (!Schema::hasTable('adminlteuserconfigfiletable')) {
+            Schema::create('adminlteuserconfigfiletable', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->timestamps();
+                $table->boolean('deleted')->default(0);
+                $table->longText('__key')->nullable();
+                $table->longText('file_name')->nullable();
+                $table->longText('description')->nullable();
+                $table->longText('mime_type')->nullable();
+                $table->bigInteger('file_size')->default(0);
+                $table->string('file_type')->nullable();
+                $table->binary('file')->nullable();
+            });
+        } else {
+            Schema::table('adminlteuserconfigfiletable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminlteuserconfigfiletable', '__key')) { 
+                    $table->longText('__key')->nullable()->change();
+                } else {
+                    $table->longText('__key')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'file_name')) { 
+                    $table->longText('file_name')->nullable()->change();
+                } else {
+                    $table->longText('file_name')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'description')) { 
+                    $table->longText('description')->nullable()->change();
+                } else {
+                    $table->longText('description')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'mime_type')) { 
+                    $table->longText('mime_type')->nullable()->change();
+                } else {
+                    $table->longText('mime_type')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'file_size')) { 
+                    $table->bigInteger('file_size')->default(0)->change();
+                } else {
+                    $table->bigInteger('file_size')->default(0);
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'file_type')) { 
+                    $table->string('file_type')->nullable()->change();
+                } else {
+                    $table->string('file_type')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'file')) { 
+                    $table->binary('file')->nullable()->change();
+                } else {
+                    $table->binary('file')->nullable();
+                }
+            });
+            
+        } // if (!Schema::hasTable('adminlteuserconfigfiletable')) {
+        
+        /* {{@snippet:end_adminlteuserconfigfiletable_migration}} */
+
         /* {{@snippet:begin_adminltemenutable_migration}} */        
         if (!Schema::hasTable('adminltemenutable')) {
             Schema::create('adminltemenutable', function (Blueprint $table) {

@@ -2,6 +2,7 @@ import HomePage from "./components/pages/default/Home.vue";
 import ProfileDetail from "./components/pages/default/profile/detail.vue";
 import ProfileEdit from "./components/pages/default/profile/edit.vue";
 import ProfileChangePassword from "./components/pages/default/profile/changepassword.vue";
+import ProfileConfiguration from "./components/pages/default/profile/configuration.vue";
 import Configuration from "./components/pages/default/Configuration.vue";
 import ParameterSettings from "./components/pages/default/ParameterSettings.vue";
 import ServerInformationPage from "./components/pages/default/ServerInformation.vue";
@@ -10,12 +11,15 @@ import AdminLTEModelDisplayTextPage from "./components/pages/default/AdminLTEMod
 import AdminLTEUserList from "./components/pages/default/adminlteuser/list.vue";
 import AdminLTEUserDetail from "./components/pages/default/adminlteuser/detail.vue";
 import AdminLTEUserEdit from "./components/pages/default/adminlteuser/edit.vue";
+import AdminLTEUserConfiguration from "./components/pages/default/adminlteuser/configuration.vue";
 import AdminLTEUserPermission from "./components/pages/default/adminlteuser/permission.vue";
 import AdminLTEUserGroupList from "./components/pages/default/adminlteusergroup/list.vue";
 import AdminLTEUserGroupDetail from "./components/pages/default/adminlteusergroup/detail.vue";
 import AdminLTEUserGroupEdit from "./components/pages/default/adminlteusergroup/edit.vue";
 import AdminLTEUserGroupPermission from "./components/pages/default/adminlteusergroup/permission.vue";
 import AdminLTEUserGroupLayout from "./components/pages/default/adminlteusergroup/layout.vue";
+import AdminLTEUserParameterSettings from "./components/pages/default/adminlteusergroup/parametersettings.vue";
+import AdminLTEUserGroupConfiguration from "./components/pages/default/adminlteusergroup/configuration.vue";
 {{ROUTES_MODEL_DEFAULT_IMPORT_DEFINITONS}}
 /* {{@snippet:import_files}} */
 
@@ -25,20 +29,24 @@ export default {
     "/profile/detail": ProfileDetail,
     "/profile/edit": ProfileEdit,
     "/profile/changepassword": ProfileChangePassword,
+    "/profile/configuration": ProfileConfiguration,
     "/configuration": Configuration,
     "/parameter_settings": ParameterSettings,
     "/server_information": ServerInformationPage,
     "/menu_configuration": MenuConfigurationPage,
     "/adminltemodeldisplaytext": AdminLTEModelDisplayTextPage,
     "/adminlteuser": AdminLTEUserList,
-    "/adminlteuser/detail/:id": AdminLTEUserDetail,
+    "/adminlteuser/detail/:id": AdminLTEUserEdit,
     "/adminlteuser/edit/:id": AdminLTEUserEdit,
+    "/adminlteuser/configuration/:current_id": AdminLTEUserConfiguration,
     "/adminlteuser/permission/:id": AdminLTEUserPermission,
     "/adminlteusergroup": AdminLTEUserGroupList,
-    "/adminlteusergroup/detail/:id": AdminLTEUserGroupDetail,
+    "/adminlteusergroup/detail/:id": AdminLTEUserGroupEdit,
     "/adminlteusergroup/edit/:id": AdminLTEUserGroupEdit,
     "/adminlteusergroup/permission/:id": AdminLTEUserGroupPermission,
     "/adminlteusergroup/layout/:id": AdminLTEUserGroupLayout,
+    "/adminlteusergroup/parametersettings/:owner_group": AdminLTEUserParameterSettings,
+    "/adminlteusergroup/configuration/:current_id": AdminLTEUserGroupConfiguration,
 {{ROUTES_MODEL_DEFAULT_EXPORT_DEFINITONS}}
 /* {{@snippet:export_files}} */
 };

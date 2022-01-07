@@ -12,8 +12,8 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
-                                <li class="breadcrumb-item"><a href="configuration">{{ $t('Configuration') }}</a></li>
-                                <li class="breadcrumb-item active">{{ $t('Parameter Settings') }}</li>
+                                <li class="breadcrumb-item"><a :href="backbuttonURL">{{ $t('User Group') }}</a></li>
+                                <li class="breadcrumb-item"><a :href="configurationURL">{{ $t('Configuration') }}</a></li>
                             </ol>
                         </div>
                     </div>
@@ -67,11 +67,11 @@
                                 <input type="hidden" id="system" value="">
                                 <input type="hidden" id="editable" value="">
                                 <input type="hidden" id="owner" value="">
-                                <input type="hidden" id="is_owner" value="" v-model="is_owner">
+                                <input type="hidden" id="is_owner" v-model="is_owner">
                                 <input type="hidden" id="currentKey" value="">
                                 <input type="hidden" id="currentParent" value="">
-                                <input type="hidden" id="item_data" v-model="item_data" @click="updateForm" value="">
-                                <input type="hidden" id="exception_key" v-model="exception_key" @click="refreshListByKey" value="">
+                                <input type="hidden" id="item_data" v-model="item_data" @click="updateForm">
+                                <input type="hidden" id="exception_key" v-model="exception_key" @click="refreshListByKey">
                                 
                                 <div class="row">
                                     <div class="form-group col-lg-12" v-show="(1 == is_owner)">
@@ -97,6 +97,48 @@
                                                     class="item-menu">
                                                 <label for="enabled" class="">
                                                     {{ $t('Enabled') }}  
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-12">
+                                        <div class="">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox"
+                                                    id="show_on_group"
+                                                    name="show_on_group"
+                                                    class="item-menu">
+                                                <label for="show_on_group" class="">
+                                                    {{ $t('Show on group page') }}  
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-12">
+                                        <div class="">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox"
+                                                    id="show_on_user"
+                                                    name="show_on_user"
+                                                    class="item-menu">
+                                                <label for="show_on_user" class="">
+                                                    {{ $t('Show on user page') }}  
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-12">
+                                        <div class="">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox"
+                                                    id="show_on_profile"
+                                                    name="show_on_profile"
+                                                    class="item-menu">
+                                                <label for="show_on_profile" class="">
+                                                    {{ $t('Show on profile page') }}  
                                                 </label>
                                             </div>
                                         </div>
@@ -599,9 +641,11 @@
 export default {
     data() {
         return {
+            owner_group: 0,
             main_folder: '',
             pagename: '',
             form: new Form({
+                'owner_group': this.owner_group,
                 'config_json': '',
                 'files': [],
             }),
@@ -637,7 +681,7 @@ export default {
                 is_data_loaded: false,
                 is_post_success: false,
                 external_files: [
-                    ("/js/adminlte/config_editor.js"),
+                    ("/js/adminlte/user_config_editor.js"),
                     ("/js/adminlte/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
                     ("/js/adminlte/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
                     ("/js/adminlte/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"),
@@ -648,6 +692,22 @@ export default {
             },
             body_loader_active: false,
         };
+    },
+    computed: {
+        backbuttonURL() {
+            let URL = '/' + this.main_folder + '/adminlteusergroup';
+            if (this.owner_group > 0) {
+                URL = URL + '/detail/' + this.owner_group;
+            }
+            return URL;
+        },
+        configurationURL() {
+            let URL = '/' + this.main_folder + '/adminlteusergroup';
+            if (this.owner_group > 0) {
+                URL = URL + '/configuration/' + this.owner_group;
+            }
+            return URL;
+        },
     },
     methods: {
         updateForm: function() {
@@ -663,6 +723,9 @@ export default {
             this.is_owner = current_data["is_owner"];
             document.getElementById("enabled").checked = current_data["enabled"];
             document.getElementById("required").checked = current_data["required"];
+            document.getElementById("show_on_group").checked = current_data["show_on_group"];
+            document.getElementById("show_on_user").checked = current_data["show_on_user"];
+            document.getElementById("show_on_profile").checked = current_data["show_on_profile"];
             this.multiple = current_data["multiple"];
             $("#__parent").val(current_data["__parent"]).trigger('change');
             document.getElementById("basekey").value = current_data["basekey"];
@@ -820,7 +883,7 @@ export default {
 
             this.page.is_data_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/get_json"))
+            axios.get(AdminLTEHelper.getAPIURL("adminlteuserconfig/get_json/" + this.owner_group))
                 .then(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
@@ -841,7 +904,7 @@ export default {
 
             this.page.is_listbykey_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/get_recordlist"))
+            axios.get(AdminLTEHelper.getAPIURL("adminlteuserconfig/get_recordlist/" + this.owner_group))
                 .then(({ data }) => {
                     this.page.is_listbykey_loaded = true;
                     this.page.is_listbykey_loading = false;
@@ -862,12 +925,12 @@ export default {
             self.form.config_json = str;
             self.form.files = self.uploadedFiles;
 
-            self.form.post(AdminLTEHelper.getAPIURL("adminlteconfig/post_json")) */
+            self.form.post(AdminLTEHelper.getAPIURL("adminlteuserconfig/post_json")) */
 
 
 
             let formData = new FormData();
-            
+            formData.append('owner_group', self.owner_group);
             formData.append('config_json', self.page.editor.getString());
             
             for (const [__key, file] of Object.entries(self.uploadedFiles)) {
@@ -879,7 +942,7 @@ export default {
             self.$Progress.start();
 
             axios.post( 
-                    AdminLTEHelper.getAPIURL("adminlteconfig/post_json"),
+                    AdminLTEHelper.getAPIURL("adminlteuserconfig/post_json"),
                     formData,
                     {
                         headers: {
@@ -937,6 +1000,9 @@ export default {
 
             document.getElementById("enabled").checked = true;
             document.getElementById("required").checked = false;
+            document.getElementById("show_on_group").checked = false;
+            document.getElementById("show_on_user").checked = false;
+            document.getElementById("show_on_profile").checked = false;
             document.getElementById("multiple").checked = false;
             $("#__parent").val("").trigger('change');
             document.getElementById("basekey").value = "";
@@ -1094,7 +1160,7 @@ export default {
             
             self.$Progress.start();
             
-            self.validationForm.post(AdminLTEHelper.getAPIURL("adminlteconfig/validate_item"))
+            self.validationForm.post(AdminLTEHelper.getAPIURL("adminlteuserconfig/validate_item"))
                 .then(({ data }) => {
                     self.$Progress.finish();
                     has_error = data.has_error;
@@ -1198,7 +1264,7 @@ export default {
             const btn = this.$refs.file_download;
             var __key = btn.getAttribute("data-current-key");
 
-            axios.get(AdminLTEHelper.getAPIURL("adminlteconfig/download_file/default/" + __key))
+            axios.get(AdminLTEHelper.getAPIURL("adminlteuserconfig/download_file/default/" + __key))
                 .then(({ data }) => {
                     var a = document.createElement("a"); //Create <a>
                     a.href = data.url; //Image Base64 Goes here
@@ -1452,6 +1518,7 @@ export default {
     },
     mounted() {
         this.body_loader_active = true;
+        this.owner_group = this.$route.params.owner_group;
         this.main_folder = AdminLTEHelper.getMainFolder();
         this.pagename = AdminLTEHelper.getPagename();
         this.page.is_ready = false;

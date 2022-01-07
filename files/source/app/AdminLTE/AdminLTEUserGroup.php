@@ -98,6 +98,11 @@ class AdminLTEUserGroup extends Model
     {
         return $this->hasMany(AdminLTEUser::class);
     }
+
+    public function AdminLTEUserConfig_owner_group()
+	{
+		return $this->hasMany(AdminLTEUserConfig::class);
+	}
     
     /* {{@snippet:end_methods}} */
 }
