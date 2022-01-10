@@ -92,7 +92,8 @@ class AdminLTEUserController extends Controller
         } // if (null !== $objectAdminLTEUser) {
 
         return [
-            'object' => $data
+            'object' => $data,
+            'has_config_parameter' => $this->groupHasConfigParameter($objectAdminLTEUser->adminlteusergroup_id)
         ];
     }
 
@@ -325,6 +326,30 @@ class AdminLTEUserController extends Controller
         ];
     }
 
+    public function groupHasConfigParameter($id) {
+        $configList = AdminLTEUserConfig::where('owner_group', $id)
+            ->where('deleted', 0)
+            ->where('enabled', 1)
+            ->get();
+
+        if (0 == count($configList)) {
+            return false;
+        }
+
+        foreach ($configList as $object) {
+            $metaData = json_decode($object->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $show_on_group = isset($metaData['show_on_group']) ? intval($metaData['show_on_group']) : 0;
+            $show_on_user = isset($metaData['show_on_user']) ? intval($metaData['show_on_user']) : 0;
+            $show_on_profile = isset($metaData['show_on_profile']) ? intval($metaData['show_on_profile']) : 0;
+
+            if (1 == $show_on_user) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function get_config_data(Request $request)
     {
         $objectAdminLTE = new AdminLTE();
@@ -519,7 +544,8 @@ class AdminLTEUserController extends Controller
             //echo 'parentKey:' . $parentKey . '<br>';
 
              if ( ('' != $parentKey) && !isset($configList[$parentKey]) ) {
-                $parentObject = $this->getConfigObjectById($object->id);
+                $parentObject = $this->getConfigObjectByKey($parentKey);
+                
                 $metaData = json_decode($parentObject->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
                 $show_on_group = isset($metaData['show_on_group']) ? intval($metaData['show_on_group']) : 0;
                 $show_on_user = isset($metaData['show_on_user']) ? intval($metaData['show_on_user']) : 0;

@@ -12,20 +12,25 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
-                                <li class="breadcrumb-item"><a :href="backbuttonURL">{{ $t('User Group') }}</a></li>
-                                <li class="breadcrumb-item active">{{ $t("Configuration") }}</li>
+                                <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteusergroup'">{{ $t("AdminLTEUserGroup List") }}</router-link></li>
+                                <li class="breadcrumb-item active">{{ $t("AdminLTEUserGroup Edit") }}</li>
                             </ol>
-                            
                         </div>
                         <div class="col-sm-12" v-show="page.variables.is_admin">
+                            <router-link tag="a"
+                                class="btn btn-primary btn-md btn-on-card text-white float-sm-right"
+                                :to="'/' + main_folder + '/adminlteusergroup/layout/' + current_id"
+                                style="margin-left:20px;">
+                                <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Layout Settings') }}</span>
+                            </router-link>
                             <a class="btn btn-primary btn-md btn-on-card text-white float-sm-right" :href="parameterSettingsURL">
-                                <span>Edit Parameters</span>
+                                <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>Edit Parameters</span>
                             </a>
                         </div>
                     </div>
                 </div>
             </section>
-            <section class="content">
+            <section class="content" id="sectionSearch">
                 <div class="container-fluid">
                     <div class="card recordlist-card">
                         <div class="card-body">
@@ -49,37 +54,70 @@
                 </div>
             </section>
             <section class="content">
-                <!-- <div class="container-fluid">
+                <div class="container-fluid" id="modelFormcontainer">
                     <div class="row">
-                        <div class="col-12">
-                            <h4 class="form-part-header">AdminLTe</h4>
-                        </div>
-                        <div class="col-5 col-sm-3">
-                            <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
-                                <a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill" href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home" aria-selected="true">Home</a>
-                                <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill" href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile" aria-selected="false">Profile</a>
-                                <a class="nav-link" id="vert-tabs-messages-tab" data-toggle="pill" href="#vert-tabs-messages" role="tab" aria-controls="vert-tabs-messages" aria-selected="false">Messages</a>
-                                <a class="nav-link" id="vert-tabs-settings-tab" data-toggle="pill" href="#vert-tabs-settings" role="tab" aria-controls="vert-tabs-settings" aria-selected="false">Settings</a>
-                            </div>
-                        </div>
-                        <div class="col-7 col-sm-9">
-                            <div class="tab-content" id="vert-tabs-tabContent">
-                                <div class="tab-pane text-left fade show active" id="vert-tabs-home" role="tabpanel" aria-labelledby="vert-tabs-home-tab">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
+                        <div class="col-lg-12 col-md-12 col-xs-12">
+                            <form id="AdminLTEUserGroupForm"
+                                class=""
+                                @submit.prevent="submitForm"
+                                @keydown="AdminLTEUserGroupForm.onKeydown($event)">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <input type="hidden" v-model="AdminLTEUserGroupForm.id" id="id" name="id">
+                                        <div class="row">
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="checkbox"
+                                                        id="AdminLTEUserGroupForm_enabled"
+                                                        name="AdminLTEUserGroupForm_enabled"
+                                                        class=""
+                                                        v-model="AdminLTEUserGroupForm.enabled"/>
+                                                    <label for="AdminLTEUserGroupForm_enabled" class="detail-label">
+                                                        {{ $t('Enabled') }}  
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="checkbox"
+                                                        id="AdminLTEUserGroupForm_admin"
+                                                        name="AdminLTEUserGroupForm_admin"
+                                                        class=""
+                                                        v-model="AdminLTEUserGroupForm.admin"/>
+                                                    <label for="AdminLTEUserGroupForm_admin" class="detail-label">
+                                                        {{ $t('Admin') }}  
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="checkbox"
+                                                        id="AdminLTEUserGroupForm_widget_permission"
+                                                        name="AdminLTEUserGroupForm_widget_permission"
+                                                        class=""
+                                                        v-model="AdminLTEUserGroupForm.widget_permission"/>
+                                                    <label for="AdminLTEUserGroupForm_widget_permission" class="detail-label">
+                                                        {{ $t('Widget Edit Permission') }}  
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                                <label for="AdminLTEUserGroupForm_title" class="detail-label">{{ $t('Title') }}  </label>
+                                                <input type="text"
+                                                    v-model="AdminLTEUserGroupForm.title"
+                                                    class="form-control "
+                                                    :class="{ 'is-invalid': AdminLTEUserGroupForm.errors.has('title') }"
+                                                    id="AdminLTEUserGroupForm_title"
+                                                    name="AdminLTEUserGroupForm_title">
+                                                    <has-error :form="AdminLTEUserGroupForm" field="title"></has-error>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="tab-pane fade" id="vert-tabs-profile" role="tabpanel" aria-labelledby="vert-tabs-profile-tab">
-                                    Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam.
-                                </div>
-                                <div class="tab-pane fade" id="vert-tabs-messages" role="tabpanel" aria-labelledby="vert-tabs-messages-tab">
-                                    Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna.
-                                </div>
-                                <div class="tab-pane fade" id="vert-tabs-settings" role="tabpanel" aria-labelledby="vert-tabs-settings-tab">
-                                    Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
                 <div class="container-fluid"  id="AdminLTEUserConfigFormContainer" style="padding-bottom:100px;">
                 </div>
@@ -88,7 +126,7 @@
                     <div class="col-lg-12 col-md-12 col-xs-12">
                         <button type="button"
                             id="saveConfigForm" 
-                            @click="submitConfigForm"
+                            @click="submitForm"
                             class="btn btn-success btn-md btn-on-card float-right sticky-btn">
                             {{ $t('Save') }}
                         </button>
@@ -96,133 +134,186 @@
                 </div>  
             </section>
         </div>
-        <input type="hidden" id="controller" value="configuration">
+        <input type="hidden" id="controller" value="adminlteusergroup">
 
-        <script type="text/html" id="noResultTemplate">
-            <div class="alert alert-warning" role="alert">
-                {{ $t('No results found.') }}
-            </div>
-        </script>
-        
-        <script type="text/html" id="groupMainTemplate">
-            <div class="card config-maingroup toggle-able" data-key="__group_key__">
-                <div class="card-header">
-                    <h2 class="lead mb-0"><b>{{ $t('__group_title__') }}</b></h2>
-                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+        <div class="scriptTemplates">
+            <script type="text/html" id="noResultTemplate">
+                <div class="alert alert-warning" role="alert">
+                    {{ $t('No results found.') }}
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12" id="groupContainer__group_key__">
-                        </div>
+            </script>
+            
+            <script type="text/html" id="groupMainTemplate">
+                <div class="card config-maingroup toggle-able" data-key="__group_key__">
+                    <div class="card-header">
+                        <h2 class="lead mb-0"><b>{{ $t('__group_title__') }}</b></h2>
+                        <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-3 col-sm-12">
-                            <div class="nav flex-column nav-tabs__delete__ h-100 hide-on-mobile" 
-                                id="groupTabContainer__group_key__" 
-                                role="tablist" 
-                                aria-orientation="vertical">
-                            </div>
-                            <select class="dropdownTabGroup__delete__ show-on-mobile" 
-                                id="groupDropdownTabContainer__group_key__" 
-                                data-tab-container-id="groupTabContentContainer__group_key__"></select>
-                        </div>
-                        <div class="col-lg-8 col-md-9 col-sm-12">
-                            <div class="tab-content" id="groupTabContentContainer__group_key__">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12" id="groupContainer__group_key__">
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-3 col-sm-12">
+                                <div class="nav flex-column nav-tabs__delete__ h-100 hide-on-mobile" 
+                                    id="groupTabContainer__group_key__" 
+                                    role="tablist" 
+                                    aria-orientation="vertical">
+                                </div>
+                                <select class="dropdownTabGroup__delete__ show-on-mobile" 
+                                    id="groupDropdownTabContainer__group_key__" 
+                                    data-tab-container-id="groupTabContentContainer__group_key__"></select>
+                            </div>
+                            <div class="col-lg-8 col-md-9 col-sm-12">
+                                <div class="tab-content" id="groupTabContentContainer__group_key__">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </script>
-        <!-- <script type="text/html" id="groupTemplateLevel0">
-            <div class="row config-maingroup toggle-able" data-key="__group_key__">
-                <div class="col-lg-4 col-md-4 col-xs-12 ">
-                    <h4 class="form-part-header">{{ $t('__group_title__') }}</h4>
-                    <h6 class="form-part-instructions">
-                        {{ $t('__description__') }}
-                    </h6>
-                </div>
-                <div class="col-lg-8 col-md-8 col-xs-12">
-                    <div class="row" id="groupContainer__group_key__">
-                    </div>                    
-                </div>
-            </div>
-        </script> -->
+            </script>
 
+            <script type="text/html" id="groupTabTemplate">
+                <a class="nav-link toggle-able" 
+                    data-key="__group_key__" 
+                    id="__group_key_converted__-tab" 
+                    data-toggle="pill" 
+                    href="#__group_key_converted__-content" 
+                    role="tab" 
+                    aria-controls="__group_key_converted__-content" 
+                    aria-selected="false">
+                    {{ $t('__group_title__') }}
+                </a>
+            </script>
+            <script type="text/html" id="groupDropdownTabTemplate">
+                <option value="__group_key_converted__-tab">
+                    {{ $t('__group_title__') }}
+                </option>
+            </script>
 
-        <script type="text/html" id="groupTabTemplate">
-            <a class="nav-link toggle-able" 
-                data-key="__group_key__" 
-                id="__group_key_converted__-tab" 
-                data-toggle="pill" 
-                href="#__group_key_converted__-content" 
-                role="tab" 
-                aria-controls="__group_key_converted__-content" 
-                aria-selected="false">
-                {{ $t('__group_title__') }}
-            </a>
-        </script>
-        <script type="text/html" id="groupDropdownTabTemplate">
-            <option value="__group_key_converted__-tab">
-                {{ $t('__group_title__') }}
-            </option>
-        </script>
-
-        <script type="text/html" id="groupContentTemplate">
-            <div class="tab-pane fade toggle-able" 
-                data-key="__group_key__" 
-                id="__group_key_converted__-content" 
-                role="tabpanel" 
-                aria-labelledby="__group_key_converted__-tab">
-                <div class="row" id="groupContainer__group_key__">
-                </div>
-            </div>
-        </script>
-
-        <script type="text/html" id="groupCardTemplate">
-            <div class="card toggle-able" data-key="__group_key__">
-                <div class="card-header">
-                    <h2 class="lead mb-0"><b>{{ $t('__group_title__') }}</b></h2>
-                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                </div>
-                <div class="card-body">
+            <script type="text/html" id="groupContentTemplate">
+                <div class="tab-pane fade toggle-able" 
+                    data-key="__group_key__" 
+                    id="__group_key_converted__-content" 
+                    role="tabpanel" 
+                    aria-labelledby="__group_key_converted__-tab">
                     <div class="row" id="groupContainer__group_key__">
                     </div>
                 </div>
-            </div>
-        </script>
+            </script>
 
-        <script type="text/html" id="groupTemplate">
-            <div class="col-lg-12 toggle-able" data-key="__group_key__">
-                <div style="border-bottom: 1px solid #6c757d;">
-                    <label style="font-size: 1.1rem;font-weight: 400;margin: 0;">{{ $t('__group_title__') }}</label>
-                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+            <script type="text/html" id="groupCardTemplate">
+                <div class="card toggle-able" data-key="__group_key__">
+                    <div class="card-header">
+                        <h2 class="lead mb-0"><b>{{ $t('__group_title__') }}</b></h2>
+                        <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="groupContainer__group_key__">
+                        </div>
+                    </div>
                 </div>
-                <div class="row mt-4 mb-4" id="groupContainer__group_key__">
-                </div>
-            </div>
-        </script>
+            </script>
 
-        <script type="text/html" id="selection_groupTemplateLevel0">
-            <div class="row config-maingroup toggle-able" data-key="__group_key__">
-                <div class="col-lg-4 col-md-4 col-xs-12 ">
-                    <h4 class="form-part-header">
-                        <span id="__group_key__-label" class="field-label">{{ $t('__group_title__') }}</span> <span class="__required_class__">*</span>
-                        <button type="button"
-                            class="use-parameter-default-value__delete__"
+            <script type="text/html" id="groupTemplate">
+                <div class="col-lg-12 toggle-able" data-key="__group_key__">
+                    <div style="border-bottom: 1px solid #6c757d;">
+                        <label style="font-size: 1.1rem;font-weight: 400;margin: 0;">{{ $t('__group_title__') }}</label>
+                        <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    </div>
+                    <div class="row mt-4 mb-4" id="groupContainer__group_key__">
+                    </div>
+                </div>
+            </script>
+
+            <script type="text/html" id="selection_groupTemplateLevel0">
+                <div class="row config-maingroup toggle-able" data-key="__group_key__">
+                    <div class="col-lg-4 col-md-4 col-xs-12 ">
+                        <h4 class="form-part-header">
+                            <span id="__group_key__-label" class="field-label">{{ $t('__group_title__') }}</span> <span class="__required_class__">*</span>
+                            <button type="button"
+                                class="use-parameter-default-value__delete__"
+                                data-type="selection_group"
+                                data-key="__group_key__"
+                                default-value="__default_value__"
+                                title="__use_default_title__">
+                                <span>{{ $t('Default') }}</span>
+                            </button>
+                        </h4>
+                        <h6 class="form-part-instructions">
+                            {{ $t('__description__') }}
+                        </h6>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-xs-12">
+                        <div class="row config-parameter__delete__ config-selection-group"
                             data-type="selection_group"
                             data-key="__group_key__"
-                            default-value="__default_value__"
-                            title="__use_default_title__">
-                            <span>{{ $t('Default') }}</span>
-                        </button>
-                    </h4>
-                    <h6 class="form-part-instructions">
-                        {{ $t('__description__') }}
-                    </h6>
+                            data-min-selection="__min_selection__"
+                            data-max-selection="__max_selection__"
+                            id="groupContainer__group_key__">
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-muted small">__selection_hint__</div>
+                        </div>
+                        <div class="row config-parameter-error" id="__group_key__-error">
+                            <span class="col-12 error invalid-feedback"></span>
+                        </div>                
+                    </div>
                 </div>
-                <div class="col-lg-8 col-md-8 col-xs-12">
-                    <div class="row config-parameter__delete__ config-selection-group"
+            </script>
+
+            <script type="text/html" id="selection_groupTemplateLevel1">
+                <div class="card toggle-able" data-key="__group_key__">
+                    <div class="card-header">
+                        <h2 class="lead mb-0">
+                            <b><span id="__group_key__-label" class="field-label">{{ $t('__group_title__') }}</span></b> <span class="__required_class__">*</span>
+                            <button type="button"
+                                class="use-parameter-default-value__delete__"
+                                data-type="selection_group"
+                                data-key="__group_key__"
+                                default-value="__default_value__"
+                                title="__use_default_title__">
+                                <span>{{ $t('Default') }}</span>
+                            </button>
+                        </h2>
+                        <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row config-parameter__delete__ config-selection-group"
+                            data-type="selection_group"
+                            data-key="__group_key__"
+                            data-min-selection="__min_selection__"
+                            data-max-selection="__max_selection__"
+                            id="groupContainer__group_key__">
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-muted small">__selection_hint__</div>
+                        </div>
+                        <div class="row config-parameter-error" id="__group_key__-error">
+                            <span class="col-12 error invalid-feedback"></span>
+                        </div>
+                    </div>
+                </div>
+            </script>
+
+            <script type="text/html" id="selection_groupTemplate">
+                <div class="col-lg-12 toggle-able" data-key="__group_key__">
+                    <div style="border-bottom: 1px solid #6c757d;">
+                        <label style="font-size: 1.1rem;font-weight: 400;margin: 0;">
+                            <span id="__group_key__-label" class="field-label">{{ $t('__group_title__') }}</span> <span class="__required_class__">*</span>
+                            <button type="button"
+                                class="use-parameter-default-value__delete__"
+                                data-type="selection_group"
+                                data-key="__group_key__"
+                                default-value="__default_value__"
+                                title="__use_default_title__">
+                                <span>{{ $t('Default') }}</span>
+                            </button>
+                        </label>
+                        <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    </div>
+                    <div class="row mt-4 config-parameter__delete__ config-selection-group"
                         data-type="selection_group"
                         data-key="__group_key__"
                         data-min-selection="__min_selection__"
@@ -232,110 +323,62 @@
                     <div class="row">
                         <div class="col-12 text-muted small">__selection_hint__</div>
                     </div>
-                    <div class="row config-parameter-error" id="__group_key__-error">
-                        <span class="col-12 error invalid-feedback"></span>
-                    </div>                
-                </div>
-            </div>
-        </script>
-
-        <script type="text/html" id="selection_groupTemplateLevel1">
-            <div class="card toggle-able" data-key="__group_key__">
-                <div class="card-header">
-                    <h2 class="lead mb-0">
-                        <b><span id="__group_key__-label" class="field-label">{{ $t('__group_title__') }}</span></b> <span class="__required_class__">*</span>
-                        <button type="button"
-                            class="use-parameter-default-value__delete__"
-                            data-type="selection_group"
-                            data-key="__group_key__"
-                            default-value="__default_value__"
-                            title="__use_default_title__">
-                            <span>{{ $t('Default') }}</span>
-                        </button>
-                    </h2>
-                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                </div>
-                <div class="card-body">
-                    <div class="row config-parameter__delete__ config-selection-group"
-                        data-type="selection_group"
-                        data-key="__group_key__"
-                        data-min-selection="__min_selection__"
-                        data-max-selection="__max_selection__"
-                        id="groupContainer__group_key__">
-                    </div>
-                    <div class="row">
-                        <div class="col-12 text-muted small">__selection_hint__</div>
-                    </div>
-                    <div class="row config-parameter-error" id="__group_key__-error">
+                    <div class="row mb-4 config-parameter-error" id="__group_key__-error">
                         <span class="col-12 error invalid-feedback"></span>
                     </div>
                 </div>
-            </div>
-        </script>
+            </script>
 
-        <script type="text/html" id="selection_groupTemplate">
-            <div class="col-lg-12 toggle-able" data-key="__group_key__">
-                <div style="border-bottom: 1px solid #6c757d;">
-                    <label style="font-size: 1.1rem;font-weight: 400;margin: 0;">
-                        <span id="__group_key__-label" class="field-label">{{ $t('__group_title__') }}</span> <span class="__required_class__">*</span>
-                        <button type="button"
-                            class="use-parameter-default-value__delete__"
-                            data-type="selection_group"
-                            data-key="__group_key__"
-                            default-value="__default_value__"
-                            title="__use_default_title__">
-                            <span>{{ $t('Default') }}</span>
-                        </button>
-                    </label>
+            <script type="text/html" id="selection_itemTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <div class="icheck-primary d-inline">
+                        <input type="checkbox"
+                            id="__field_key__"
+                            name="__field_key__"
+                            class="selection-item__delete__ __parent_key__-selection_item"
+                            data-parentkey="__parent_key__"
+                            data-type="checkbox">
+                        <label for="__field_key__" class="detail-label">
+                            {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                            <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                        </label>
+                    </div>
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 </div>
-                <div class="row mt-4 config-parameter__delete__ config-selection-group"
-                    data-type="selection_group"
-                    data-key="__group_key__"
-                    data-min-selection="__min_selection__"
-                    data-max-selection="__max_selection__"
-                    id="groupContainer__group_key__">
+            </script>
+            
+            <script type="text/html" id="checkboxTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <div class="icheck-primary d-inline">
+                        <input type="checkbox"
+                            id="__field_key__"
+                            name="__field_key__"
+                            class="config-parameter__delete__"
+                            data-type="checkbox">
+                        <label for="__field_key__" class="detail-label">
+                            {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                            <button type="button"
+                                class="use-parameter-default-value__delete__"
+                                data-type="checkbox"
+                                data-key="__field_key__"
+                                default-value="__default_value__"
+                                title="__use_default_title__">
+                                <span>{{ $t('Default') }}</span>
+                            </button>
+                            <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                        </label>
+                    </div>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 </div>
-                <div class="row">
-                    <div class="col-12 text-muted small">__selection_hint__</div>
-                </div>
-                <div class="row mb-4 config-parameter-error" id="__group_key__-error">
-                    <span class="col-12 error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
+            </script>
 
-        <script type="text/html" id="selection_itemTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <div class="icheck-primary d-inline">
-                    <input type="checkbox"
-                        id="__field_key__"
-                        name="__field_key__"
-                        class="selection-item__delete__ __parent_key__-selection_item"
-                        data-parentkey="__parent_key__"
-                        data-type="checkbox">
+            <script type="text/html" id="colorpickerTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                     <label for="__field_key__" class="detail-label">
-                        {{ $t('__field_title__') }} <span class="__required_class__">*</span>
-                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                    </label>
-                </div>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-            </div>
-        </script>
-        
-        <script type="text/html" id="checkboxTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <div class="icheck-primary d-inline">
-                    <input type="checkbox"
-                        id="__field_key__"
-                        name="__field_key__"
-                        class="config-parameter__delete__"
-                        data-type="checkbox">
-                    <label for="__field_key__" class="detail-label">
-                        {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
                         <button type="button"
                             class="use-parameter-default-value__delete__"
-                            data-type="checkbox"
+                            data-type="colorpicker"
                             data-key="__field_key__"
                             default-value="__default_value__"
                             title="__use_default_title__">
@@ -343,484 +386,466 @@
                         </button>
                         <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                     </label>
-                </div>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-            </div>
-        </script>
-
-        <script type="text/html" id="colorpickerTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="colorpicker"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <div class="input-group">
-                    <input type="text"
-                        class="form-control color-picker__delete__ config-parameter__delete__"
-                        data-type="colorpicker"
-                        id="__field_key__"
-                        name="__field_key__">
-                    <div class="input-group-append">
-                        <span class="input-group-text" id="__field_key__append" style="padding-left:100px;"></span>
-                    </div>
-                </div>
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-
-        <script type="text/html" id="datepickerTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="datepicker"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <input type="date"
-                    class="form-control config-parameter__delete__"
-                    data-type="datepicker"
-                    id="__field_key__"
-                    name="__field_key__">
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-
-        <script type="text/html" id="datetimepickerTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="datetimepicker"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <input type="datetime-local"
-                    class="form-control config-parameter__delete__"
-                    data-type="datetimepicker"
-                    id="__field_key__"
-                    name="__field_key__">
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-
-        <script type="text/html" id="dropdownTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="dropdown"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        data-multiple="__multiple__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <select __multiple__
-                    id="__field_key__"
-                    name="__field_key__"
-                    class="form-control configselect2__delete__ config-parameter__delete__"
-                    data-type="dropdown"
-                    data-key="__field_key__"
-                    style="width:100%;">
-                </select>
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-        <script type="text/html" id="fileTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="file"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <div class="input-field">
-                    <input type="file" id="__field_key__" name="__field_key__" 
-                        accept="__file_types__"
-                        data-type="file" 
-                        class="form-input config-file__delete__ config-parameter__delete__"
-                        style="display:none;">
-                    <button type="button" class="btn btn-primary btn-file-trigger__delete__" data-triggered-id="__field_key__">
-                        {{ $t('Browse...') }}
-                    </button>
-                    <span id="spanFileName__field_key__"></span>
-                    <input type="hidden" id="__field_key__-file_name">
-                    <input type="hidden" id="__field_key__-file_value">
-                    <input type="hidden" id="__field_key__-file_process_type">
-                    <button type="button" id="__field_key__-download_btn" class="text-btn file_download__delete__"
-                        data-key="__field_key__">
-                        <span>{{ $t('__value__') }}</span>
-                    </button>
-                    <button type="button" id="__field_key__-download_default_btn" class="text-btn default_file_download__delete__"
-                        data-key="__field_key__">
-                        <span>{{ $t('__default_value__') }}</span>
-                    </button>
-                    <button type="button" id="__field_key__-file_remove_btn" 
-                        class="text-btn text-danger file_remove__delete__" 
-                        data-key="__field_key__"
-                        title="__remove_file_title__">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </div>
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-        <script type="text/html" id="htmlEditorTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="html_editor"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <textarea id="__field_key__"
-                    name="__field_key__"
-                    data-type="html_editor"
-                    class="textarea vue-editor__delete__ config-parameter__delete__"
-                    rows="5"></textarea>
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-        <script type="text/html" id="iconPickerTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="iconpicker"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <button type="button" id="__field_key__" class="btn btn-outline-secondary icon-picker__delete__"></button>
-                <input type="hidden" id="__field_key__-value" name="__field_key__-value" data-key="__field_key__" data-type="iconpicker" class="item-widget config-parameter__delete__">
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-        <script type="text/html" id="integerTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="shorttext"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <input type="number"
-                    class="form-control config-parameter__delete__"
-                    data-type="shorttext"
-                    id="__field_key__"
-                    name="__field_key__"
-                    min="__min__"
-                    max="__max__"
-                    step="__step__">
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-        <script type="text/html" id="link_buttonTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <a class="btn btn-primary btn-md btn-on-card text-white"
-                    target="_blank"
-                    href="__url__">
-                    <span>{{ $t('__field_title__') }}</span>
-                </a>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-            </div>
-        </script>
-        <script type="text/html" id="link_textTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <a class=""
-                    target="_blank"
-                    href="__url__">
-                    <span>{{ $t('__field_title__') }}</span>
-                </a>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-            </div>
-        </script>
-        <script type="text/html" id="numberTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="shorttext"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <input type="number"
-                    class="form-control config-parameter__delete__"
-                    data-type="shorttext"
-                    id="__field_key__"
-                    name="__field_key__"
-                    min="__min__"
-                    max="__max__"
-                    step="__step__">
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-        <script type="text/html" id="passwordTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="shorttext"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <input type="password"
-                    class="form-control config-parameter__delete__"
-                    data-type="shorttext"
-                    id="__field_key__"
-                    name="__field_key__">
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-        <script type="text/html" id="radioTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="radio"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <div id="container_radio___field_key__" 
-                    class="clearfix config-parameter__delete__"
-                    data-type="radio"   
-                    data-key="__field_key__">
-                    __radio_options_html__
-                </div>
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-        <script type="text/html" id="radioOptionTemplate">
-            <div class="icheck-primary">
-                <input type="radio"
-                    id="__field_key____option_index__"
-                    name="__field_key__"
-                    class="blue-style"
-                    value="__option_value__">
-                <label for="__field_key____option_index__" class="detail-label">{{ $t('__option_title__') }}</label>
-            </div>
-        </script>
-        <script type="text/html" id="readonly_contentTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <h6>{{ $t('__field_title__') }}</h6>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <p>{{ $t('__content__') }}</p>
-            </div>
-        </script>
-        <script type="text/html" id="shorttextTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="shorttext"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        v-bindtitle="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <input type="text"
-                    class="form-control config-parameter__delete__"
-                    data-type="shorttext"
-                    id="__field_key__"
-                    name="__field_key__">
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
-                </div>
-            </div>
-        </script>
-        <script type="text/html" id="switchTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <input type="checkbox"
-                    id="__field_key__"
-                    name="__field_key__"
-                    class="vue-switch__delete__ config-parameter__delete__"
-                    data-type="switch"
-                    data-key="__field_key__"
-                    data-bootstrap-switch>
-                <label for="__field_key__" class="switch-label">
-                    <div class="bootstrap-switch bootstrap-switch-wrapper fake-switch-container" style="width: 88px;">
-                        <div class="bootstrap-switch-container" style="width: 129px; margin-left: 0px;">
-                            <span class="bootstrap-switch-handle-on bootstrap-switch-primary" style="width: 43px;">{{ $t('ON') }}</span>
-                            <span class="bootstrap-switch-label" style="width: 43px;">&nbsp;</span>
-                            <span class="bootstrap-switch-handle-off bootstrap-switch-default" style="width: 43px;">{{ $t('OFF') }}</span>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <div class="input-group">
+                        <input type="text"
+                            class="form-control color-picker__delete__ config-parameter__delete__"
+                            data-type="colorpicker"
+                            id="__field_key__"
+                            name="__field_key__">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="__field_key__append" style="padding-left:100px;"></span>
                         </div>
                     </div>
-                    {{ $t('__field_title__') }}
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="switch"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-            </div>
-        </script>
-        <script type="text/html" id="textareaTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="textarea"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <textarea rows="5"
-                    id="__field_key__"
-                    name="__field_key__"
-                    class="form-control config-parameter__delete__"
-                    data-type="textarea"></textarea>
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
                 </div>
-            </div>
-        </script>
-        <script type="text/html" id="timepickerTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <label for="__field_key__" class="detail-label">
-                    <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
-                    <button type="button"
-                        class="use-parameter-default-value__delete__"
-                        data-type="timepicker"
-                        data-key="__field_key__"
-                        default-value="__default_value__"
-                        title="__use_default_title__">
-                        <span>{{ $t('Default') }}</span>
-                    </button>
-                    <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
-                </label>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-                <input type="time"
-                    class="form-control config-parameter__delete__"
-                    data-type="timepicker"
-                    id="__field_key__"
-                    name="__field_key__">
-                <div class="config-parameter-error" id="__field_key__-error">
-                    <span class="error invalid-feedback"></span>
+            </script>
+
+            <script type="text/html" id="datepickerTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="datepicker"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <input type="date"
+                        class="form-control config-parameter__delete__"
+                        data-type="datepicker"
+                        id="__field_key__"
+                        name="__field_key__">
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
                 </div>
-            </div>
-        </script>
-        <script type="text/html" id="toggleTemplate">
-            <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
-                <div class="icheck-primary d-inline">
+            </script>
+
+            <script type="text/html" id="datetimepickerTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="datetimepicker"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <input type="datetime-local"
+                        class="form-control config-parameter__delete__"
+                        data-type="datetimepicker"
+                        id="__field_key__"
+                        name="__field_key__">
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+
+            <script type="text/html" id="dropdownTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="dropdown"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            data-multiple="__multiple__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <select __multiple__
+                        id="__field_key__"
+                        name="__field_key__"
+                        class="form-control configselect2__delete__ config-parameter__delete__"
+                        data-type="dropdown"
+                        data-key="__field_key__"
+                        style="width:100%;">
+                    </select>
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="fileTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="file"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <div class="input-field">
+                        <input type="file" id="__field_key__" name="__field_key__" 
+                            accept="__file_types__"
+                            data-type="file" 
+                            class="form-input config-file__delete__ config-parameter__delete__"
+                            style="display:none;">
+                        <button type="button" class="btn btn-primary btn-file-trigger__delete__" data-triggered-id="__field_key__">
+                            {{ $t('Browse...') }}
+                        </button>
+                        <span id="spanFileName__field_key__"></span>
+                        <input type="hidden" id="__field_key__-file_name">
+                        <input type="hidden" id="__field_key__-file_value">
+                        <input type="hidden" id="__field_key__-file_process_type">
+                        <button type="button" id="__field_key__-download_btn" class="text-btn file_download__delete__"
+                            data-key="__field_key__">
+                            <span>{{ $t('__value__') }}</span>
+                        </button>
+                        <button type="button" id="__field_key__-download_default_btn" class="text-btn default_file_download__delete__"
+                            data-key="__field_key__">
+                            <span>{{ $t('__default_value__') }}</span>
+                        </button>
+                        <button type="button" id="__field_key__-file_remove_btn" 
+                            class="text-btn text-danger file_remove__delete__" 
+                            data-key="__field_key__"
+                            title="__remove_file_title__">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="htmlEditorTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="html_editor"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <textarea id="__field_key__"
+                        name="__field_key__"
+                        data-type="html_editor"
+                        class="textarea vue-editor__delete__ config-parameter__delete__"
+                        rows="5"></textarea>
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="iconPickerTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="iconpicker"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <button type="button" id="__field_key__" class="btn btn-outline-secondary icon-picker__delete__"></button>
+                    <input type="hidden" id="__field_key__-value" name="__field_key__-value" data-key="__field_key__" data-type="iconpicker" class="item-widget config-parameter__delete__">
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="integerTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="shorttext"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <input type="number"
+                        class="form-control config-parameter__delete__"
+                        data-type="shorttext"
+                        id="__field_key__"
+                        name="__field_key__"
+                        min="__min__"
+                        max="__max__"
+                        step="__step__">
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="link_buttonTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <a class="btn btn-primary btn-md btn-on-card text-white"
+                        target="_blank"
+                        href="__url__">
+                        <span>{{ $t('__field_title__') }}</span>
+                    </a>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                </div>
+            </script>
+            <script type="text/html" id="link_textTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <a class=""
+                        target="_blank"
+                        href="__url__">
+                        <span>{{ $t('__field_title__') }}</span>
+                    </a>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                </div>
+            </script>
+            <script type="text/html" id="numberTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="shorttext"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <input type="number"
+                        class="form-control config-parameter__delete__"
+                        data-type="shorttext"
+                        id="__field_key__"
+                        name="__field_key__"
+                        min="__min__"
+                        max="__max__"
+                        step="__step__">
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="passwordTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="shorttext"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <input type="password"
+                        class="form-control config-parameter__delete__"
+                        data-type="shorttext"
+                        id="__field_key__"
+                        name="__field_key__">
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="radioTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="radio"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <div id="container_radio___field_key__" 
+                        class="clearfix config-parameter__delete__"
+                        data-type="radio"   
+                        data-key="__field_key__">
+                        __radio_options_html__
+                    </div>
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="radioOptionTemplate">
+                <div class="icheck-primary">
+                    <input type="radio"
+                        id="__field_key____option_index__"
+                        name="__field_key__"
+                        class="blue-style"
+                        value="__option_value__">
+                    <label for="__field_key____option_index__" class="detail-label">{{ $t('__option_title__') }}</label>
+                </div>
+            </script>
+            <script type="text/html" id="readonly_contentTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <h6>{{ $t('__field_title__') }}</h6>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <p>{{ $t('__content__') }}</p>
+                </div>
+            </script>
+            <script type="text/html" id="shorttextTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="shorttext"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            v-bindtitle="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <input type="text"
+                        class="form-control config-parameter__delete__"
+                        data-type="shorttext"
+                        id="__field_key__"
+                        name="__field_key__">
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="switchTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
                     <input type="checkbox"
                         id="__field_key__"
                         name="__field_key__"
-                        class="config-parameter__delete__ config-toggle__delete__"
-                        data-toggle-elements="__toggle_elements__"
-                        data-type="toggle">
-                    <label for="__field_key__" class="detail-label">
-                        {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                        class="vue-switch__delete__ config-parameter__delete__"
+                        data-type="switch"
+                        data-key="__field_key__"
+                        data-bootstrap-switch>
+                    <label for="__field_key__" class="switch-label">
+                        <div class="bootstrap-switch bootstrap-switch-wrapper fake-switch-container" style="width: 88px;">
+                            <div class="bootstrap-switch-container" style="width: 129px; margin-left: 0px;">
+                                <span class="bootstrap-switch-handle-on bootstrap-switch-primary" style="width: 43px;">{{ $t('ON') }}</span>
+                                <span class="bootstrap-switch-label" style="width: 43px;">&nbsp;</span>
+                                <span class="bootstrap-switch-handle-off bootstrap-switch-default" style="width: 43px;">{{ $t('OFF') }}</span>
+                            </div>
+                        </div>
+                        {{ $t('__field_title__') }}
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="switch"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
                         <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
                     </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                 </div>
-                <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
-            </div>
-        </script>
+            </script>
+            <script type="text/html" id="textareaTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="textarea"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <textarea rows="5"
+                        id="__field_key__"
+                        name="__field_key__"
+                        class="form-control config-parameter__delete__"
+                        data-type="textarea"></textarea>
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="timepickerTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <label for="__field_key__" class="detail-label">
+                        <span id="__field_key__-label" class="field-label">{{ $t('__field_title__') }}</span> <span class="__required_class__">*</span>
+                        <button type="button"
+                            class="use-parameter-default-value__delete__"
+                            data-type="timepicker"
+                            data-key="__field_key__"
+                            default-value="__default_value__"
+                            title="__use_default_title__">
+                            <span>{{ $t('Default') }}</span>
+                        </button>
+                        <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                    </label>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                    <input type="time"
+                        class="form-control config-parameter__delete__"
+                        data-type="timepicker"
+                        id="__field_key__"
+                        name="__field_key__">
+                    <div class="config-parameter-error" id="__field_key__-error">
+                        <span class="error invalid-feedback"></span>
+                    </div>
+                </div>
+            </script>
+            <script type="text/html" id="toggleTemplate">
+                <div class="__grid_class__ mb-20 toggle-able" data-key="__field_key__">
+                    <div class="icheck-primary d-inline">
+                        <input type="checkbox"
+                            id="__field_key__"
+                            name="__field_key__"
+                            class="config-parameter__delete__ config-toggle__delete__"
+                            data-toggle-elements="__toggle_elements__"
+                            data-type="toggle">
+                        <label for="__field_key__" class="detail-label">
+                            {{ $t('__field_title__') }} <span class="__required_class__">*</span>
+                            <i class="fas fa-info-circle __hint_class__" data-toggle="__data_toggle__" data-placement="top" title="__hint__"></i>
+                        </label>
+                    </div>
+                    <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
+                </div>
+            </script>
+        </div>
 
         <span class="d-none" id="btnUseDefaultTitle">{{ $t('Set default value') }}</span>
         <span class="d-none" id="btnRemoveFileTitle">{{ $t('Remove file') }}</span>
@@ -835,6 +860,16 @@ export default {
         return {
             current_id: 0,
             main_folder: '',
+            pagename: '',
+			AdminLTEUserGroupForm: new Form({
+                'debug_mode': false,
+                'id': this.current_id,
+                'enabled': false,
+                'admin': false,
+                'widget_permission': false,
+                'title': ''
+            }),
+            has_config_parameter: false,
             list: [],
             search_text: '',
             current_page: 1,
@@ -856,6 +891,12 @@ export default {
             init_toggles:false,
             page: {
                 is_ready: false,
+                has_post_error: false,
+                post_error_msg: '',
+                is_data_loading: false,
+                is_data_loaded: false,
+                is_files_loading: false,
+                is_files_loaded: false,
                 has_server_error: false,
                 variables: [],
                 is_authorized: true,
@@ -909,14 +950,21 @@ export default {
                 return;
             }
 
-            if (!self.page.is_variables_loaded && !self.page.is_configlist_loaded) {
+            if (!self.page.is_variables_loaded 
+                && !self.page.is_data_loaded
+                && !self.page.is_files_loaded 
+                && !self.page.is_configlist_loaded) {
                 self.$Progress.start();
             }
 
             if (!self.page.is_variables_loaded) {
                 self.loadPageVariables();
             } else {
-                if (self.page.is_configlist_loaded) {
+                if (!self.page.is_files_loaded) {
+                    self.load_files();
+                } else if (!self.page.is_data_loaded) {
+                    self.loadModelData();
+                } else if (self.page.is_configlist_loaded) {
                     self.$Progress.finish();
                     self.page.is_ready = true;
                 } else {
@@ -924,10 +972,93 @@ export default {
                         function() {
                             AdminLTEHelper.initializePermissions(self.page.variables, true);
                             self.renderForm();
+                            if (!self.has_config_parameter) {
+                                document.getElementById("sectionSearch").style.display = "none";
+                                document.getElementById("AdminLTEUserConfigFormContainer").style.display = "none";
+                            }
                         }
                     );
                 }
             }
+        },
+        load_files: function () {
+            if (this.page.is_files_loading) {
+                return;
+            }
+
+            this.page.is_files_loading = true;
+
+            axios.get(AdminLTEHelper.getAPIURL("adminlteusergroup/get_files/" + this.current_id))
+                .then(({ data }) => {
+                    this.page.is_files_loaded = true;
+                    this.page.is_files_loading = false;
+                    this.files = data.list;
+                    this.processLoadQueue();
+                }).catch(({ data }) => {
+                    this.page.is_files_loaded = true;
+                    this.page.is_files_loading = false;
+                    this.$Progress.fail();
+                    this.page.has_server_error = true;
+                    this.processLoadQueue();
+                });
+        },
+        loadModelData: function () {
+            if (this.page.is_data_loading) {
+                return;
+            }
+
+            this.page.is_data_loading = true;
+
+            axios.get(AdminLTEHelper.getAPIURL("adminlteusergroup/get/" + this.current_id))
+                .then(({ data }) => {
+                    this.page.is_data_loaded = true;
+                    this.page.is_data_loading = false;
+                    this.AdminLTEUserGroupForm.fill(data.object);
+                    this.has_config_parameter = data.has_config_parameter;
+                    this.processLoadQueue();
+                }).catch(({ data }) => {
+                    this.page.is_data_loaded = true;
+                    this.page.is_data_loading = false;
+                    this.$Progress.fail();
+                    this.page.has_server_error = true;
+                    this.processLoadQueue();
+                });
+        },
+        submitForm: function () {
+            var self = this;
+            self.$Progress.start();
+            self.AdminLTEUserGroupForm.post(AdminLTEHelper.getAPIURL("adminlteusergroup/post"))
+                .then(({ data }) => {
+                    self.$Progress.finish();
+                    self.current_id = data.id;
+                    self.page.has_post_error = data.has_error;
+                    self.page.post_error_msg = data.error_msg;
+                    self.page.has_server_error = false;
+                }).catch(({ data }) => {
+                    self.$Progress.fail();
+                    let errors = (self.AdminLTEUserGroupForm.errors.errors);
+                    if (undefined !== errors.error) {
+                        self.page.has_server_error = true;
+                    } else {
+                        self.page.has_post_error = true;
+                        self.page.post_error_msg = self.$t("Your changes could not be saved. Please check your details and try again.");
+                    }
+                }).finally(function() {
+                    if (!self.page.has_server_error) {
+                        if (!self.page.has_post_error) {
+                            self.submitConfigForm();
+                        } else {
+                            Vue.swal.fire({
+                                position: 'top-end',
+                                title:self.page.post_error_msg,
+                                icon: 'error',
+                                showConfirmButton: false,
+                                timer: 10000,
+                                timerProgressBar: true
+                            });
+                        }
+                    }
+                });
         },
         setListByKey: function() {
             var listByKey = {};
@@ -1318,7 +1449,7 @@ export default {
 
             $(".color-picker").on("colorpickerChange", function(event) {
                 var colorHex = event.color.toString();
-                var elAppend = document.getElementById(this.id + "append")
+                var elAppend = document.getElementById(this.current_id + "append")
                 elAppend.style.background = colorHex;
                 elAppend.style.borderColor = colorHex;
             });
@@ -1338,7 +1469,7 @@ export default {
 
             var iconPicker = $(".icon-picker").iconpicker(iconPickerOptions);
             iconPicker.on("change", function (e) {
-                document.getElementById(this.id + "-value").value = e.icon;
+                document.getElementById(this.current_id + "-value").value = e.icon;
             });
 
             $(".btn-file-trigger").on('click', function(e){
@@ -2030,7 +2161,7 @@ export default {
                 )
                 .then(({ data }) => {
                     self.$Progress.finish();
-                    self.id = data.id;
+                    self.current_id = data.id;
                     self.page.has_post_error = data.has_error;
                     self.page.post_error_msg = data.error_msg;
                     self.page.has_server_error = false;
@@ -2267,6 +2398,7 @@ export default {
         self.current_id = self.$route.params.current_id;
         self.body_loader_active = true;
         self.main_folder = AdminLTEHelper.getMainFolder();
+        self.pagename = AdminLTEHelper.getPagename();
         self.page.is_ready = false;
         AdminLTEHelper.loadExternalFiles(self.page.external_files, self.processLoadQueue());
     }

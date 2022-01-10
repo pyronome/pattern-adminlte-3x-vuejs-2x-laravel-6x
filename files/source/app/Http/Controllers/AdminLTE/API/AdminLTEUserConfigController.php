@@ -276,7 +276,7 @@ class AdminLTEUserConfigController extends Controller
             //echo 'parentKey:' . $parentKey . '<br>';
 
             if ( ('' != $parentKey) && !isset($configList[$parentKey]) ) {
-                $parentObject = $this->getConfigObjectById($object->id);
+                $parentObject = $this->getConfigObjectByKey($parentKey);
 
                 if ((null !== $parentObject) && (1 == $parentObject->enabled)) {
                     $configList[$parentKey]['object'] = $parentObject;

@@ -71,7 +71,8 @@ class AdminLTEUserGroupController extends Controller
         } // if (null !== $objectAdminLTEUserGroup) {
 
         return [
-            'object' => $data
+            'object' => $data,
+            'has_config_parameter' => $this->groupHasConfigParameter($id)
         ];
     }
 
@@ -295,6 +296,19 @@ class AdminLTEUserGroupController extends Controller
         return $return_data;
     }
 
+    public function groupHasConfigParameter($id) {
+        $configList = AdminLTEUserConfig::where('owner_group', $id)
+            ->where('deleted', 0)
+            ->where('enabled', 1)
+            ->get();
+
+        if (0 == count($configList)) {
+            return false;
+        }
+
+        return true;
+    }
+    
     public function get_config_data(Request $request)
     {
         $objectAdminLTE = new AdminLTE();
@@ -352,7 +366,6 @@ class AdminLTEUserGroupController extends Controller
             }
         } // foreach ($objectList as $object)
 
-   
         $this->setConfigTree($configList);
 
         $keys = array_keys($configList);
@@ -386,7 +399,7 @@ class AdminLTEUserGroupController extends Controller
         $keys = array_keys($keyOrders);
         $list = [];
         $index = 0;
-
+        
         foreach ($keys as $key) {
             $object = $configList[$key]['object'];
 
@@ -446,9 +459,9 @@ class AdminLTEUserGroupController extends Controller
                 if (('group' != $object->type) && ('selection_group' != $object->type)) {
                     $list[$index]['value'] = $this->getConfigVal($object->__key, $model_id);
                 }
+
+                $index++;
             }
-            
-            $index++;
         }
         
         $data = [
@@ -482,8 +495,8 @@ class AdminLTEUserGroupController extends Controller
             //echo 'parentKey:' . $parentKey . '<br>';
 
             if ( ('' != $parentKey) && !isset($configList[$parentKey]) ) {
-                $parentObject = $this->getConfigObjectById($object->id);
-
+                $parentObject = $this->getConfigObjectByKey($parentKey);
+                //echo 'parentObjectKey:' . $parentObject->__key . '<br>';
                 if ((null !== $parentObject) && (1 == $parentObject->enabled)) {
                     $configList[$parentKey]['object'] = $parentObject;
                     $configList[$parentKey]['searched'] = false;

@@ -1809,6 +1809,9 @@ function MenuEditor(idSelector, options) {
         objectData["__parent"] = newParent;
         objectData["title"] = newTitle;
 
+        console.log("2")
+        console.log(objectData)
+
         if (oldParent != newParent) {
             this.update_parentChanged($cEl, oldParent, newParent, oldKey, newKey, objectData);
         } else {
@@ -2150,6 +2153,8 @@ function MenuEditor(idSelector, options) {
             || ("toggle" == type)
             ) {
             default_val = document.getElementById("default_value_checkbox").value;
+        } else if ("file" == type){
+            default_val = document.getElementById("default_value_file-file_name").value;
         } else if (
             ("dropdown" == type)
             || ("password" == type)
