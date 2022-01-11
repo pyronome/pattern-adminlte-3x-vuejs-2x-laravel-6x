@@ -42,6 +42,7 @@ class AdminLTE
 		'AdminLTEUser',
 		'AdminLTEUserGroup',
 		'AdminLTEUserConfig',
+		'AdminLTEUserConfigVal',
 		'AdminLTEUserConfigFile',
 		'AdminLTEUserLayout',
 		'AdminLTEVariable',
