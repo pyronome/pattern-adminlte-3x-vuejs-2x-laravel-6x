@@ -16,6 +16,11 @@ use App\AdminLTE\AdminLTEPermission;
 use App\AdminLTE\AdminLTEMenu;
 use App\AdminLTE\AdminLTEMeta;
 use App\AdminLTE\AdminLTEConfig;
+use App\AdminLTE\AdminLTEUserConfig;
+use App\AdminLTE\AdminLTEUserConfigVal;
+use App\AdminLTE\AdminLTEUserConfigFile;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 use PDO;
 
 /* {{@snippet:begin_class}} */
@@ -2169,6 +2174,7 @@ class AdminLTE
 			'AdminLTEUser',
 			'AdminLTEUserGroup',
 			'AdminLTEUserConfig',
+			'AdminLTEUserConfigVal',
 			'AdminLTEUserConfigFile',
 			'AdminLTEUserLayout',
 			'AdminLTEVariable',
@@ -2938,6 +2944,136 @@ class AdminLTE
 
 				$returnVal .= $partValue;
 			}
+		}
+
+		return $returnVal;
+	}
+
+	public function getUserConfigParameterValue($parameter, $type, $model_id) {
+		$returnVal = '';
+		$groupId = 0;
+		$userId = 0;
+
+		if ('group' == $type) {
+			$groupId = $model_id;
+		} else {
+			$userId = $model_id;
+			$objectAdminLTEUser = AdminLTEUser::find($userId);
+			$groupId = $objectAdminLTEUser->adminlteusergroup_id;
+		}
+
+		$objConfig = AdminLTEUserConfig::where('__key', $parameter)
+			->where('deleted', 0)
+			->where('owner_group', $groupId)
+			->first();
+
+		if (null !== $objConfig) {
+			$metaData = json_decode($objConfig->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $show_on_group = isset($metaData['show_on_group']) ? intval($metaData['show_on_group']) : 0;
+
+			if ("group" == $type) {
+				$returnVal = $this->getGroupConfigVal($objConfig->__key, $groupId);
+			} else {
+				$returnVal = $this->getUserConfigVal($objConfig->__key, $userId, $show_on_group, $groupId);
+			}
+
+			if (empty($returnVal)) {
+				$returnVal = $objConfig->default_value;
+			}
+
+			if ('selection_group' == $objConfig->type) {
+				$returnVal = $this->getUserConfigSelectionGroupVal($returnVal, $type, $model_id);
+			}
+		}
+		
+		return $returnVal;
+	}
+
+	public function getUserConfigVal($configKey, $userId, $show_on_group, $groupId) {
+        $val = '';
+        $strKey = $configKey . ':0:' . $userId;
+        $__key = hash('sha256', $strKey);
+
+        $object = AdminLTEUserConfigVal::where('__key', $__key)
+            ->where('deleted', 0)
+            ->first();
+
+        if (null !== $object) {
+            try {
+                $val = Crypt::decryptString($object->value);
+            } catch (DecryptException $e) {
+                $val = '';
+            }
+        }
+
+        if (('' == $val) && (1 == $show_on_group)) {
+            $val = $this->getGroupConfigVal($configKey, $groupId);
+        }
+
+        return $val;
+    }
+
+    public function getGroupConfigVal($configKey, $groupId) {
+        $val = '';
+        $strKey = $configKey . ':' . $groupId . ':' . '0';
+        $__key = hash('sha256', $strKey);
+
+        $object = AdminLTEUserConfigVal::where('__key', $__key)
+            ->where('deleted', 0)
+            ->first();
+
+        if (null !== $object) {
+            try {
+                $val = Crypt::decryptString($object->value);
+            } catch (DecryptException $e) {
+                $val = '';
+            }
+        }
+
+        return $val;
+    }
+	
+	public function getUserConfigSelectionGroupVal($selectionGroupValue, $type, $model_id) {
+		if ('' == $selectionGroupValue) {
+			return $selectionGroupValue;
+		}
+
+		$parts = explode(',', $selectionGroupValue);
+		$returnVal = '';
+
+		foreach ($parts as $key) {
+			$partValue = $this->getUserConfigSelectionItemValue($key, $type, $model_id);
+			
+			if ('' != $partValue) {
+				if ('' != $returnVal) {
+					$returnVal .= ',';
+				}
+
+				$returnVal .= $partValue;
+			}
+		}
+
+		return $returnVal;
+	}
+
+	public function getUserConfigSelectionItemValue($key, $type, $model_id) {
+		$returnVal = '';
+
+		if ('group' == $type) {
+			$groupId = $model_id;
+		} else {
+			$userId = $model_id;
+			$objectAdminLTEUser = AdminLTEUser::find($userId);
+			$groupId = $objectAdminLTEUser->adminlteusergroup_id;
+		}
+
+		$objConfig = AdminLTEUserConfig::where('__key', $key)
+			->where('deleted', 0)
+			->where('owner_group', $groupId)
+			->first();
+
+		if (null !== $objConfig) {
+			$returnVal = $objConfig->value;
 		}
 
 		return $returnVal;

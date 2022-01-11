@@ -456,9 +456,9 @@ class AdminLTEUserGroupController extends Controller
                 $list[$index]['show_on_profile'] = $show_on_profile;
 
                 $list[$index]['value'] = '';
-                if (('group' != $object->type) && ('selection_group' != $object->type)) {
+                if ('group' != $object->type) {
                     $list[$index]['value'] = $this->getConfigVal($object->__key, $model_id);
-                }
+                } 
 
                 $index++;
             }
@@ -614,6 +614,54 @@ class AdminLTEUserGroupController extends Controller
 
         return $val;
     }
+
+    public function getUserConfigSelectionGroupVal($selectionGroupValue, $type, $model_id) {
+		if ('' == $selectionGroupValue) {
+			return $selectionGroupValue;
+		}
+
+		$parts = explode(',', $selectionGroupValue);
+		$returnVal = '';
+
+		foreach ($parts as $key) {
+			$partValue = $this->getUserConfigSelectionItemValue($key, $type, $model_id);
+			
+			if ('' != $partValue) {
+				if ('' != $returnVal) {
+					$returnVal .= ',';
+				}
+
+				$returnVal .= $partValue;
+			}
+		}
+
+		return $returnVal;
+	}
+
+    public function getUserConfigSelectionItemValue($key, $type, $model_id) {
+		$returnVal = '';
+
+		if ('group' == $type) {
+			$groupId = $model_id;
+		} else {
+			$userId = $model_id;
+			$objectAdminLTEUser = AdminLTEUser::find($userId);
+			$groupId = $objectAdminLTEUser->adminlteusergroup_id;
+		}
+
+		$objConfig = AdminLTEUserConfig::where('__key', $key)
+			->where('deleted', 0)
+			->where('owner_group', $groupId)
+			->first();
+
+		if (null !== $objConfig) {
+			$returnVal = $objConfig->value;
+		}
+
+		return $returnVal;
+	}
+
+    
 
     public function download_file(Request $request) {
         $parameters = $request->route()->parameters();

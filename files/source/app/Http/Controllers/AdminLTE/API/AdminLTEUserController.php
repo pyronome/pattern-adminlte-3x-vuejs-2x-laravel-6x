@@ -505,7 +505,7 @@ class AdminLTEUserController extends Controller
                 $list[$index]['show_on_profile'] = $show_on_profile;
 
                 $list[$index]['value'] = '';
-                if (('group' != $object->type) && ('selection_group' != $object->type)) {
+                if ('group' != $object->type) {
                     $list[$index]['value'] = $this->getConfigVal($object->__key, $model_id, $show_on_group, $object->owner_group);
                 }
 

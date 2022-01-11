@@ -2035,10 +2035,11 @@ export default {
                     self.page.has_server_error = true;
                     self.processLoadQueue();
                 }).finally(function() {
-                   AdminLTEHelper.initializePermissions(self.page.variables, true);
+                   /* AdminLTEHelper.initializePermissions(self.page.variables, true);
                    let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, "configuration");
                    self.page.is_authorized = authorize.status;
-                   self.page.unauthorized_type = authorize.type;
+                   self.page.unauthorized_type = authorize.type; */
+                   self.page.is_authorized = true;
                    self.processLoadQueue();
                 });
         },
@@ -2176,9 +2177,9 @@ export default {
                                 showConfirmButton: false,
                                 timer: 2000,
                                 timerProgressBar: true,
-                                /* onClose: () => {
+                                onClose: () => {
                                     self.reloadPage();
-                                } */
+                                }
                             });
                         } else {
                             self.renderFormErrors(self.page.post_error_msg);

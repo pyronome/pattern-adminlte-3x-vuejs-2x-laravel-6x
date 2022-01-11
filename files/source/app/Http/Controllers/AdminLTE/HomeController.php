@@ -30,6 +30,13 @@ class HomeController extends Controller
         $viewData['project_title'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.projecttitle');
         $viewData['main_folder'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.mainfolder');
         $viewData['google_maps_api_key'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.googlemapsapikey');
+
+        // get user config val example
+        // $objectAdminLTE->getUserConfigParameterValue($parameter, $type, $modelId);
+        // $parameter: config parameter key
+        // $type: group | user
+        // $modelId: group == $type -> AdminLTEUserGroup id
+        // $modelId: user == $type -> AdminLTEUser id
         
         return view($viewName, $viewData);
     }

@@ -13,10 +13,15 @@
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
                                 <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteusergroup'">{{ $t("AdminLTEUserGroup List") }}</router-link></li>
-                                <li class="breadcrumb-item active">{{ $t("AdminLTEUserGroup Edit") }}</li>
                             </ol>
                         </div>
                         <div class="col-sm-12" v-show="page.variables.is_admin">
+                            <router-link tag="a"
+                                class="btn btn-primary btn-md btn-on-card text-white float-sm-right"
+                                :to="'/' + main_folder + '/adminlteusergroup/permission/' + current_id"
+                                style="margin-left:20px;">
+                                <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Permissions') }}</span>
+                            </router-link>
                             <router-link tag="a"
                                 class="btn btn-primary btn-md btn-on-card text-white float-sm-right"
                                 :to="'/' + main_folder + '/adminlteusergroup/layout/' + current_id"
@@ -2178,9 +2183,9 @@ export default {
                                 showConfirmButton: false,
                                 timer: 2000,
                                 timerProgressBar: true,
-                                /* onClose: () => {
+                                onClose: () => {
                                     self.reloadPage();
-                                } */
+                                }
                             });
                         } else {
                             self.renderFormErrors(self.page.post_error_msg);

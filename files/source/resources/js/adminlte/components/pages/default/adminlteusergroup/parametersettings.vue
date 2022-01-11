@@ -12,7 +12,7 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
-                                <li class="breadcrumb-item"><a :href="backbuttonURL">{{ $t('User Group') }}</a></li>
+                                <li class="breadcrumb-item"><a :href="backbuttonURL">{{ $t('AdminLTEUserGroup') }}</a></li>
                                 <li class="breadcrumb-item"><a :href="configurationURL">{{ $t('Configuration') }}</a></li>
                             </ol>
                         </div>
@@ -704,7 +704,7 @@ export default {
         configurationURL() {
             let URL = '/' + this.main_folder + '/adminlteusergroup';
             if (this.owner_group > 0) {
-                URL = URL + '/configuration/' + this.owner_group;
+                URL = URL + '/detail/' + this.owner_group;
             }
             return URL;
         },
