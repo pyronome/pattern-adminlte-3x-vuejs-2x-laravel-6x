@@ -2160,7 +2160,6 @@ function MenuEditor(idSelector, options) {
             || ("password" == type)
             || ("radio" == type)
             || ("shorttext" == type)
-            || ("selection_group" == type)
             ) {
             default_val = document.getElementById("default_value_text").value;
         } else if (("integer" == type) || ("number" == type)){
@@ -2179,6 +2178,8 @@ function MenuEditor(idSelector, options) {
             default_val = document.getElementById("default_value_colorpicker").value;
         } else if ("iconpicker" == type) {
             default_val = document.getElementById("default_value_iconpicker").value
+        } else if ("selection_group" == type) {
+            default_val = $(document.getElementById("default_value_multiple")).val().join(",");
         }
 
         return default_val;

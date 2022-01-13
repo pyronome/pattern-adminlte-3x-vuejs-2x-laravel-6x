@@ -326,9 +326,9 @@ class AdminLTEUserGroupController extends Controller
             $page = $p;
         }
 
-        $model_id = 0;
+        $objectId = 0;
         if ($o = \Request::get('o')) {
-            $model_id = $o;
+            $objectId = $o;
         }
 
         $sort_variable = 'id';
@@ -360,7 +360,7 @@ class AdminLTEUserGroupController extends Controller
         $configList = [];
 
         foreach ($objectList as $object) {
-            if ((1 == $object->enabled) && (($model_id == $object->owner_group) || (1 == $object->system))) {
+            if ((1 == $object->enabled) && (($objectId == $object->owner_group) || (1 == $object->system))) {
                 $configList[$object->__key]['object'] = $object;
                 $configList[$object->__key]['searched'] = false;
             }
@@ -457,7 +457,11 @@ class AdminLTEUserGroupController extends Controller
 
                 $list[$index]['value'] = '';
                 if ('group' != $object->type) {
-                    $list[$index]['value'] = $this->getConfigVal($object->__key, $model_id);
+                    if ('file' == $object->type) {
+                        $list[$index]['value'] = $this->getConfigFileVal($object->__key, $objectId);
+                    } else {
+                        $list[$index]['value'] = $this->getConfigVal($object->__key, $objectId);
+                    }
                 } 
 
                 $index++;
@@ -595,11 +599,10 @@ class AdminLTEUserGroupController extends Controller
         return $level;
     }
 
-    public function getConfigVal($configKey, $model_id) {
+    public function getConfigVal($configKey, $objectId) {
         $val = '';
-        $strKey = $configKey . ':' . $model_id . ':' . '0';
+        $strKey = $configKey . ':' . $objectId . ':' . '0';
         $__key = hash('sha256', $strKey);
-
         $object = AdminLTEUserConfigVal::where('__key', $__key)
             ->where('deleted', 0)
             ->first();
@@ -615,7 +618,23 @@ class AdminLTEUserGroupController extends Controller
         return $val;
     }
 
-    public function getUserConfigSelectionGroupVal($selectionGroupValue, $type, $model_id) {
+    public function getConfigFileVal($configKey, $objectId) {
+        $val = '';
+        $strKey = $configKey . ':' . $objectId . ':' . '0';
+        $__key = hash('sha256', $strKey);
+
+        $object = AdminLTEUserConfigFile::where('__key', $__key)
+            ->where('deleted', 0)
+            ->first();
+
+        if (null !== $object) {
+            $val = $object->file_name;
+        }
+
+        return $val;
+    }
+
+    public function getUserConfigSelectionGroupVal($selectionGroupValue, $type, $objectId) {
 		if ('' == $selectionGroupValue) {
 			return $selectionGroupValue;
 		}
@@ -624,7 +643,7 @@ class AdminLTEUserGroupController extends Controller
 		$returnVal = '';
 
 		foreach ($parts as $key) {
-			$partValue = $this->getUserConfigSelectionItemValue($key, $type, $model_id);
+			$partValue = $this->getUserConfigSelectionItemValue($key, $type, $objectId);
 			
 			if ('' != $partValue) {
 				if ('' != $returnVal) {
@@ -638,13 +657,13 @@ class AdminLTEUserGroupController extends Controller
 		return $returnVal;
 	}
 
-    public function getUserConfigSelectionItemValue($key, $type, $model_id) {
+    public function getUserConfigSelectionItemValue($key, $type, $objectId) {
 		$returnVal = '';
 
 		if ('group' == $type) {
-			$groupId = $model_id;
+			$groupId = $objectId;
 		} else {
-			$userId = $model_id;
+			$userId = $objectId;
 			$objectAdminLTEUser = AdminLTEUser::find($userId);
 			$groupId = $objectAdminLTEUser->adminlteusergroup_id;
 		}
@@ -722,7 +741,7 @@ class AdminLTEUserGroupController extends Controller
         ];
     }
 
-    public function validateSelectionGroup($key, $val) {
+    public function validateSelectionGroup($selectionGroup, $val) {
         $result = [
             'has_error' => false,
             'error_msg' => ''
@@ -734,7 +753,6 @@ class AdminLTEUserGroupController extends Controller
         }
         $selectedCount = count($selection_options);
 
-        $selectionGroup = $this->getConfigObjectByKey($key);
         $metaData = json_decode($selectionGroup->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
         $min_selection = isset($metaData['min_selection']) ? $metaData['min_selection'] : 0;
         $max_selection = isset($metaData['max_selection']) ? $metaData['max_selection'] : 0;
@@ -808,9 +826,11 @@ class AdminLTEUserGroupController extends Controller
                     }
                 }
             }
-            
+
+            $configObject = $this->getConfigObjectByKey($key);
+
             if (('selection_group' == $type) && ('' != $val)) {
-                $selectionGroupError = $this->validateSelectionGroup($key, $val);
+                $selectionGroupError = $this->validateSelectionGroup($configObject, $val);
 
                 if ($selectionGroupError['has_error']) {
                     $result['error_count']++;
@@ -818,7 +838,6 @@ class AdminLTEUserGroupController extends Controller
                 }
             }
 
-            $configObject = $this->getConfigObjectByKey($key);
             $metaData = json_decode($configObject->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
             $expression = $metaData['expression'];
             if ('' != $expression) {
@@ -842,7 +861,7 @@ class AdminLTEUserGroupController extends Controller
         $error_msg = '';
         $return_data = [];
         
-        $model_id = $request->input('model_id');
+        $objectId = $request->input('objectId');
 
         $config_dataJSON = $request->input('config_data');
         $config_data = json_decode(
@@ -864,7 +883,7 @@ class AdminLTEUserGroupController extends Controller
 
         foreach ($config_data as $element_data) {
             if (isset($element_data['key'])) {
-                $this->saveConfigParameter($element_data, $model_id);
+                $this->saveConfigParameter($element_data, $objectId);
 
                 if ('file' == $element_data['type']) {
                     $files[$file_index]['parameter'] = $element_data['key'];
@@ -877,9 +896,9 @@ class AdminLTEUserGroupController extends Controller
         foreach ($files as $index => $fileData) {
             if ($request->hasFile($fileData['id'])) {
                 $file = $request->file($fileData['id']);
-                $this->saveFile($model_id, $fileData['parameter'], $file);
+                $this->saveFile($objectId, $fileData['parameter'], $file);
             } else {
-                $this->updateFile($model_id, $fileData);
+                $this->updateFile($objectId, $fileData);
             }
         }
 
@@ -890,15 +909,14 @@ class AdminLTEUserGroupController extends Controller
         return $return_data;
     }
 
-    public function saveConfigParameter($element_data, $model_id)
+    public function saveConfigParameter($element_data, $objectId)
     {
         $val = '';
         if (isset($element_data['val'])) {
             $val = $element_data['val'];
         }
 
-        echo 'val eklendi:' . $element_data['key'] . '<br>';
-        $strKey = $element_data['key'] . ':' . $model_id . ':0';
+        $strKey = $element_data['key'] . ':' . $objectId . ':0';
         $__key = hash('sha256', $strKey);
 
         $object = AdminLTEUserConfigVal::where('__key', $__key)
@@ -916,7 +934,7 @@ class AdminLTEUserGroupController extends Controller
         }
     }
 
-    public function saveFile($model_id, $parameter, $file) {
+    public function saveFile($objectId, $parameter, $file) {
         /* //File Name
         echo $file->getClientOriginalName() . '<br>';
     
@@ -934,8 +952,7 @@ class AdminLTEUserGroupController extends Controller
 
         $file_name = $file->getClientOriginalName();
 
-        echo 'file eklendi:' . $parameter . '<br>';
-        $strKey = $parameter . ':' . $model_id . ':0';
+        $strKey = $parameter . ':' . $objectId . ':0';
         $__key = hash('sha256', $strKey);
 
         $object = AdminLTEUserConfigFile::where('deleted', 0)->where('file_type', '!=', 'default')->where('__key', $__key)->first();
@@ -961,13 +978,13 @@ class AdminLTEUserGroupController extends Controller
         $objConfigVal->save();
     }
 
-    public function updateFile($model_id, $file_data) {
+    public function updateFile($objectId, $file_data) {
         $processtype = $file_data['processtype'];
         if ('' == $processtype) {
             return;
         }
 
-        $strKey = $element_data['key'] . ':' . $model_id . ':0';
+        $strKey = $element_data['key'] . ':' . $objectId . ':0';
         $__key = hash('sha256', $strKey);
 
         $objConfigVal = AdminLTEUserConfigVal::where('__key', $__key)

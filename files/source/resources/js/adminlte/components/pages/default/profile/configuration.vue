@@ -41,7 +41,7 @@
             </section>
             
             <section class="content">
-                <div class="container-fluid">
+                <div class="container-fluid" id="modelFormcontainer">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-xs-12">
                             <form id="AdminLTEUserForm"
@@ -58,7 +58,7 @@
                                     <div class="card-body">
                                         <input type="hidden" v-model="AdminLTEUserForm.id" id="id" name="id">
                                         <div class="row">
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 searchable-container" data-search-text="fullname">
                                                 <label for="AdminLTEUserForm_fullname" class="detail-label">{{ $t('Fullname') }}  </label>
                                                 <input type="text"
                                                     v-model="AdminLTEUserForm.fullname"
@@ -66,7 +66,7 @@
                                                     id="AdminLTEUserForm_fullname"
                                                     name="AdminLTEUserForm_fullname">
                                             </div> 
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 searchable-container" data-search-text="username">
                                                 <label for="AdminLTEUserForm_username" class="detail-label">{{ $t('Username') }} <span class="required">*</span></label>
                                                 <input type="text"
                                                     v-model="AdminLTEUserForm.username"
@@ -76,7 +76,7 @@
                                                     name="AdminLTEUserForm_username">
                                                 <has-error :form="AdminLTEUserForm" field="username"></has-error>
                                             </div>
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 searchable-container" data-search-text="email">
                                                 <label for="AdminLTEUserForm_email" class="detail-label">{{ $t('Email') }} <span class="required">*</span></label>
                                                 <input type="email"
                                                     v-model="AdminLTEUserForm.email"
@@ -86,7 +86,7 @@
                                                     name="AdminLTEUserForm_email">
                                                 <has-error :form="AdminLTEUserForm" field="email"></has-error>
                                             </div>
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 searchable-container" data-search-text="profile image">
                                                 <label for="AdminLTEUserForm_profile_img" class="detail-label">{{ $t('Profile Image') }}  </label>
                                                 <div class="input-field">
                                                     <input type="hidden"
@@ -2105,6 +2105,8 @@ export default {
             
             AdminLTEHelper.activateSearchLoader(search_input);
 
+            self.searchForm(search_input.value);
+
             self.search_text = search_input.value;
             self.current_page = 1;
 
@@ -2113,6 +2115,27 @@ export default {
                 self.renderForm();
             });
         }, 1000),
+        searchForm: function(search_text) {
+            $("#modelFormcontainer").addClass("d-none");
+            $(".searchable-container").addClass("d-none");
+
+            var found = false;
+            var searchText = search_text.toLowerCase();
+            var items = $(".searchable-container");
+            var itemLength = items.length;
+            var strData = "";
+            for (var i = 0; i < itemLength; i++) {
+                strData = items[i].getAttribute("data-search-text");
+                if (strData.search(new RegExp(searchText, "i")) != -1) {
+                    $(items[i]).removeClass("d-none");
+                    found = true;
+                }
+            }
+
+            if (found) {
+                $("#modelFormcontainer").removeClass("d-none");
+            }
+        },
         paginate: function (page = 1) {
             this.current_page = page;
             this.loadData(function(){});

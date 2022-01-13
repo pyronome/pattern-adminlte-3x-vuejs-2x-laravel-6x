@@ -37,9 +37,9 @@ class AdminLTEUserConfigController extends Controller
             $page = $p;
         }
 
-        $model_id = 0;
+        $objectId = 0;
         if ($o = \Request::get('o')) {
-            $model_id = $o;
+            $objectId = $o;
         }
 
         $page_type = '';
@@ -80,7 +80,7 @@ class AdminLTEUserConfigController extends Controller
 
             if ($user_can_view 
                 && (1 == $object->enabled)
-                && (($model_id == $object->owner_group) || (1 == $object->system))) {
+                && (($objectId == $object->owner_group) || (1 == $object->system))) {
                 $configList[$object->__key]['object'] = $object;
                 $configList[$object->__key]['searched'] = false;
             }
@@ -175,7 +175,7 @@ class AdminLTEUserConfigController extends Controller
 
             $list[$index]['value'] = '';
             if (('group' != $object->type) && ('selection_group' != $object->type)) {
-                $list[$index]['value'] = $this->getConfigVal($object->__key, $page_type, $model_id);
+                $list[$index]['value'] = $this->getConfigVal($object->__key, $page_type, $objectId);
             }
             
             $index++;
@@ -202,13 +202,13 @@ class AdminLTEUserConfigController extends Controller
         ];
     }
 
-    public function getConfigVal($configKey, $page_type, $model_id) {
+    public function getConfigVal($configKey, $page_type, $objectId) {
         $val = '';
 
         if ('group' == $page_type) {
-            $strKey = $configKey . ':' . $model_id . ':' . '0';
+            $strKey = $configKey . ':' . $objectId . ':' . '0';
         } else {
-            $strKey = $configKey . ':' . '0' . ':' . $model_id;
+            $strKey = $configKey . ':' . '0' . ':' . $objectId;
         }
 
         $__key = hash('sha256', $strKey);
@@ -502,7 +502,7 @@ class AdminLTEUserConfigController extends Controller
         $return_data = [];
         
         $page_type = $request->input('page_type');
-        $model_id = $request->input('model_id');
+        $objectId = $request->input('objectId');
 
         $config_dataJSON = $request->input('config_data');
         $config_data = json_decode(
@@ -529,7 +529,7 @@ class AdminLTEUserConfigController extends Controller
                     $files[$file_index]['id'] = $element_data['val'];
                     $files[$file_index]['processtype'] = $request->input($element_data['key'] . 'processtype');
                 } else {
-                    $this->saveConfigParameter($element_data, $page_type, $model_id);
+                    $this->saveConfigParameter($element_data, $page_type, $objectId);
                 }
             }
         }
@@ -537,9 +537,9 @@ class AdminLTEUserConfigController extends Controller
         foreach ($files as $index => $fileData) {
             if ($request->hasFile($fileData['id'])) {
                 $file = $request->file($fileData['id']);
-                $this->saveFile($page_type, $model_id, $fileData['parameter'], $file);
+                $this->saveFile($page_type, $objectId, $fileData['parameter'], $file);
             } else {
-                $this->updateFile($page_type, $model_id, $fileData);
+                $this->updateFile($page_type, $objectId, $fileData);
             }
         }
 
@@ -550,7 +550,7 @@ class AdminLTEUserConfigController extends Controller
         return $return_data;
     }
 
-    public function saveConfigParameter($element_data, $page_type, $model_id)
+    public function saveConfigParameter($element_data, $page_type, $objectId)
     {
         $val = '';
         if (isset($element_data['val'])) {
@@ -558,9 +558,9 @@ class AdminLTEUserConfigController extends Controller
         }
 
         if ('group' == $page_type) {
-            $strKey = $element_data['key'] . ':' . $model_id . ':' . '0';
+            $strKey = $element_data['key'] . ':' . $objectId . ':' . '0';
         } else {
-            $strKey = $element_data['key'] . ':' . '0' . ':' . $model_id;
+            $strKey = $element_data['key'] . ':' . '0' . ':' . $objectId;
         }
 
         $__key = hash('sha256', $strKey);
@@ -580,7 +580,7 @@ class AdminLTEUserConfigController extends Controller
         }
     }
 
-    public function saveFile($page_type, $model_id, $parameter, $file) {
+    public function saveFile($page_type, $objectId, $parameter, $file) {
         /* //File Name
         echo $file->getClientOriginalName() . '<br>';
     
@@ -599,9 +599,9 @@ class AdminLTEUserConfigController extends Controller
         $file_name = $file->getClientOriginalName();
 
         if ('group' == $page_type) {
-            $strKey = $element_data['key'] . ':' . $model_id . ':' . '0';
+            $strKey = $element_data['key'] . ':' . $objectId . ':' . '0';
         } else {
-            $strKey = $element_data['key'] . ':' . '0' . ':' . $model_id;
+            $strKey = $element_data['key'] . ':' . '0' . ':' . $objectId;
         }
 
         $__key = hash('sha256', $strKey);
@@ -629,16 +629,16 @@ class AdminLTEUserConfigController extends Controller
         $configObject->save();
     }
 
-    public function updateFile($page_type, $model_id, $file_data) {
+    public function updateFile($page_type, $objectId, $file_data) {
         $processtype = $file_data['processtype'];
         if ('' == $processtype) {
             return;
         }
 
         if ('group' == $page_type) {
-            $strKey = $element_data['key'] . ':' . $model_id . ':' . '0';
+            $strKey = $element_data['key'] . ':' . $objectId . ':' . '0';
         } else {
-            $strKey = $element_data['key'] . ':' . '0' . ':' . $model_id;
+            $strKey = $element_data['key'] . ':' . '0' . ':' . $objectId;
         }
 
         $__key = hash('sha256', $strKey);

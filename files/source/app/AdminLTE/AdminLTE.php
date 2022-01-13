@@ -2950,17 +2950,22 @@ class AdminLTE
 		return $returnVal;
 	}
 
-	public function getUserConfigParameterValue($parameter, $type, $model_id) {
+	public function getUserConfigParameterValue($parameter, $type, $objectId) {
 		$returnVal = '';
 		$groupId = 0;
 		$userId = 0;
 
 		if ('group' == $type) {
-			$groupId = $model_id;
+			$groupId = $objectId;
+			/* $strKey = $parameter . ':' . $objectId . ':0';
+			$hashedKey = hash('sha256', $strKey); */
 		} else {
-			$userId = $model_id;
+			$userId = $objectId;
 			$objectAdminLTEUser = AdminLTEUser::find($userId);
 			$groupId = $objectAdminLTEUser->adminlteusergroup_id;
+
+			/* $strKey = $parameter . ':0:' . $objectId;
+			$hashedKey = hash('sha256', $strKey); */
 		}
 
 		$objConfig = AdminLTEUserConfig::where('__key', $parameter)
@@ -2983,7 +2988,7 @@ class AdminLTE
 			}
 
 			if ('selection_group' == $objConfig->type) {
-				$returnVal = $this->getUserConfigSelectionGroupVal($returnVal, $type, $model_id);
+				$returnVal = $this->getUserConfigSelectionGroupVal($returnVal, $type, $objectId);
 			}
 		}
 		
@@ -3034,7 +3039,7 @@ class AdminLTE
         return $val;
     }
 	
-	public function getUserConfigSelectionGroupVal($selectionGroupValue, $type, $model_id) {
+	public function getUserConfigSelectionGroupVal($selectionGroupValue, $type, $objectId) {
 		if ('' == $selectionGroupValue) {
 			return $selectionGroupValue;
 		}
@@ -3043,7 +3048,7 @@ class AdminLTE
 		$returnVal = '';
 
 		foreach ($parts as $key) {
-			$partValue = $this->getUserConfigSelectionItemValue($key, $type, $model_id);
+			$partValue = $this->getUserConfigSelectionItemValue($key, $type, $objectId);
 			
 			if ('' != $partValue) {
 				if ('' != $returnVal) {
@@ -3057,13 +3062,13 @@ class AdminLTE
 		return $returnVal;
 	}
 
-	public function getUserConfigSelectionItemValue($key, $type, $model_id) {
+	public function getUserConfigSelectionItemValue($key, $type, $objectId) {
 		$returnVal = '';
 
 		if ('group' == $type) {
-			$groupId = $model_id;
+			$groupId = $objectId;
 		} else {
-			$userId = $model_id;
+			$userId = $objectId;
 			$objectAdminLTEUser = AdminLTEUser::find($userId);
 			$groupId = $objectAdminLTEUser->adminlteusergroup_id;
 		}

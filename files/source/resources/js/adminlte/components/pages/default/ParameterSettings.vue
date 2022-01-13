@@ -435,9 +435,14 @@
                                                 || ('password' == parameter_type)
                                                 || ('radio' == parameter_type)
                                                 || ('shorttext' == parameter_type)
-                                                || ('selection_group' == parameter_type)
                                             )">
                                             <input type="text" class="form-control" id="default_value_text">
+                                        </div>
+                                        <div class="input-group" v-show="('selection_group' == parameter_type)">
+                                            <select multiple
+                                                id="default_value_multiple"
+                                                class="form-control">
+                                            </select>
                                         </div>
                                         <div class="input-group"
                                             v-show="('integer' == parameter_type) || ('number' == parameter_type)">
@@ -452,9 +457,7 @@
                                         <span class="text-muted" v-show="('radio' == parameter_type)">
                                             {{ $t('This string should be one of option values.') }}
                                         </span>
-                                        <span class="text-muted" v-show="'selection_group' == parameter_type">
-                                            {{ $t('This string is a comma-separated list of selection item keys.') }}
-                                        </span>
+                                        
                                         <div class="input-group" v-show="('datepicker' == parameter_type)">
                                             <input type="date" class="form-control" id="default_value_datepicker">
                                         </div>
@@ -643,6 +646,7 @@ export default {
                     ("/js/adminlte/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"),
                     ("/js/adminlte/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"),
                     ("/js/adminlte/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"),
+                    ("/js/adminlte/select2/dist/js/select2.min.js"),
                 ],
                 editor: null
             },
@@ -701,6 +705,7 @@ export default {
                 document.getElementById("type").disabled = true;
             }
 
+            var __key = current_data["__key"];
             var type = current_data["type"];
             var val = current_data["default_value"];
 
@@ -718,7 +723,6 @@ export default {
                 || ("password" == type)
                 || ("radio" == type)
                 || ("shorttext" == type)
-                || ("selection_group" == type)
                 ) {
                 document.getElementById("default_value_text").value = val;
             } else if (("integer" == type) || ("number" == type)){
@@ -743,8 +747,34 @@ export default {
                 } else{
                     $(document.getElementById("default_value_iconpicker_picker")).iconpicker('setIcon', val);
                 }
+            } else if ("selection_group" == type) {
+                this.setDefaultValueSelection(__key, val);
             }
-            
+        },
+        setDefaultValueSelection: function(__key, value) {
+            $("#default_value_multiple").html("");
+
+            var optionTemplateHTML = '<option value="__val__">__title__</option>';
+            var optionHTML = "";
+            var optionsHTML = "";
+
+            var arrLi = $('ul:first>li', document.getElementById(__key));
+            for (let index = 0; index < arrLi.length; index++) {
+                const li = arrLi[index];
+
+                optionHTML = optionTemplateHTML;
+                optionHTML = optionHTML
+                        .replace(/__val__/g, $(li).data("__key"))
+                        .replace(/__title__/g, $(li).data("title"));
+
+                optionsHTML = optionsHTML + optionHTML;
+            }
+
+            if ("" != optionsHTML) {
+                $("#default_value_multiple").html(optionsHTML);
+                $("#default_value_multiple").select2();
+                $("#default_value_multiple").val(value.split(",")).trigger('change');
+            }
         },
         processLoadQueue: function () {
             if (this.page.has_server_error) {

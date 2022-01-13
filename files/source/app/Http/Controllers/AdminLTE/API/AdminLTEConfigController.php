@@ -316,7 +316,7 @@ class AdminLTEConfigController extends Controller
         return $basekey;
     }
 
-    public function validateSelectionGroup($key, $val) {
+    public function validateSelectionGroup($selectionGroup, $val) {
         $result = [
             'has_error' => false,
             'error_msg' => ''
@@ -328,7 +328,6 @@ class AdminLTEConfigController extends Controller
         }
         $selectedCount = count($selection_options);
 
-        $selectionGroup = $this->getConfigObject($key);
         $metaData = json_decode($selectionGroup->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
         $min_selection = isset($metaData['min_selection']) ? $metaData['min_selection'] : 0;
         $max_selection = isset($metaData['max_selection']) ? $metaData['max_selection'] : 0;
@@ -402,9 +401,11 @@ class AdminLTEConfigController extends Controller
                     }
                 }
             }
+
+            $configObject = $this->getConfigObject($key);
             
             if (('selection_group' == $type) && ('' != $val)) {
-                $selectionGroupError = $this->validateSelectionGroup($key, $val);
+                $selectionGroupError = $this->validateSelectionGroup($configObject, $val);
 
                 if ($selectionGroupError['has_error']) {
                     $result['error_count']++;
@@ -412,7 +413,6 @@ class AdminLTEConfigController extends Controller
                 }
             }
 
-            $configObject = $this->getConfigObject($key);
             $metaData = json_decode($configObject->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
             $expression = $metaData['expression'];
             if ('' != $expression) {
