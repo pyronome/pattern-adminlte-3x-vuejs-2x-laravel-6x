@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\AdminLTE\AdminLTELog;
-use App\AdminLTEUserGroup;
+use App\AdminLTE\AdminLTEUserGroup;
 
 class AdminLTEUserGroupObserver
 {
