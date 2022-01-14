@@ -183,7 +183,7 @@
         "description":"Model Observer",
         "base":"\/project\/model_list\/model\/name",
         "enabled":"1",
-        "source":"source\/model\/observer",
+        "source":"model\/observer",
         "destination":"\/source\/app\/Observers\/{{$ __value__}}Observer.php",
         "temporary":"0",
         "skip_empty":"0",
