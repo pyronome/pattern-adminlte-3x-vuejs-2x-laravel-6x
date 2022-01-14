@@ -132,7 +132,13 @@ class AdminLTEUserController extends Controller
         }
         
         $objectAdminLTEUser->deleted = 0;
-        
+        if ($id > 0) {
+            $objectAdminLTEUser->updated_by = $User->id;
+        } else {
+            $objectAdminLTEUser->created_by = $User->id;
+            $objectAdminLTEUser->updated_by = $User->id;
+        } // if ($id > 0) {
+
         $objectAdminLTEUser->enabled = ('' != $request->input('enabled'))
             ? intval($request->input('enabled'))
             : 0;
@@ -213,6 +219,7 @@ class AdminLTEUserController extends Controller
             foreach ($objects as $object)
             {
                 $object->deleted = 1;
+                $object->updated_by = $User->id;
                 $object->save();                
             } // foreach ($objects as $object)
         }

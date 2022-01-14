@@ -19,6 +19,74 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
     public function up()
     {
         /* {{@snippet:begin_up_method}} */
+        /* {{@snippet:begin_adminltelogtable_migration}} */        
+        if (!Schema::hasTable('adminltelogtable')) {
+            Schema::create('adminltelogtable', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->timestamps();
+                $table->boolean('deleted');
+                $table->bigInteger('user_id')->default(0);
+                $table->string('type');
+                $table->string('title');
+                $table->string('sub_title');
+                $table->bigInteger('object_id')->default(0);
+                $table->text('object_old_values');
+                $table->text('object_new_values');
+                $table->text('message');
+            });
+        } else {
+            Schema::table('adminltelogtable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminltemetatable', 'user_id')) { 
+                    $table->bigInteger('user_id')->default(0)->change();
+                } else {
+                    $table->bigInteger('user_id')->default(0);
+                }
+
+                if (Schema::hasColumn('adminltelogtable', 'type')) { 
+                    $table->string('type')->change();
+                } else {
+                    $table->string('type');
+                }
+
+                if (Schema::hasColumn('adminltelogtable', 'title')) { 
+                    $table->string('title')->change();
+                } else {
+                    $table->string('title');
+                }
+
+                if (Schema::hasColumn('adminltelogtable', 'sub_title')) { 
+                    $table->string('sub_title')->change();
+                } else {
+                    $table->string('sub_title');
+                }
+                
+                if (Schema::hasColumn('adminltelogtable', 'object_id')) { 
+                    $table->bigInteger('object_id')->default(0)->change();
+                } else {
+                    $table->bigInteger('object_id')->default(0);
+                }
+
+                if (Schema::hasColumn('adminltelogtable', 'object_old_values')) { 
+                    $table->text('object_old_values')->change();
+                } else {
+                    $table->text('object_old_values');
+                }
+
+                if (Schema::hasColumn('adminltelogtable', 'object_new_values')) { 
+                    $table->text('object_new_values')->change();
+                } else {
+                    $table->text('object_new_values');
+                }
+
+                if (Schema::hasColumn('adminltelogtable', 'message')) { 
+                    $table->text('message')->change();
+                } else {
+                    $table->text('message');
+                }
+            });
+        }
+        /* {{@snippet:end_adminltelogtable_migration}} */
+        
         /* {{@snippet:begin_adminltelayouttable_migration}} */        
         if (!Schema::hasTable('adminltelayouttable')) {
             Schema::create('adminltelayouttable', function (Blueprint $table) {
@@ -149,6 +217,8 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             Schema::create('adminlteusertable', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->timestamps();
+                $table->bigInteger('created_by')->default(0);
+                $table->bigInteger('updated_by')->default(0);
                 $table->boolean('deleted')->default(0);
                 $table->boolean('enabled')->default(0);
                 $table->string('fullname')->nullable();
@@ -159,6 +229,18 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             });
         } else {
             Schema::table('adminlteusertable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminlteusertable', 'created_by')) { 
+                    $table->bigInteger('created_by')->default(0)->change();
+                } else {
+                    $table->bigInteger('created_by')->default(0);
+                }
+
+                if (Schema::hasColumn('adminlteusertable', 'updated_by')) { 
+                    $table->bigInteger('updated_by')->default(0)->change();
+                } else {
+                    $table->bigInteger('updated_by')->default(0);
+                }
+
                 if (Schema::hasColumn('adminlteusertable', 'enabled')) { 
                     $table->boolean('enabled')->default(0)->change();
                 } else {
@@ -214,6 +296,8 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             Schema::create('adminlteusergrouptable', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->timestamps();
+                $table->bigInteger('created_by')->default(0);
+                $table->bigInteger('updated_by')->default(0);
                 $table->boolean('deleted')->default(0);
                 $table->boolean('enabled')->default(0);
                 $table->boolean('admin')->default(0);
@@ -227,6 +311,8 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     'deleted' => 0,
                     'created_at' => now(),
                     'updated_at' => now(),
+                    'created_by' => 0,
+                    'updated_by' => 0,
                     'title' => 'Administrators',
                     'enabled' => 1,
                     'admin' => 1,
@@ -240,6 +326,8 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     'deleted' => 0,
                     'created_at' => now(),
                     'updated_at' => now(),
+                    'created_by' => 0,
+                    'updated_by' => 0,
                     'title' => 'Users',
                     'enabled' => 1,
                     'admin' => 0,
@@ -268,6 +356,8 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     'created_at' => now(),
                     'updated_at' => now(),
                     'adminlteusergroup_id' => 1,
+                    'created_by' => 0,
+                    'updated_by' => 0,
                     'enabled' => 1,
                     'fullname' => 'AdminLTE Root',
                     'username' => 'root',
@@ -278,6 +368,18 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             );
         } else {
             Schema::table('adminlteusergrouptable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminlteusergrouptable', 'created_by')) { 
+                    $table->bigInteger('created_by')->default(0)->change();
+                } else {
+                    $table->bigInteger('created_by')->default(0);
+                }
+
+                if (Schema::hasColumn('adminlteusergrouptable', 'updated_by')) { 
+                    $table->bigInteger('updated_by')->default(0)->change();
+                } else {
+                    $table->bigInteger('updated_by')->default(0);
+                }
+
                 if (Schema::hasColumn('adminlteusergrouptable', 'enabled')) { 
                     $table->boolean('enabled')->default(0)->change();
                 } else {

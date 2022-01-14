@@ -55,6 +55,18 @@ class AdminLTEUserGroup extends Model
             'title' => 'Updated At'
         ],
         [
+            'name' => 'created_by',
+            'type' => 'integer',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'created_by'
+        ],
+        [
+            'name' => 'updated_by',
+            'type' => 'integer',
+            'belongs_to' => 'AdminLTEUser',
+            'display_property' => 'updated_by'
+        ],
+        [
             'name' => 'enabled',
             'type' => 'checkbox',
             'belongs_to' => 'AdminLTEUserGroup',

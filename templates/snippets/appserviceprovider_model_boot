@@ -1,0 +1,1 @@
+        {{$ __value__}}::observe({{$ __value__}}Observer::class);

@@ -1,0 +1,5 @@
+use App\AdminLTE\AdminLTEUser;
+use App\Observers\AdminLTEUserObserver;
+use App\AdminLTE\AdminLTEUserGroup;
+use App\Observers\AdminLTEUserGroupObserver;
+{{APPSERVICEPROVIDER_MODEL_IMPORTS}}

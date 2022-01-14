@@ -1,0 +1,2 @@
+use App\{{$ __value__}};
+use App\Observers\{{$ __value__}}Observer;

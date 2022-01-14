@@ -108,6 +108,13 @@ class AdminLTEUserGroupController extends Controller
         }
         
         $objectAdminLTEUserGroup->deleted = 0;
+        if ($id > 0) {
+            $objectAdminLTEUserGroup->updated_by = $User->id;
+        } else {
+            $objectAdminLTEUserGroup->created_by = $User->id;
+            $objectAdminLTEUserGroup->updated_by = $User->id;
+        } // if ($id > 0) {
+
         $objectAdminLTEUserGroup->enabled = ('' != $request->input('enabled'))
                 ? intval($request->input('enabled'))
                 : 0; 
@@ -154,6 +161,7 @@ class AdminLTEUserGroupController extends Controller
             foreach ($objects as $object)
             {
                 $object->deleted = 1;
+                $object->updated_by = $User->id;
                 $object->save();                
             } // foreach ($objects as $object)
         }

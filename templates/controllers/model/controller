@@ -95,6 +95,13 @@ class {{$ __value__}}Controller extends Controller
         }
         
         $object{{$ __value__}}->deleted = 0;
+        if ($id > 0) {
+            $object{{$ __value__}}->updated_by = $User->id;
+        } else {
+            $object{{$ __value__}}->created_by = $User->id;
+            $object{{$ __value__}}->updated_by = $User->id;
+        } // if ($id > 0) {
+
 {{MODEL{{$ ../__item_index__/__value__}}_POST_SERVICE_ASSIGNMENTS}}
 
 		$object{{$ __value__}}->save();
@@ -137,6 +144,7 @@ class {{$ __value__}}Controller extends Controller
             foreach ($objects as $object)
             {
                 $object->deleted = 1;
+                $object{{$ __value__}}->updated_by = $User->id;
                 $object->save();                
             } // foreach ($objects as $object)
         }
