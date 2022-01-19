@@ -62,26 +62,26 @@ class AdminLTELog extends Model
         ],
         [
             'name' => 'user_id',
-            'type' => 'image',
+            'type' => 'integer',
             'belongs_to' => 'AdminLTELog',
             'display_property' => 'user_id'
         ],
         [
             'name' => 'type',
             'type' => 'text',
-            'belongs_to' => 'AdminLTELogGroup',
+            'belongs_to' => 'AdminLTELog',
             'display_property' => 'type'
         ],
         [
             'name' => 'title',
             'type' => 'text',
-            'belongs_to' => 'AdminLTELogGroup',
+            'belongs_to' => 'AdminLTELog',
             'display_property' => 'title'
         ],
         [
             'name' => 'sub_title',
             'type' => 'text',
-            'belongs_to' => 'AdminLTELogGroup',
+            'belongs_to' => 'AdminLTELog',
             'display_property' => 'sub_title'
         ],
         [

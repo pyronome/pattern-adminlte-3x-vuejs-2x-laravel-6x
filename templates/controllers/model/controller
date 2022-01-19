@@ -144,7 +144,7 @@ class {{$ __value__}}Controller extends Controller
             foreach ($objects as $object)
             {
                 $object->deleted = 1;
-                $object{{$ __value__}}->updated_by = $User->id;
+                $object->updated_by = $User->id;
                 $object->save();                
             } // foreach ($objects as $object)
         }

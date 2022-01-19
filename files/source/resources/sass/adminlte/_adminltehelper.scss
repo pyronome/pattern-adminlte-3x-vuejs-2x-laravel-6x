@@ -109,6 +109,20 @@ body {
     max-width: 560px;
 }
 
+.btn-icon {
+    margin-bottom: 0px;
+    border: none;
+    outline: 0!important;
+    background: none;
+}
+.btn-icon:hover {
+    opacity: .5;
+}
+
+.btn-icon-primary {
+    color: #007bff;
+}
+
 .spanIcon {
     font-size: 18px;
 }
@@ -1472,5 +1486,59 @@ button.copyKey {
         display: none;
     }
 }
+.btn-filter {
+    float: right;
+    height: 40px;
+    padding: 5px 20px 5px 10px;
+    line-height: 1.1;
+}
 
+.btn-filter > span.badge {
+    right: 0px;
+    top: 0px;
+    font-size: 12px;
+}
+
+.btn-filter > b {
+    display: block;
+}
+
+.btn-clear-filter {
+    float: right;
+    height: 40px;
+    padding: 5px;
+    line-height: 1.1;
+}
+
+.btn-clear-filter > i.fas.fa-times {
+    font-size: 17px;
+    margin-top: -1px;
+}
+
+#log-detail-text > div > b {
+    padding-left: 3px;
+}
+
+.logtype-icon {
+    display: inline-block;
+    height: 25px;
+    width: 30px;
+    border-radius: 5px;
+    color: white !important;
+    text-align: center;
+}
+
+.modal-log-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+.modal-log-title > span {
+    height: 32px;
+    width: 32px;
+}
+
+.modal-log-title > span > i {
+    line-height: inherit;
+}
 /* {{@snippet:end}} */

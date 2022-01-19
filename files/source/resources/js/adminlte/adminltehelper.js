@@ -38,6 +38,7 @@ var AdminLTEHelper = {
             || ("adminltemodeldisplaytext" == strPageURL)
             || ("adminlteuser" == strPageURL)
             || ("adminlteusergroup" == strPageURL)
+            || ("adminltelogs" == strPageURL)
         ) {
             $("#pageurlconfiguration").addClass("active");
             return;

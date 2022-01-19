@@ -19,6 +19,7 @@ use App\AdminLTE\AdminLTEConfig;
 use App\AdminLTE\AdminLTEUserConfig;
 use App\AdminLTE\AdminLTEUserConfigVal;
 use App\AdminLTE\AdminLTEUserConfigFile;
+use App\AdminLTE\AdminLTELog;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use PDO;
@@ -46,6 +47,7 @@ class AdminLTE
 		'AdminLTEUserConfigFile',
 		'AdminLTEUserLayout',
 		'AdminLTEVariable',
+		'AdminLTELog',
 		'User'
 	];
 
@@ -2179,6 +2181,7 @@ class AdminLTE
 			'AdminLTEUserConfigFile',
 			'AdminLTEUserLayout',
 			'AdminLTEVariable',
+			'AdminLTELog',
 			'User'
 		];
 
@@ -3083,6 +3086,51 @@ class AdminLTE
 		}
 
 		return $returnVal;
+	}
+
+	public function logInfo($title, $message) {
+		$currentUser = auth()->guard('adminlteuser')->user();
+
+		$objectLog = new AdminLTELog();
+        $objectLog->user_id = $currentUser->id;
+        $objectLog->type = 'INFO';
+        $objectLog->title = $title;
+        $objectLog->sub_title = '';
+        $objectLog->object_id = 0;
+        $objectLog->object_old_values = '';
+        $objectLog->object_new_values = '';
+        $objectLog->message = $message;
+        $objectLog->save();
+	}
+
+	public function logWarning($title, $message) {
+		$currentUser = auth()->guard('adminlteuser')->user();
+
+		$objectLog = new AdminLTELog();
+        $objectLog->user_id = $currentUser->id;
+        $objectLog->type = 'WARNING';
+        $objectLog->title = $title;
+        $objectLog->sub_title = '';
+        $objectLog->object_id = 0;
+        $objectLog->object_old_values = '';
+        $objectLog->object_new_values = '';
+        $objectLog->message = $message;
+        $objectLog->save();
+	}
+
+	public function logError($title, $message) {
+		$currentUser = auth()->guard('adminlteuser')->user();
+
+		$objectLog = new AdminLTELog();
+        $objectLog->user_id = $currentUser->id;
+        $objectLog->type = 'ERROR';
+        $objectLog->title = $title;
+        $objectLog->sub_title = '';
+        $objectLog->object_id = 0;
+        $objectLog->object_old_values = '';
+        $objectLog->object_new_values = '';
+        $objectLog->message = $message;
+        $objectLog->save();
 	}
 	
     /* {{@snippet:end_methods}} */

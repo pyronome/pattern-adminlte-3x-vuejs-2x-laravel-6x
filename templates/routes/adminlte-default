@@ -129,6 +129,11 @@ Route::namespace('API')
         Route::post('/validate_item', 'AdminLTEUserConfigController@validate_item');
     });
 
+    Route::prefix('adminltelogs')->group(function () {
+        Route::get('/get_filter_options', 'AdminLTELogController@get_filter_options');
+        Route::get('/get_recordlist', 'AdminLTELogController@get_recordlist');
+    });
+
     Route::prefix('__layout')->group(function () {
         Route::get('/get/{pageName}', 'AdminLTELayoutController@get_widgetconfig');
         Route::get('/get_attributes', 'AdminLTELayoutController@get_attributes');
