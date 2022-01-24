@@ -30,7 +30,7 @@
                     <table class="table table-striped table-bordered table-hover table-sm">
                         <thead>
                             <tr>
-                                <th class="text-center sbp-item" :model-permission-token="model + '-delete'">
+                                <th class="text-center sbp-item" :model-permission-token="lowercase_model + '-delete'">
                                     <div class="icheck-primary d-inline">
                                         <input type="checkbox"
                                             @click="select_all_row($event.target)"
@@ -62,9 +62,9 @@
                                 </th>
                                 <th class="text-center th-btn-1">
                                     <router-link :id="'buttonNew' + model" class="btn btn-primary btn-xs btn-on-table sbp-item"
-                                        :menu-permission-token="model.toLowerCase()"
-                                        :model-permission-token="model + '-create'"
-                                        :to="'/' + main_folder + '/' + (model.toLowerCase()) + '/edit/new'">
+                                        :menu-permission-token="lowercase_model"
+                                        :model-permission-token="lowercase_model + '-create'"
+                                        :to="'/' + main_folder + '/' + lowercase_model + '/edit/new'">
                                         <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ $t('Add') }}</span>
                                     </router-link>
                                     
@@ -72,7 +72,7 @@
                                         :id="'buttonDelete' + model"
                                         @click="deleteSelectedRows($event.target, model)"
                                         class="btn btn-danger btn-xs btn-on-table button-model-delete sbp-item"
-                                        :model-permission-token="model + '-delete'"
+                                        :model-permission-token="lowercase_model + '-delete'"
                                         style="display:none;">
                                         <i class="fa fa-trash"></i> <span class="hidden-xxs">{{ $t('Delete') }}</span> <span class="selected-count"></span>
                                     </button>
@@ -81,7 +81,7 @@
                         </thead>
                         <tbody :id="'tbody' + model + 'RecordList'">
                             <tr v-for="row in list" :key="row.id">
-                                <td class="text-center sbp-item" :model-permission-token="model + '-delete'">
+                                <td class="text-center sbp-item" :model-permission-token="lowercase_model + '-delete'">
                                     <div class="icheck-primary d-inline">
                                         <input type="checkbox"
                                             @click="select_row($event.target)"
@@ -96,9 +96,9 @@
                                 </td>
                                 <td class="text-center">
                                     <router-link class="btn btn-outline-primary btn-xs btn-on-table sbp-item"
-                                        :menu-permission-token="model.toLowerCase()"
-                                        :model-permission-token="model + '-read'"
-                                        :to="'/' + main_folder + '/' + (model.toLowerCase()) + '/detail/' + row.id">
+                                        :menu-permission-token="lowercase_model"
+                                        :model-permission-token="lowercase_model + '-read'"
+                                        :to="'/' + main_folder + '/' + lowercase_model + '/detail/' + row.id">
                                         <i class="fa fa-info-circle"></i> <span class="hidden-xxs">{{ $t('Detail') }}</span>
                                     </router-link>
                                 </td>
@@ -123,6 +123,7 @@
             return {
                 main_folder: '',
                 model: this.$attrs.model,
+                lowercase_model: this.$attrs.model.toLowerCase(),
                 state: 0,
                 cookie_suffix: ('widgetRecordList' + this.$attrs.model),
                 data: {},
@@ -246,7 +247,7 @@
             submitDeleteForm: function () {
                 var self = this;
                 self.$Progress.start();
-                self.formDelete.post(AdminLTEHelper.getAPIURL((self.$attrs.model.toLowerCase()) + "/delete"))
+                self.formDelete.post(AdminLTEHelper.getAPIURL(self.lowercase_model + "/delete"))
                     .then(({ data }) => {
                         self.$Progress.finish();
                         self.delete_form.has_error = data.has_error;

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
     	/* {{@snippet:begin_run_method}} */
 
         $this->updateAdminLTEConfigParameters();
+        $this->updateAdminLTEUserConfigParameters();
         $this->updateAdminLTEModelMenu();
         $this->updateAdminLTEPluginMenu();
         $this->updateLayout();
@@ -30,6 +31,12 @@ class DatabaseSeeder extends Seeder
         require(__DIR__ . '/ConfigParameters.php');
         $adminLTE = new AdminLTE();
         $adminLTE->updateAdminLTEConfig($config);
+    }
+
+    public function updateAdminLTEUserConfigParameters() {
+        require(__DIR__ . '/UserConfigParameters.php');
+        $adminLTE = new AdminLTE();
+        $adminLTE->updateAdminLTEUserConfig($config);
     }
 
     public function updateAdminLTEModelMenu() {

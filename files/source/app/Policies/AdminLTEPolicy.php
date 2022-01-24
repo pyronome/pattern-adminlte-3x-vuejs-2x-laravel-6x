@@ -10,14 +10,16 @@ class AdminLTEPolicy
 {
     use HandlesAuthorization;
 
-    public function has_menu_permission(AdminLTEUser $user, $permission_key) // $permission_key = 'home' olsun
+    public function has_menu_permission(AdminLTEUser $user, $permission_key) // $permission_key = 'home' 
     {
-        $permissions = json_decode($user->permission, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+        $menu_permissions = $objectAdminLTE->getUserMenuPermissions();
 
-        $menu_permission_object = $permissions['menu']; // meta_key == 'menu' olan..
-        $menu_permissions = $menu_permission_object->permissions;
+        if (isset($menu_permissions[$permission_key]))
+        {
+            $has_permission = $menu_permissions[$permission_key];
+        }
 
-        return (1 == $menu_permissions->$permission_key) ? $this->allow(true) : $this->deny(false);
+        return $has_permission ? $this->allow(true) : $this->deny(false);
     }
     
     /**

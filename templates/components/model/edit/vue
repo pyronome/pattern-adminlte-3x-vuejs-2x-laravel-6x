@@ -32,7 +32,7 @@
                                         <div class="col-lg-12 col-md-12 col-xs-12">
                                             <button v-if="'new' == id"
                                                 menu-permission-token="{{$ __value__/__lowercase_text__}}"
-                                                model-permission-token="{{$ __value__}}-create"
+                                                model-permission-token="{{$ __value__/__lowercase_text__}}-create"
                                                 :disabled="{{$ __value__}}Form.busy"
                                                 type="submit"
                                                 class="sbp-item sbp-hide btn btn-success btn-md btn-on-card float-right">
@@ -40,7 +40,7 @@
                                             </button>
                                             <button v-else 
                                                 menu-permission-token="{{$ __value__/__lowercase_text__}}"
-                                                model-permission-token="{{$ __value__}}-update"
+                                                model-permission-token="{{$ __value__/__lowercase_text__}}-update"
                                                 :disabled="{{$ __value__}}Form.busy"
                                                 type="submit"
                                                 class="sbp-item sbp-hide btn btn-success btn-md btn-on-card float-right">
@@ -63,7 +63,7 @@
                                         <div class="col-lg-12 col-md-12 col-xs-12">
                                             <button v-if="'new' == id"
                                                 menu-permission-token="{{$ __value__/__lowercase_text__}}"
-                                                model-permission-token="{{$ __value__}}-create"
+                                                model-permission-token="{{$ __value__/__lowercase_text__}}-create"
                                                 :disabled="{{$ __value__}}Form.busy"
                                                 type="submit"
                                                 class="sbp-item sbp-hide btn btn-success btn-md btn-on-card float-right">
@@ -71,7 +71,7 @@
                                             </button>
                                             <button v-else 
                                                 menu-permission-token="{{$ __value__/__lowercase_text__}}"
-                                                model-permission-token="{{$ __value__}}-update"
+                                                model-permission-token="{{$ __value__/__lowercase_text__}}-update"
                                                 :disabled="{{$ __value__}}Form.busy"
                                                 type="submit"
                                                 class="sbp-item sbp-hide btn btn-success btn-md btn-on-card float-right">
@@ -200,13 +200,12 @@ export default {
                     self.processLoadQueue();
                 }).finally(function() {
                    AdminLTEHelper.initializePermissions(self.page.variables, false);
-                   let authorize = {};
                    if ("new" == self.id) {
-                       authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__}}', 'create');
+                       authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'create');
                    } else {
-                       authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__}}', 'read');
+                       authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'read');
                        if (authorize.status) {
-                           authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__}}', 'update');
+                           authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'update');
                        }
                    }
 

@@ -172,46 +172,6 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         }
         /* {{@snippet:end_adminltemodeldisplaytexttable_migration}} */
 
-        /* {{@snippet:begin_adminltepermissiontable_migration}} */        
-        if (!Schema::hasTable('adminltepermissiontable')) {
-            Schema::create('adminltepermissiontable', function (Blueprint $table) {
-                $table->bigIncrements('id');
-                $table->timestamps();
-                $table->boolean('deleted')->default(0);
-                $table->bigInteger('usergroup_id', false, true);
-                $table->bigInteger('user_id', false, true);
-                $table->string('meta_key')->nullable();
-                $table->text('permissions')->nullable();
-            });
-        } else {
-            Schema::table('adminltepermissiontable', function (Blueprint $table) {
-                if (Schema::hasColumn('adminltepermissiontable', 'usergroup_id')) { 
-                    $table->bigInteger('usergroup_id', false, true)->change();
-                } else {
-                    $table->bigInteger('usergroup_id', false, true);
-                }
-
-                if (Schema::hasColumn('adminltepermissiontable', 'user_id')) { 
-                    $table->bigInteger('user_id', false, true)->change();
-                } else {
-                    $table->bigInteger('user_id', false, true);
-                }
-                
-                if (Schema::hasColumn('adminltepermissiontable', 'meta_key')) { 
-                    $table->string('meta_key')->nullable()->change();
-                } else {
-                    $table->string('meta_key')->nullable();
-                }
-
-                if (Schema::hasColumn('adminltepermissiontable', 'permissions')) { 
-                    $table->text('permissions')->nullable()->change();
-                } else {
-                    $table->text('permissions')->nullable();
-                }
-            });
-        }
-        /* {{@snippet:end_adminltepermissiontable_migration}} */
-
         /* {{@snippet:begin_adminlteusertable_migration}} */        
         if (!Schema::hasTable('adminlteusertable')) {
             Schema::create('adminlteusertable', function (Blueprint $table) {
@@ -1055,7 +1015,6 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         Schema::dropIfExists('adminltelayouttable');
         Schema::dropIfExists('adminltemetatable');
         Schema::dropIfExists('adminltemodeldisplaytexttable');
-        Schema::dropIfExists('adminltepermissiontable');
         Schema::dropIfExists('adminlteusertable');
         Schema::dropIfExists('adminlteuser__filetable');
         Schema::dropIfExists('adminlteusergrouptable');

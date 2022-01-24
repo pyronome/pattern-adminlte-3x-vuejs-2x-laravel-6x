@@ -27,14 +27,11 @@ class {{$ __value__}}Policy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $menu_permissions = $objectAdminLTE->getUserMenuPermissions();
 
-        if (isset($permissions['__adminlte_menu']))
+        if (isset($menu_permissions['{{$ __value__/__lowercase_text__}}']))
         {
-            if (isset($permissions['__adminlte_menu']['{{$ __value__/__lowercase_text__}}']))
-            {
-                $has_permission = $permissions['__adminlte_menu']['{{$ __value__/__lowercase_text__}}'];
-            }
+            $has_permission = $menu_permissions['{{$ __value__/__lowercase_text__}}'];
         }
 
         return $has_permission;
@@ -56,13 +53,12 @@ class {{$ __value__}}Policy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['{{$ __value__/__lowercase_text__}}']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-read'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-read'];
-            }
+            $tokens = explode(',', $model_permissions['{{$ __value__/__lowercase_text__}}']);
+            $has_permission = in_array('read', $tokens);
         }
 
         return $has_permission;
@@ -83,13 +79,12 @@ class {{$ __value__}}Policy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['{{$ __value__/__lowercase_text__}}']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-create'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-create'];
-            }
+            $tokens = explode(',', $model_permissions['{{$ __value__/__lowercase_text__}}']);
+            $has_permission = in_array('create', $tokens);
         }
 
         return $has_permission;
@@ -111,13 +106,12 @@ class {{$ __value__}}Policy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['{{$ __value__/__lowercase_text__}}']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-update'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-update'];
-            }
+            $tokens = explode(',', $model_permissions['{{$ __value__/__lowercase_text__}}']);
+            $has_permission = in_array('update', $tokens);
         }
 
         return $has_permission;
@@ -139,13 +133,12 @@ class {{$ __value__}}Policy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['{{$ __value__/__lowercase_text__}}']))
         {
-            if (isset($permissions['__adminlte_model']['{{$ __value__}}-delete'])) {
-                $has_permission = $permissions['__adminlte_model']['{{$ __value__}}-delete'];
-            }
+            $tokens = explode(',', $model_permissions['{{$ __value__/__lowercase_text__}}']);
+            $has_permission = in_array('delete', $tokens);
         }
 
         return $has_permission;

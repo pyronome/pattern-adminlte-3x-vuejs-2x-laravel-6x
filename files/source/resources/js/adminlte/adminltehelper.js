@@ -1223,8 +1223,8 @@ var AdminLTEHelper = {
         // show hide menu item
         $('li.nav-item.menu-nav-item').css("display", "none");
         
-        if ('undefined' !== typeof page_variables.permissions.__adminlte_menu) {
-            let menu_permissions = page_variables.permissions.__adminlte_menu;
+        if ('undefined' !== typeof page_variables.menu_permissions) {
+            let menu_permissions = page_variables.menu_permissions;
             Object.keys(menu_permissions).map((key) => {
                 if (menu_permissions[key]) {
                     $('li.nav-item.menu-nav-item[data-href="' + key + '"]').css("display", "block");
@@ -1232,7 +1232,27 @@ var AdminLTEHelper = {
             });
         }
 
-        // model permissions
+        // accesable to everyone
+        $('#logout-menu').css("display", "block");
+
+        if ('undefined' !== typeof page_variables.model_permissions) {
+            let model_permissions = page_variables.model_permissions;
+            Object.keys(model_permissions).map((key) => {
+                $('.sbp-item[model-permission-token="' + key + '-create"]').addClass('sbp-hide');
+                $('.sbp-item[model-permission-token="' + key + '-read"]').addClass('sbp-hide');
+                $('.sbp-item[model-permission-token="' + key + '-update"]').addClass('sbp-hide');
+                $('.sbp-item[model-permission-token="' + key + '-delete"]').addClass('sbp-hide');
+
+                if (model_permissions[key]) {
+                    let parts = model_permissions[key].split(",");
+                    parts.forEach(crud => {
+                        $('.sbp-item[model-permission-token="' + key + '-' + crud + '"]').removeClass('sbp-hide');
+                    });
+                }
+            });
+        }
+
+        /* // model permissions
         if ('undefined' !== typeof page_variables.permissions.__adminlte_menu) {
             let menu_permissions = page_variables.permissions.__adminlte_menu;
             Object.keys(menu_permissions).map((key) => {
@@ -1253,7 +1273,7 @@ var AdminLTEHelper = {
                     $('.sbp-item[model-permission-token="' + key + '"]').addClass('sbp-hide');
                 }
             });
-        }
+        } */
 
         AdminLTEHelper.initializeOtherPermissions(page_variables);
     },
@@ -1266,8 +1286,8 @@ var AdminLTEHelper = {
             return authorize;
         }
         
-        if ('undefined' !== typeof page_variables.permissions.__adminlte_menu) {
-            let menu_permissions = page_variables.permissions.__adminlte_menu;
+        if ('undefined' !== typeof page_variables.menu_permissions) {
+            let menu_permissions = page_variables.menu_permissions;
             if (!menu_permissions[pagename]) {
                 authorize["status"] = false;
                 authorize["type"] = 'menu_permission';
@@ -1276,11 +1296,17 @@ var AdminLTEHelper = {
 
         if ("" != model) {
             if (authorize["status"]) {
-                if ('undefined' !== typeof page_variables.permissions.__adminlte_model) {
-                    let model_permissions = page_variables.permissions.__adminlte_model;
-                    if (!model_permissions[model + "-" + token]) {
+                if ('undefined' !== typeof page_variables.model_permissions) {
+                    let model_permissions = page_variables.model_permissions;
+                    if (!model_permissions[model]) {
                         authorize["status"] = false;
                         authorize["type"] = token + '_permission';
+                    } else {
+                        var parts = model_permissions[model].split(",");
+                        if (!parts.includes(token)) {
+                            authorize["status"] = false;
+                            authorize["type"] = token + '_permission';
+                        }
                     }
                 }
             }

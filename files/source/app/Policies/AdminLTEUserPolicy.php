@@ -26,14 +26,11 @@ class AdminLTEUserPolicy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $menu_permissions = $objectAdminLTE->getUserMenuPermissions();
 
-        if (isset($permissions['__adminlte_menu']))
+        if (isset($menu_permissions['adminlteuser']))
         {
-            if (isset($permissions['__adminlte_menu']['adminlteuser']))
-            {
-                $has_permission = $permissions['__adminlte_menu']['adminlteuser'];
-            }
+            $has_permission = $menu_permissions['adminlteuser'];
         }
 
         return $has_permission;
@@ -55,13 +52,12 @@ class AdminLTEUserPolicy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['adminlteuser']))
         {
-            if (isset($permissions['__adminlte_model']['AdminLTEUser-read'])) {
-                $has_permission = $permissions['__adminlte_model']['AdminLTEUser-read'];
-            }
+            $tokens = explode(',', $model_permissions['adminlteuser']);
+            $has_permission = in_array('read', $tokens);
         }
 
         return $has_permission;
@@ -82,13 +78,12 @@ class AdminLTEUserPolicy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['adminlteuser']))
         {
-            if (isset($permissions['__adminlte_model']['AdminLTEUser-create'])) {
-                $has_permission = $permissions['__adminlte_model']['AdminLTEUser-create'];
-            }
+            $tokens = explode(',', $model_permissions['adminlteuser']);
+            $has_permission = in_array('create', $tokens);
         }
 
         return $has_permission;
@@ -110,13 +105,12 @@ class AdminLTEUserPolicy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['adminlteuser']))
         {
-            if (isset($permissions['__adminlte_model']['AdminLTEUser-update'])) {
-                $has_permission = $permissions['__adminlte_model']['AdminLTEUser-update'];
-            }
+            $tokens = explode(',', $model_permissions['adminlteuser']);
+            $has_permission = in_array('update', $tokens);
         }
 
         return $has_permission;
@@ -138,13 +132,12 @@ class AdminLTEUserPolicy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['adminlteuser']))
         {
-            if (isset($permissions['__adminlte_model']['AdminLTEUser-delete'])) {
-                $has_permission = $permissions['__adminlte_model']['AdminLTEUser-delete'];
-            }
+            $tokens = explode(',', $model_permissions['adminlteuser']);
+            $has_permission = in_array('delete', $tokens);
         }
 
         return $has_permission;

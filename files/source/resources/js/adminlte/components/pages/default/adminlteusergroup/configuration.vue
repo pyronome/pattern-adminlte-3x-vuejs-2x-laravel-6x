@@ -18,12 +18,6 @@
                         <div class="col-sm-12" v-show="page.variables.is_admin">
                             <router-link tag="a"
                                 class="btn btn-primary btn-md btn-on-card text-white float-sm-right"
-                                :to="'/' + main_folder + '/adminlteusergroup/permission/' + current_id"
-                                style="margin-left:20px;">
-                                <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Permissions') }}</span>
-                            </router-link>
-                            <router-link tag="a"
-                                class="btn btn-primary btn-md btn-on-card text-white float-sm-right"
                                 :to="'/' + main_folder + '/adminlteusergroup/layout/' + current_id"
                                 style="margin-left:20px;">
                                 <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Layout Settings') }}</span>

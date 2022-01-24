@@ -99,7 +99,7 @@
                     $title = $logoutMenu['title'];
                     $icon = $logoutMenu['icon'];
                 ?>
-                <li class="nav-item menu-nav-item" data-href="logout" style="display:none;">
+                <li id="logout-menu" class="nav-item menu-nav-item" data-href="logout" style="display:none;">
                     <a id="pageurl<?php echo $url; ?>" 
                         class="nav-link"
                         href="<?php echo ('/' . $main_folder . '/' . $href); ?>" >

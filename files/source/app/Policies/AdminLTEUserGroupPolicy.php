@@ -27,14 +27,11 @@ class AdminLTEUserGroupPolicy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $menu_permissions = $objectAdminLTE->getUserMenuPermissions();
 
-        if (isset($permissions['__adminlte_menu']))
+        if (isset($menu_permissions['adminlteusergroup']))
         {
-            if (isset($permissions['__adminlte_menu']['adminlteusergroup']))
-            {
-                $has_permission = $permissions['__adminlte_menu']['adminlteusergroup'];
-            }
+            $has_permission = $menu_permissions['adminlteusergroup'];
         }
 
         return $has_permission;
@@ -56,13 +53,12 @@ class AdminLTEUserGroupPolicy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['adminlteusergroup']))
         {
-            if (isset($permissions['__adminlte_model']['AdminLTEUserGroup-read'])) {
-                $has_permission = $permissions['__adminlte_model']['AdminLTEUserGroup-read'];
-            }
+            $tokens = explode(',', $model_permissions['adminlteusergroup']);
+            $has_permission = in_array('read', $tokens);
         }
 
         return $has_permission;
@@ -83,13 +79,12 @@ class AdminLTEUserGroupPolicy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['adminlteusergroup']))
         {
-            if (isset($permissions['__adminlte_model']['AdminLTEUserGroup-create'])) {
-                $has_permission = $permissions['__adminlte_model']['AdminLTEUserGroup-create'];
-            }
+            $tokens = explode(',', $model_permissions['adminlteusergroup']);
+            $has_permission = in_array('create', $tokens);
         }
 
         return $has_permission;
@@ -111,13 +106,12 @@ class AdminLTEUserGroupPolicy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['adminlteusergroup']))
         {
-            if (isset($permissions['__adminlte_model']['AdminLTEUserGroup-update'])) {
-                $has_permission = $permissions['__adminlte_model']['AdminLTEUserGroup-update'];
-            }
+            $tokens = explode(',', $model_permissions['adminlteusergroup']);
+            $has_permission = in_array('update', $tokens);
         }
 
         return $has_permission;
@@ -139,13 +133,12 @@ class AdminLTEUserGroupPolicy
         $has_permission = false;
         
         $objectAdminLTE = new AdminLTE();
-        $permissions = $objectAdminLTE->getUserPermissionData();
+        $model_permissions = $objectAdminLTE->getUserModelPermissions();
 
-        if (isset($permissions['__adminlte_model']))
+        if (isset($model_permissions['adminlteusergroup']))
         {
-            if (isset($permissions['__adminlte_model']['AdminLTEUserGroup-delete'])) {
-                $has_permission = $permissions['__adminlte_model']['AdminLTEUserGroup-delete'];
-            }
+            $tokens = explode(',', $model_permissions['adminlteusergroup']);
+            $has_permission = in_array('delete', $tokens);
         }
 
         return $has_permission;

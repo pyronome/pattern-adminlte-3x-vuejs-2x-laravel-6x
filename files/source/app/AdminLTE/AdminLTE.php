@@ -12,7 +12,6 @@ use App\AdminLTE\AdminLTEUserLayout;
 use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTEModelDisplayText;
 use App\AdminLTE\AdminLTEModelOption;
-use App\AdminLTE\AdminLTEPermission;
 use App\AdminLTE\AdminLTEMenu;
 use App\AdminLTE\AdminLTEMeta;
 use App\AdminLTE\AdminLTEConfig;
@@ -39,7 +38,6 @@ class AdminLTE
 		'AdminLTEMeta',
 		'AdminLTEModelDisplayText',
 		'AdminLTEModelOption',
-		'AdminLTEPermission',
 		'AdminLTEUser',
 		'AdminLTEUserGroup',
 		'AdminLTEUserConfig',
@@ -2173,7 +2171,6 @@ class AdminLTE
 			'AdminLTEMeta',
 			'AdminLTEModelDisplayText',
 			'AdminLTEModelOption',
-			'AdminLTEPermission',
 			'AdminLTEUser',
 			'AdminLTEUserGroup',
 			'AdminLTEUserConfig',
@@ -2721,40 +2718,6 @@ class AdminLTE
 		return $query;
 	}
 
-	public function getUserGroupPermissions($usergroup_id) {
-		$permission_data = [];
-		$index = 0;
-
-		$objectPermissionList = AdminLTEPermission::where('deleted', 0)
-                ->where('usergroup_id', $usergroup_id)
-				->get();
-
-		foreach ($objectPermissionList as $objectPermission) {
-			$permission_data[$index]['meta_key'] = $objectPermission->meta_key;
-			$permission_data[$index]['permissions'] = json_decode($this->base64Decode($objectPermission->permissions), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
-			$index++;
-		}
-
-		return $permission_data;
-	}
-
-	public function getUserPermissions($user_id) {
-		$permission_data = [];
-		$index = 0;
-
-		$objectPermissionList = AdminLTEPermission::where('deleted', 0)
-                ->where('user_id', $user_id)
-				->get();
-
-		foreach ($objectPermissionList as $objectPermission) {
-			$permission_data[$index]['meta_key'] = $objectPermission->meta_key;
-			$permission_data[$index]['permissions'] = json_decode($this->base64Decode($objectPermission->permissions), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
-			$index++;
-		}
-
-		return $permission_data;
-	}
-
 	public function getMetaData($meta_key, $term_id = 0) {
 		$objects = [];
 
@@ -2788,55 +2751,6 @@ class AdminLTE
 		$object->save();
 		
 		return true;
-	}
-
-	public function getUserPermissionData() {
-		$User = auth()->guard('adminlteuser')->user();
-		
-		if ($User == null)
-		{
-			return [];	
-		}
-		
-		$UserGroupPermissions = $this->getUserGroupPermissions($User->adminlteusergroup_id);
-		$UserPermissions = $this->getUserPermissions($User->id);
-
-		$Permissions = [];
-		
-		foreach ($UserGroupPermissions as $permission) {
-			$meta_key = $permission['meta_key'];
-			$Permissions[$meta_key] = [];
-			
-			foreach ($permission['permissions'] as $token => $value) {
-				$Permissions[$meta_key][$token] = false;
-
-				if ('Y' == $value) {
-					$Permissions[$meta_key][$token] = true;
-				}				
-			}
-		}
-
-		foreach ($UserPermissions as $permission) {
-			$meta_key = $permission['meta_key'];
-
-			if (!isset($Permissions[$meta_key])) {
-				$Permissions[$meta_key] = [];
-			}
-			
-			foreach ($permission['permissions'] as $token => $value) {
-				if (!isset($Permissions[$meta_key][$token])) {
-					$Permissions[$meta_key][$token] = false;
-				}
-
-				if ('Y' == $value) {
-					$Permissions[$meta_key][$token] = true;
-				} else if ('N' == $value) {
-					$Permissions[$meta_key][$token] = false;
-				}
-			}
-		}
- 
-		return $Permissions;
 	}
 
 	public function updateAdminLTEConfig($config) {
@@ -2951,6 +2865,78 @@ class AdminLTE
 		}
 
 		return $returnVal;
+	}
+
+	public function updateAdminLTEUserConfig($config) {
+		$__order = 0;
+
+		foreach ($config as $config_item) {
+			$id = $this->getUserConfigIdByKey($config_item['__key']);
+
+			if (0 == $id) {
+				$AdminLTEUserConfig = new AdminLTEUserConfig();
+				$AdminLTEUserConfig->owner_group = $config_item['owner_group'];
+				$AdminLTEUserConfig->system = $config_item['system'];
+				$AdminLTEUserConfig->locked = $config_item['locked'];
+				$AdminLTEUserConfig->owner = $config_item['owner'];
+				$AdminLTEUserConfig->enabled = $config_item['enabled'];
+				$AdminLTEUserConfig->__order = $__order;
+
+				$parent_id = 0;
+				if ('' != $config_item['__parent']) {
+					$parent_id = $this->getUserConfigIdByKey($config_item['__parent']);
+				}
+
+				$AdminLTEUserConfig->parent_id = $parent_id;
+
+				$AdminLTEUserConfig->default_value = $config_item['default_value'];
+				$AdminLTEUserConfig->required = $config_item['required'];
+				$AdminLTEUserConfig->title = $config_item['title'];
+				$AdminLTEUserConfig->__key = $config_item['__key'];
+				$AdminLTEUserConfig->type = $config_item['type'];
+				$AdminLTEUserConfig->value = $config_item['value'];
+				$AdminLTEUserConfig->hint = $config_item['hint'];
+				$AdminLTEUserConfig->description = $config_item['description'];
+
+				$metaData = [];
+				$metaData['multiple'] = $config_item['multiple'];
+				$metaData['option_titles'] = $config_item['option_titles'];
+				$metaData['option_values'] = $config_item['option_values'];
+				$metaData['toggle_elements'] = empty($config_item['toggle_elements']) ? [] : $config_item['toggle_elements'];
+				$metaData['url'] = $config_item['url'];
+				$metaData['content'] = $config_item['content'];
+				$metaData['min'] = $config_item['min'];
+				$metaData['max'] = $config_item['max'];
+				$metaData['step'] = $config_item['step'];
+				$metaData['file_types'] = $config_item['file_types'];
+				$metaData['large_screen_size'] = $config_item['large_screen_size'];
+				$metaData['medium_screen_size'] = $config_item['medium_screen_size'];
+				$metaData['small_screen_size'] = $config_item['small_screen_size'];
+				$metaData['min_selection'] = $config_item['min_selection'];
+				$metaData['max_selection'] = $config_item['max_selection'];
+				$metaData['show_on_group'] = $config_item['show_on_group'];
+				$metaData['show_on_user'] = $config_item['show_on_user'];
+				$metaData['show_on_profile'] = $config_item['show_on_profile'];
+
+				$encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+				$AdminLTEUserConfig->meta_data_json = $encodedData;
+
+				$AdminLTEUserConfig->save();
+
+				$__order++;
+			}
+		}
+	}
+
+	public function getUserConfigIdByKey($__key) {
+		$id = 0;
+
+		$AdminLTEUserConfigItem = AdminLTEUserConfig::where('__key', $__key)->where('owner_group', 0)->first();
+		if (null !== $AdminLTEUserConfigItem) {
+			$id = $AdminLTEUserConfigItem->id;
+		}
+
+		return $id;
 	}
 
 	public function getUserConfigParameterValue($parameter, $type, $objectId) {
@@ -3088,6 +3074,18 @@ class AdminLTE
 		return $returnVal;
 	}
 
+	public function getConfigParameterBasekey($key) {
+        $basekey = '';
+
+        if ('' != $key) {
+           $parts = explode('.', $key);
+           $length = count($parts);
+           $basekey = $parts[$length-1];
+        }
+
+        return $basekey;
+    }
+
 	public function logInfo($title, $message) {
 		$currentUser = auth()->guard('adminlteuser')->user();
 
@@ -3131,6 +3129,40 @@ class AdminLTE
         $objectLog->object_new_values = '';
         $objectLog->message = $message;
         $objectLog->save();
+	}
+
+	public function getUserMenuPermissions() {
+		// $currentUser = auth()->guard('adminlteuser')->user();
+		$menu_permissions = [];
+
+		$objConfigList = AdminLTEUserConfig::where('deleted', 0)
+			->where('__key', 'like', 'permission.adminltemenu.%')
+			->get();
+
+		foreach ($objConfigList as $objConfig) {
+			$basekey = $this->getConfigParameterBasekey($objConfig->__key);
+			$menu_permissions[$basekey] = ('on' == $this->getUserConfigParameterValue($objConfig->__key, 'user', 2));
+		}
+		
+		return $menu_permissions;
+	}
+
+	public function getUserModelPermissions() {
+		// $currentUser = auth()->guard('adminlteuser')->user();
+		$model_permissions = [];
+
+		$objConfigList = AdminLTEUserConfig::where('deleted', 0)
+			->where('__key', 'like', 'permission.adminltemodel.%')
+			->get();
+
+		foreach ($objConfigList as $objConfig) {
+			if ('selection_group' == $objConfig->type) {
+				$basekey = $this->getConfigParameterBasekey($objConfig->__key);
+				$model_permissions[$basekey] = $this->getUserConfigParameterValue($objConfig->__key, 'user', 2);
+			}
+		}
+		
+		return $model_permissions;
 	}
 	
     /* {{@snippet:end_methods}} */

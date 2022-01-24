@@ -13,7 +13,6 @@ use App\AdminLTE\AdminLTEUserConfigVal;
 use App\AdminLTE\AdminLTEUserConfigFile;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
-use App\AdminLTE\AdminLTEPermission;
 use App\AdminLTE\AdminLTEUserLayout;
 use App\Http\Requests\AdminLTE\API\AdminLTEUserPOSTRequest;
 
@@ -264,72 +263,6 @@ class AdminLTEUserController extends Controller
 
         return [
             'list' => $list
-        ];
-    }
-
-    public function get_permission_data(Request $request)
-    {    
-        $form_data = [];
-        
-        $parameters = $request->route()->parameters();
-
-        $id = isset($parameters['id'])
-            ? intval($parameters['id'])
-            : 0;
-
-
-        if ($id <= 0) {
-            return;
-        } // if (!isset($parameters['id'])) {
-
-        $objectAdminLTE = new AdminLTE();
-        $objectAdminLTEUser = AdminLTEUser::find($id);
-
-        if (null !== $objectAdminLTEUser) {
-            $form_data['user_id'] = $id;
-            $form_data['fullname'] = $objectAdminLTEUser->fullname;
-            $form_data['permission_data'] = $objectAdminLTE->getUserPermissions($id);
-
-            $objectAdminLTEUserGroup = AdminLTEUserGroup::find($objectAdminLTEUser->adminlteusergroup_id);
-
-            if (null !== $objectAdminLTEUserGroup) {
-                $form_data['title'] = $objectAdminLTEUserGroup->title;
-                $form_data['group_permission_data'] = $objectAdminLTE->getUserGroupPermissions($objectAdminLTEUserGroup->id);
-            }
-        }
-
-        return [
-            'form_data' => $form_data
-        ];
-    }
-
-    public function post_permission_data(Request $request)
-    {
-        $user_id = intval($request->input('user_id'));
-        $permission_data_list = $request->input('permission_data');
-
-        $objectAdminLTE = new AdminLTE();
-
-        foreach ($permission_data_list as $permission_data) {
-            $meta_key = $permission_data['meta_key'];
-            $encodedPermissions = $objectAdminLTE->base64encode(json_encode($permission_data['permissions'], (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-            $objectPermission = AdminLTEPermission::where('deleted', false)
-                ->where('user_id', $user_id)
-                ->where('meta_key', $meta_key)
-                ->first();
-
-            if (null === $objectPermission) {
-                $objectPermission = new AdminLTEPermission();
-                $objectPermission->user_id = $user_id;
-                $objectPermission->meta_key = $meta_key;
-            }
-            
-            $objectPermission->permissions = $encodedPermissions;
-            $objectPermission->save();
-        }
-        
-        return [
-            'id' => $user_id
         ];
     }
 
