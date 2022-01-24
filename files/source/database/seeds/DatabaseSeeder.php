@@ -23,32 +23,33 @@ class DatabaseSeeder extends Seeder
         $this->updateAdminLTEPluginMenu();
         $this->updateLayout();
 
-		$this->seedModelOptions();
-
+    	/* {{@snippet:end_run_method}} */         
     }
 
     public function updateAdminLTEConfigParameters() {
+        /* {{@snippet:begin_update_config_parameters_method}} */
+
         require(__DIR__ . '/ConfigParameters.php');
         $adminLTE = new AdminLTE();
         $adminLTE->updateAdminLTEConfig($config);
+
+        /* {{@snippet:end_update_config_parameters_method}} */
     }
 
     public function updateAdminLTEUserConfigParameters() {
+        /* {{@snippet:begin_update_user_config_parameters_method}} */
+
         require(__DIR__ . '/UserConfigParameters.php');
         $adminLTE = new AdminLTE();
         $adminLTE->updateAdminLTEUserConfig($config);
+
+        /* {{@snippet:end_update_user_config_parameters_method}} */
     }
 
     public function updateAdminLTEModelMenu() {
         $menu = [];
 
-		$menu[] = [
-			'text' => 'Student List',
-			'href' => 'student',
-			'icon' => 'far fa-list-alt',
-			'visibility' => 1,
-			'parent' => 'contents'
-        ];
+        /* {{@snippet:model_menu_definitions}} */ 
 
         $adminLTE = new AdminLTE();
         $adminLTE->updateAdminLTEMenu($menu);
@@ -67,12 +68,5 @@ class DatabaseSeeder extends Seeder
 		$AdminLTE->setAdminLTEDefaultLayout();
     }
 
-	public function seedModelOptions() {
-		$AdminLTE = new AdminLTE();
-		$option_data_list = [];
-
-
-		
-		$AdminLTE->seedModelDropdownOptions($option_data_list);
-    }
+    /* {{@snippet:end_methods}} */
 }

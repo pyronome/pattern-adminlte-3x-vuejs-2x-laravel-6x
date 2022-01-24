@@ -2868,6 +2868,8 @@ class AdminLTE
 	}
 
 	public function updateAdminLTEUserConfig($config) {
+		DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
 		$__order = 0;
 
 		foreach ($config as $config_item) {
@@ -2926,6 +2928,8 @@ class AdminLTE
 				$__order++;
 			}
 		}
+
+		DB::statement('SET FOREIGN_KEY_CHECKS=1');
 	}
 
 	public function getUserConfigIdByKey($__key) {
@@ -3132,7 +3136,7 @@ class AdminLTE
 	}
 
 	public function getUserMenuPermissions() {
-		// $currentUser = auth()->guard('adminlteuser')->user();
+		$currentUser = auth()->guard('adminlteuser')->user();
 		$menu_permissions = [];
 
 		$objConfigList = AdminLTEUserConfig::where('deleted', 0)
@@ -3141,14 +3145,14 @@ class AdminLTE
 
 		foreach ($objConfigList as $objConfig) {
 			$basekey = $this->getConfigParameterBasekey($objConfig->__key);
-			$menu_permissions[$basekey] = ('on' == $this->getUserConfigParameterValue($objConfig->__key, 'user', 2));
+			$menu_permissions[$basekey] = ('on' == $this->getUserConfigParameterValue($objConfig->__key, 'user', $currentUser->id));
 		}
 		
 		return $menu_permissions;
 	}
 
 	public function getUserModelPermissions() {
-		// $currentUser = auth()->guard('adminlteuser')->user();
+		$currentUser = auth()->guard('adminlteuser')->user();
 		$model_permissions = [];
 
 		$objConfigList = AdminLTEUserConfig::where('deleted', 0)
@@ -3158,7 +3162,7 @@ class AdminLTE
 		foreach ($objConfigList as $objConfig) {
 			if ('selection_group' == $objConfig->type) {
 				$basekey = $this->getConfigParameterBasekey($objConfig->__key);
-				$model_permissions[$basekey] = $this->getUserConfigParameterValue($objConfig->__key, 'user', 2);
+				$model_permissions[$basekey] = $this->getUserConfigParameterValue($objConfig->__key, 'user', $currentUser->id);
 			}
 		}
 		
