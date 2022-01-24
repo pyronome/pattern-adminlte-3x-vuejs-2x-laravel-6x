@@ -36,7 +36,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             });
         } else {
             Schema::table('adminltelogtable', function (Blueprint $table) {
-                if (Schema::hasColumn('adminltemetatable', 'user_id')) { 
+                if (Schema::hasColumn('adminltelogtable', 'user_id')) { 
                     $table->bigInteger('user_id')->default(0)->change();
                 } else {
                     $table->bigInteger('user_id')->default(0);
