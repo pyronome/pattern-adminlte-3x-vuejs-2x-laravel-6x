@@ -245,7 +245,7 @@ class AdminLTEUserGroupController extends Controller
     }
 
     public function groupHasConfigParameter($id) {
-        $configList = AdminLTEUserConfig::where('owner_group', $id)
+        $configList = AdminLTEUserConfig::whereIn('owner_group', [0, $id])
             ->where('deleted', 0)
             ->where('enabled', 1)
             ->get();
