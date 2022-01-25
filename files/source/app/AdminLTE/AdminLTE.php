@@ -2916,6 +2916,8 @@ class AdminLTE
 				$metaData['small_screen_size'] = $config_item['small_screen_size'];
 				$metaData['min_selection'] = $config_item['min_selection'];
 				$metaData['max_selection'] = $config_item['max_selection'];
+				$metaData['expression'] = $config_item['expression'];
+				$metaData['message'] = $config_item['message'];
 				$metaData['show_on_group'] = $config_item['show_on_group'];
 				$metaData['show_on_user'] = $config_item['show_on_user'];
 				$metaData['show_on_profile'] = $config_item['show_on_profile'];
