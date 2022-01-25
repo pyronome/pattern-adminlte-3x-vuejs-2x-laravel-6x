@@ -442,12 +442,10 @@ class AdminLTEUserGroupController extends Controller
         $list = $configList;
         foreach ($list as $__key => $item) {
             $object = $item['object'];
-            //echo 'objectKey:' . $object->__key . '<br>';
             $parentKey = $this->getParentKey($object->__key);
-            //echo 'parentKey:' . $parentKey . '<br>';
 
             if ( ('' != $parentKey) && !isset($configList[$parentKey]) ) {
-                $parentObject = $this->getConfigObjectByKey($parentKey);
+                $parentObject = $this->getConfigObjectById($object->parent_id);
                 //echo 'parentObjectKey:' . $parentObject->__key . '<br>';
                 if ((null !== $parentObject) && (1 == $parentObject->enabled)) {
                     $configList[$parentKey]['object'] = $parentObject;
@@ -479,14 +477,6 @@ class AdminLTEUserGroupController extends Controller
 
     public function getConfigObjectById($id) {
         return AdminLTEUserConfig::where('id', $id)
-            /* ->where('owner_group', $owner_group) */
-            ->where('deleted', 0)
-            /* ->where('enabled', 1) */
-            ->first();
-    }
-
-    public function getConfigObjectByKey($__key) {
-        return AdminLTEUserConfig::where('__key', $__key)
             /* ->where('owner_group', $owner_group) */
             ->where('deleted', 0)
             /* ->where('enabled', 1) */
@@ -739,8 +729,9 @@ class AdminLTEUserGroupController extends Controller
 
         $errors = [];
         $index = 0;
-        
+
         foreach ($config_data as $__order => $data) {
+            $object_id = $data['object_id'];
             $type = $data['type'];
             $key = $data['key'];
             $title = $data['title'];
@@ -755,19 +746,7 @@ class AdminLTEUserGroupController extends Controller
                         $result['error_count']++;
                         $errors[$key] = 'The <b>' . $title . '</b> field is required.';
                     }
-                } /* else if ('selection_group' == $type) {
-                    if (empty($val)) {
-                        $result['error_count']++;
-                        $errors[$key] = 'The <b>' . $title . '</b> field is required.';
-                    } else {
-                        $selectionGroupError = $this->validateSelectionGroup($key, $val);
-
-                        if ($selectionGroupError['has_error']) {
-                            $result['error_count']++;
-                            $errors[$key] = $selectionGroupError['error_msg'];
-                        }
-                    }
-                } */ else {
+                } else {
                     if (empty($val)) {
                         $result['error_count']++;
                         $errors[$key] = 'The <b>' . $title . '</b> field is required.';
@@ -775,7 +754,7 @@ class AdminLTEUserGroupController extends Controller
                 }
             }
 
-            $configObject = $this->getConfigObjectByKey($key);
+            $configObject = $this->getConfigObjectById($object_id);
 
             if (('selection_group' == $type) && ('' != $val)) {
                 $selectionGroupError = $this->validateSelectionGroup($configObject, $val);

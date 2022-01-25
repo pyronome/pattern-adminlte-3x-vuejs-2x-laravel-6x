@@ -20,298 +20,6 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 class AdminLTEUserConfigController extends Controller
 {
-    public function getlist(Request $request)
-    {
-        $objectAdminLTE = new AdminLTE();
-        $User = auth()->guard('adminlteuser')->user();
-
-        $parameters = $request->route()->parameters();
-
-        $search_text = '';
-        if ($s = \Request::get('s')) {
-            $search_text = $s;
-        }
-
-        $page = 1;
-        if ($p = \Request::get('p')) {
-            $page = $p;
-        }
-
-        $objectId = 0;
-        if ($o = \Request::get('o')) {
-            $objectId = $o;
-        }
-
-        $page_type = '';
-        if ($t = \Request::get('t')) {
-            $page_type = $t;
-        }
-
-        $sort_variable = 'id';
-        $sort_direction = 'asc';
-
-        $limit = 1000;
-        $show_pagination = false;
-
-        $current_page = 0;
-        $last_page = 0;
-        $per_page = 0;
-        $from = 0;
-        $to = 0;
-        $total = 0;
-        $next_page_url = null;
-        $prev_page_url = null;
-
-        $objectList = AdminLTEUserConfig::defaultQuery($search_text, $sort_variable, $sort_direction)->paginate($limit, ['*'], 'page', $page);
-
-        $current_page = $objectList->currentPage();
-        $last_page = $objectList->lastPage();
-        $per_page = $objectList->perPage();
-        $from = (($current_page - 1) * $per_page) + 1;
-        $to = ($current_page * $per_page);
-        $total = $objectList->total();
-        $next_page_url = ($last_page == $current_page) ? null : 'getlist?p=' . ($current_page + 1);
-        $prev_page_url = (1 == $current_page) ? null : 'getlist?p=' . ($current_page - 1);
-
-        $configList = [];
-
-        foreach ($objectList as $object) {
-            $user_can_view = $User->can('viewAny', $object);
-
-            if ($user_can_view 
-                && (1 == $object->enabled)
-                && (($objectId == $object->owner_group) || (1 == $object->system))) {
-                $configList[$object->__key]['object'] = $object;
-                $configList[$object->__key]['searched'] = false;
-            }
-        } // foreach ($objectList as $object)
-
-   
-        $this->setConfigTree($configList);
-
-        $keys = array_keys($configList);
-        
-        $basekeyOrders = $this->getBasekeyOrders($configList);
-        
-        $keyOrders = [];
-
-        foreach ($configList as $key => $data) {
-            $object = $data['object'];
-
-            if (!isset($keyOrders[$key])) {
-                $orderedKey = '';
-                $keyParts = $this->getKeyPartsForOrder($key);
-                foreach ($keyParts as $part) {
-                    $tempStr = str_replace($part, $basekeyOrders[$part], $part);
-
-                    if ('' != $orderedKey) {
-                        $orderedKey .= '.';
-                    }
-
-                    $orderedKey .= $tempStr;
-                }
-
-                $keyOrders[$key] = $orderedKey;
-            }
-        }
-
-        natsort($keyOrders);
-
-        $keys = array_keys($keyOrders);
-        $list = [];
-        $index = 0;
-
-        foreach ($keys as $key) {
-            $object = $configList[$key]['object'];
-
-            $list[$index] = array();
-            $list[$index]['id'] = $object->id;
-            $list[$index]['deleted'] = $object->deleted;
-            $list[$index]['created_at'] = $object->created_at;
-            $list[$index]['updated_at'] = $object->updated_at;
-            $list[$index]['owner_group'] = $object->owner_group;
-            $list[$index]['enabled'] = $object->enabled;
-            $list[$index]['required'] = $object->required;
-            $list[$index]['__order'] = $object->__order;
-            $list[$index]['type'] = $object->type;
-            $list[$index]['parent'] = $this->getParentKey($object->__key);
-            $list[$index]['__key'] = $object->__key;
-            $list[$index]['title'] = $object->title;
-            $list[$index]['default_value'] = $object->default_value;
-            $list[$index]['description'] = $object->description;
-            $list[$index]['hint'] = $object->hint;
-
-            $metaData = json_decode($object->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
-
-            $list[$index]['option_titles'] = isset($metaData['option_titles']) ? $metaData['option_titles'] : '';
-            $list[$index]['option_values'] = isset($metaData['option_values']) ? $metaData['option_values'] : '';
-            $list[$index]['toggle_elements'] = isset($metaData['toggle_elements']) ? $metaData['toggle_elements'] : [];
-            $list[$index]['url'] = isset($metaData['url']) ? $metaData['url'] : '';
-            $list[$index]['content'] = isset($metaData['content']) ? $metaData['content'] : '';
-            $list[$index]['min'] = isset($metaData['min']) ? $metaData['min'] : 0;
-            $list[$index]['max'] = isset($metaData['max']) ? $metaData['max'] : 0;
-            $list[$index]['step'] = isset($metaData['step']) ? $metaData['step'] : 0;
-            $list[$index]['multiple'] = isset($metaData['multiple']) ? $metaData['multiple'] : 0;
-            $list[$index]['file_types'] = isset($metaData['file_types']) ? $metaData['file_types'] : '';
-
-            $large_screen_size = isset($metaData['large_screen_size']) ? intval($metaData['large_screen_size']) : 12;
-            $medium_screen_size = isset($metaData['medium_screen_size']) ? intval($metaData['medium_screen_size']) : 12;
-            $small_screen_size = isset($metaData['small_screen_size']) ? intval($metaData['small_screen_size']) : 12;
-            $list[$index]['grid_class'] = 
-                ' col-lg-'.$large_screen_size // desktop
-                . ' col-md-'.$medium_screen_size . ' col-sm-'.$medium_screen_size // tablet
-                . ' col-'.$small_screen_size; // mobile
-
-            $list[$index]['level'] = 0;
-            if (('group' == $object->type) || ('selection_group' == $object->type)) {
-                $list[$index]['level'] = $this->getGroupLevel($object->__key);
-            }
-
-            $list[$index]['min_selection'] = isset($metaData['min_selection']) ? $metaData['min_selection'] : 0;
-            $list[$index]['max_selection'] = isset($metaData['max_selection']) ? $metaData['max_selection'] : 0;
-            $list[$index]['show_on_group'] = isset($metaData['show_on_group']) ? $metaData['show_on_group'] : 0;
-            $list[$index]['show_on_user'] = isset($metaData['show_on_user']) ? $metaData['show_on_user'] : 0;
-            $list[$index]['show_on_profile'] = isset($metaData['show_on_profile']) ? $metaData['show_on_profile'] : 0;
-
-            $list[$index]['value'] = '';
-            if (('group' != $object->type) && ('selection_group' != $object->type)) {
-                $list[$index]['value'] = $this->getConfigVal($object->__key, $page_type, $objectId);
-            }
-            
-            $index++;
-        }
-        
-        $data = [
-            'list' => $list
-        ];
-
-        return [
-            'search_text' => $search_text,
-            'sort_variable' => $sort_variable,
-            'sort_direction' => $sort_direction,
-            'current_page' => $current_page,
-            'last_page' => $last_page,
-            'per_page' => $per_page,
-            'from' => $from,
-            'to' => $to,
-            'total' => $total,
-            'next_page_url' => $next_page_url,
-            'prev_page_url' => $prev_page_url,
-            'show_pagination' => $show_pagination,
-            'data' => $data
-        ];
-    }
-
-    public function getConfigVal($configKey, $page_type, $objectId) {
-        $val = '';
-
-        if ('group' == $page_type) {
-            $strKey = $configKey . ':' . $objectId . ':' . '0';
-        } else {
-            $strKey = $configKey . ':' . '0' . ':' . $objectId;
-        }
-
-        $__key = hash('sha256', $strKey);
-
-        $object = AdminLTEUserConfigVal::where('__key', $__key)
-            ->where('deleted', 0)
-            ->first();
-
-        if (null !== $object) {
-            try {
-                $val = Crypt::decryptString($object->value);
-            } catch (DecryptException $e) {
-                $val = '';
-            }
-        }
-
-        return $val;
-    }
-
-    public function getKeyPartsForOrder($key) {
-        $configuredParts = [];
-        $index = 0;
-        $parts = explode('.', $key);
-        foreach ($parts as $part) {
-            if (0 == $index) {
-                $configuredParts[$index] = $part;
-            } else {
-                $configuredParts[$index] = $configuredParts[$index-1] . '.' . $part;
-            }
-
-            $index++;
-        }
-
-        return $configuredParts;
-    }
-
-    public function getBasekeyOrders($configList) {
-        $basekeyOrders = [];
-
-        foreach ($configList as $key => $data) {
-            $object = $data['object'];
-            /* $basekey = $this->getBasekey($key); */
-
-            if (!isset($basekeyOrders[$key])) {
-                $basekeyOrders[$key] = $object->__order;
-            }
-        }
-
-        return $basekeyOrders;
-    }
-
-    public function getGroupLevel($__key) {
-        $parts = explode('.', $__key);
-        $level = count($parts) - 1;
-        return $level;
-    }
-
-    public function setConfigTree(&$configList) {
-        $need_search = false;
-        $list = $configList;
-        foreach ($list as $__key => $item) {
-            $object = $item['object'];
-            //echo 'objectKey:' . $object->__key . '<br>';
-            $parentKey = $this->getParentKey($object->__key);
-            //echo 'parentKey:' . $parentKey . '<br>';
-
-            if ( ('' != $parentKey) && !isset($configList[$parentKey]) ) {
-                $parentObject = $this->getConfigObjectByKey($parentKey);
-
-                if ((null !== $parentObject) && (1 == $parentObject->enabled)) {
-                    $configList[$parentKey]['object'] = $parentObject;
-                    $configList[$parentKey]['searched'] = false;
-                    $need_search = true;
-                    $configList[$__key]['searched'] = true;
-                } else {
-                    // clear unabled sub elements
-                    $this->cleanUnabledSubelements($configList, $parentKey);
-                }
-            }
-        }
-
-        if ($need_search) {
-            $this->setConfigTree($configList);
-        }
-
-        return;
-    }
-
-    public function cleanUnabledSubelements(&$configList, $parentKey) {
-        foreach ($configList as $__key => $object) {
-            if ($this->startsWith($__key,$parentKey)) {
-                unset($configList[$__key]);
-            }
-        }
-        return;
-    }
-
-    public function startsWith($string, $startString)
-    {
-        $len = strlen($startString);
-        return (substr($string, 0, $len) === $startString);
-    }
-
     public function get_recordlist(Request $request)
     {
         $parameters = $request->route()->parameters();
@@ -319,7 +27,7 @@ class AdminLTEUserConfigController extends Controller
             ? intval($parameters['owner_group'])
             : 0;
 
-        $objectList = AdminLTEUserConfig::where('deleted', 0)->where('owner_group', $owner_group)->get();
+        $objectList = AdminLTEUserConfig::where('deleted', 0)->whereIn('owner_group', [0, $owner_group])->get();
 
         $list = [];
 
@@ -335,22 +43,6 @@ class AdminLTEUserConfigController extends Controller
         return [
             'list' => $list
         ];
-    }
-
-    public function getConfigObjectById($id) {
-        return AdminLTEUserConfig::where('id', $id)
-            /* ->where('owner_group', $owner_group) */
-            ->where('deleted', 0)
-            /* ->where('enabled', 1) */
-            ->first();
-    }
-
-    public function getConfigObjectByKey($__key) {
-        return AdminLTEUserConfig::where('__key', $__key)
-            /* ->where('owner_group', $owner_group) */
-            ->where('deleted', 0)
-            /* ->where('enabled', 1) */
-            ->first();
     }
 
     public function getParentKey($key) {
@@ -379,282 +71,6 @@ class AdminLTEUserConfigController extends Controller
         }
 
         return $basekey;
-    }
-
-    public function validateSelectionGroup($key, $val) {
-        $result = [
-            'has_error' => false,
-            'error_msg' => ''
-        ];
-
-        $selected_options = [];
-        if ('' != $val) {
-            $selection_options = explode(',', $val);
-        }
-        $selectedCount = count($selection_options);
-
-        $selectionGroup = $this->getConfigObjectByKey($key);
-        $metaData = json_decode($selectionGroup->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
-        $min_selection = isset($metaData['min_selection']) ? $metaData['min_selection'] : 0;
-        $max_selection = isset($metaData['max_selection']) ? $metaData['max_selection'] : 0;
-
-        if ((0 == $min_selection) && ($max_selection > 0)) {
-            if ($selectedCount > $max_selection) {
-                $result['has_error'] = true;
-                $result['error_msg'] = "You can choose maximum " . $max_selection . " option(s).";
-            }
-        } else if (($min_selection > 0) && ($max_selection > 0)) {
-            if (($selectedCount < $min_selection) && ($selectedCount > $max_selection)) {
-                $result['has_error'] = true;
-                $result['error_msg'] = "You must choose minimum " . $min_selection . " option(s). You can choose maximum " . $max_selection . " option(s).";
-            } else if ($selectedCount < $min_selection) {
-                $result['has_error'] = true;
-                $result['error_msg'] = "You must choose minimum " . $min_selection . " option(s).";
-            } else if ($selectedCount > $max_selection) {
-                $result['has_error'] = true;
-                $result['error_msg'] = "You can choose maximum " . $max_selection . " option(s).";
-            }
-        } else if (($min_selection > 0) && (0 == $max_selection)) {
-            if ($selectedCount < $min_selection) {
-                $result['has_error'] = true;
-                $result['error_msg'] = "You must choose minimum " . $min_selection . " option(s).";
-            }
-        }
-
-        return $result;
-    }
-
-    public function validation($request, $config_data) {
-        $result = [
-            'error_msg' => '',
-            'error_count' => 0
-        ];
-
-        $errors = [];
-        $index = 0;
-        
-        foreach ($config_data as $__order => $data) {
-            $type = $data['type'];
-            $key = $data['key'];
-            $title = $data['title'];
-            $val = isset($data['val']) ? $data['val'] : '';
-
-            if ($data['required']) {
-                if ('file' == $type) {
-                    if (empty($val)) {
-                        $result['error_count']++;
-                        $errors[$key] = 'The <b>' . $title . '</b> field is required.';
-                    } else if (!$request->hasFile($val)) {
-                        $result['error_count']++;
-                        $errors[$key] = 'The <b>' . $title . '</b> field is required.';
-                    }
-                } /* else if ('selection_group' == $type) {
-                    if (empty($val)) {
-                        $result['error_count']++;
-                        $errors[$key] = 'The <b>' . $title . '</b> field is required.';
-                    } else {
-                        $selectionGroupError = $this->validateSelectionGroup($key, $val);
-
-                        if ($selectionGroupError['has_error']) {
-                            $result['error_count']++;
-                            $errors[$key] = $selectionGroupError['error_msg'];
-                        }
-                    }
-                } */ else {
-                    if (empty($val)) {
-                        $result['error_count']++;
-                        $errors[$key] = 'The <b>' . $title . '</b> field is required.';
-                    }
-                }
-            }
-            
-            if (('selection_group' == $type) && ('' != $val)) {
-                $selectionGroupError = $this->validateSelectionGroup($key, $val);
-
-                if ($selectionGroupError['has_error']) {
-                    $result['error_count']++;
-                    $errors[$key] = $selectionGroupError['error_msg'];
-                }
-            }
-
-            $configObject = $this->getConfigObjectByKey($key);
-            $metaData = json_decode($configObject->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
-            $expression = $metaData['expression'];
-            if ('' != $expression) {
-                if (0 == preg_match($expression, $val)) {
-                    $result['error_count']++;
-                    $errors[$key] = $metaData['message'];
-                }
-            }
-
-        }
-
-        $result['error_msg'] = $errors;
-
-        return $result;
-    }
-
-    public function post_config_data(Request $request)
-    {
-        $User = auth()->guard('adminlteuser')->user();
-        $has_error = false;
-        $error_msg = '';
-        $return_data = [];
-        
-        $page_type = $request->input('page_type');
-        $objectId = $request->input('objectId');
-
-        $config_dataJSON = $request->input('config_data');
-        $config_data = json_decode(
-            $config_dataJSON,
-            (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)
-        );
-
-        $validationResult = $this->validation($request, $config_data);
-        if ($validationResult['error_count'] > 0) {
-            $return_data['id'] = 1;
-            $return_data['has_error'] = true;
-            $return_data['error_msg'] = $validationResult['error_msg'];
-
-            return $return_data;
-        }
-
-        $files = [];
-        $file_index = 0;
-
-        foreach ($config_data as $element_data) {
-            if (isset($element_data['key'])) {
-                if ('file' == $element_data['type']) {
-                    $files[$file_index]['parameter'] = $element_data['key'];
-                    $files[$file_index]['id'] = $element_data['val'];
-                    $files[$file_index]['processtype'] = $request->input($element_data['key'] . 'processtype');
-                } else {
-                    $this->saveConfigParameter($element_data, $page_type, $objectId);
-                }
-            }
-        }
-
-        foreach ($files as $index => $fileData) {
-            if ($request->hasFile($fileData['id'])) {
-                $file = $request->file($fileData['id']);
-                $this->saveFile($page_type, $objectId, $fileData['parameter'], $file);
-            } else {
-                $this->updateFile($page_type, $objectId, $fileData);
-            }
-        }
-
-        $return_data['id'] = 1;
-        $return_data['has_error'] = false;
-        $return_data['error_msg'] = '';
-
-        return $return_data;
-    }
-
-    public function saveConfigParameter($element_data, $page_type, $objectId)
-    {
-        $val = '';
-        if (isset($element_data['val'])) {
-            $val = $element_data['val'];
-        }
-
-        if ('group' == $page_type) {
-            $strKey = $element_data['key'] . ':' . $objectId . ':' . '0';
-        } else {
-            $strKey = $element_data['key'] . ':' . '0' . ':' . $objectId;
-        }
-
-        $__key = hash('sha256', $strKey);
-
-        $object = AdminLTEUserConfigVal::where('__key', $__key)
-            ->where('deleted', 0)
-            ->first();
-
-        if (null !== $object) {
-            $object->value = Crypt::encryptString($val);
-            $object->save();
-        } else {
-            $object = new AdminLTEUserConfigVal();
-            $object->__key = $__key;
-            $object->value = Crypt::encryptString($val);
-            $object->save();
-        }
-    }
-
-    public function saveFile($page_type, $objectId, $parameter, $file) {
-        /* //File Name
-        echo $file->getClientOriginalName() . '<br>';
-    
-        //Display File Extension
-        echo $file->getClientOriginalExtension() . '<br>';
-
-        //Display File Real Path
-        echo $file->getRealPath() . '<br>';
-
-        //Display File Size
-        echo $file->getSize() . '<br>';
-
-        //Display File Mime Type
-        echo $file->getMimeType() . '<br>'; */
-
-        $file_name = $file->getClientOriginalName();
-
-        if ('group' == $page_type) {
-            $strKey = $element_data['key'] . ':' . $objectId . ':' . '0';
-        } else {
-            $strKey = $element_data['key'] . ':' . '0' . ':' . $objectId;
-        }
-
-        $__key = hash('sha256', $strKey);
-
-        $object = AdminLTEUserConfigFile::where('deleted', 0)->where('file_type', '!=', 'default')->where('__key', $__key)->first();
-        if (null === $object) {
-            $object = new AdminLTEUserConfigFile();
-        }
-
-        $object->__key = $__key;
-        $object->file_name = $file->getClientOriginalName();
-        $object->mime_type = $file->getMimeType();
-        $object->file_size = $file->getSize();
-        $object->file = base64_encode(file_get_contents($file->getRealPath()));
-        $object->file_type = 'uploaded';
-        $object->save();
-
-
-        $objConfigVal = AdminLTEUserConfigVal::where('__key', $__key)
-            ->where('deleted', 0)
-            ->first();
-
-        $configObject->__key = $__key;
-        $configObject->value = Crypt::encryptString($file_name);
-        $configObject->save();
-    }
-
-    public function updateFile($page_type, $objectId, $file_data) {
-        $processtype = $file_data['processtype'];
-        if ('' == $processtype) {
-            return;
-        }
-
-        if ('group' == $page_type) {
-            $strKey = $element_data['key'] . ':' . $objectId . ':' . '0';
-        } else {
-            $strKey = $element_data['key'] . ':' . '0' . ':' . $objectId;
-        }
-
-        $__key = hash('sha256', $strKey);
-
-        $objConfigVal = AdminLTEUserConfigVal::where('__key', $__key)
-            ->where('deleted', 0)
-            ->first();
-
-        if (('set_default' == $processtype) || ('removed' == $processtype)) {
-            AdminLTEUserConfigFile::where('file_type', 'uploaded')->where('__key', $__key)->delete();
-
-            if (null !== $objConfigVal) {
-                $objConfigVal->value = '';
-                $objConfigVal->save();
-            }
-        }
     }
 
     public function download_file(Request $request) {
@@ -742,60 +158,6 @@ class AdminLTEUserConfigController extends Controller
         }
 
         return $return_data;
-    }
-
-    public function get_parentlist(Request $request) {
-        $parameters = $request->route()->parameters();
-        $owner_group = isset($parameters['owner_group'])
-            ? intval($parameters['owner_group'])
-            : 0;
-
-        $id = isset($parameters['id'])
-            ? intval($parameters['id'])
-            : 0;
-
-        $objectList = AdminLTEUserConfig::where('id', '!=', $id)
-            ->where('deleted', 0)
-            ->where('owner_group', $owner_group)
-            ->where('type', 'group')
-            ->orderBy('title', 'asc')
-            ->get();
-
-        $list = [];
-
-        foreach ($objectList as $index => $object) {
-            $list[$index]['id'] = $object->__key;
-            $list[$index]['text'] = $this->getParameterOptionTitle($object->__key);
-        }
-
-        return [
-            'list' => $list
-        ];
-    }
-
-    public function get_toggle_elements_options(Request $request) {
-        $parameters = $request->route()->parameters();
-
-        $id = isset($parameters['id'])
-            ? intval($parameters['id'])
-            : 0;
-
-        $objectList = AdminLTEUserConfig::where('id', '!=', $id)
-            ->where('deleted', 0)
-            ->where('enabled', 1)
-            ->orderBy('title', 'asc')
-            ->get();
-
-        $list = [];
-
-        foreach ($objectList as $index => $object) {
-            $list[$index]['id'] = $object->__key;
-            $list[$index]['text'] = $this->getParameterOptionTitle($object->__key);
-        }
-
-        return [
-            'list' => $list
-        ];
     }
 
     public function getParameterOptionTitle($key) {
@@ -908,7 +270,7 @@ class AdminLTEUserConfigController extends Controller
             $index++;
 		}
 
-        $AdminLTEUserConfigList = AdminLTEUserConfig::where('deleted', 0)->where('system', 0)->where('owner_group', $owner_group)->where('parent_id', 0)->get();
+        $AdminLTEUserConfigList = AdminLTEUserConfig::where('deleted', 0)->where('system', 0)->whereIn('owner_group', [0, $owner_group])->where('parent_id', 0)->get();
 		foreach ($AdminLTEUserConfigList as $object) {
             $parent_data[$index] = [];
             $parent_data[$index]['system'] = $object->system;
@@ -1046,19 +408,6 @@ class AdminLTEUserConfigController extends Controller
         return $children_data;
     }
 
-    public function getSystemConfigData() {
-        $AdminLTEUserConfigList = AdminLTEUserConfig::where('deleted', 0)->where('system', 1)->get();
-		$systemConfigData = [];
-
-		foreach ($AdminLTEUserConfigList as $object) {
-            $systemConfigData[$object->__key] = $object;
-		}
-        
-        return $systemConfigData;
-    }
-
-    
-
     public function validate_item(Request $request) {
         $return_data = [];
         $return_data['has_error'] = false;
@@ -1077,7 +426,7 @@ class AdminLTEUserConfigController extends Controller
     }
 
 	public function post_json(Request $request) {
-        /* $systemConfigData = $this->getSystemConfigData(); */
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
         $User = auth()->guard('adminlteuser')->user();
 
@@ -1110,13 +459,14 @@ class AdminLTEUserConfigController extends Controller
 			$AdminLTEUserConfig->required = $data['required'];
             $AdminLTEUserConfig->locked = $data['locked'];
 
-            $owner = 0;
-            if (0 == $data['system']) {
-                $owner = ($data['owner'] > 0) ? $data['owner'] : $User->id;
+            if (1 == $data['system']) {
+                $AdminLTEUserConfig->owner_group = 0;
+                $AdminLTEUserConfig->owner = 0;
+            } else {
+                $AdminLTEUserConfig->owner_group = $owner_group;
+                $AdminLTEUserConfig->owner = ($data['owner'] > 0) ? $data['owner'] : $User->id;
             }
-            $AdminLTEUserConfig->owner = $owner;
             
-            $AdminLTEUserConfig->owner_group = $owner_group;
 			$AdminLTEUserConfig->__order = $__order;
 			$AdminLTEUserConfig->parent_id = 0;
 			$AdminLTEUserConfig->type = $data['type'];
@@ -1158,7 +508,7 @@ class AdminLTEUserConfigController extends Controller
                 $file_id = str_replace('.', '_', $AdminLTEUserConfig->__key);
                 if ($request->hasFile($file_id)) {
                     $file = $request->file($file_id);
-                    $this->saveDefaultFile($AdminLTEUserConfig->__key, $file);
+                    $this->saveDefaultFile($AdminLTEUserConfig, $file);
                 }
             }
 
@@ -1166,6 +516,8 @@ class AdminLTEUserConfigController extends Controller
                 $this->saveChildren($owner_group, $request, $data['children'], $AdminLTEUserConfig->id, $AdminLTEUserConfig->__key);
 			}
 		}
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
 	}
 
     public function saveChildren($owner_group, $request, $children, $parent_id, $parent_key) {
@@ -1180,13 +532,14 @@ class AdminLTEUserConfigController extends Controller
 			$AdminLTEUserConfig->required = $data['required'];
             $AdminLTEUserConfig->locked = $data['locked'];
 
-            $owner = 0;
-            if (0 == $data['system']) {
-                $owner = ($data['owner'] > 0) ? $data['owner'] : $User->id;
+            if (1 == $data['system']) {
+                $AdminLTEUserConfig->owner_group = 0;
+                $AdminLTEUserConfig->owner = 0;
+            } else {
+                $AdminLTEUserConfig->owner_group = $owner_group;
+                $AdminLTEUserConfig->owner = ($data['owner'] > 0) ? $data['owner'] : $User->id;
             }
-            $AdminLTEUserConfig->owner = $owner;
-
-            $AdminLTEUserConfig->owner_group = $owner_group;
+            
             $AdminLTEUserConfig->__order = $__order;
 			$AdminLTEUserConfig->parent_id = $parent_id;
 			$AdminLTEUserConfig->type = $data['type'];
@@ -1238,7 +591,8 @@ class AdminLTEUserConfigController extends Controller
 		}
 	}
 
-    public function saveDefaultFile($parameter, $file) {
+    public function saveDefaultFile($configObject, $file) {
+        $parameter = $configObject->__key;
         /* //File Name
         echo $file->getClientOriginalName() . '<br>';
     
@@ -1278,7 +632,6 @@ class AdminLTEUserConfigController extends Controller
         $object->file_type = 'default';
         $object->save();
 
-        $configObject = $this->getConfigObjectByKey($parameter);
         if (null !== $configObject) {
             $configObject->default_value = $object->file_name;
             $configObject->save();

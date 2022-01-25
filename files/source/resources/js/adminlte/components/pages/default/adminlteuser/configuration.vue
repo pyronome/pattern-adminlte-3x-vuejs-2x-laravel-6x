@@ -292,6 +292,7 @@
                     </div>
                     <div class="col-lg-8 col-md-8 col-xs-12">
                         <div class="row config-parameter__delete__ config-selection-group"
+                            data-object-id="__object_id__"
                             data-type="selection_group"
                             data-key="__group_key__"
                             data-min-selection="__min_selection__"
@@ -326,6 +327,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row config-parameter__delete__ config-selection-group"
+                            data-object-id="__object_id__"
                             data-type="selection_group"
                             data-key="__group_key__"
                             data-min-selection="__min_selection__"
@@ -359,6 +361,7 @@
                         <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     </div>
                     <div class="row mt-4 config-parameter__delete__ config-selection-group"
+                        data-object-id="__object_id__"
                         data-type="selection_group"
                         data-key="__group_key__"
                         data-min-selection="__min_selection__"
@@ -399,6 +402,7 @@
                             id="__field_key__"
                             name="__field_key__"
                             class="config-parameter__delete__"
+                            data-object-id="__object_id__"
                             data-type="checkbox">
                         <label for="__field_key__" class="detail-label">
                             {{ $t('__field_title__') }} <span class="__required_class__">*</span>
@@ -435,6 +439,7 @@
                     <div class="input-group">
                         <input type="text"
                             class="form-control color-picker__delete__ config-parameter__delete__"
+                            data-object-id="__object_id__"
                             data-type="colorpicker"
                             id="__field_key__"
                             name="__field_key__">
@@ -465,6 +470,7 @@
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     <input type="date"
                         class="form-control config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="datepicker"
                         id="__field_key__"
                         name="__field_key__">
@@ -491,6 +497,7 @@
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     <input type="datetime-local"
                         class="form-control config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="datetimepicker"
                         id="__field_key__"
                         name="__field_key__">
@@ -520,6 +527,7 @@
                         id="__field_key__"
                         name="__field_key__"
                         class="form-control configselect2__delete__ config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="dropdown"
                         data-key="__field_key__"
                         style="width:100%;">
@@ -548,6 +556,7 @@
                             accept="__file_types__"
                             data-type="file" 
                             class="form-input config-file__delete__ config-parameter__delete__"
+                            data-object-id="__object_id__"
                             style="display:none;">
                         <button type="button" class="btn btn-primary btn-file-trigger__delete__" data-triggered-id="__field_key__">
                             {{ $t('Browse...') }}
@@ -595,6 +604,7 @@
                         name="__field_key__"
                         data-type="html_editor"
                         class="textarea vue-editor__delete__ config-parameter__delete__"
+                        data-object-id="__object_id__"
                         rows="5"></textarea>
                     <div class="config-parameter-error" id="__field_key__-error">
                         <span class="error invalid-feedback"></span>
@@ -617,7 +627,13 @@
                     </label>
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     <button type="button" id="__field_key__" class="btn btn-outline-secondary icon-picker__delete__"></button>
-                    <input type="hidden" id="__field_key__-value" name="__field_key__-value" data-key="__field_key__" data-type="iconpicker" class="item-widget config-parameter__delete__">
+                    <input type="hidden" 
+                        id="__field_key__-value" 
+                        name="__field_key__-value" 
+                        data-key="__field_key__"
+                        data-object-id="__object_id__"
+                        data-type="iconpicker" 
+                        class="item-widget config-parameter__delete__">
                     <div class="config-parameter-error" id="__field_key__-error">
                         <span class="error invalid-feedback"></span>
                     </div>
@@ -640,6 +656,7 @@
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     <input type="number"
                         class="form-control config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="shorttext"
                         id="__field_key__"
                         name="__field_key__"
@@ -688,6 +705,7 @@
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     <input type="number"
                         class="form-control config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="shorttext"
                         id="__field_key__"
                         name="__field_key__"
@@ -716,6 +734,7 @@
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     <input type="password"
                         class="form-control config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="shorttext"
                         id="__field_key__"
                         name="__field_key__">
@@ -741,6 +760,7 @@
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     <div id="container_radio___field_key__" 
                         class="clearfix config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="radio"   
                         data-key="__field_key__">
                         __radio_options_html__
@@ -784,6 +804,7 @@
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     <input type="text"
                         class="form-control config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="shorttext"
                         id="__field_key__"
                         name="__field_key__">
@@ -798,6 +819,7 @@
                         id="__field_key__"
                         name="__field_key__"
                         class="vue-switch__delete__ config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="switch"
                         data-key="__field_key__"
                         data-bootstrap-switch>
@@ -842,6 +864,7 @@
                         id="__field_key__"
                         name="__field_key__"
                         class="form-control config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="textarea"></textarea>
                     <div class="config-parameter-error" id="__field_key__-error">
                         <span class="error invalid-feedback"></span>
@@ -865,6 +888,7 @@
                     <p class="text-muted text-sm config-desc">{{ $t('__description__') }}</p>
                     <input type="time"
                         class="form-control config-parameter__delete__"
+                        data-object-id="__object_id__"
                         data-type="timepicker"
                         id="__field_key__"
                         name="__field_key__">
@@ -880,6 +904,7 @@
                             id="__field_key__"
                             name="__field_key__"
                             class="config-parameter__delete__ config-toggle__delete__"
+                            data-object-id="__object_id__"
                             data-toggle-elements="__toggle_elements__"
                             data-type="toggle">
                         <label for="__field_key__" class="detail-label">
@@ -1541,6 +1566,7 @@ export default {
 
             return templateHTML
                     .replace(/__delete__/g, "")
+                    .replace(/__object_id__/g, element.id)
                     .replace(/__group_title__/g, element.title)
                     .replace(/__description__/g, element.description)
                     .replace(/__group_key__/g, element.__key)
@@ -1831,6 +1857,7 @@ export default {
                 .replace(/__field_title__/g, element.title)
                 .replace(/__hint__/g, element.hint)
                 .replace(/__hint_class__/g, hintClass)
+                .replace(/__object_id__/g, element.id)
                 .replace(/__required_class__/g, requiredClass)
                 .replace(/__use_default_title__/g, document.getElementById("btnUseDefaultTitle").innerHTML);
         },
@@ -2327,6 +2354,7 @@ export default {
                 let parameter_data = {};
 
                 if ("radio" == element.getAttribute("data-type")) {
+                    parameter_data["object_id"] = element.getAttribute("data-object-id");
                     let id = element.getAttribute("data-key");
                     parameter_data["type"] = "radio";
                     parameter_data["key"] = id;
@@ -2334,6 +2362,7 @@ export default {
                     parameter_data["val"] = $(selectorText).val();
 
                 } else if ("dropdown" == element.getAttribute("data-type")) {
+                    parameter_data["object_id"] = element.getAttribute("data-object-id");
                     parameter_data["type"] = "dropdown";
                     parameter_data["key"] = element.getAttribute("data-key");
                     parameter_data["val"] = $(element).val();
@@ -2343,6 +2372,7 @@ export default {
                         parameter_data["val"] = $(element).val().join(",");
                     }
                 } else if ("file" == element.getAttribute("data-type")) {
+                    parameter_data["object_id"] = element.getAttribute("data-object-id");
                     parameter_data["type"] = "file";
                     parameter_data["key"] = element.id;
 
@@ -2356,26 +2386,32 @@ export default {
                     formData.append((parameter_data["key"] + "processtype"), document.getElementById(parameter_data["key"] + "-file_process_type").value);
                     
                 } else if ("html_editor" == element.getAttribute("data-type")) {
+                    parameter_data["object_id"] = element.getAttribute("data-object-id");
                     parameter_data["type"] = "html_editor";
                     parameter_data["key"] = element.id;
                     parameter_data["val"] = $(element).summernote('code');
                 } else if ("iconpicker" == element.getAttribute("data-type")) {
+                    parameter_data["object_id"] = element.getAttribute("data-object-id");
                     parameter_data["type"] = "iconpicker";
                     parameter_data["key"] = element.getAttribute("data-key");
                     parameter_data["val"] = element.value;
                 } else if ("switch" == element.getAttribute("data-type")) {
+                    parameter_data["object_id"] = element.getAttribute("data-object-id");
                     parameter_data["type"] = "switch";
                     parameter_data["key"] = element.getAttribute("data-key");
                     parameter_data["val"] = element.checked ? 'on' : 'off';
                 } else if ("selection_group" == element.getAttribute("data-type")) {
+                    parameter_data["object_id"] = element.getAttribute("data-object-id");
                     parameter_data["type"] = "selection_group";
                     parameter_data["key"] = element.getAttribute("data-key");
                     parameter_data["val"] = self.getSelectionGroupValue(parameter_data["key"])
                 } else if ("checkbox" == element.getAttribute("data-type")) {
+                    parameter_data["object_id"] = element.getAttribute("data-object-id");
                     parameter_data["type"] = "other";
                     parameter_data["key"] = element.id;
                     parameter_data["val"] = element.checked ? 'on' : 'off';
                 } else {
+                    parameter_data["object_id"] = element.getAttribute("data-object-id");
                     parameter_data["type"] = "other";
                     parameter_data["key"] = element.id;
                     parameter_data["val"] = element.value;

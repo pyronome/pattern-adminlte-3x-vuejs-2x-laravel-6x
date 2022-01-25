@@ -447,9 +447,9 @@ class AdminLTEUserController extends Controller
                 $list[$index]['value'] = '';
                 if ('group' != $object->type) {
                     if ('file' == $object->type) {
-                        $list[$index]['value'] = $this->getConfigFileVal($object->__key, $objectId, $show_on_group, $object->owner_group);
+                        $list[$index]['value'] = $this->getConfigFileVal($object->__key, $objectId, $show_on_group, $owner_group);
                     } else {
-                        $list[$index]['value'] = $this->getConfigVal($object->__key, $objectId, $show_on_group, $object->owner_group);
+                        $list[$index]['value'] = $this->getConfigVal($object->__key, $objectId, $show_on_group, $owner_group);
                     }
                 }
 
@@ -488,7 +488,7 @@ class AdminLTEUserController extends Controller
             //echo 'parentKey:' . $parentKey . '<br>';
 
              if ( ('' != $parentKey) && !isset($configList[$parentKey]) ) {
-                $parentObject = $this->getConfigObjectByKey($parentKey);
+                $parentObject = $this->getConfigObjectById($object->parent_id);
                 
                 $metaData = json_decode($parentObject->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
                 $show_on_group = isset($metaData['show_on_group']) ? intval($metaData['show_on_group']) : 0;
@@ -530,14 +530,6 @@ class AdminLTEUserController extends Controller
 
     public function getConfigObjectById($id) {
         return AdminLTEUserConfig::where('id', $id)
-            /* ->where('owner_group', $owner_group) */
-            ->where('deleted', 0)
-            /* ->where('enabled', 1) */
-            ->first();
-    }
-
-    public function getConfigObjectByKey($__key) {
-        return AdminLTEUserConfig::where('__key', $__key)
             /* ->where('owner_group', $owner_group) */
             ->where('deleted', 0)
             /* ->where('enabled', 1) */
@@ -801,6 +793,7 @@ class AdminLTEUserController extends Controller
         $index = 0;
         
         foreach ($config_data as $__order => $data) {
+            $object_id = $data['object_id'];
             $type = $data['type'];
             $key = $data['key'];
             $title = $data['title'];
@@ -815,19 +808,7 @@ class AdminLTEUserController extends Controller
                         $result['error_count']++;
                         $errors[$key] = 'The <b>' . $title . '</b> field is required.';
                     }
-                } /* else if ('selection_group' == $type) {
-                    if (empty($val)) {
-                        $result['error_count']++;
-                        $errors[$key] = 'The <b>' . $title . '</b> field is required.';
-                    } else {
-                        $selectionGroupError = $this->validateSelectionGroup($key, $val);
-
-                        if ($selectionGroupError['has_error']) {
-                            $result['error_count']++;
-                            $errors[$key] = $selectionGroupError['error_msg'];
-                        }
-                    }
-                } */ else {
+                } else {
                     if (empty($val)) {
                         $result['error_count']++;
                         $errors[$key] = 'The <b>' . $title . '</b> field is required.';
@@ -835,7 +816,7 @@ class AdminLTEUserController extends Controller
                 }
             }
             
-            $configObject = $this->getConfigObjectByKey($key);
+            $configObject = $this->getConfigObjectById($object_id);
 
             if (('selection_group' == $type) && ('' != $val)) {
                 $selectionGroupError = $this->validateSelectionGroup($configObject, $val);
