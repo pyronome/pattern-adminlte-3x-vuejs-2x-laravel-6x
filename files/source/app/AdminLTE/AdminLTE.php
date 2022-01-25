@@ -2965,7 +2965,7 @@ class AdminLTE
 
 		$objConfig = AdminLTEUserConfig::where('__key', $parameter)
 			->where('deleted', 0)
-			->where('owner_group', $groupId)
+			->whereIn('owner_group', [0, $groupId])
 			->first();
 
 		if (null !== $objConfig) {
@@ -3070,7 +3070,7 @@ class AdminLTE
 
 		$objConfig = AdminLTEUserConfig::where('__key', $key)
 			->where('deleted', 0)
-			->where('owner_group', $groupId)
+			->whereIn('owner_group', [0, $groupId])
 			->first();
 
 		if (null !== $objConfig) {
