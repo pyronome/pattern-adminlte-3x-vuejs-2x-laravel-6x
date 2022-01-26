@@ -200,6 +200,7 @@ export default {
                     self.processLoadQueue();
                 }).finally(function() {
                    AdminLTEHelper.initializePermissions(self.page.variables, false);
+                   let authorize = {};
                    if ("new" == self.id) {
                        authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'create');
                    } else {
