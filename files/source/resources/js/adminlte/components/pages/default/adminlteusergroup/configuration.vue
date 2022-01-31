@@ -7,11 +7,11 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>{{ $t("Configuration") }}</h1>
+                            <h1 v-html="AdminLTEUserGroupForm.title"></h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
+                                <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
                                 <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/adminlteusergroup'">{{ $t("AdminLTEUserGroup List") }}</router-link></li>
                             </ol>
                         </div>
@@ -23,7 +23,7 @@
                                 <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Layout Settings') }}</span>
                             </router-link>
                             <a class="btn btn-primary btn-md btn-on-card text-white float-sm-right" :href="parameterSettingsURL">
-                                <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>Edit Parameters</span>
+                                <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Add / Edit Parameters') }}</span>
                             </a>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                                         id="searchText" name="searchText"
                                         @keyup="search_list" v-model="search_text"
                                         class="form-control float-right inputSearchBar"
-                                        v-bind:placeholder="$t('Search')" autocomplete="off">
+                                        v-bind:placeholder="$t('Search Fields')" autocomplete="off">
                                     <div class="input-group-append labelSearchBar">
                                         <button type="button" class="btn btn-default ">
                                             <img class="imgLoader" src="/img/adminlte/loader.svg" width="14" height="14"/>
@@ -88,7 +88,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 searchable-container" data-search-text="permission">
+                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 searchable-container" data-search-text="widget permission">
                                                 <div class="icheck-primary d-inline">
                                                     <input type="checkbox"
                                                         id="AdminLTEUserGroupForm_widget_permission"

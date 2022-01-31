@@ -15,7 +15,11 @@ class LoginController extends Controller
 
     public function get_brand_data() {
         $objectAdminLTE = new AdminLTE();
-        return $objectAdminLTE->getBrandData();
+        
+        return [
+            'brand' => $objectAdminLTE->getBrandData(),
+            'showregisterpage' => ('on' == $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.showregisterpage')),
+        ];
     }
 
     public function post(LoginPOSTRequest $request)

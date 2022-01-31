@@ -29,6 +29,7 @@ class HomeController extends Controller
         $viewData['brand'] = $objectAdminLTE->getBrandData();
         $viewData['project_title'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.projecttitle');
         $viewData['main_folder'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.mainfolder');
+        $viewData['showregisterpage'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.showregisterpage');
         $viewData['google_maps_api_key'] = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.googlemapsapikey');
 
         // get user config val example

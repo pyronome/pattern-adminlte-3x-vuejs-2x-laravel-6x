@@ -13,6 +13,8 @@ class ForgotPasswordController extends Controller
 
     public function index(Request $request)
     {
+        $objectAdminLTE = new AdminLTE();
+        
         $viewName = 'adminlte.' . $this->controllerName;
 
         if (view()->exists('adminlte.custom.' . $this->controllerName))

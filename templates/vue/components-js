@@ -18,6 +18,7 @@ Vue.component('page-layout', require('./components/elements/default/PageLayout.v
 /* Forms BOF */
 /* {{@snippet:begin_forms}} */
 
+Vue.component('register-form', require('./components/elements/default/RegisterForm.vue').default);
 Vue.component('login-form', require('./components/elements/default/LoginForm.vue').default);
 Vue.component('forgot-password-form', require('./components/elements/default/ForgotPasswordForm.vue').default);
 

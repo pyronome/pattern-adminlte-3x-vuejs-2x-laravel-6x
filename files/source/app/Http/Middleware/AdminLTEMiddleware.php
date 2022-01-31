@@ -52,12 +52,15 @@ class AdminLTEMiddleware
         $adminLTEFolder = config('adminlte.main_folder');
 
         $publicPages = [
+            'register',
             'login',
             'logout',
             'forgotpassword',
-	    'api/login/get_brand_data',
-	    'api/login',
-	    'api/forgotpassword'
+            'api/register/get_brand_data',
+            'api/register',
+            'api/login/get_brand_data',
+            'api/login',
+            'api/forgotpassword'
         ];
 
         $publicPageCount = count($publicPages);

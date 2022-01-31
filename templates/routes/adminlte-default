@@ -13,6 +13,7 @@
 
 /* {{@snippet:begin_routes}} */
 
+Route::get('/register', 'RegisterController@index');
 Route::get('/login', 'LoginController@index');
 Route::get('/logout', 'LogoutController@index');
 Route::get('/forgotpassword', 'ForgotPasswordController@index');
@@ -29,6 +30,11 @@ Route::namespace('API')
     /* {{@snippet:begin_api_routes}} */
     Route::prefix('adminlte')->group(function () {
         Route::get('/get_page_variables/{componentName}', 'AdminLTEController@get_page_variables');
+    });
+    
+    Route::prefix('register')->group(function () {
+        Route::get('/get_brand_data', 'RegisterController@get_brand_data');
+        Route::post('/post', 'RegisterController@post');
     });
     
     Route::prefix('login')->group(function () {

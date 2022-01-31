@@ -11,14 +11,14 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
+                                <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
                                 <li class="breadcrumb-item active">{{ $t("Configuration") }}</li>
                             </ol>
                             
                         </div>
                         <div class="col-sm-12" v-show="page.variables.is_admin">
                             <a class="btn btn-primary btn-md btn-on-card text-white float-sm-right" href="parameter_settings">
-                                <span>Edit Parameters</span>
+                                <i class="fas fa-pencil-alt" aria-hidden="true"></i> <span>{{ $t('Add / Edit Parameters') }}</span>
                             </a>
                         </div>
                     </div>

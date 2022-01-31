@@ -14,6 +14,36 @@
                     <!-- {{@snippet:begin_login_form}} -->
                     <div class="input-group mb-3">
                         <input type="text"
+                            v-model="form.fullname"
+                            id="formLogin-fullname"
+                            name="formLogin-fullname"
+                            class="form-control"
+                            v-bind:placeholder="$t('Full Name')"
+                            :class="{ 'is-invalid': form.errors.has('fullname') }">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-id-card"></span>
+                            </div>
+                        </div>
+                        <has-error :form="form" field="fullname"></has-error>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text"
+                            v-model="form.username"
+                            id="formLogin-username"
+                            name="formLogin-username"
+                            class="form-control"
+                            v-bind:placeholder="$t('Username')"
+                            :class="{ 'is-invalid': form.errors.has('username') }">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                        <has-error :form="form" field="username"></has-error>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text"
                             v-model="form.email"
                             id="formLogin-email"
                             name="formLogin-email"
@@ -40,36 +70,21 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
-                        <input type="hidden" v-model="form.enabled" :class="{ 'is-invalid': form.errors.has('enabled') }">
-                        <has-error :form="form" field="enabled"></has-error>
                         <has-error :form="form" field="password"></has-error>
                     </div>
                     <div class="row">
                         <div class="col-7" style="padding-top:8px;">
-                            <div class="icheck-primary d-inline">
-                                <input type="checkbox"
-                                    v-model="form.remember"
-                                    id="formLogin-remember"
-                                    name="formLogin-remember"
-                                    class="form-control">
-                                <label for="formLogin-remember">
-                                    {{ $t('Remember Me') }}
-                                </label>
-                            </div>
                         </div>
                         <div class="col-5">
                             <button :disabled="form.busy"
                                     type="submit"
-                                    class="btn btn-primary btn-block">{{ $t('Sign in') }}</button>
+                                    class="btn btn-primary btn-block">{{ $t('Register') }}</button>
                         </div>
                     </div>
                     <!-- {{@snippet:end_login_form}} -->
                 </form>
                 <p class="mb-1 mt-2">
-                    <a href="forgotpassword">{{ $t('I forgot my password') }}</a>
-                </p>
-                <p class="mb-1 mt-2" v-if="showregisterpage">
-                   {{ $t('Don’t have an account?') }} <a href="register">{{ $t('Register Now!') }}</a>
+                   {{ $t('Do you have an account?') }} <a href="login">{{ $t('Sign in!') }}</a>
                 </p>
             </div>
         </div>
@@ -82,18 +97,16 @@ export default {
     data() {
         return {
             brand_data: [],
-            showregisterpage: false,
             form: new Form({
+                fullname: '',
                 email: '',
-                password: '',
-                enabled: 0,
-                remember: false
+                password: ''
             }),
             page: {
                 is_ready: false,
                 is_data_loading: false,
                 is_data_loaded: false,
-                is_post_success: false,
+                is_post_success: false
             },
             body_loader_active: false
         }
@@ -125,12 +138,11 @@ export default {
 
             self.page.is_data_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("login/get_brand_data"))
+            axios.get(AdminLTEHelper.getAPIURL("register/get_brand_data"))
                 .then(({ data }) => {
                     self.page.is_data_loaded = true;
                     self.page.is_data_loading = false;
-                    self.brand_data = data.brand;
-                    self.showregisterpage = data.showregisterpage;
+                    self.brand_data = data;
                     self.processLoadQueue();
                 }).catch(({ data }) => {
                     self.page.is_data_loaded = true;
@@ -145,9 +157,9 @@ export default {
         },
         submitForm: function () {
             var self = this;
-            var landing_page = AdminLTEHelper.getLandingPage();
+            
             self.$Progress.start();
-            self.form.post(AdminLTEHelper.getAPIURL("login/post"))
+            self.form.post(AdminLTEHelper.getAPIURL("register/post"))
                 .then(({ data }) => {
                     self.$Progress.finish();
                     self.page.is_post_success = true;
@@ -156,7 +168,7 @@ export default {
                     self.page.is_post_success = false;
                 }).finally(function() {
                     if (self.page.is_post_success) {
-                        window.location = landing_page;
+                        window.location = "login";
                     }
                 });
         }
