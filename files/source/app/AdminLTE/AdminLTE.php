@@ -2799,6 +2799,8 @@ class AdminLTE
 				$metaData['small_screen_size'] = $config_item['small_screen_size'];
 				$metaData['min_selection'] = $config_item['min_selection'];
 				$metaData['max_selection'] = $config_item['max_selection'];
+				$metaData['expression'] = $config_item['expression'];
+				$metaData['message'] = $config_item['message'];
 
 				$encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 				$AdminLTEConfig->meta_data_json = $encodedData;
