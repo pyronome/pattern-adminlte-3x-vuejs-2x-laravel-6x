@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
 use App\Http\Requests\AdminLTE\API\RegisterPOSTRequest;
-use App\AdminLTE\AdminLTEUserLayout;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -23,6 +23,8 @@ class RegisterController extends Controller
     {
         /* {{@snippet:begin_login_post}} */
 
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
         $objectAdminLTEUser = new AdminLTEUser();
         $objectAdminLTEUser->created_by = 0;
         $objectAdminLTEUser->updated_by = 0;
@@ -32,27 +34,10 @@ class RegisterController extends Controller
         $objectAdminLTEUser->username = $request->input('username');
         $objectAdminLTEUser->email = $request->input('email');
         $objectAdminLTEUser->password = bcrypt($request->input('password'));
-        $objectAdminLTEUser->adminlteusergroup_id = 2;//default seçtirebiliriz
+        $objectAdminLTEUser->adminlteusergroup_id = 0;
 		$objectAdminLTEUser->save();
 
-        $baseUser = AdminLTEUser::where('adminlteusergroup_id', 2)
-                ->where('deleted', 0)
-                ->where('enabled', 1)
-                ->first();
-
-        if (null !== $baseUser) {
-            $layoutList = AdminLTEUserLayout::where('deleted', false)->where('adminlteuser_id', $baseUser->id)->get();
-            foreach ($layoutList as $layout) {
-                $newLayout = new AdminLTEUserLayout();
-                
-                $newLayout->created_at = time();
-                $newLayout->updated_at = time();
-                $newLayout->adminlteuser_id = $objectAdminLTEUser->id;
-                $newLayout->pagename = $layout->pagename;
-                $newLayout->widgets = $layout->widgets;
-                $newLayout->save();
-            } // foreach ($objectList as $object)
-        }
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         return [
             'landing_page' => 'login'
