@@ -97,9 +97,9 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->bigInteger('__order')->default(0);
                 $table->string('pagename');
                 $table->string('widget');
-                $table->string('title');
+                $table->string('title')->nullable();
                 $table->string('grid_size');
-                $table->string('icon');
+                $table->string('icon')->nullable();
                 $table->text('meta_data_json');
             });
         } else {

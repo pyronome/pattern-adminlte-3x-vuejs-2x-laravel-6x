@@ -7,8 +7,8 @@
         <section>
             <div class="row">
                 <div v-for="(child, index) in children" :key="index" :class="child.grid_class">
-                    <div class="widget-header" v-show="child.db_data.enabled">
-                        <widget-header></widget-header>
+                    <div class="widget-header" v-show="child.db_data.enabled" style="text-align:right">
+                        <widget-header :instance_id="child.instance_id"></widget-header>
                     </div>
                     <div class="widget-body">
                         <elements :element="child"></elements>

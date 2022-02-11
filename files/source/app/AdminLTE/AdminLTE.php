@@ -369,8 +369,6 @@ class AdminLTE
 	}
 
 	public function getCustomization() {
-		$preferences = $this->getUserPreferences();
-
 		$values = array();
 
 		$values['body'] = '';
