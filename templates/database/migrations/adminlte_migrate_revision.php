@@ -86,28 +86,70 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             });
         }
         /* {{@snippet:end_adminltelogtable_migration}} */
-        
+
         /* {{@snippet:begin_adminltelayouttable_migration}} */        
         if (!Schema::hasTable('adminltelayouttable')) {
             Schema::create('adminltelayouttable', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->timestamps();
                 $table->boolean('deleted');
+                $table->boolean('enabled')->default(0);
+                $table->bigInteger('__order')->default(0);
                 $table->string('pagename');
-                $table->text('widgets');
+                $table->string('widget');
+                $table->string('title');
+                $table->string('grid_size');
+                $table->string('icon');
+                $table->text('meta_data_json');
             });
         } else {
             Schema::table('adminltelayouttable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminltelayouttable', 'enabled')) { 
+                    $table->boolean('enabled')->default(0)->change();
+                } else {
+                    $table->boolean('enabled')->default(0);
+                }
+
+                if (Schema::hasColumn('adminltelayouttable', '__order')) { 
+                    $table->bigInteger('__order')->default(0)->change();
+                } else {
+                    $table->bigInteger('__order')->default(0);
+                }
+
                 if (Schema::hasColumn('adminltelayouttable', 'pagename')) { 
                     $table->string('pagename')->change();
                 } else {
                     $table->string('pagename');
                 }
 
-                if (Schema::hasColumn('adminltelayouttable', 'widgets')) { 
-                    $table->text('widgets')->change();
+                if (Schema::hasColumn('adminltelayouttable', 'widget')) { 
+                    $table->string('widget')->change();
                 } else {
-                    $table->text('widgets');
+                    $table->string('widget');
+                }
+
+                if (Schema::hasColumn('adminltelayouttable', 'title')) { 
+                    $table->string('title')->change();
+                } else {
+                    $table->string('title');
+                }
+
+                if (Schema::hasColumn('adminltelayouttable', 'grid_size')) { 
+                    $table->string('grid_size')->change();
+                } else {
+                    $table->string('grid_size');
+                }
+
+                if (Schema::hasColumn('adminltelayouttable', 'icon')) { 
+                    $table->string('icon')->change();
+                } else {
+                    $table->string('icon');
+                }
+
+                if (Schema::hasColumn('adminltelayouttable', 'meta_data_json')) { 
+                    $table->text('meta_data_json')->change();
+                } else {
+                    $table->text('meta_data_json');
                 }
             });
         }
@@ -326,6 +368,20 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     'remember_token' => Str::random(10)
                 )
             );
+
+            Schema::table('adminltelayouttable', function(Blueprint $table) {
+                if (Schema::hasColumn('adminltelayouttable', 'adminlteusergroup_id')) { 
+                    $table->unsignedBigInteger('adminlteusergroup_id')->nullable()->unsigned()->change();
+                } else {
+                    $table->unsignedBigInteger('adminlteusergroup_id')->nullable()->unsigned();
+                }
+    
+                $foreignKeys = $this->listTableForeignKeys('adminltelayouttable');
+    
+                if (!in_array('adminltelayouttable_adminlteusergroup_id_foreign', $foreignKeys)) {
+                    $table->foreign('adminlteusergroup_id')->references('id')->on('adminlteusergrouptable'); 
+                }     
+            });
         } else {
             Schema::table('adminlteusergrouptable', function (Blueprint $table) {
                 if (Schema::hasColumn('adminlteusergrouptable', 'created_by')) { 
@@ -366,39 +422,6 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             });
         }
         /* {{@snippet:end_adminlteusergrouptable_migration}} */
-
-        /* {{@snippet:begin_adminlteuserlayouttable_migration}} */        
-        if (!Schema::hasTable('adminlteuserlayouttable')) {
-            Schema::create('adminlteuserlayouttable', function (Blueprint $table) {
-                $table->bigIncrements('id');
-                $table->timestamps();
-                $table->boolean('deleted')->default(0);
-                $table->bigInteger('adminlteuser_id', false, true);
-                $table->string('pagename')->nullable();
-                $table->text('widgets')->nullable();
-            });
-        } else {
-            Schema::table('adminlteuserlayouttable', function (Blueprint $table) {
-                if (Schema::hasColumn('adminlteuserlayouttable', 'adminlteuser_id')) { 
-                    $table->bigInteger('adminlteuser_id', false, true)->change();
-                } else {
-                    $table->bigInteger('adminlteuser_id', false, true);
-                }
-
-                if (Schema::hasColumn('adminlteuserlayouttable', 'pagename')) { 
-                    $table->string('pagename')->nullable()->change();
-                } else {
-                    $table->string('pagename')->nullable();
-                }
-
-                if (Schema::hasColumn('adminlteuserlayouttable', 'widgets')) { 
-                    $table->text('widgets')->default(0)->change();
-                } else {
-                    $table->text('widgets')->default(0);
-                }
-            });
-        }
-        /* {{@snippet:end_adminlteuserlayouttable_migration}} */
 
         /* {{@snippet:begin_adminltevariabletable_migration}} */        
         if (!Schema::hasTable('adminltevariabletable')) {

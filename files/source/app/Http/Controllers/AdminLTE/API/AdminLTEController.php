@@ -35,6 +35,9 @@ class AdminLTEController extends Controller
         if (Gate::allows('isAdmin')) {
             $admin = true;
         }
+
+        // widgets
+        $active_widgets = $objectAdminLTE->getUserWidgets($componentName);
         
         // Permissions
         $menu_permissions = $objectAdminLTE->getUserMenuPermissions();
@@ -45,6 +48,7 @@ class AdminLTEController extends Controller
             'show_widget_config_button' => $show_widget_config_button,
             'menu_permissions' => $menu_permissions,
             'model_permissions' => $model_permissions,
+            'active_widgets' => $active_widgets
         ];
     }
 }

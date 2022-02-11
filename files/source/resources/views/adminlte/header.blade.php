@@ -16,6 +16,11 @@
                         <i class="fas fa-palette nav-icon"></i>
                     </a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a id="buttonElements" class="nav-link" href="javascript:void(0);">
+                        <i class="fas fa-palette nav-icon text-green"></i>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- Main Sidebar Container -->

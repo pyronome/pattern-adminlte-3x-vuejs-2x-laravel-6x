@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->updateAdminLTEUserConfigParameters();
         $this->updateAdminLTEModelMenu();
         $this->updateAdminLTEPluginMenu();
-        $this->updateLayout();
+        /* $this->updateLayout(); */
 
     	/* {{@snippet:end_run_method}} */         
     }

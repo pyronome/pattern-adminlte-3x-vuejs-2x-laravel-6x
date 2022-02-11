@@ -1,6 +1,9 @@
 /* Elements BOF */
 /* {{@snippet:begin_elements}} */
 
+import { Widgets } from './components/widgets/widgets';
+window.Widgets = Widgets;
+
 Vue.component('widgets', require('./components/widgets/Widgets.vue').default);
 Vue.component('select2-element', require('./components/elements/default/Select2Element.vue').default);
 Vue.component('dropzone', require('./components/elements/default/Dropzone.vue').default);
@@ -11,6 +14,11 @@ Vue.component('body-loader', require('./components/elements/default/BodyLoader.v
 Vue.component('permission-error', require('./components/elements/default/PermissionError.vue').default);
 Vue.component('server-error', require('./components/elements/default/ServerError.vue').default);
 Vue.component('page-layout', require('./components/elements/default/PageLayout.vue').default);
+Vue.component('layout', require('./components/widgets/Layout.vue').default);
+Vue.component('elements', require('./components/widgets/Elements.vue').default);
+Vue.component('element-settings', require('./components/widgets/Settings.vue').default);
+Vue.component('layout-editor', require('./components/elements/default/LayoutEditor.vue').default);
+Vue.component('widget-header', require('./components/elements/default/WidgetHeader.vue').default);
 
 /* {{@snippet:end_elements}} */
 /* Elements EOF */

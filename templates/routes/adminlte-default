@@ -145,6 +145,9 @@ Route::namespace('API')
         Route::get('/get_recordlist/{pageName}/{model}', 'AdminLTELayoutController@get_recordlist');
         Route::get('/get_layout_page_options', 'AdminLTELayoutController@get_layout_page_options');
         Route::get('/get_page_layout/{pagename}', 'AdminLTELayoutController@get_page_layout');
+        Route::get('/get_widgets/{pagename}', 'AdminLTELayoutController@get_widgets');
+        Route::get('/get_active_widgets/{pagename}', 'AdminLTELayoutController@get_active_widgets');
+        Route::post('/post_layout', 'AdminLTELayoutController@post_layout');
     });
 
     Route::prefix('__modeldisplaytext')->group(function () {

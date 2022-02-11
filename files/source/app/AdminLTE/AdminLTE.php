@@ -3172,6 +3172,49 @@ class AdminLTE
 		
 		return $model_permissions;
 	}
+
+	public function getUserWidgets($pagename) {
+		$currentUser = auth()->guard('adminlteuser')->user();
+
+		$objectAdminLTELayout = null;
+        $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
+				->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
+				->where('pagename', $pagename)
+				->orderBy('__order','asc')
+				->get();
+
+        if (0 == count($objectAdminLTELayouts)) {
+            $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
+				->where('adminlteusergroup_id', null)
+				->where('pagename', $pagename)
+				->orderBy('__order','asc')
+				->get();
+        }
+
+		return $objectAdminLTELayouts;
+	}
+
+	public function getUserActiveWidgets($pagename) {
+		$currentUser = auth()->guard('adminlteuser')->user();
+
+		$objectAdminLTELayout = null;
+        $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
+				->where('enabled', true)
+				->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
+				->where('pagename', $pagename)
+				->orderBy('__order','asc')
+				->get();
+
+        if (0 == count($objectAdminLTELayouts)) {
+            $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
+				->where('adminlteusergroup_id', null)
+				->where('pagename', $pagename)
+				->orderBy('__order','asc')
+				->get();
+        }
+
+		return $objectAdminLTELayouts;
+	}
 	
     /* {{@snippet:end_methods}} */
 }

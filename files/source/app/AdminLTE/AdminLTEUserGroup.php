@@ -106,6 +106,11 @@ class AdminLTEUserGroup extends Model
         return $query;
     }
 
+    public function AdminLTELayout_adminlteusergroup_id()
+    {
+        return $this->hasMany(AdminLTELayout::class);
+    }
+
     public function AdminLTEUser_adminlteusergroup_id()
     {
         return $this->hasMany(AdminLTEUser::class);

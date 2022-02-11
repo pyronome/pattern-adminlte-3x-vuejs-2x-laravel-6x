@@ -1,6 +1,6 @@
 <template>
     <div class="content-wrapper">
-        <server-error v-if="page.has_server_error" ></server-error>
+        <!--server-error v-if="page.has_server_error" ></server-error>
         <permission-error v-else-if="!page.is_authorized" :type="page.unauthorized_type"></permission-error>
         <div v-else>
             <section class="content-header">
@@ -23,8 +23,13 @@
                 </div>
             </section>
         </div>
+
+        
+
         <input type="hidden" id="controller" :value="pagename">
-        <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
+        <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader-->
+
+        <layout :pagename="pagename"></layout>
     </div>
 </template>
 
@@ -42,40 +47,40 @@ export default {
                 is_authorized: true,
                 unauthorized_type: '',
                 is_variables_loading: false,
-                is_variables_loaded: false
+                is_variables_loaded: false,
             },
             body_loader_active: false
         };
     },
     methods: {
         processLoadQueue: function () {
-            if (this.page.has_server_error) {
-                this.$Progress.finish();
-                this.page.is_ready = true;
+            var self = this;
+
+            if (self.page.has_server_error) {
+                self.$Progress.finish();
+                self.page.is_ready = true;
                 return;
             }
 
-            if (!this.page.is_authorized) {
-                this.$Progress.finish();
-                this.page.is_ready = true;
+            if (!self.page.is_authorized) {
+                self.$Progress.finish();
+                self.page.is_ready = true;
                 return;
             }
 
-            if (!this.page.is_variables_loaded) {
-                this.$Progress.start();
-                this.loadPageVariables();
+            if (!self.page.is_variables_loaded) {
+                self.$Progress.start();
+                self.loadPageVariables();
             } else {
-                this.$nextTick(function () {
-                    var self = this;
-
+                self.$nextTick(function () {
                     setTimeout(function() {
                         self.initializePage();
                         self.body_loader_active = false;
                     }, 500);                        
                 });
                 
-                this.$Progress.finish();
-                this.page.is_ready = true;
+                self.$Progress.finish();
+                self.page.is_ready = true;
             }
         },
         loadPageVariables: function () {

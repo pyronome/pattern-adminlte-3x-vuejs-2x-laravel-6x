@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\AdminLTE\AdminLTE;
+use App\AdminLTE\AdminLTELayout;
 use App\AdminLTE\AdminLTEUser;
 use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTEUserLayout;
@@ -169,6 +170,72 @@ class AdminLTELayoutController extends Controller
         } // for ($i=0; $i < $countWidgets; $i++) {
 
         return $list;
+    }
+
+    public function get_widgets(Request $request)
+    {
+        $parameters = $request->route()->parameters();
+
+        $pagename = isset($parameters['pagename'])
+                ? htmlspecialchars($parameters['pagename'])
+                : '';
+
+        $objectAdminLTE = new AdminLTE();
+
+        // widgets
+        $widgets = $objectAdminLTE->getUserWidgets($pagename);
+        
+        return [
+            'page_widgets' => $widgets
+        ];
+
+    }
+
+    public function get_active_widgets(Request $request)
+    {
+        $parameters = $request->route()->parameters();
+
+        $pagename = isset($parameters['pagename'])
+                ? htmlspecialchars($parameters['pagename'])
+                : '';
+
+        $objectAdminLTE = new AdminLTE();
+
+        // widgets
+        $active_widgets = $objectAdminLTE->getUserActiveWidgets($pagename);
+        
+        return [
+            'active_widgets' => $active_widgets
+        ];
+
+    }
+
+    public function post_layout(Request $request) {
+        $currentUser = auth()->guard('adminlteuser')->user();
+        $currentGroupId = $currentUser->adminlteusergroup_id;
+        $pagename = $request->input('pagename');
+        $layoutdata = $request->input('layoutdata');
+
+        AdminLTELayout::query()->where('adminlteusergroup_id', $currentGroupId)
+            ->where('pagename', $pagename)
+            ->delete();
+
+        foreach ($layoutdata as $__order => $data) {
+            $general_data = $data['general_data'];
+            $content_data = $data['content_data'];
+
+            $object = new AdminLTELayout();
+            $object->enabled = $general_data['enabled'];
+            $object->__order = $__order;
+            $object->adminlteusergroup_id = $currentGroupId;
+            $object->pagename = $pagename;
+            $object->widget = $general_data['widget'];
+            $object->title = $general_data['title'];
+            $object->grid_size = $general_data['grid_size'];
+            $object->icon = $general_data['icon'];
+            $object->meta_data_json = json_encode($content_data);
+            $object->save();
+        }
     }
 
     public function get_infoboxvalue(Request $request)

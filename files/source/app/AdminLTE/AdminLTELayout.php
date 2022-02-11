@@ -18,8 +18,15 @@ class AdminLTELayout extends Model
     protected $table = 'adminltelayouttable';
 
 	protected $fillable = [
+        'enabled',
+        '__order',
+        'adminlteusergroup_id',
 		'pagename',
-		'widgets'
+        'widget',
+		'title',
+		'grid_size',
+        'icon',
+		'meta_data_json'
 	];
 
 	public static $property_list = [
@@ -39,12 +46,40 @@ class AdminLTELayout extends Model
             'name' => 'updated_at',
             'type' => 'date'
         ],
+        [
+            'name' => 'enabled',
+            'type' => 'checkbox'
+        ],
+        [
+            'name' => '__order',
+            'type' => 'integer'
+        ],
+        [
+            'name' => 'adminlteusergroup_id',
+            'type' => 'class_selection_single',
+        ],
 		[
             'name' => 'pagename',
             'type' => 'text'
         ],
         [
-            'name' => 'widgets',
+            'name' => 'widget',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'title',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'grid_size',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'icon',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'meta_data_json',
             'type' => 'text'
         ]
     ];
@@ -53,6 +88,11 @@ class AdminLTELayout extends Model
 
 	/* {{@snippet:begin_methods}} */
 	
+    public function adminlteusergroup_id()
+    {
+        return $this->belongsTo(AdminLTEUserGroup::class, 'adminlteusergroup_id');
+    }
+
 	/* {{@snippet:end_methods}} */
 
 }

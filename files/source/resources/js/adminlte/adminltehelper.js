@@ -6,6 +6,10 @@ var AdminLTEHelper = {
         $("#buttonWidgetConfig").off("click").on("click", function () {
             $("#modal-WidgetList").modal();
         });
+
+        $("#buttonElements").off("click").on("click", function () {
+            $("#modal-Elements").modal();
+        });
     },
     "initializeSideMenu": function () {
         $(".main-sidebar .active").removeClass("active");
@@ -1451,6 +1455,9 @@ var AdminLTEHelper = {
     "initializeOtherPermissions": function(page_variables) {
         /* {{@snippet:begin_initialize_other_permissions}} */
         /* {{@snippet:end_initialize_other_permissions}} */
+    },
+    "setWidgetFormContentData": function(instance_id, data) {
+        $(document.getElementById(instance_id + "content_data")).data("content_data", data);
     }
     /* {{@snippet:end_methods}} */
 }
