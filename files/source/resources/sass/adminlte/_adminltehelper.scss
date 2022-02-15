@@ -1566,4 +1566,29 @@ button.copyKey {
     color: #dc3545;
 }
 
+.widget-container {
+    text-align: right;
+}
+
+.widget-container.widget-editable {
+    border: 1px dashed lightgrey;
+    border-radius: 5px;
+}
+
+.widget-header {
+    display: none;
+}
+
+.widget-header.widget-editable {
+    display: inline-block;
+}
+
+.widget-header > div > .btn-icon {
+    padding:2px;
+}
+
+.widget-body {
+    text-align: initial;
+}
+
 /* {{@snippet:end}} */

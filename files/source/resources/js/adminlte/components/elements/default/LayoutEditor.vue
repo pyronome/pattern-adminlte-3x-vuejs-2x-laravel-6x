@@ -3,7 +3,7 @@
         <div class="modal fade" id="modal-Elements" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
-                    <form id="formConfiguration" @submit.prevent="submitForm" @keydown="form.onKeydown($event)">
+                    <form id="formConfiguration" @submit.prevent="submitForm" @keydown="layoutForm.onKeydown($event)">
                         <div class="modal-header">
                             <h4 class="modal-title">{{ $t('Widgets') }}</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -13,9 +13,11 @@
                         <div class="modal-body" style="padding-top:0px;">
                             <div class="row mt-3">
                                 <div class="col-lg-12 col-md-12 col-xs-12">
-                                    <a id="buttonAddWidget" class="btn btn-primary btn-md btn-on-card float-right" href="javascript:void(0);">
+                                    <button type="button"
+                                        class="btn btn-primary btn-md btn-on-card float-right"
+                                        @click="showAddWidgetDialog">
                                         <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ $t('Add Widget') }}</span>
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                             <div class="row">
@@ -39,7 +41,8 @@
                                         <li v-for="(page_widget, index) in page_widgets" :key="index" 
                                             class="list-group-item li-widget-item" 
                                             :id="'li-' + page_widget.instance_id"
-                                            :data-enabled="page_widget.db_data.enabled">
+                                            :data-enabled="page_widget.db_data.enabled"
+                                            :data-search-text="page_widget.db_data.title + page_widget.db_data.widget">
                                             <div style="overflow=auto;">
                                                 <div class="editor-title-container">
                                                     <p class="title" :id="'liTitle-' + page_widget.instance_id" v-html="page_widget.db_data.title"></p>
@@ -80,10 +83,95 @@
                         <div class="modalfooter justify-content-between">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button :disabled="form.busy"
+                                    <button :disabled="layoutForm.busy"
                                         type="submit"
                                         class="btn btn-success btn-md btn-on-table float-right">
-                                        {{ $t('Save') }}
+                                        {{ $t('Save Layout') }}
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal" style="margin-right:10px;">{{ $t('Cancel') }}</button>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalWidgetList" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{ $t('Widgets') }}</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" style="padding-top:0px;">
+                            <div class="row">
+                                <div class="col-12 mt-3 mb-3">
+                                    <div class="input-group input-group-md">
+                                        <input type="search"
+                                            id="searchNewWidget" name="searchNewWidget"
+                                            class="form-control float-right inputSearchBar"
+                                            v-bind:placeholderr="$t('Search')">
+                                        <div class="input-group-append labelSearchBar">
+                                            <button type="button" class="btn btn-default">
+                                                <i class="fas fa-search text-primary"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-striped table-bordered table-hover table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:30px;">
+                                                    <div class="icheck-primary m-0">
+                                                        <input type="checkbox"
+                                                            @click="select_all_widget($event.target)"
+                                                            id="select_all_widget"
+                                                            class="select_all_widget">
+                                                        <label for="select_all_widget"></label>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <span>{{ $t('Title') }}</span>&nbsp;
+                                                </th>
+                                                <th>
+                                                    <span>{{ $t('Type') }}</span>&nbsp;
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyWidgetList">
+                                            <tr v-for="(widget, index) in widgets" :key="index"
+                                                :data-search-text="widget.title + widget.type">
+                                                <td>
+                                                    <div class="icheck-primary m-0">
+                                                        <input type="checkbox"
+                                                            :id="'select_widget-' + widget.name"
+                                                            class="select_widget"
+                                                            :data-widget="widget.name">
+                                                        <label :for="'select_widget-' + widget.name"></label>
+                                                    </div>
+                                                </td>
+                                                <td v-html="widget.title"></td>
+                                                <td v-html="widget.type"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modalfooter justify-content-between">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="button"
+                                        class="btn btn-success btn-md btn-on-table float-right"
+                                        @click="addWidgets">
+                                        {{ $t('Add') }}
                                     </button>
                                     <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal" style="margin-right:10px;">{{ $t('Cancel') }}</button>                                    
                                 </div>
@@ -102,14 +190,14 @@ export default {
     watch: {
         pagename: function(pagename) {
             this.pagename = pagename;
-            this.form.pagename = pagename;
+            this.layoutForm.pagename = pagename;
             this.initializePage();
         }
     },
     data() {
         return {
             widgets : window.Widgets,
-            form: new Form({
+            layoutForm: new Form({
                 'pagename': '',
                 'layoutdata': [],
             }),
@@ -132,7 +220,58 @@ export default {
     },
     methods: {
         initializePage: function() {
+            var self = this;
             $( "#ulPageWidgets" ).sortable();
+
+            $("#searchWidget").off("keyup").on("keyup", function () {
+                self.doSearchWidget(this);
+            });
+
+            $("#searchNewWidget").off("keyup").on("keyup", function () {
+                self.doSearchNewWidget(this);
+            });
+        },
+        doSearchWidget: function(sender) {
+            if (!sender) {
+                return;
+            }
+
+            var searchText = sender.value;
+
+            $("#ulPageWidgets > li").css("display", "none");
+
+            var arrLI = $("#ulPageWidgets > li");
+            var countLI = arrLI.length;
+            var searchedText = "";
+
+            for (var i = 0; i < countLI; i++) {
+                searchedText = arrLI[i].getAttribute("data-search-text");
+
+                if (searchedText.search(new RegExp(searchText, "i")) != -1) {
+                    arrLI[i].style.display = "block";
+                }
+            }
+        },
+        doSearchNewWidget: function(sender) {
+            if (!sender) {
+                return;
+            }
+
+            var searchText = sender.value;
+
+            $("#tbodyWidgetList > tr").addClass("d-none");
+
+            var arrTR = $("#tbodyWidgetList > tr");
+            var countTR = arrTR.length;
+            var searchedText = "";
+
+            for (var i = 0; i < countTR; i++) {
+                searchedText = arrTR[i].getAttribute("data-search-text");
+
+                if (searchedText.search(new RegExp(searchText, "i")) != -1) {
+                    $(arrTR[i]).removeClass("d-none");
+                }
+            }
         },
         toggleWidget: function (instance_id) {
             var widgets_form_data = $("#widgets_form_data").data("widgets_form_data");
@@ -165,9 +304,9 @@ export default {
         submitForm: function () {
             var self = this;
             self.$Progress.start();
-            self.form.layoutdata = self.getLayoutData();
+            self.layoutForm.layoutdata = self.getLayoutData();
             
-            self.form.post(AdminLTEHelper.getAPIURL("__layout/post_layout"))
+            self.layoutForm.post(AdminLTEHelper.getAPIURL("__layout/post_layout"))
                 .then(({ data }) => {
                     self.$Progress.finish();
                     self.page.is_post_success = true;
@@ -202,7 +341,31 @@ export default {
             });
 
             return widgets;
-        }
+        },
+        showAddWidgetDialog: function() {
+            $("#tbodyWidgetList > tr > td > div > .select_widget").prop("checked", false);
+            $("#modalWidgetList").modal();
+        },
+        select_all_widget: function(sender) {
+            $("#tbodyWidgetList > tr > td > div > .select_widget").prop("checked", sender.checked);
+        },
+        addWidgets: function() {
+            var tbodyElement = document.getElementById("tbodyWidgetList");
+            var selectedCheckboxes = $(".select_widget:checked", tbodyElement);
+            var selectedCount = selectedCheckboxes.length;
+            var selectedWidgets = "";
+            for (var i = 0; i < selectedCount; i++) {
+                if ("" != selectedWidgets) {
+                    selectedWidgets += ",";
+                }
+
+                selectedWidgets += selectedCheckboxes[i].getAttribute("data-widget");
+            }
+
+            document.getElementById("new_widgets").value = selectedWidgets;
+            $('#new_widgets').trigger('click'); 
+            $("#modalWidgetList").modal("hide");
+        },
     },
     mounted() {
         this.$Progress.start();

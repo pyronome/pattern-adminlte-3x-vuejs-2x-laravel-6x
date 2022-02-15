@@ -29,7 +29,7 @@
         <input type="hidden" id="controller" :value="pagename">
         <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader-->
 
-        <layout :pagename="pagename"></layout>
+        <layout :pagename="pagename" :pagevariables="page.variables"></layout>
     </div>
 </template>
 

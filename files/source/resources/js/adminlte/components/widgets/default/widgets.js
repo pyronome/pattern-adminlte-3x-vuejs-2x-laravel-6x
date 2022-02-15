@@ -11,7 +11,10 @@ export default {
         "grid_size": "12,12,12",
         "icon": "",
         "description": "",
-        "metadata" : {},
+        "metadata" : {
+                "css" : "",
+                "text" : "",
+        },
     },
     "widgetB": {
         "component": widgetB,
@@ -21,7 +24,10 @@ export default {
         "grid_size": "12,12,12",
         "icon": "",
         "description": "",
-        "metadata" : {},
+        "metadata" : {
+            "css" : "",
+            "text" : "",
+        },
     },
     "widgetC": {
         "component": widgetC,
@@ -31,6 +37,9 @@ export default {
         "grid_size": "12,12,12",
         "icon": "",
         "description": "",
-        "metadata" : {},
+        "metadata" : {
+            "css" : "",
+            "text" : "",
+        },
     }
 };
