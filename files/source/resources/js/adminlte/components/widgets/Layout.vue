@@ -154,7 +154,7 @@ export default {
                     child["instance_id"] = instance_id;
                     child["widget"] = window.Widgets[widgetname];
                     child["db_data"] = page_widget;
-                    child["grid_class"] = page_widget.enabled ? self.getWidgetGridClass(page_widget["grid_size"]) : "";
+                    child["grid_class"] = page_widget.enabled ? self.getWidgetGridClass(page_widget["grid_size"]) : "widget-disabled";
                     child["content"] = JSON.parse(page_widget["meta_data_json"]);
 
                     self.children.push(child);

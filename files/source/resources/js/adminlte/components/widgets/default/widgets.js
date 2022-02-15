@@ -1,26 +1,25 @@
 import widgetA from './a/Main.vue';
 import widgetB from './b/Main.vue';
 import widgetC from './c/Main.vue';
+import infobox from './infobox/Main.vue';
 
 export default {
     "widgetA": {
         "component": widgetA,
         "name": "widgetA",
         "title": "Widget A",
-        "type": "widgetA",
         "grid_size": "12,12,12",
         "icon": "",
         "description": "",
         "metadata" : {
-                "css" : "",
-                "text" : "",
+            "css" : "",
+            "text" : "",
         },
     },
     "widgetB": {
         "component": widgetB,
         "name": "widgetB",
         "title": "Widget B",
-        "type": "widgetB",
         "grid_size": "12,12,12",
         "icon": "",
         "description": "",
@@ -33,13 +32,27 @@ export default {
         "component": widgetC,
         "name": "widgetC",
         "title": "Widget C",
-        "type": "widgetC",
         "grid_size": "12,12,12",
         "icon": "",
         "description": "",
         "metadata" : {
             "css" : "",
             "text" : "",
+        },
+    },
+    "infobox": {
+        "component": infobox,
+        "name": "infobox",
+        "title": "Infobox",
+        "grid_size": "12,12,12",
+        "icon": "",
+        "description": "",
+        "metadata" : {
+            "model" : "",
+            "title" : "",
+            "icon" : "fas fa-cog",
+            "iconbackground" : "#17a2b8",
+            "redirectURL": "",
         },
     }
 };

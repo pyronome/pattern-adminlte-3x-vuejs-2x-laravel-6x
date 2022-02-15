@@ -140,7 +140,7 @@ Route::namespace('API')
         Route::get('/get_attributes', 'AdminLTELayoutController@get_attributes');
         Route::post('/post/{pageName}', 'AdminLTELayoutController@post_widgetconfig');
         Route::get('/get_page_widgets/{pageName}', 'AdminLTELayoutController@get_page_widgets');
-        Route::get('/get_infoboxvalue/{pageName}/{model}', 'AdminLTELayoutController@get_infoboxvalue');
+        Route::get('/get_infoboxvalue/{model}', 'AdminLTELayoutController@get_infoboxvalue');
         Route::get('/get_recordgraph/{pageName}/{model}', 'AdminLTELayoutController@get_recordgraph');
         Route::get('/get_recordlist/{pageName}/{model}', 'AdminLTELayoutController@get_recordlist');
         Route::get('/get_layout_page_options', 'AdminLTELayoutController@get_layout_page_options');

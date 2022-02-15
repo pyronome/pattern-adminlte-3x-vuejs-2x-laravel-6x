@@ -1570,7 +1570,7 @@ button.copyKey {
     text-align: right;
 }
 
-.widget-container.widget-editable {
+.widget-container.widget-editable:not(.widget-disabled) {
     border: 1px dashed lightgrey;
     border-radius: 5px;
 }

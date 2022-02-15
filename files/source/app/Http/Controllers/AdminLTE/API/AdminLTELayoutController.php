@@ -242,51 +242,14 @@ class AdminLTELayoutController extends Controller
     {   
         $parameters = $request->route()->parameters();
 
-        $pageName = isset($parameters['pageName'])
-                ? htmlspecialchars($parameters['pageName'])
-                : '';
         $model = isset($parameters['model'])
                 ? htmlspecialchars($parameters['model'])
                 : '';
 
-        $currentWidget = null;
         $objectAdminLTE = new AdminLTE();
         $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
 
-        $Widgets = $objectAdminLTE->getPageLayout($pageName);
-        
-        foreach ($Widgets as $Widget) {
-            if (('infobox' == $Widget['type']) && ($model == $Widget['model'])) {
-                $currentWidget = $Widget;
-                break;
-            }
-        }
-
-        $text = '';
-        $href = '';
-        $sizeCSV = '12,12,12';
-        $icon = 'fas fa-cog';
-        $iconbackground = '#17a2b8';
-
-        if($currentWidget) {
-            $text = $Widget['text'];
-            $href = $Widget['href'];
-            $sizeCSV = $Widget['size'];
-            $icon = $Widget['icon'];
-            $iconbackground = $Widget['iconbackground'];
-        }
-        
-        $sizes = explode(',', $sizeCSV);
-        $size = 'col-lg-' . $sizes[0] . ' col-md-' . $sizes[1] . ' col-xs-' . $sizes[2];
-
         return [
-            'id' => 1,
-            'model' => $model,
-            'text' => $text,
-            'href' => $href,
-            'size' => $size,
-            'icon' => $icon,
-            'iconbackground' => $iconbackground,
             'count' => $modelNameWithNamespace::where('deleted', false)->count()
         ];
     }

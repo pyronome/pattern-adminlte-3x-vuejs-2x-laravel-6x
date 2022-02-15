@@ -16,7 +16,7 @@
                                     <button type="button"
                                         class="btn btn-primary btn-md btn-on-card float-right"
                                         @click="showAddWidgetDialog">
-                                        <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ $t('Add Widget') }}</span>
+                                        <i class="fa fa-plus"></i> <span class="hidden-xxs">{{ $t('Add Widget(s)') }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                 <div class="modal-content">
                     <form>
                         <div class="modal-header">
-                            <h4 class="modal-title">{{ $t('Widgets') }}</h4>
+                            <h4 class="modal-title">{{ $t('Add Widget(s)') }}</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -138,16 +138,13 @@
                                                     </div>
                                                 </th>
                                                 <th>
-                                                    <span>{{ $t('Title') }}</span>&nbsp;
-                                                </th>
-                                                <th>
-                                                    <span>{{ $t('Type') }}</span>&nbsp;
+                                                    <span>{{ $t('Widgets') }}</span>&nbsp;
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody id="tbodyWidgetList">
                                             <tr v-for="(widget, index) in widgets" :key="index"
-                                                :data-search-text="widget.title + widget.type">
+                                                :data-search-text="widget.title + widget.name">
                                                 <td>
                                                     <div class="icheck-primary m-0">
                                                         <input type="checkbox"
@@ -157,8 +154,7 @@
                                                         <label :for="'select_widget-' + widget.name"></label>
                                                     </div>
                                                 </td>
-                                                <td v-html="widget.title"></td>
-                                                <td v-html="widget.type"></td>
+                                                <td v-html="widget.title + ' (' + widget.name + ')'"></td>
                                             </tr>
                                         </tbody>
                                     </table>

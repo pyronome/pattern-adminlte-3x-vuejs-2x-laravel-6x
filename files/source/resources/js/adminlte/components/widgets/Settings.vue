@@ -39,25 +39,25 @@
                                         <div class="form-group col-lg-12">
                                             <div class="icheck-primary d-inline">
                                                 <input type="checkbox"
-                                                    :id="instance_id + 'enabled'"
+                                                    :id="instance_id + '__enabled'"
                                                     class="">
-                                                <label :for="instance_id + 'enabled'" class="detail-label">
+                                                <label :for="instance_id + '__enabled'" class="detail-label">
                                                     {{ $t('Enabled') }}  
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="form-group col-lg-12">
-                                            <label :for="instance_id + 'title'" class="detail-label">{{ $t('Title') }}</label>
+                                            <label :for="instance_id + '__title'" class="detail-label">{{ $t('Title') }}</label>
                                             <input type="text"
                                                 class="form-control "
-                                                :id="instance_id + 'title'">
+                                                :id="instance_id + '__title'">
                                         </div> 
                                     </div>
                                     <div class="row">
                                         <input type="hidden" :id="instance_id + 'size'">
                                         <div class="col-md-4">
-                                            <label :for="instance_id + 'large_screen_size'">{{ $t('Large Screen Size') }}</label>
-                                            <select :id="instance_id + 'large_screen_size'" class="form-control">
+                                            <label :for="instance_id + '__large_screen_size'">{{ $t('Large Screen Size') }}</label>
+                                            <select :id="instance_id + '__large_screen_size'" class="form-control">
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -73,8 +73,8 @@
                                             </select>
                                         </div>
                                         <div class="col-md-4">
-                                            <label :for="instance_id + 'medium_screen_size'">{{ $t('Medium Screen Size') }}</label>
-                                            <select :id="instance_id + 'medium_screen_size'" class="form-control">
+                                            <label :for="instance_id + '__medium_screen_size'">{{ $t('Medium Screen Size') }}</label>
+                                            <select :id="instance_id + '__medium_screen_size'" class="form-control">
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -90,8 +90,8 @@
                                             </select>
                                         </div>
                                         <div class="col-md-4">
-                                            <label :for="instance_id + 'small_screen_size'">{{ $t('Small Screen Size') }}</label>
-                                            <select :id="instance_id + 'small_screen_size'" class="form-control">
+                                            <label :for="instance_id + '__small_screen_size'">{{ $t('Small Screen Size') }}</label>
+                                            <select :id="instance_id + '__small_screen_size'" class="form-control">
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -109,7 +109,7 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" :id="instance_id + 'content'" role="tabpanel" :aria-labelledby="instance_id + 'content-tab'">
-                                    <input type="hidden" :id="instance_id + 'content_data'">
+                                    <input type="hidden" :id="instance_id + '__content_data'">
                                     <slot></slot>
                                 </div>
                             </div>
@@ -149,14 +149,14 @@ export default {
             var widgets_form_data = $("#widgets_form_data").data("widgets_form_data");
             var general_data = widgets_form_data[instance_id]["general_data"];
 
-            document.getElementById(this.instance_id + 'enabled').checked = (1 == general_data.enabled);
+            document.getElementById(this.instance_id + '__enabled').checked = (1 == general_data.enabled);
 
-            document.getElementById(instance_id + "title").value = general_data.title;
+            document.getElementById(instance_id + "__title").value = general_data.title;
 
             var sizes = general_data.grid_size.split(",");
-            document.getElementById(this.instance_id + 'large_screen_size').value = sizes[0];
-            document.getElementById(this.instance_id + 'medium_screen_size').value = sizes[1];
-            document.getElementById(this.instance_id + 'small_screen_size').value = sizes[2];
+            document.getElementById(this.instance_id + '__large_screen_size').value = sizes[0];
+            document.getElementById(this.instance_id + '__medium_screen_size').value = sizes[1];
+            document.getElementById(this.instance_id + '__small_screen_size').value = sizes[2];
         },
         saveWidget: function() {
             var self = this;
@@ -167,17 +167,17 @@ export default {
             var widgets_form_data = $("#widgets_form_data").data("widgets_form_data");
             
             // General
-            widgets_form_data[instance_id]["general_data"]["enabled"] = document.getElementById(instance_id + 'enabled').checked ? 1 : 0;
-            widgets_form_data[instance_id]["general_data"]["title"] = document.getElementById(instance_id + 'title').value;
+            widgets_form_data[instance_id]["general_data"]["enabled"] = document.getElementById(instance_id + '__enabled').checked ? 1 : 0;
+            widgets_form_data[instance_id]["general_data"]["title"] = document.getElementById(instance_id + '__title').value;
 
-            var large_screen_size = document.getElementById(instance_id + 'large_screen_size').value;
-            var medium_screen_size = document.getElementById(instance_id + 'medium_screen_size').value;
-            var small_screen_size = document.getElementById(instance_id + 'small_screen_size').value;
+            var large_screen_size = document.getElementById(instance_id + '__large_screen_size').value;
+            var medium_screen_size = document.getElementById(instance_id + '__medium_screen_size').value;
+            var small_screen_size = document.getElementById(instance_id + '__small_screen_size').value;
 
             widgets_form_data[instance_id]["general_data"]["grid_size"] = large_screen_size + "," + medium_screen_size + "," + small_screen_size;
 
             // Content
-            widgets_form_data[instance_id]["content_data"] = $(document.getElementById(instance_id + "content_data")).data("content_data");
+            widgets_form_data[instance_id]["content_data"] = $(document.getElementById(instance_id + "__content_data")).data("content_data");
 
             $("#widgets_form_data").data("widgets_form_data", widgets_form_data);
 

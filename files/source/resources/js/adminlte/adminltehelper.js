@@ -1457,7 +1457,7 @@ var AdminLTEHelper = {
         /* {{@snippet:end_initialize_other_permissions}} */
     },
     "setWidgetFormContentData": function(instance_id, data) {
-        $(document.getElementById(instance_id + "content_data")).data("content_data", data);
+        $(document.getElementById(instance_id + "__content_data")).data("content_data", data);
     }
     /* {{@snippet:end_methods}} */
 }
