@@ -1202,10 +1202,10 @@ var AdminLTEHelper = {
     },
     "initializePermissions": function(page_variables, page_has_widgets=false) {
         if (page_variables.is_admin) {
-            $("#buttonWidgetConfig").removeClass("d-none");
+            $("#toggleEditMode").removeClass("d-none");
 
             if (!page_has_widgets) {
-                $("#buttonWidgetConfig").addClass("d-none");
+                $("#toggleEditMode").addClass("d-none");
             }
 
             $('li.nav-item.menu-nav-item').css("display", "block");
@@ -1214,14 +1214,14 @@ var AdminLTEHelper = {
         }
 
         // Widget config button
-        $("#buttonWidgetConfig").addClass("d-none");
+        $("#toggleEditMode").addClass("d-none");
 
         if (page_variables.show_widget_config_button) {
-            $("#buttonWidgetConfig").removeClass("d-none");
+            $("#toggleEditMode").removeClass("d-none");
         }
 
         if (!page_has_widgets) {
-            $("#buttonWidgetConfig").addClass("d-none");
+            $("#toggleEditMode").addClass("d-none");
         }
 
         // show hide menu item
@@ -1455,9 +1455,6 @@ var AdminLTEHelper = {
     "initializeOtherPermissions": function(page_variables) {
         /* {{@snippet:begin_initialize_other_permissions}} */
         /* {{@snippet:end_initialize_other_permissions}} */
-    },
-    "setWidgetFormContentData": function(instance_id, data) {
-        $(document.getElementById(instance_id + "__content_data")).data("content_data", data);
     }
     /* {{@snippet:end_methods}} */
 }

@@ -1566,21 +1566,26 @@ button.copyKey {
     color: #dc3545;
 }
 
-.widget-container {
-    text-align: right;
+
+.widget-container.widget-disabled > .widget-main-container > .widget-body {
+    display: none;
 }
 
-.widget-container.widget-editable:not(.widget-disabled) {
-    border: 1px dashed lightgrey;
-    border-radius: 5px;
+.widget-container.widget-disabled.widget-edit-mode > .widget-main-container > .widget-body {
+    display: block;
+}
+
+.widget-container.widget-disabled.widget-edit-mode > .widget-main-container  > .widget-body .widget-inner-container {
+    display: block;
+    opacity: 0.5;
 }
 
 .widget-header {
     display: none;
 }
 
-.widget-header.widget-editable {
-    display: inline-block;
+.widget-header.widget-editable.widget-edit-mode {
+    display: block;
 }
 
 .widget-header > div > .btn-icon {
@@ -1589,6 +1594,82 @@ button.copyKey {
 
 .widget-body {
     text-align: initial;
+}
+
+.widget-main-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.widget-container.widget-edit-mode > .widget-main-container {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.widget-container.widget-editable.widget-edit-mode > .widget-main-container {
+    border: 1px dashed #dee2e6;
+    -webkit-border-radius: 0.25rem;
+    -moz-border-radius: 0.25rem;
+    border-radius: 0.25rem;
+}
+
+.widget-main-container .widget-header-wrapper {
+    /*background-color: #dee2e6;*/
+    color: #c7cace;
+    font-size: 0.8rem;
+    display: flex;
+    width: 100%;
+    line-height: 24px;
+}
+
+.widget-main-container .widget-body {
+    width: 100%;
+    height: auto;
+    background-color: transparent;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.widget-header-wrapper .widget-sortable-handle,
+.widget-header-wrapper .widget-header-text,
+.widget-header-wrapper .widget-settings-menu-container,
+.widget-header-wrapper .widget-remove-button-container {
+    height: auto;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.widget-header-wrapper .btn {
+    color: inherit;
+}
+
+.widget-header .widget-sortable-handle {
+    width: 20px;
+    padding-left:5px;
+    cursor: move;
+}
+
+.widget-header .widget-header-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex:1;
+}
+
+.widget-header .widget-settings-menu-container {
+    width: 30px;
+}
+
+.widget-header .widget-remove-button-container {
+    width: 20px;
+}
+
+#btnToggleEditMode[on-edit-mode="1"] > i.fas.fa-lock {
+    display:none;
+}
+
+#btnToggleEditMode[on-edit-mode="0"] > i.fas.fa-unlock {
+    display:none;
 }
 
 /* {{@snippet:end}} */

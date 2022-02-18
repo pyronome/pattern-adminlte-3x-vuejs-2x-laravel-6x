@@ -1,11 +1,12 @@
 <template>
     <div>
         <div class="widget-inner-container">
-            <div :style="data.content.css">{{data.content.text}}</div>
+            <div :style="data.content.css"></div>
         </div>
         <div class="widget-settings-dialog-container">
             <settingsDialog :instance_id="instance_id"></settingsDialog>
         </div>
+
     </div>
 </template>
 

@@ -1,39 +1,30 @@
 <template>
     <div>
         <section>
-            <layout-editor :pagename="pagename" :page_widgets="children"></layout-editor>
+            <layout-editor :pagename="pagename"></layout-editor>
         </section>
 
-        <section class="container-fluid">
+        <section class="container-fluid mt-3">
             <div class="row" id="divWidgetContainer">
-                <div v-for="(child, index) in children" :key="index" 
-                    :class="'widget-container ' + widget_admin_class + ' ' + child.grid_class" 
-                    :id="'container-' + child.instance_id">
-                    <div :class="'widget-header ' + widget_admin_class" v-show="child.db_data.enabled">
-                        <widget-header :instance_id="child.instance_id"></widget-header>
-                    </div>
-                    <div class="widget-body">
-                        <elements :element="child"></elements>
+                <div v-for="(pageWidget, index) in pageWidgets" :key="index" 
+                    :class="'widget-container ' + widget_admin_class + ' ' + pageWidget.grid_class" 
+                    :id="'container-' + pageWidget.instance_id">
+                    <div class="widget-main-container">
+                        <div :class="'widget-header ' + widget_admin_class">
+                            <widget-header 
+                                :instance_id="pageWidget.instance_id" 
+                                :data="pageWidget.data">
+                            </widget-header>
+                        </div>
+                        <div class="widget-body">
+                            <elements :element="pageWidget"></elements>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-xs-12">
-                    <button type="button"
-                        id="btnSaveWidgets"
-                        @click="saveWidgets"
-                        class="btn btn-success btn-md btn-on-card float-right sticky-btn d-none">
-                        {{ $t('Save Layout') }}
-                    </button>
-                </div>
-            </div> 
         </section>
 
         <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
-        
-        <input type="hidden" id="widgets_form_data">
-        <input type="hidden" id="new_widgets" @click="newWidgets">
     </div>
 </template>
 
@@ -42,7 +33,7 @@
 export default {
     data() {
         return {
-            children: [],
+            pageWidgets: [],
             main_folder: '',
             widget_admin_class:"",
             is_admin: false,
@@ -50,7 +41,16 @@ export default {
                 is_ready: false,
                 has_server_error: false,
                 is_active_widgets_loading: false,
-                is_active_widgets_loaded: false
+                is_active_widgets_loaded: false,
+                external_files: [
+                    ("/js/adminlte/bootstrap-switch/js/bootstrap-switch.js"),
+                    ("/js/adminlte/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
+                    ("/js/adminlte/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
+                    ("/js/adminlte/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"),
+                    ("/js/adminlte/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"),
+                    ("/js/adminlte/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"),
+                    ("/js/adminlte/select2/dist/js/select2.min.js"),
+                ],
             },
             active_widgets: [],
             body_loader_active: false,
@@ -68,7 +68,7 @@ export default {
             self.body_loader_active = true;
             self.main_folder = AdminLTEHelper.getMainFolder();
             self.page.is_ready = false;
-            self.processLoadQueue();
+            AdminLTEHelper.loadExternalFiles(self.page.external_files, self.processLoadQueue());
         },
         pagevariables: function (pagevariables) {
             var self = this;
@@ -104,6 +104,72 @@ export default {
                 
                 self.$Progress.finish();
                 self.page.is_ready = true;
+            }
+        },
+        initializePage: function () {
+            var self = this;
+
+            $("#btnToggleEditMode").off('click').on('click', function () {
+                self.doToggleEditModeChange(this);
+            });
+
+            $("#btnAddNewWidgets").off("click").on("click", function () {
+                $("#modalWidgetList").modal();
+            });
+
+            $("#btnSaveWidgets").off("click").on("click", function () {
+                self.saveWidgets();
+            });
+
+            var activeWidgets = self.active_widgets;
+            activeWidgets.forEach(activeWidget => {
+                let widgetname = activeWidget["widget"];
+                if (null !== window.Widgets[widgetname]) {
+                    let child = {};
+                    let instance_id = AdminLTEHelper.generateGUID("widget");
+
+                    child["instance_id"] = instance_id;
+                    child["widget"] = window.Widgets[widgetname];
+                    child["data"] = {
+                        "general": activeWidget,
+                        "content": JSON.parse(activeWidget["meta_data_json"])
+                    }
+
+                    child["grid_class"] = self.getWidgetGridClass(activeWidget["grid_size"]) + " " + (activeWidget.enabled ? "" : " widget-disabled");
+
+                    self.pageWidgets.push(child);
+                }
+            });
+
+            $("#divWidgetContainer").sortable({
+                handle: ".btn-move-widget",
+                cancel: '',
+                change: function( event, ui ) {
+                    $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
+                }
+            }).disableSelection();
+
+            setTimeout(function() {
+                self.setWidgetsFormData();
+            }, 500);
+            
+        },
+        doToggleEditModeChange: function(btn) {
+            var editModeActive = btn.getAttribute("on-edit-mode");
+            
+            if (0 == editModeActive) {
+                btn.setAttribute("on-edit-mode", 1);
+                $("#btnToggleEditMode").removeClass("btn-default").addClass("btn-primary");
+
+                $(".show-on-edit-mode").removeClass("d-none")
+                $(".widget-editable").addClass("widget-edit-mode")
+
+            } else {
+                btn.setAttribute("on-edit-mode", 0);
+                $("#btnToggleEditMode").addClass("btn-default").removeClass("btn-primary");
+
+                $(".show-on-edit-mode").addClass("d-none")
+                $(".widget-editable").removeClass("widget-edit-mode")
             }
         },
         getActiveWidgets: function () {
@@ -142,62 +208,13 @@ export default {
 
             return grid_class;
         },
-        initializePage: function () {
-            var self = this;
-            var page_widgets = self.active_widgets;
-            page_widgets.forEach(page_widget => {
-                let widgetname = page_widget["widget"];
-                if (null !== window.Widgets[widgetname]) {
-                    let child = {};
-                    let instance_id = AdminLTEHelper.generateGUID("widget");
-
-                    child["instance_id"] = instance_id;
-                    child["widget"] = window.Widgets[widgetname];
-                    child["db_data"] = page_widget;
-                    child["grid_class"] = page_widget.enabled ? self.getWidgetGridClass(page_widget["grid_size"]) : "widget-disabled";
-                    child["content"] = JSON.parse(page_widget["meta_data_json"]);
-
-                    self.children.push(child);
-                }
-            });
-
-            $("#divWidgetContainer").sortable({
-                handle: ".btn-move-widget",
-                cancel: '',
-                change: function( event, ui ) {
-                    $("#btnSaveWidgets").removeClass("d-none");
-                }
-            }).disableSelection();
-
-            self.setWidgetsFormData();
-        },
         setWidgetsFormData: function() {
             var self = this;
-            var widgets_form_data = {};
-            
-            self.children.forEach(child => {
+
+            self.pageWidgets.forEach(child => {
                 let instance_id = child.instance_id;
-
-                let general_data = {
-                    "enabled" : child.db_data.enabled,
-                    "__order" : child.db_data.__order,
-                    "title" : child.db_data.title,
-	                "widget" : child.widget.name,
-	                "grid_size" : child.db_data.grid_size,
-	                "icon" : child.db_data.icon
-                };
-
-                let content_data = child.content;
-
-                let widget_form_data = {
-                    "general_data" : general_data,
-                    "content_data" : content_data
-                }
-
-                widgets_form_data[instance_id] = widget_form_data;
+                $(document.getElementById("container-" + instance_id)).data("widget_data", child.data);
             });
-
-            $("#widgets_form_data").data("widgets_form_data", widgets_form_data);
         },
         saveWidgets: function () {
             var self = this;
@@ -221,7 +238,6 @@ export default {
                             timer: 2000,
                             timerProgressBar: true,
                             onClose: () => {
-                                /* console.log("posted") */
                                 window.location.reload()
                             }
                         });
@@ -230,18 +246,18 @@ export default {
             );
         },
         getLayoutData: function() {
-            var widgets = [];
-            var widgets_form_data = $("#widgets_form_data").data("widgets_form_data");
-            var sortedIds = $("#divWidgetContainer").sortable("toArray");
-            sortedIds.forEach(item => {
-                let instance_id = item.replace("container-", "");
-                widgets.push(widgets_form_data[instance_id]);
-            });
+            var layoutData = [];
+            
+            var widgetContainers = $("#divWidgetContainer > .widget-container");
+            for (let index = 0; index < widgetContainers.length; index++) {
+                const container = widgetContainers[index];
+                layoutData.push($(container).data("widget_data"));
+            }
 
-            return widgets;
+            return layoutData;
         },
-        newWidgets: function() {
-            var default_db_data = {
+        addNewWidgets: function(selectedWidgets) {
+            var default_general_data = {
                 "enabled" : 1,
                 "__order" : 0,
                 "title" : "",
@@ -251,7 +267,8 @@ export default {
             };
 
             var self = this;
-            var new_widgets = document.getElementById("new_widgets").value.split(",");
+            var new_widgets = selectedWidgets.split(",");
+
             new_widgets.forEach(new_widget => {
                 if (null !== window.Widgets[new_widget]) {
                     let winWidget = window.Widgets[new_widget];
@@ -261,16 +278,20 @@ export default {
                     child["instance_id"] = instance_id;
                     child["widget"] = winWidget;
 
-                    default_db_data["title"] = winWidget.title;
-                    default_db_data["widget"] = winWidget.name;
-                    default_db_data["grid_size"] = winWidget.grid_size;
-                    default_db_data["icon"] = winWidget.icon;
+                    let general_data = default_general_data;
+                    general_data["title"] = winWidget.title;
+                    general_data["widget"] = winWidget.name;
+                    general_data["grid_size"] = winWidget.grid_size;
+                    general_data["icon"] = winWidget.icon;
 
-                    child["db_data"] = default_db_data;
+                    child["data"] = {
+                        "general": general_data,
+                        "content": winWidget.metadata
+                    }
+
                     child["grid_class"] = self.getWidgetGridClass(winWidget.grid_size);
-                    child["content"] = winWidget.metadata;
 
-                    self.children.push(child);
+                    self.pageWidgets.push(child);
                 }
             });
 
@@ -278,15 +299,67 @@ export default {
                 handle: ".btn-move-widget",
                 cancel: '',
                 change: function( event, ui ) {
-                    $("#btnSaveWidgets").removeClass("d-none");
+                    $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
                 }
             }).disableSelection();
 
-            self.setWidgetsFormData();
+            self.body_loader_active = true;
+
+            setTimeout(function(){
+                self.setWidgetsFormData();
+                $(".widget-editable").addClass("widget-edit-mode")
+                $("html, body").animate({ scrollTop: $(document).height() }, 1500);
+                self.body_loader_active = false;
+            }, 500);
+        },
+        copyWidget: function(copy_data) {
+            var self = this;
+
+            let winWidget = window.Widgets[copy_data.general.widget];
+            let child = {};
+            let instance_id = AdminLTEHelper.generateGUID("widget");
+
+            child["instance_id"] = instance_id;
+            child["widget"] = winWidget;
+            child["data"] = copy_data;
+            child["grid_class"] = self.getWidgetGridClass(copy_data.general.grid_size);
+
+            self.pageWidgets.push(child);
+
+            self.body_loader_active = true;
+
+            setTimeout(function(){
+                self.setWidgetsFormData();
+
+                $(".widget-editable").addClass("widget-edit-mode")
+
+                $("html, body").animate({ scrollTop: $(document).height() }, 1500);
+
+                self.body_loader_active = false;
+            }, 500);
+        },
+        refreshWidget: function(instance_id) {
+            var self = this;
+            
+            // General
+            var widgetContainer = document.getElementById("container-" + instance_id);
+            var data = $(widgetContainer).data("widget_data");
+
+            var grid_class = self.getWidgetGridClass(data.general.grid_size) + " " + (data.general.enabled ? "" : " widget-disabled");
+            widgetContainer.className = "widget-container widget-editable " + grid_class + " widget-edit-mode";
+
+            document.getElementById(instance_id + "-header-text").innerHTML = data.general.title;
+
+            // Content
+            window.mainLayoutInstance.widgetMainComponents[instance_id].refresh();
         }
     },
     mounted() {
-        
+        window.mainLayoutInstance = {};
+        window.mainLayoutInstance.vueComponent = this;
+        window.mainLayoutInstance.settingsComponents = [];
+        window.mainLayoutInstance.widgetMainComponents = [];
+        window.mainLayoutInstance.widgetSettingComponents = [];
     }
 }
 </script>

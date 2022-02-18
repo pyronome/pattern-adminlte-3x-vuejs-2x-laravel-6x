@@ -12,14 +12,19 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Widget Configuration -->
                 <li class="nav-item dropdown">
-                    <a id="buttonWidgetConfig" class="nav-link" href="javascript:void(0);">
-                        <i class="fas fa-palette nav-icon"></i>
-                    </a>
+                    <button type="button" id="btnToggleEditMode" class="btn btn-block btn-default btn-md" on-edit-mode="0">
+                        <i class="fas fa-lock nav-icon"></i><i class="fas fa-unlock nav-icon"></i> <span>{{ __('Edit Mode') }}</span>
+                    </button>
                 </li>
-                <li class="nav-item dropdown">
-                    <a id="buttonElements" class="nav-link" href="javascript:void(0);">
-                        <i class="fas fa-palette nav-icon text-green"></i>
-                    </a>
+                <li class="nav-item dropdown show-on-edit-mode d-none" style="margin-left:10px;">
+                    <button type="button" id="btnAddNewWidgets" class="btn btn-block btn-primary btn-md">
+                        <i class="fas fa-plus nav-icon"></i>
+                    </button>
+                </li>
+                <li class="nav-item dropdown show-on-edit-mode d-none" style="margin-left:10px;">
+                    <button type="button" id="btnSaveWidgets" class="btn btn-block btn-default btn-md">
+                        {{ __('Save')}}
+                    </button>
                 </li>
             </ul>
         </nav>

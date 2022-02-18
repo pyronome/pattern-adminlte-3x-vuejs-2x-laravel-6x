@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" :id="instance_id + 'ModalSettings'" tabindex="-1" role="dialog">
+    <div class="modal fade widget-settings-dialog" :id="instance_id + 'ModalSettings'" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -109,7 +109,6 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" :id="instance_id + 'content'" role="tabpanel" :aria-labelledby="instance_id + 'content-tab'">
-                                    <input type="hidden" :id="instance_id + '__content_data'">
                                     <slot></slot>
                                 </div>
                             </div>
@@ -132,73 +131,59 @@
 
 <script>
 export default {
-    props: ['instance_id'],
+    props: ["instance_id"],
     mounted() {
-        var self = this;
-
-        self.$root.$on("fill-widget-form-values", (instance_id) => {
-            if (self.instance_id == instance_id) {
-                self.setWidgetFormValues();
-            }
-        });
+        window.mainLayoutInstance.settingsComponents[this.instance_id] = this;
     },
     methods: {
         setWidgetFormValues: function() {
-            var self = this;
-            var instance_id = self.instance_id;
-            var widgets_form_data = $("#widgets_form_data").data("widgets_form_data");
-            var general_data = widgets_form_data[instance_id]["general_data"];
+            var instance_id = this.instance_id;
+            var data = $(document.getElementById("container-" + instance_id)).data("widget_data");
+            
+            console.log("Settings -> instance_id:" + this.instance_id);
 
-            document.getElementById(this.instance_id + '__enabled').checked = (1 == general_data.enabled);
+            document.getElementById(instance_id + "__enabled").checked = (1 == data.general.enabled);
+            document.getElementById(instance_id + "__title").value = data.general.title;
 
-            document.getElementById(instance_id + "__title").value = general_data.title;
+            var sizes = data.general.grid_size.split(",");
+            document.getElementById(instance_id + "__large_screen_size").value = sizes[0];
+            document.getElementById(instance_id + "__medium_screen_size").value = sizes[1];
+            document.getElementById(instance_id + "__small_screen_size").value = sizes[2];
 
-            var sizes = general_data.grid_size.split(",");
-            document.getElementById(this.instance_id + '__large_screen_size').value = sizes[0];
-            document.getElementById(this.instance_id + '__medium_screen_size').value = sizes[1];
-            document.getElementById(this.instance_id + '__small_screen_size').value = sizes[2];
+            window.mainLayoutInstance.widgetSettingComponents[instance_id].setWidgetFormValues();
         },
         saveWidget: function() {
             var self = this;
             var instance_id = self.instance_id;
-
-            self.$root.$emit("collect-widget-form-values", instance_id);
-
-            var widgets_form_data = $("#widgets_form_data").data("widgets_form_data");
+            var data = $(document.getElementById("container-" + instance_id)).data("widget_data");
             
             // General
-            widgets_form_data[instance_id]["general_data"]["enabled"] = document.getElementById(instance_id + '__enabled').checked ? 1 : 0;
-            widgets_form_data[instance_id]["general_data"]["title"] = document.getElementById(instance_id + '__title').value;
+            data.general.enabled = document.getElementById(instance_id + "__enabled").checked ? 1 : 0;
+            data.general.title = document.getElementById(instance_id + "__title").value;
 
-            var large_screen_size = document.getElementById(instance_id + '__large_screen_size').value;
-            var medium_screen_size = document.getElementById(instance_id + '__medium_screen_size').value;
-            var small_screen_size = document.getElementById(instance_id + '__small_screen_size').value;
+            var large_screen_size = document.getElementById(instance_id + "__large_screen_size").value;
+            var medium_screen_size = document.getElementById(instance_id + "__medium_screen_size").value;
+            var small_screen_size = document.getElementById(instance_id + "__small_screen_size").value;
 
-            widgets_form_data[instance_id]["general_data"]["grid_size"] = large_screen_size + "," + medium_screen_size + "," + small_screen_size;
+            data.general.grid_size = large_screen_size + "," + medium_screen_size + "," + small_screen_size;
 
             // Content
-            widgets_form_data[instance_id]["content_data"] = $(document.getElementById(instance_id + "__content_data")).data("content_data");
+            data.content = window.mainLayoutInstance.widgetSettingComponents[instance_id].getWidgetFormValues();
 
-            $("#widgets_form_data").data("widgets_form_data", widgets_form_data);
-
-            self.updateList(widgets_form_data[instance_id]["general_data"]);
+            $(document.getElementById("container-" + instance_id)).data("widget_data", data);
 
             Vue.swal.fire({
-                position: 'top-end',
+                position: "top-end",
                 title: self.$t("Your changes have been saved!"),
-                icon: 'success',
+                icon: "success",
                 showConfirmButton: false,
                 timer: 1000,
                 timerProgressBar: true,
                 onClose: () => {
+                    window.mainLayoutInstance.vueComponent.refreshWidget(instance_id);
                     $(document.getElementById(instance_id + "ModalSettings")).modal("hide")
                 }
             });
-        },
-        updateList: function(general_data) {
-            var li = document.getElementById("li-" + this.instance_id);
-            li.setAttribute("data-enabled", general_data["enabled"]);
-            $(".editor-title-container > .title", li).html(general_data["title"]);
         }
     }
 };

@@ -1,7 +1,12 @@
 <template>
     <div>
         <div class="widget-inner-container">
-            <div :style="data.content.css">{{data.content.text}}</div>
+            <iframe :width="data.content.width" height="315"
+                 :src="data.content.youtubecode" 
+                 title="YouTube video player" 
+                 frameborder="0" 
+                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            </iframe>
         </div>
         <div class="widget-settings-dialog-container">
             <settingsDialog :instance_id="instance_id"></settingsDialog>

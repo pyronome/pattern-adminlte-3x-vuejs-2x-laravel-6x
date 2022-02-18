@@ -1,7 +1,8 @@
 import widgetA from './a/Main.vue';
 import widgetB from './b/Main.vue';
-import widgetC from './c/Main.vue';
+import spacer from './spacer/Main.vue';
 import infobox from './infobox/Main.vue';
+import youtubeVideo from './youtube/Main.vue';
 
 export default {
     "widgetA": {
@@ -12,8 +13,8 @@ export default {
         "icon": "",
         "description": "",
         "metadata" : {
-            "css" : "",
-            "text" : "",
+            "css" : "padding:20px,background:white",
+            "text" : "New A",
         },
     },
     "widgetB": {
@@ -24,20 +25,19 @@ export default {
         "icon": "",
         "description": "",
         "metadata" : {
-            "css" : "",
-            "text" : "",
+            "css" : "padding:20px,background:white",
+            "text" : "New B",
         },
     },
-    "widgetC": {
-        "component": widgetC,
-        "name": "widgetC",
-        "title": "Widget C",
+    "spacer": {
+        "component": spacer,
+        "name": "spacer",
+        "title": "Spacer",
         "grid_size": "12,12,12",
         "icon": "",
         "description": "",
         "metadata" : {
             "css" : "",
-            "text" : "",
         },
     },
     "infobox": {
@@ -54,5 +54,17 @@ export default {
             "iconbackground" : "#17a2b8",
             "redirectURL": "",
         },
-    }
+    },
+    "youtubeVideo": {
+        "component": youtubeVideo,
+        "name": "youtubeVideo",
+        "title": "Youtube Video",
+        "grid_size": "12,12,12",
+        "icon": "",
+        "description": "",
+        "metadata" : {
+            "youtubecode" : "",
+            "width" : 560,
+        },
+    },
 };

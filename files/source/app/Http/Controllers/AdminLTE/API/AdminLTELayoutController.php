@@ -221,8 +221,8 @@ class AdminLTELayoutController extends Controller
             ->delete();
 
         foreach ($layoutdata as $__order => $data) {
-            $general_data = $data['general_data'];
-            $content_data = $data['content_data'];
+            $general_data = $data['general'];
+            $content_data = $data['content'];
 
             $object = new AdminLTELayout();
             $object->enabled = $general_data['enabled'];

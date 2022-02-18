@@ -1,33 +1,38 @@
 <template>
     <div class="widgetcomponent">
-        <router-link v-show="enabled" class="info-box clickable-infobox" tag="div" :to="content.redirectURL">
-            <span class="info-box-icon elevation-1" v-bind:style="{backgroundColor: content.iconbackground}"><i :class="content.icon"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text">{{content.title}}</span>
-                <span class="info-box-number">{{count}}</span>
-            </div>
-        </router-link>
-        <settingsForm :instance_id="instance_id"></settingsForm>
+        <div class="widget-inner-container">
+            <router-link class="info-box clickable-infobox" tag="div" :to="data.content.redirectURL">
+                <span class="info-box-icon elevation-1" v-bind:style="{backgroundColor: data.content.iconbackground}"><i :class="data.content.icon"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">{{data.content.title}}</span>
+                    <span class="info-box-number">{{count}}</span>
+                </div>
+            </router-link>
+        </div>
+        <div class="widget-settings-dialog-container">
+            <settingsDialog :instance_id="instance_id"></settingsDialog>
+        </div>
     </div>
 </template>
 
 <script>
-    import settingsForm from './SettingsForm.vue';
+    import settingsDialog from "./Settings.vue";
 
     export default {
-        components: {settingsForm},
-        props: ['instance_id','enabled','content'],
+        components: {settingsDialog},
+        props: ["instance_id","data"],
         data() {
             return {
-                model: this.content.model,
                 count: 0,
             };
         },
         methods: {
+            refresh: function () {
+                this.data = $(document.getElementById("container-" + this.instance_id)).data("widget_data");
+            },
             loadData: function () {
-                axios.get(AdminLTEHelper.getAPIURL("__layout/get_infoboxvalue/" + this.model))
+                axios.get(AdminLTEHelper.getAPIURL("__layout/get_infoboxvalue/" + this.data.content.model))
                     .then(({ data }) => {
-                        this.data = data;
                         this.count = data.count;
                     }).catch(({ data }) => {
                         this.$Progress.fail();
@@ -36,17 +41,7 @@
         },
         mounted() {
             this.loadData();
-
-            /* var eventName = "refresh" + this.model + "Data";
-            this.$root.$on(eventName, () => {
-                this.loadData();
-            });     
-            this.$nextTick(() => {
-                this.$root.$emit("widget-rendered", this.model, "infobox");
-            });   */     
-        },
-        updated() {
-            
+            window.mainLayoutInstance.widgetMainComponents[this.instance_id] = this;
         }
     }
 </script>

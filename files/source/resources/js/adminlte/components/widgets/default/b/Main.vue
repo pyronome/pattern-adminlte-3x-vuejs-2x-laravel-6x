@@ -1,15 +1,27 @@
 <template>
     <div>
-        <div v-show="enabled" :style="content.css">{{content.text}}</div>
-        <settingsForm :instance_id="instance_id"></settingsForm>
+        <div class="widget-inner-container">
+            <div :style="data.content.css">{{data.content.text}}</div>
+        </div>
+        <div class="widget-settings-dialog-container">
+            <settingsDialog :instance_id="instance_id"></settingsDialog>
+        </div>
     </div>
 </template>
 
 <script>
-    import settingsForm from './SettingsForm.vue';
+    import settingsDialog from "./Settings.vue";
 
     export default {
-        components: {settingsForm},
-        props: ['instance_id','enabled','content']
+        components: {settingsDialog},
+        props: ["instance_id","data"],
+        methods: {
+            refresh: function () {
+                this.data = $(document.getElementById("container-" + this.instance_id)).data("widget_data");
+            }
+        },
+        mounted() {
+            window.mainLayoutInstance.widgetMainComponents[this.instance_id] = this;
+        }
     }
 </script>
