@@ -28,7 +28,7 @@
         },
         methods: {
             refresh: function () {
-                this.data = $(document.getElementById("container-" + this.instance_id)).data("widget_data");
+                this.data = window.mainLayoutInstance.pageWidgets[this.instance_id].data;
             },
             loadData: function () {
                 axios.get(AdminLTEHelper.getAPIURL("__layout/get_infoboxvalue/" + this.data.content.model))
@@ -41,7 +41,7 @@
         },
         mounted() {
             this.loadData();
-            window.mainLayoutInstance.widgetMainComponents[this.instance_id] = this;
+            window.mainLayoutInstance.pageWidgets[this.instance_id].main = this;
         }
     }
 </script>

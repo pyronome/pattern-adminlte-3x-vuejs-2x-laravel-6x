@@ -1557,15 +1557,10 @@ button.copyKey {
     opacity: 0.5;
 }
 
-.btn-move-widget {
-    color: #555;
-    cursor: move;
+.widget-container.widget-disabled:not(.widget-edit-mode) {
+    max-width: 0%;
+    padding: 0;
 }
-
-.btn-remove-widget {
-    color: #dc3545;
-}
-
 
 .widget-container.widget-disabled > .widget-main-container > .widget-body {
     display: none;
@@ -1654,6 +1649,7 @@ button.copyKey {
     overflow: hidden;
     text-overflow: ellipsis;
     flex:1;
+    cursor: move;
 }
 
 .widget-header .widget-settings-menu-container {

@@ -17,11 +17,11 @@
         props: ["instance_id","data"],
         methods: {
             refresh: function () {
-                this.data = $(document.getElementById("container-" + this.instance_id)).data("widget_data");
+                this.data = window.mainLayoutInstance.pageWidgets[this.instance_id].data;
             }
         },
         mounted() {
-            window.mainLayoutInstance.widgetMainComponents[this.instance_id] = this;
+            window.mainLayoutInstance.pageWidgets[this.instance_id].main = this;
         }
     }
 </script>

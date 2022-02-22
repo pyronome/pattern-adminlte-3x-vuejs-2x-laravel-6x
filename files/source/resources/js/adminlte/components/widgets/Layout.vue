@@ -1,14 +1,15 @@
 <template>
     <div>
         <section>
-            <layout-editor :pagename="pagename"></layout-editor>
+            <widget-list :pagename="pagename"></widget-list>
         </section>
 
         <section class="container-fluid mt-3">
             <div class="row" id="divWidgetContainer">
                 <div v-for="(pageWidget, index) in pageWidgets" :key="index" 
                     :class="'widget-container ' + widget_admin_class + ' ' + pageWidget.grid_class" 
-                    :id="'container-' + pageWidget.instance_id">
+                    :id="'container-' + pageWidget.instance_id"
+                    :data-instance-id="pageWidget.instance_id">
                     <div class="widget-main-container">
                         <div :class="'widget-header ' + widget_admin_class">
                             <widget-header 
@@ -17,7 +18,7 @@
                             </widget-header>
                         </div>
                         <div class="widget-body">
-                            <elements :element="pageWidget"></elements>
+                            <widget-body :element="pageWidget"></widget-body>
                         </div>
                     </div>
                 </div>
@@ -125,24 +126,25 @@ export default {
             activeWidgets.forEach(activeWidget => {
                 let widgetname = activeWidget["widget"];
                 if (null !== window.Widgets[widgetname]) {
-                    let child = {};
                     let instance_id = AdminLTEHelper.generateGUID("widget");
+                    window.mainLayoutInstance.pageWidgets[instance_id] = [];
 
-                    child["instance_id"] = instance_id;
-                    child["widget"] = window.Widgets[widgetname];
-                    child["data"] = {
-                        "general": activeWidget,
-                        "content": JSON.parse(activeWidget["meta_data_json"])
+                    let child = {
+                        "instance_id": instance_id,
+                        "widget": window.Widgets[widgetname],
+                        "data": {
+                            "general": activeWidget,
+                            "content": JSON.parse(activeWidget["meta_data_json"])
+                        },
+                        "grid_class": self.getWidgetGridClass(activeWidget["grid_size"]) + " " + (activeWidget.enabled ? "" : " widget-disabled")
                     }
-
-                    child["grid_class"] = self.getWidgetGridClass(activeWidget["grid_size"]) + " " + (activeWidget.enabled ? "" : " widget-disabled");
 
                     self.pageWidgets.push(child);
                 }
             });
 
             $("#divWidgetContainer").sortable({
-                handle: ".btn-move-widget",
+                handle: ".widget-move-handle",
                 cancel: '',
                 change: function( event, ui ) {
                     $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
@@ -213,7 +215,7 @@ export default {
 
             self.pageWidgets.forEach(child => {
                 let instance_id = child.instance_id;
-                $(document.getElementById("container-" + instance_id)).data("widget_data", child.data);
+                window.mainLayoutInstance.pageWidgets[instance_id].data = child.data;
             });
         },
         saveWidgets: function () {
@@ -250,53 +252,48 @@ export default {
             
             var widgetContainers = $("#divWidgetContainer > .widget-container");
             for (let index = 0; index < widgetContainers.length; index++) {
-                const container = widgetContainers[index];
-                layoutData.push($(container).data("widget_data"));
+                let instance_id = widgetContainers[index].getAttribute("data-instance-id");
+                layoutData.push(window.mainLayoutInstance.pageWidgets[instance_id].data);
             }
 
             return layoutData;
         },
         addNewWidgets: function(selectedWidgets) {
-            var default_general_data = {
-                "enabled" : 1,
-                "__order" : 0,
-                "title" : "",
-                "widget" : "",
-                "grid_size" : "12,12,12",
-                "icon" : ""
-            };
-
             var self = this;
             var new_widgets = selectedWidgets.split(",");
 
             new_widgets.forEach(new_widget => {
                 if (null !== window.Widgets[new_widget]) {
                     let winWidget = window.Widgets[new_widget];
-                    let child = {};
+                    
                     let instance_id = AdminLTEHelper.generateGUID("widget");
+                    window.mainLayoutInstance.pageWidgets[instance_id] = [];
 
-                    child["instance_id"] = instance_id;
-                    child["widget"] = winWidget;
+                    let general_data = {
+                        "enabled" : 1,
+                        "__order" : 0,
+                        "title" : winWidget.title,
+                        "widget" : winWidget.name,
+                        "grid_size" : winWidget.grid_size,
+                        "icon" : winWidget.icon
+                    };
 
-                    let general_data = default_general_data;
-                    general_data["title"] = winWidget.title;
-                    general_data["widget"] = winWidget.name;
-                    general_data["grid_size"] = winWidget.grid_size;
-                    general_data["icon"] = winWidget.icon;
-
-                    child["data"] = {
-                        "general": general_data,
-                        "content": winWidget.metadata
+                    let child = {
+                        "instance_id": instance_id,
+                        "widget": winWidget,
+                        "data": {
+                            "general": general_data,
+                            "content": winWidget.metadata
+                        },
+                        "grid_class": self.getWidgetGridClass(winWidget.grid_size)
                     }
-
-                    child["grid_class"] = self.getWidgetGridClass(winWidget.grid_size);
 
                     self.pageWidgets.push(child);
                 }
             });
 
             $("#divWidgetContainer").sortable({
-                handle: ".btn-move-widget",
+                handle: ".widget-move-handle",
                 cancel: '',
                 change: function( event, ui ) {
                     $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
@@ -312,17 +309,31 @@ export default {
                 self.body_loader_active = false;
             }, 500);
         },
-        copyWidget: function(copy_data) {
+        copyWidget: function(copy_data, widgetname) {
             var self = this;
 
-            let winWidget = window.Widgets[copy_data.general.widget];
-            let child = {};
-            let instance_id = AdminLTEHelper.generateGUID("widget");
+            var winWidget = window.Widgets[widgetname];
+            var instance_id = AdminLTEHelper.generateGUID("widget");
+            window.mainLayoutInstance.pageWidgets[instance_id] = [];
 
-            child["instance_id"] = instance_id;
-            child["widget"] = winWidget;
-            child["data"] = copy_data;
-            child["grid_class"] = self.getWidgetGridClass(copy_data.general.grid_size);
+            let general_data = {
+                "enabled" : copy_data.general.enabled,
+                "__order" : 0,
+                "title" : copy_data.general.title,
+                "widget" : widgetname,
+                "grid_size" : copy_data.general.grid_size,
+                "icon" : copy_data.general.icon,
+            };
+
+            var child = {
+                "instance_id": instance_id,
+                "widget": winWidget,
+                "data": {
+                    "general": general_data,
+                    "content": copy_data.content
+                },
+                "grid_class": self.getWidgetGridClass(general_data.grid_size)
+            };
 
             self.pageWidgets.push(child);
 
@@ -331,8 +342,7 @@ export default {
             setTimeout(function(){
                 self.setWidgetsFormData();
 
-                $(".widget-editable").addClass("widget-edit-mode")
-
+                $(".widget-editable").addClass("widget-edit-mode");
                 $("html, body").animate({ scrollTop: $(document).height() }, 1500);
 
                 self.body_loader_active = false;
@@ -340,26 +350,29 @@ export default {
         },
         refreshWidget: function(instance_id) {
             var self = this;
-            
+
             // General
-            var widgetContainer = document.getElementById("container-" + instance_id);
-            var data = $(widgetContainer).data("widget_data");
+            var data = window.mainLayoutInstance.pageWidgets[instance_id].data;
 
             var grid_class = self.getWidgetGridClass(data.general.grid_size) + " " + (data.general.enabled ? "" : " widget-disabled");
-            widgetContainer.className = "widget-container widget-editable " + grid_class + " widget-edit-mode";
+            document.getElementById("container-" + instance_id).className = "widget-container widget-editable " + grid_class + " widget-edit-mode";
 
             document.getElementById(instance_id + "-header-text").innerHTML = data.general.title;
 
             // Content
-            window.mainLayoutInstance.widgetMainComponents[instance_id].refresh();
+            window.mainLayoutInstance.pageWidgets[instance_id]["main"].refresh();
+        },
+        showLoader: function() {
+            this.body_loader_active = true;
+        },
+        hideLoader: function() {
+            this.body_loader_active = false;
         }
     },
     mounted() {
         window.mainLayoutInstance = {};
         window.mainLayoutInstance.vueComponent = this;
-        window.mainLayoutInstance.settingsComponents = [];
-        window.mainLayoutInstance.widgetMainComponents = [];
-        window.mainLayoutInstance.widgetSettingComponents = [];
+        window.mainLayoutInstance.pageWidgets = [];
     }
 }
 </script>

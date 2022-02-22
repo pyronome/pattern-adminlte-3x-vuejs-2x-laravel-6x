@@ -133,15 +133,13 @@
 export default {
     props: ["instance_id"],
     mounted() {
-        window.mainLayoutInstance.settingsComponents[this.instance_id] = this;
+        window.mainLayoutInstance.pageWidgets[this.instance_id].general_settings = this;
     },
     methods: {
-        setWidgetFormValues: function() {
-            var instance_id = this.instance_id;
-            var data = $(document.getElementById("container-" + instance_id)).data("widget_data");
+        setWidgetFormValues: function(instance_id) {
+            /* var instance_id = this.instance_id; */
+            var data = window.mainLayoutInstance.pageWidgets[instance_id].data;
             
-            console.log("Settings -> instance_id:" + this.instance_id);
-
             document.getElementById(instance_id + "__enabled").checked = (1 == data.general.enabled);
             document.getElementById(instance_id + "__title").value = data.general.title;
 
@@ -150,13 +148,12 @@ export default {
             document.getElementById(instance_id + "__medium_screen_size").value = sizes[1];
             document.getElementById(instance_id + "__small_screen_size").value = sizes[2];
 
-            window.mainLayoutInstance.widgetSettingComponents[instance_id].setWidgetFormValues();
+            window.mainLayoutInstance.pageWidgets[instance_id].content_settings.setWidgetFormValues();
         },
         saveWidget: function() {
-            var self = this;
-            var instance_id = self.instance_id;
-            var data = $(document.getElementById("container-" + instance_id)).data("widget_data");
-            
+            var instance_id = this.instance_id;
+            var data = window.mainLayoutInstance.pageWidgets[instance_id].data;
+
             // General
             data.general.enabled = document.getElementById(instance_id + "__enabled").checked ? 1 : 0;
             data.general.title = document.getElementById(instance_id + "__title").value;
@@ -168,22 +165,17 @@ export default {
             data.general.grid_size = large_screen_size + "," + medium_screen_size + "," + small_screen_size;
 
             // Content
-            data.content = window.mainLayoutInstance.widgetSettingComponents[instance_id].getWidgetFormValues();
+            data.content = window.mainLayoutInstance.pageWidgets[instance_id].content_settings.getWidgetFormValues();
 
-            $(document.getElementById("container-" + instance_id)).data("widget_data", data);
+            window.mainLayoutInstance.pageWidgets[instance_id].data = data;
 
-            Vue.swal.fire({
-                position: "top-end",
-                title: self.$t("Your changes have been saved!"),
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1000,
-                timerProgressBar: true,
-                onClose: () => {
-                    window.mainLayoutInstance.vueComponent.refreshWidget(instance_id);
-                    $(document.getElementById(instance_id + "ModalSettings")).modal("hide")
-                }
-            });
+            window.mainLayoutInstance.vueComponent.showLoader();
+            window.mainLayoutInstance.vueComponent.refreshWidget(instance_id);
+            $(document.getElementById(instance_id + "ModalSettings")).modal("hide")
+
+            setTimeout(function(){
+                window.mainLayoutInstance.vueComponent.hideLoader();
+            }, 1000);
         }
     }
 };

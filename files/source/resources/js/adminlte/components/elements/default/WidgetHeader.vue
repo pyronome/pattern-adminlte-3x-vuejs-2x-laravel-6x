@@ -1,9 +1,9 @@
 <template>
     <div class="widget-header-wrapper">
-        <div class="widget-sortable-handle">
-            <span class="btn-move-widget"><i class="fa fa-ellipsis-v" aria-hidden="true"></i><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span>
+        <div class="widget-sortable-handle widget-move-handle">
+            <span><i class="fa fa-ellipsis-v" aria-hidden="true"></i><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span>
         </div>
-        <div class="widget-header-text" :id="this.instance_id + '-header-text'">{{data.general.title}}</div>
+        <div class="widget-header-text widget-move-handle" :id="this.instance_id + '-header-text'">{{data.general.title}}</div>
         <div class="widget-settings-menu-container">
             <button type="button" class="btn btn-flat btn-xs dropdown-toggle" data-toggle="dropdown" data-offset="-10" aria-expanded="false">
                 <i class="fa fa-cog" aria-hidden="true"></i>
@@ -29,7 +29,6 @@
                     @click="editWidget()">
                     Settings...
                 </button>
-                <a href="#" class="dropdown-item"></a>
             </div>
         </div>
         <div class="widget-remove-button-container">
@@ -54,7 +53,7 @@ export default {
             $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
 
             var instance_id = this.instance_id;
-            var data = $(document.getElementById("container-" + instance_id)).data("widget_data");
+            var data = window.mainLayoutInstance.pageWidgets[instance_id].data;
             var enabled = data.general.enabled;
 
             if (0 == enabled) {
@@ -68,7 +67,7 @@ export default {
             this.state = (1 == enabled);
 
             data.general.enabled = enabled;
-            $(document.getElementById("container-" + instance_id)).data("widget_data", data);
+            window.mainLayoutInstance.pageWidgets[instance_id].data = data;
         },
         removeWidget: function () {
             $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
@@ -76,20 +75,23 @@ export default {
             document.getElementById("container-" + this.instance_id).remove();
         },
         editWidget: function () {
+            var instance_id = this.instance_id;
+
             $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
 
-            console.log("WidgetHeader -> instance_id:" + this.instance_id);
-            window.mainLayoutInstance.settingsComponents[this.instance_id].setWidgetFormValues();
+            window.mainLayoutInstance.pageWidgets[instance_id].general_settings.setWidgetFormValues(instance_id);
 
-            var modal = document.getElementById(this.instance_id + "ModalSettings");
+            document.getElementById(instance_id + "general-tab").click();
+
+            var modal = document.getElementById(instance_id + "ModalSettings");
             $(modal).modal();
         },
         copyWidget: function() {
             $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
 
             var instance_id = this.instance_id;
-            var data = $(document.getElementById("container-" + instance_id)).data("widget_data");
-            window.mainLayoutInstance.vueComponent.copyWidget(data);
+            var data = window.mainLayoutInstance.pageWidgets[instance_id].data;
+            window.mainLayoutInstance.vueComponent.copyWidget(data, data.general.widget);
         }
     },
     mounted() {

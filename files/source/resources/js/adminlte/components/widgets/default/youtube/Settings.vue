@@ -1,6 +1,6 @@
 <template>
     <div>
-        <element-settings :instance_id="instance_id">
+        <widget-settings-dialog :instance_id="instance_id">
             <div class="row">
                 <div class="form-group col-lg-12">
                     <label :for="instance_id + 'youtubecode'" class="detail-label">{{ $t('Youtube Code') }}</label>
@@ -15,7 +15,7 @@
                         :id="instance_id + 'width'">
                 </div>
             </div>
-        </element-settings>
+        </widget-settings-dialog>
     </div>
 </template>
 
@@ -25,7 +25,7 @@
         methods: {
             setWidgetFormValues: function() {
                 var instance_id = this.instance_id;
-                var data = $(document.getElementById("container-" + instance_id)).data("widget_data");
+                var data = window.mainLayoutInstance.pageWidgets[instance_id].data;
                 
                 document.getElementById(instance_id + "youtubecode").value = data.content.youtubecode;
                 document.getElementById(instance_id + "width").value = data.content.width;
@@ -40,7 +40,7 @@
             }
         },
         mounted() {
-            window.mainLayoutInstance.widgetSettingComponents[this.instance_id] = this;
+            window.mainLayoutInstance.pageWidgets[this.instance_id].content_settings = this;
         }
     }
 </script>

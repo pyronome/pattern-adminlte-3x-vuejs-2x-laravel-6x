@@ -1,6 +1,6 @@
 <template>
     <div>
-        <element-settings :instance_id="instance_id">
+        <widget-settings-dialog :instance_id="instance_id">
             <div class="row">
                 <div class="form-group col-lg-12">
                     <label :for="instance_id + 'model'" class="detail-label">{{ $t('Model') }}</label>
@@ -33,7 +33,7 @@
                         :id="instance_id + 'redirectURL'">
                 </div>
             </div>
-        </element-settings>
+        </widget-settings-dialog>
     </div>
 </template>
 
@@ -43,8 +43,8 @@
         methods: {
             setWidgetFormValues: function() {
                 var instance_id = this.instance_id;
-                var data = $(document.getElementById("container-" + instance_id)).data("widget_data");
-                console.log("Infobox Settings -> instance_id:" + this.instance_id);
+                var data = window.mainLayoutInstance.pageWidgets[this.instance_id].data;
+
                 document.getElementById(instance_id + "model").value = data.content.model;
                 document.getElementById(instance_id + "title").value = data.content.title;
                 document.getElementById(instance_id + "icon").value = data.content.icon;
@@ -64,7 +64,7 @@
             }
         },
         mounted() {
-            window.mainLayoutInstance.widgetSettingComponents[this.instance_id] = this;
+            window.mainLayoutInstance.pageWidgets[this.instance_id].content_settings = this;
         }
     }
 </script>
