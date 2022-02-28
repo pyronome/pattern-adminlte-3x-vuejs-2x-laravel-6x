@@ -63,19 +63,22 @@ class AdminLTEUser extends Authenticatable
             'name' => 'created_by',
             'type' => 'integer',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'created_by'
+            'display_property' => 'created_by',
+            'title' => 'Created By'
         ],
         [
             'name' => 'updated_by',
             'type' => 'integer',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'updated_by'
+            'display_property' => 'updated_by',
+            'title' => 'Updated By'
         ],
         [
             'name' => 'profile_img',
             'type' => 'image',
             'belongs_to' => 'AdminLTEUser',
-            'display_property' => 'profile_img'
+            'display_property' => 'profile_img',
+            'title' => 'Profile Image'
         ],
         [
             'name' => 'adminlteusergroup_id',

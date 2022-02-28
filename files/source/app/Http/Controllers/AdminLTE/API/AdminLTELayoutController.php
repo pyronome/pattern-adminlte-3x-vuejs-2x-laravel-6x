@@ -123,10 +123,12 @@ class AdminLTELayoutController extends Controller
 
         $parameters = $request->route()->parameters();
 
-        $pageName = isset($parameters['pageName'])
-                ? htmlspecialchars($parameters['pageName'])
+        $pagename = isset($parameters['pagename'])
+                ? htmlspecialchars($parameters['pagename'])
                 : '';
 
+
+                
         $objectAdminLTE = new AdminLTE();
 
         $Widgets = $objectAdminLTE->getPageLayout($pageName);
@@ -236,6 +238,97 @@ class AdminLTELayoutController extends Controller
             $object->meta_data_json = json_encode($content_data);
             $object->save();
         }
+    }
+
+    public function get_filter_options(Request $request) {    
+        $data = [];
+
+        $parameters = $request->route()->parameters();
+
+        $pagename = isset($parameters['pagename'])
+                ? htmlspecialchars($parameters['pagename'])
+                : '';
+
+        // Widget Pages
+        $objectList = AdminLTELayout::where('deleted', 0)->groupBy('pagename')->orderBy('pagename', 'asc')->get();
+
+        $list = [];
+        $index = 0;
+
+        $list[$index]['id'] = '__global';
+        $list[$index]['text'] = 'Global Widgets';
+        $index++;
+
+        foreach ($objectList as $object) {
+            if ($pagename != $object->pagename) {
+                $list[$index]['id'] = $object->pagename;
+                $list[$index]['text'] = $object->pagename . ' | ' . 'Widgets';
+                $index++;
+            }
+        } // foreach ($objectList as $object)
+
+        $data['widget_page'] = $list;
+
+        return [
+            'options' => $data
+        ];
+    }
+
+    public function get_model_list(Request $request) {    
+        $list = [];
+        $index = 0;
+
+        $list[$index]['id'] = 'AdminLTEUser';
+        $list[$index]['text'] = 'AdminLTEUser';
+        $index++;
+
+        $list[$index]['id'] = 'AdminLTEUserGroup';
+        $list[$index]['text'] = 'AdminLTEUserGroup';
+        $index++;
+
+        $objectAdminLTE = new AdminLTE();
+		$Models = $objectAdminLTE->getModelList();
+		$countModels = count($Models);
+
+		for ($i=0; $i < $countModels; $i++) {
+            $list[$index]['id'] = $Models[$i];
+            $list[$index]['text'] = $Models[$i];
+            $index++;
+        }
+
+        return [
+            'list' => $list
+        ];
+    }
+
+    public function get_model_properties(Request $request)
+    {
+        $parameters = $request->route()->parameters();
+
+        $model = isset($parameters['model'])
+                ? htmlspecialchars($parameters['model'])
+                : '';
+
+        $list = array();
+        $index = 0;
+
+        $objectAdminLTE = new AdminLTE();
+        $property_list = $objectAdminLTE->getModelPropertyList($model);
+        $countProperty = count($property_list);
+
+        for ($j=0; $j < $countProperty; $j++) { 
+            $property = 
+
+            $list[$index]['id'] = $property_list[$j]['name'];
+            $list[$index]['text'] = $property_list[$j]['title'];
+
+            $index++;
+        } // for ($j=0; $j < $countProperty; $j++) { 
+
+        return [
+            'list' => $list
+        ];
+
     }
 
     public function get_infoboxvalue(Request $request)

@@ -12,7 +12,15 @@
                         </div>
                         <div class="modal-body" style="padding-top:0px;">
                             <div class="row">
-                                <div class="col-12 mt-3 mb-3">
+                                <div class="col-6 mt-3 mb-3">
+                                    <select2-element class="select2-element"
+                                        id="widget_page"
+                                        name="widget_page"
+                                        :options="widget_page_options"
+                                        value="__global">
+                                    </select2-element>
+                                </div>
+                                <div class="col-6 mt-3 mb-3">
                                     <div class="input-group input-group-md">
                                         <input type="search"
                                             id="searchNewWidget" name="searchNewWidget"
@@ -46,18 +54,30 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tbodyWidgetList">
-                                            <tr v-for="(widget, index) in widgets" :key="index"
-                                                :data-search-text="widget.title + widget.name">
+                                            <tr v-for="(widgetItem, index) in widgetList" :key="index"
+                                                :data-search-text="widgetItem.title + widgetItem.name">
                                                 <td>
                                                     <div class="icheck-primary m-0">
                                                         <input type="checkbox"
-                                                            :id="'select_widget-' + widget.name"
+                                                            :id="'select_widget-' + widgetItem.guid"
                                                             class="select_widget"
-                                                            :data-widget="widget.name">
-                                                        <label :for="'select_widget-' + widget.name"></label>
+                                                            :data-widget="widgetItem.data">
+                                                        <label :for="'select_widget-' + widgetItem.guid"></label>
                                                     </div>
                                                 </td>
-                                                <td v-html="widget.title + ' (' + widget.name + ')'"></td>
+                                                <td>
+                                                   <span v-html="widgetItem.title + ' (' + widgetItem.name + ')'"></span>
+                                                   <button v-if="widgetItem.has_preview"
+                                                        type="button"
+                                                        class="btn-icon btn-icon-primary"
+                                                        @click="showPreview(widgetItem.name)"
+                                                        style="margin-bottom:0;"
+                                                        title="Preview">
+                                                        <span class="btn-label btn-label-right">
+                                                            <i class="fas fa-eye"></i>
+                                                        </span>                    
+                                                    </button> 
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -80,6 +100,27 @@
                 </div>
             </div>
         </div>
+
+        <section class="container-fluid mt-3">
+            <div class="row" id="divWidgetCatalogContainer">
+                <div v-for="(winWidget, index) in windowWidgets" :key="index" 
+                    class="widget-container widget-catalog" 
+                    :id="'container-' + winWidget.instance_id"
+                    :data-instance-id="winWidget.instance_id">
+                    <div class="widget-main-container">
+                        <div class="widget-header">
+                            <widget-header 
+                                :instance_id="winWidget.instance_id" 
+                                :data="winWidget.data">
+                            </widget-header>
+                        </div>
+                        <div class="widget-body">
+                            <widget-body :element="winWidget"></widget-body>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </template>
 
@@ -89,20 +130,22 @@ export default {
     watch: {
         pagename: function(pagename) {
             this.pagename = pagename;
-            this.layoutForm.pagename = pagename;
-            this.initializePage();
+            this.processLoadQueue();
         }
     },
     data() {
         return {
-            widgets : window.Widgets,
-            layoutForm: new Form({
-                'pagename': '',
-                'layoutdata': [],
-            }),
+            windowWidgets: [],
+            windowWidgetList: [],
+            widgetList: [],
+            selectedPageWidgets: [],
+            widget_page_options: [],
             page: {
                 is_ready: false,
+                has_server_error: false,
                 is_post_success: false,
+                is_widget_page_options_loading: false,
+                is_widget_page_options_loaded: false,
                 external_files: [
                     ("/js/adminlte/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
                     ("/js/adminlte/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
@@ -115,13 +158,154 @@ export default {
         };
     },
     methods: {
+        processLoadQueue: function () {
+            var self = this;
+            
+            if (self.page.has_server_error) {
+                self.$Progress.finish();
+                self.page.is_ready = true;
+                return;
+            }
+
+            if (!self.page.is_widget_page_options_loaded) {
+                self.load_widget_page_options();
+            } else {
+                self.initializePage();
+            }
+        },
         initializePage: function() {
             var self = this;
-            $( "#ulPageWidgets" ).sortable();
+
+            $("#widget_page").off("change").on("change", function (e) {
+                self.pageChanged(this.value);
+            });
 
             $("#searchNewWidget").off("keyup").on("keyup", function () {
                 self.doSearchNewWidget(this);
             });
+
+            var windowWidgetList = [];
+            var index = 0;
+
+            for (const [widgetname, windowWidget] of Object.entries(window.Widgets)) {
+                let instance_id = AdminLTEHelper.generateGUID("widget");
+                window.mainLayoutInstance.pageWidgets[instance_id] = [];
+
+                let general_data = {
+                    "enabled" : 0,
+                    "__order" : 0,
+                    "title" : windowWidget.title,
+                    "widget" : widgetname,
+                    "grid_size" : windowWidget.grid_size,
+                    "icon" : windowWidget.icon
+                };
+
+                let child = {
+                    "instance_id": instance_id,
+                    "widget": windowWidget,
+                    "data": {
+                        "general": general_data,
+                        "content": windowWidget.metadata
+                    },
+                    "grid_class": ""
+                }
+
+                self.windowWidgets.push(child);
+
+                windowWidgetList[index] = [];
+                windowWidgetList[index]["guid"] = instance_id;
+                windowWidgetList[index]["title"] = windowWidget.title;
+                windowWidgetList[index]["name"] = widgetname;
+                windowWidgetList[index]["has_preview"] = windowWidget.has_preview;
+                windowWidgetList[index]["data"] = JSON.stringify(child.data);
+                index++;
+            }
+
+            self.windowWidgetList = windowWidgetList;
+            self.widgetList = windowWidgetList;
+        },
+        pageChanged: function(page) {
+            var self = this;
+
+            $(".select_widget").prop("checked", false);
+            
+            if ("__global" == page) {
+                self.widgetList = self.windowWidgetList;
+            } else {
+                self.load_selectedPageWidgets(page);
+            }
+        },
+        load_selectedPageWidgets: function(page) {
+            var self = this;
+			
+			axios.get(AdminLTEHelper.getAPIURL("__layout/get_widgets/" + page))
+                .then(({ data }) => {
+                    self.selectedPageWidgets = data.page_widgets;
+                    self.renderPageWidgets();
+                }).catch(({ data }) => {
+                    self.$Progress.fail();
+                    self.page.has_server_error = true;
+                });
+        },
+        renderPageWidgets: function() {
+            var self = this;
+            var selectedPageWidgetList = [];
+            var index = 0;
+
+            console.log("renderPageWidgets")
+            console.log(self.selectedPageWidgets)
+
+            self.selectedPageWidgets.forEach(page_widget => {
+                let widgetname = page_widget["widget"];
+
+                if (null !== window.Widgets[widgetname]) {
+                    let instance_id = AdminLTEHelper.generateGUID("widget");
+
+                    let data = {
+                        "general": {
+                            "enabled" : page_widget.enabled,
+                            "__order" : page_widget.__order,
+                            "title" : page_widget.title,
+                            "widget" : widgetname,
+                            "grid_size" : page_widget.grid_size,
+                            "icon" : page_widget.icon
+                        },
+                        "content": JSON.parse(page_widget.meta_data_json)
+                    };
+                    
+                    selectedPageWidgetList[index] = [];
+                    selectedPageWidgetList[index]["guid"] = instance_id;
+                    selectedPageWidgetList[index]["title"] = page_widget.title;
+                    selectedPageWidgetList[index]["name"] = widgetname;
+                    selectedPageWidgetList[index]["has_preview"] = window.Widgets[widgetname].has_preview;
+                    selectedPageWidgetList[index]["data"] = JSON.stringify(data);
+                    index++;
+                }
+            });
+
+            self.widgetList = selectedPageWidgetList;
+        },
+        load_widget_page_options: function() {
+            var self = this;
+            if (self.page.is_widget_page_options_loading) {
+                return;
+            }
+
+            self.page.is_widget_page_options_loading = true;
+			
+			axios.get(AdminLTEHelper.getAPIURL("__layout/get_filter_options/" + self.pagename))
+                .then(({ data }) => {
+                    self.page.is_widget_page_options_loaded = true;
+                    self.page.is_widget_page_options_loading = false;
+                    self.widget_page_options = data.options['widget_page'];
+                    self.processLoadQueue();
+                }).catch(({ data }) => {
+                    self.page.is_widget_page_options_loaded = true;
+                    self.page.is_widget_page_options_loading = false;
+                    self.$Progress.fail();
+                    self.page.has_server_error = true;
+                    self.processLoadQueue();
+                });
         },
         doSearchNewWidget: function(sender) {
             if (!sender) {
@@ -151,19 +335,23 @@ export default {
             var tbodyElement = document.getElementById("tbodyWidgetList");
             var selectedCheckboxes = $(".select_widget:checked", tbodyElement);
             var selectedCount = selectedCheckboxes.length;
-            var selectedWidgets = "";
+            var selectedWidgets = [];
             for (var i = 0; i < selectedCount; i++) {
-                if ("" != selectedWidgets) {
-                    selectedWidgets += ",";
-                }
-
-                selectedWidgets += selectedCheckboxes[i].getAttribute("data-widget");
+                selectedWidgets.push(JSON.parse(selectedCheckboxes[i].getAttribute("data-widget")));
             }
 
             window.mainLayoutInstance.vueComponent.addNewWidgets(selectedWidgets);
 
+            if (selectedCount > 0) {
+                $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
+            }
+
             $("#modalWidgetList").modal("hide");
         },
+        showPreview: function(widget_name) {
+            var modal = document.getElementById(widget_name + "ModalPreview");
+            $(modal).modal();
+        }
     },
     mounted() {
         this.$Progress.start();

@@ -11,8 +11,8 @@
             <div class="dropdown-menu" role="menu" style="">
                 <button type="button" class="dropdown-item btn-toggle-widget"
                     @click="toggleWidget()">
-                    <span v-show="!state">Enabled</span>
-                    <span v-show="state">Disabled</span>
+                    <span v-show="!state">Enable</span>
+                    <span v-show="state">Disable</span>
                 </button>
                 <div class="dropdown-divider"></div>
                 <button type="button" class="dropdown-item btn-copy-widget"

@@ -58,13 +58,15 @@ class AdminLTEUserGroup extends Model
             'name' => 'created_by',
             'type' => 'integer',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'created_by'
+            'display_property' => 'created_by',
+            'title' => 'Created By'
         ],
         [
             'name' => 'updated_by',
             'type' => 'integer',
             'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'updated_by'
+            'display_property' => 'updated_by',
+            'title' => 'Updated By'
         ],
         [
             'name' => 'enabled',

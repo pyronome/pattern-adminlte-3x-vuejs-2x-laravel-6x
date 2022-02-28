@@ -9,7 +9,7 @@
                         :id="instance_id + 'youtubecode'">
                 </div>
                 <div class="form-group col-lg-12">
-                    <label :for="instance_id + 'width'" class="detail-label">{{ $t('Iframw Width') }}</label>
+                    <label :for="instance_id + 'width'" class="detail-label">{{ $t('Iframe Width') }}</label>
                     <input type="text"
                         class="form-control "
                         :id="instance_id + 'width'">

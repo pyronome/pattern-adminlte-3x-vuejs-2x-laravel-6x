@@ -3,11 +3,6 @@
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <!--
-                    <div class="col-sm-6">
-                        <h1>{{ $t("Profile Detail") }}</h1>
-                    </div>
-                    -->
                     <div class="col-sm-12">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><router-link :to="'/' + main_folder + '/home'">{{ $t('Home') }}</router-link></li>
@@ -17,6 +12,7 @@
                 </div>
             </div>
         </section>
+
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -99,8 +95,9 @@
                 </div>
             </div>
         </section>
-        <input type="hidden" id="controller" value="profile">
-		<image-display :init_image_display="init_image_display"></image-display>
+
+        <layout :pagename="pagename" :pagevariables="page.variables"></layout>
+        <image-display :init_image_display="init_image_display"></image-display>
     </div>
 </template>
 
@@ -110,7 +107,7 @@ export default {
     data() {
         return {
             main_folder: '',
-            pagename: 'profile',
+            pagename: '',
             id: 0,
             data: [],
             page: {
@@ -121,23 +118,23 @@ export default {
                 unauthorized_type: '',
                 is_variables_loading: false,
                 is_variables_loaded: false,
-                is_data_loading: false,
-                is_data_loaded: false,
             },
 			init_image_display: false
         };
     },
     methods: {
         processLoadQueue: function () {
-            if (this.page.has_server_error) {
-                this.$Progress.finish();
-                this.page.is_ready = true;
+            var self = this;
+
+            if (self.page.has_server_error) {
+                self.$Progress.finish();
+                self.page.is_ready = true;
                 return;
             }
 
-            if (!this.page.is_authorized) {
-                this.$Progress.finish();
-                this.page.is_ready = true;
+            if (!self.page.is_authorized) {
+                self.$Progress.finish();
+                self.page.is_ready = true;
                 return;
             }
 
@@ -149,6 +146,12 @@ export default {
                 this.loadPageVariables();
             } else {
                 if (this.page.is_data_loaded) {
+                    self.$nextTick(function () {
+                        setTimeout(function() {
+                            self.initializePage();
+                        }, 500);                        
+                    });
+
                     this.$Progress.finish();
                     this.page.is_ready = true;
                 } else {
@@ -207,12 +210,18 @@ export default {
                 }).finally(function() {
                     self.init_image_display = true;
                 });
+        },
+        initializePage: function () {
+            var self = this;
         }
     },
     mounted() {
-        this.main_folder = AdminLTEHelper.getMainFolder();
-        this.id = this.$route.params.id;
-        this.processLoadQueue();
+        var self = this;
+        self.main_folder = AdminLTEHelper.getMainFolder();
+        var pagename = AdminLTEHelper.getPagename();
+        self.pagename = ('' != pagename) ? pagename : 'home';
+        self.page.is_ready = false;
+        self.processLoadQueue();
     }
 }
 </script>

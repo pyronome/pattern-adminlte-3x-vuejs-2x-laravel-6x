@@ -115,6 +115,7 @@ export default {
             });
 
             $("#btnAddNewWidgets").off("click").on("click", function () {
+                $(".select_widget").prop("checked", false);
                 $("#modalWidgetList").modal();
             });
 
@@ -123,6 +124,7 @@ export default {
             });
 
             var activeWidgets = self.active_widgets;
+
             activeWidgets.forEach(activeWidget => {
                 let widgetname = activeWidget["widget"];
                 if (null !== window.Widgets[widgetname]) {
@@ -154,7 +156,6 @@ export default {
             setTimeout(function() {
                 self.setWidgetsFormData();
             }, 500);
-            
         },
         doToggleEditModeChange: function(btn) {
             var editModeActive = btn.getAttribute("on-edit-mode");
@@ -260,37 +261,27 @@ export default {
         },
         addNewWidgets: function(selectedWidgets) {
             var self = this;
-            var new_widgets = selectedWidgets.split(",");
 
-            new_widgets.forEach(new_widget => {
-                if (null !== window.Widgets[new_widget]) {
-                    let winWidget = window.Widgets[new_widget];
+            for (let index = 0; index < selectedWidgets.length; index++) {
+                let widgetData = selectedWidgets[index];
+                let widgetname = widgetData.general.widget;
+
+                if (null !== window.Widgets[widgetname]) {
+                    let winWidget = window.Widgets[widgetname];
                     
                     let instance_id = AdminLTEHelper.generateGUID("widget");
                     window.mainLayoutInstance.pageWidgets[instance_id] = [];
 
-                    let general_data = {
-                        "enabled" : 1,
-                        "__order" : 0,
-                        "title" : winWidget.title,
-                        "widget" : winWidget.name,
-                        "grid_size" : winWidget.grid_size,
-                        "icon" : winWidget.icon
-                    };
-
                     let child = {
                         "instance_id": instance_id,
                         "widget": winWidget,
-                        "data": {
-                            "general": general_data,
-                            "content": winWidget.metadata
-                        },
-                        "grid_class": self.getWidgetGridClass(winWidget.grid_size)
+                        "data": widgetData,
+                        "grid_class": self.getWidgetGridClass(widgetData.general.grid_size)
                     }
 
                     self.pageWidgets.push(child);
                 }
-            });
+            }
 
             $("#divWidgetContainer").sortable({
                 handle: ".widget-move-handle",

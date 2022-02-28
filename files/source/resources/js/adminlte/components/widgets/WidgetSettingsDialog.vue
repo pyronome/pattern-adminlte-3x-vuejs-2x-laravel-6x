@@ -28,7 +28,7 @@
                                     role="tab" 
                                     :aria-controls="instance_id + 'content'"
                                     aria-selected="false">
-                                    Content
+                                    Advanced
                                 </a>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group col-lg-12">
-                                            <label :for="instance_id + '__title'" class="detail-label">{{ $t('Title') }}</label>
+                                            <label :for="instance_id + '__title'" class="detail-label">{{ $t('Caption') }}</label>
                                             <input type="text"
                                                 class="form-control "
                                                 :id="instance_id + '__title'">
@@ -134,6 +134,10 @@ export default {
     props: ["instance_id"],
     mounted() {
         window.mainLayoutInstance.pageWidgets[this.instance_id].general_settings = this;
+
+        $(document.getElementById(this.instance_id + 'ModalSettings')).on('shown.bs.modal', function (e) { 
+            $(document).off('focusin.modal'); 
+        });
     },
     methods: {
         setWidgetFormValues: function(instance_id) {
@@ -149,6 +153,8 @@ export default {
             document.getElementById(instance_id + "__small_screen_size").value = sizes[2];
 
             window.mainLayoutInstance.pageWidgets[instance_id].content_settings.setWidgetFormValues();
+
+            $(document).off('focusin.modal');
         },
         saveWidget: function() {
             var instance_id = this.instance_id;

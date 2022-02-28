@@ -123,6 +123,10 @@ body {
     color: #007bff;
 }
 
+.btn.btn-secondary.btn-icon {
+    color:#91979d;
+}
+
 .spanIcon {
     font-size: 18px;
 }
@@ -797,6 +801,10 @@ label > .hint-text {
 }
 .btn-icon > i {
     font-size: x-large !important;
+}
+.icon-picker {
+    background-color: #555;
+    color: #fff;
 }
 .iconpicker > i {
     font-size: initial;
@@ -1542,10 +1550,6 @@ button.copyKey {
     line-height: inherit;
 }
 
-.btn-toggle-widget {
-    color: #7487a9;
-}
-
 .li-widget-item {
     border: 1px solid #c2c7d0 !important;
     padding-right: 10px;
@@ -1668,4 +1672,15 @@ button.copyKey {
     display:none;
 }
 
+.widget-container.widget-catalog {
+    height: 0;
+}
+
+.widget-container.widget-catalog > .widget-main-container  > .widget-body {
+    padding: 0;
+}
+
+.widget-container.widget-catalog > .widget-main-container  > .widget-body .widget-inner-container {
+    display: none;
+}
 /* {{@snippet:end}} */

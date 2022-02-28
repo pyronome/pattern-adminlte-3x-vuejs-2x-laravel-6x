@@ -17,6 +17,7 @@ Vue.component('page-layout', require('./components/elements/default/PageLayout.v
 Vue.component('layout', require('./components/widgets/Layout.vue').default);
 Vue.component('widget-body', require('./components/elements/default/WidgetBody.vue').default);
 Vue.component('widget-settings-dialog', require('./components/elements/default/WidgetSettingsDialog.vue').default);
+Vue.component('widget-preview-dialog', require('./components/widgets/WidgetPreviewDialog.vue').default);
 Vue.component('widget-list', require('./components/elements/default/WidgetList.vue').default);
 Vue.component('widget-header', require('./components/elements/default/WidgetHeader.vue').default);
 

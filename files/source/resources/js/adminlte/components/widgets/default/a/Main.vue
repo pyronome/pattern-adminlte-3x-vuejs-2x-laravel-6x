@@ -6,14 +6,18 @@
         <div class="widget-settings-dialog-container">
             <settingsDialog :instance_id="instance_id"></settingsDialog>
         </div>
+        <div class="widget-preview-dialog-container">
+            <previewDialog widget_name="widgetA"></previewDialog>
+        </div>
     </div>
 </template>
 
 <script>
     import settingsDialog from "./Settings.vue";
+    import previewDialog from "./Preview.vue";
 
     export default {
-        components: {settingsDialog},
+        components: {settingsDialog, previewDialog},
         props: ["instance_id","data"],
         methods: {
             refresh: function () {
