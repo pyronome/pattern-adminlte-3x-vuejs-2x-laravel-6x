@@ -15,8 +15,8 @@ Vue.component('permission-error', require('./components/elements/default/Permiss
 Vue.component('server-error', require('./components/elements/default/ServerError.vue').default);
 Vue.component('page-layout', require('./components/elements/default/PageLayout.vue').default);
 Vue.component('layout', require('./components/widgets/Layout.vue').default);
-Vue.component('widget-body', require('./components/elements/default/WidgetBody.vue').default);
-Vue.component('widget-settings-dialog', require('./components/elements/default/WidgetSettingsDialog.vue').default);
+Vue.component('widget-body', require('./components/widgets/WidgetBody.vue').default);
+Vue.component('widget-settings-dialog', require('./components/widgets/WidgetSettingsDialog.vue').default);
 Vue.component('widget-preview-dialog', require('./components/widgets/WidgetPreviewDialog.vue').default);
 Vue.component('widget-list', require('./components/elements/default/WidgetList.vue').default);
 Vue.component('widget-header', require('./components/elements/default/WidgetHeader.vue').default);
