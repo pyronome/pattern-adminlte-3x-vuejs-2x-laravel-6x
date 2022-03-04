@@ -1,11 +1,11 @@
 <template>
     <div class="widgetcomponent">
         <div class="widget-inner-container">
-            <router-link class="info-box clickable-infobox" tag="div" :to="data.content.redirectURL">
-                <span class="info-box-icon elevation-1" v-bind:style="{backgroundColor: data.content.iconbackground}"><i :class="data.content.icon"></i></span>
+            <router-link class="info-box clickable-infobox" tag="div" :to="content.redirectURL">
+                <span class="info-box-icon elevation-1" v-bind:style="{backgroundColor: content.iconbackground}"><i :class="content.icon"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">{{data.content.title}}</span>
-                    <span class="info-box-number">{{count}}</span>
+                    <span class="info-box-text" v-html="content.title"></span>
+                    <span class="info-box-number" v-html="content.infobox_value"></span>
                 </div>
             </router-link>
         </div>
@@ -27,7 +27,7 @@
         props: ["instance_id","data"],
         data() {
             return {
-                count: 0,
+                "content": this.data.content,
             };
         },
         methods: {
@@ -35,9 +35,14 @@
                 this.data = window.mainLayoutInstance.pageWidgets[this.instance_id].data;
             },
             loadData: function () {
-                axios.get(AdminLTEHelper.getAPIURL("__layout/get_infoboxvalue/" + this.data.content.model))
+                var parameters = AdminLTEHelper.getWidgetParameter(this.data.general.id);
+                axios.get(AdminLTEHelper.getAPIURL("__layout/get_infobox_data/" + parameters))
                     .then(({ data }) => {
-                        this.count = data.count;
+                        if (data) {
+                            this.content = data;
+                        }
+
+                        this.$Progress.finish();
                     }).catch(({ data }) => {
                         this.$Progress.fail();
                     });

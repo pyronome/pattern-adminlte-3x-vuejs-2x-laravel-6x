@@ -1641,7 +1641,7 @@ class AdminLTE
 		return htmlspecialchars_decode($display_text);
 	}
 
-	private function getStringBetween($string, $start, $end)
+	public function getStringBetween($string, $start, $end)
 	{
 		$string = ' ' . $string;
 		$ini = strpos($string, $start);

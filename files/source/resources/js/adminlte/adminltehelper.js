@@ -89,6 +89,22 @@ var AdminLTEHelper = {
             }
         });
     },
+    "getWidgetParameter": function(layoutId) {
+        var widgetParameter = {
+            "layout_id": layoutId,
+            "url_parameters": [],
+            "request_parameters": {}
+        };
+
+        // url_parameters
+        widgetParameter.url_parameters = window.location.pathname.split("/");
+
+        // request_parameters
+        var urlSearchParams = new URLSearchParams(window.location.search);
+        widgetParameter.request_parameters = Object.fromEntries(urlSearchParams.entries());
+
+        return btoa(JSON.stringify(widgetParameter));
+    },
     "getLandingPage": function () {
         if (document.body.getAttribute("data-landing-page")) {
             return document.body.getAttribute("data-landing-page");

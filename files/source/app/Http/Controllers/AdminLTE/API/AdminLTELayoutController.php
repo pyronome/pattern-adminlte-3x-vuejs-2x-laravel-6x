@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\AdminLTE\API;
 
+use Illuminate\Support\Facades\DB;
+use PDO;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,7 +12,10 @@ use App\AdminLTE\AdminLTELayout;
 use App\AdminLTE\AdminLTEUser;
 use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTEUserLayout;
+use App\AdminLTE\AdminLTEConfig;
+use App\AdminLTE\AdminLTEUserConfig;
 use App\Http\Requests\AdminLTE\API\AdminLTELayoutPOSTRequest;
+
 
 class AdminLTELayoutController extends Controller
 {
@@ -278,6 +283,10 @@ class AdminLTELayoutController extends Controller
         $list = [];
         $index = 0;
 
+        $list[$index]['id'] = '';
+        $list[$index]['text'] = __('Please Select');
+        $index++;
+
         $list[$index]['id'] = 'AdminLTEUser';
         $list[$index]['text'] = 'AdminLTEUser';
         $index++;
@@ -331,7 +340,173 @@ class AdminLTELayoutController extends Controller
 
     }
 
-    public function get_infoboxvalue(Request $request)
+    public function get_infoboxvalue_by_simple_calculation($metaData) {
+        $calculationResult = [];
+
+        $function = $metaData['function'];
+        $model = $metaData['model'];
+        $property = $metaData['property'];
+        $condition = 1;
+
+        $tablename = strtolower($model) . "table";
+
+        $selectSQL = 'SELECT ' . $function . '(' . $property . ') as result '
+            . ' FROM ' . $tablename
+            . ' WHERE ' . $condition;
+        
+        try {
+            $connection = DB::connection()->getPdo();
+        } catch (PDOException $e) {
+            print($e->getMessage());
+        }
+                
+        $objPDO = $connection->prepare($selectSQL);
+        $objPDO->execute();
+        $data = $objPDO->fetchAll();
+
+        if (isset($data)) {
+            if (isset($data[0])) {
+                $calculationResult = $data[0];//["result"];
+            }
+        }
+
+        return $calculationResult;
+    }
+
+    public function get_infoboxvalue_by_advanced_calculation($query) {
+        $calculationResult = [];
+        $condition = 1;
+
+        try {
+            $connection = DB::connection()->getPdo();
+        } catch (PDOException $e) {
+            print($e->getMessage());
+        }
+                
+        $objPDO = $connection->prepare($query);
+        $objPDO->execute();
+        $data = $objPDO->fetchAll();
+
+        /* echo '<div style="display:block">';
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+        echo '</div>';
+        die(); */
+
+        if (isset($data)) {
+            if (isset($data[0])) {
+                $calculationResult = $data[0];//["result"];
+            }
+        }
+
+        return $calculationResult;
+    }
+
+    public function get_infobox_data(Request $request)
+    {   
+        $returnData = null;
+
+        $parameters = $request->route()->parameters();
+
+        $widgetParametersEncoded = isset($parameters['parameters'])
+                ? htmlspecialchars($parameters['parameters'])
+                : '';
+
+        $objectAdminLTE = new AdminLTE();
+        $widgetParameters = json_decode(base64_decode($widgetParametersEncoded), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+
+        if (!isset($widgetParameters['layout_id'])) {
+            return $returnData;
+        }
+
+        $layoutId = $widgetParameters['layout_id'];
+        $url_parameters = $widgetParameters['url_parameters'];
+        $request_parameters = $widgetParameters['request_parameters'];
+
+        $objectLayout = AdminLTELayout::where('id', $layoutId)->first();
+
+        if (null !== $objectLayout) {
+            $metaData = json_decode($objectLayout->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+
+            if ('simple' == $metaData['calculation_type']) {
+                $queryResult = $this->get_infoboxvalue_by_simple_calculation($metaData);
+            } else if ('advanced' == $metaData['calculation_type']) {
+                $query = $this->getParsedValue($metaData['query'], '', $url_parameters, $request_parameters);
+                $queryResult = $this->get_infoboxvalue_by_advanced_calculation($query);
+            }
+
+            foreach ($metaData as $key => $value) {
+                $returnData[$key] = $this->getParsedValue($value, $queryResult, $url_parameters, $request_parameters);
+            }
+
+            $returnData['result'] = isset($queryResult['result']) 
+                ? $queryResult['result']
+                : 0;
+        }
+
+        return $returnData;
+    }
+
+    public function getParsedValue($display_text, $queryResult, $url_parameters, $request_parameters)
+    {
+        $currentUser = auth()->guard('adminlteuser')->user();
+        //- Sabit 
+        //{{Model/Teacher/firstname}}                         - Model Property
+
+        //{{GlobalParameters/__key}}         - Global Parameter (settingsdekiler)
+        //{{UserParameters/__key}}           - User Parameter (kullanıcıya ait settings parameterlar)
+        
+        //{{URLParameters/parameterIndex}}          - URL Parameter (urlden)
+        //{{RequestParameters/parameterName}}           - Request Parameter (formdan)
+        
+        //{{QueryResultFields/key}}
+
+        $objectAdminLTE = new AdminLTE();
+        $parsed = $objectAdminLTE->getStringBetween($display_text, '{{', '}}');
+
+		while (strlen($parsed) > 0) {
+            $parsedWithMustache = '{{' . $parsed . '}}';
+			$partResult = '';
+
+			$textPart = explode('/', $parsed);
+			$countPart = count($textPart);
+
+            if ('GlobalParameters' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = $objectAdminLTE->getConfigParameterValue($__key);
+            } else if ('UserParameters' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = $objectAdminLTE->getUserConfigParameterValue($__key, 'user', $currentUser->id);
+            } else if ('URLParameters' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = isset($url_parameters[$__key]) 
+                    ? $url_parameters[$__key]
+                    : $__key;
+            } else if ('RequestParameters' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = isset($request_parameters[$__key]) 
+                    ? $request_parameters[$__key]
+                    : $__key;
+            } else if ('QueryResultFields' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = isset($queryResult[$__key]) 
+                    ? $queryResult[$__key] 
+                    : $__key;
+            } else {
+                $__key = $textPart[1];
+                $partResult = $__key;
+            }
+
+            $display_text = str_replace($parsedWithMustache, $partResult, $display_text);
+			$temp_text = $display_text;
+			$parsed = $objectAdminLTE->getStringBetween($temp_text, '{{', '}}');
+		} // while (strlen($parsed) > 0) {
+
+        return htmlspecialchars_decode($display_text);
+    }
+    
+    public function __EX__get_infoboxvalue(Request $request)
     {   
         $parameters = $request->route()->parameters();
 
@@ -345,6 +520,128 @@ class AdminLTELayoutController extends Controller
         return [
             'count' => $modelNameWithNamespace::where('deleted', false)->count()
         ];
+    }
+
+    public function get_global_parameter_list(Request $request)
+    {
+        $parameters = $request->route()->parameters();
+
+        $objectList = AdminLTEConfig::where('deleted', 0)->get();
+
+        $list = [];
+        $index = 0;
+
+        foreach ($objectList as $object) {
+            if (('group' == $object->type) || ('selection_group' == $object->type)) {
+                continue;
+            }
+
+            $list[$index]['id'] = $object->__key;
+            $list[$index]['text'] = $this->getGlobalParameterOptionTitle($object->__key);
+            $index++;
+        }
+
+        return [
+            'list' => $list
+        ];
+    }
+
+    public function getGlobalParameterOptionTitle($key) {
+        $option_title = '';
+        $parts = explode('.', $key);
+        $parent_key = '';
+
+        foreach ($parts as $part) {
+            if ('' != $parent_key) {
+                $parent_key .= '.';
+            }
+
+            $parent_key .= $part;
+
+            $title = $this->getGlobalParameterTitle($parent_key);
+
+            if ('' != $option_title) {
+                $option_title .= ' / ';
+            }
+
+            $option_title .= $title;
+        }
+
+        return $option_title;
+    }
+
+    public function getGlobalParameterTitle($key) {
+        $element_title = '';
+
+        $object = AdminLTEConfig::where('deleted', 0)->where('__key', $key)->first();
+
+        if (null !== $object) {
+            $element_title = $object->title;
+        }
+
+        return $element_title;
+    }
+
+    public function get_user_parameter_list(Request $request)
+    {
+        $parameters = $request->route()->parameters();
+        $currentUser = auth()->guard('adminlteuser')->user();
+        $currentGroupId = $currentUser->adminlteusergroup_id;
+
+        $objectList = AdminLTEUserConfig::where('deleted', 0)->whereIn('owner_group', [0, $currentGroupId])->get();
+
+        $list = [];
+        $index = 0;
+
+        foreach ($objectList as $object) {
+            if (('group' == $object->type) || ('selection_group' == $object->type)) {
+                continue;
+            }
+
+            $list[$index]['id'] = $object->__key;
+            $list[$index]['text'] = $this->getUserParameterOptionTitle($object->__key);
+            $index++;
+        }
+
+        return [
+            'list' => $list
+        ];
+    }
+
+    public function getUserParameterOptionTitle($key) {
+        $option_title = '';
+        $parts = explode('.', $key);
+        $parent_key = '';
+
+        foreach ($parts as $part) {
+            if ('' != $parent_key) {
+                $parent_key .= '.';
+            }
+
+            $parent_key .= $part;
+
+            $title = $this->getUserParameterTitle($parent_key);
+
+            if ('' != $option_title) {
+                $option_title .= ' / ';
+            }
+
+            $option_title .= $title;
+        }
+
+        return $option_title;
+    }
+
+    public function getUserParameterTitle($key) {
+        $element_title = '';
+
+        $object = AdminLTEUserConfig::where('deleted', 0)->where('__key', $key)->first();
+
+        if (null !== $object) {
+            $element_title = $object->title;
+        }
+
+        return $element_title;
     }
 
     public function get_recordgraph(Request $request)

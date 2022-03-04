@@ -20,6 +20,8 @@ Vue.component('widget-settings-dialog', require('./components/widgets/WidgetSett
 Vue.component('widget-preview-dialog', require('./components/widgets/WidgetPreviewDialog.vue').default);
 Vue.component('widget-list', require('./components/elements/default/WidgetList.vue').default);
 Vue.component('widget-header', require('./components/elements/default/WidgetHeader.vue').default);
+Vue.component('insert-variable-button', require('./components/elements/default/InsertVariableButton.vue').default);
+Vue.component('insert-variable-dialog', require('./components/elements/default/InsertVariableDialog.vue').default);
 
 /* {{@snippet:end_elements}} */
 /* Elements EOF */

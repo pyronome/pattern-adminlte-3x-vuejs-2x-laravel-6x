@@ -2,25 +2,19 @@
     <div>
         <widget-settings-dialog :instance_id="instance_id">
             <div :id="instance_id + '-accordion'">
-                <div class="card card-primary">
+                <div class="card card-outline card-primary">
                     <div class="card-header">
                         <h4 class="card-title w-100">
-                            <a class="d-block w-100" data-toggle="collapse" :href="'#' + instance_id + '-accordion-style'">
-                                Style
+                            <a class="d-block w-100" data-toggle="collapse" :href="'#' + instance_id + '-accordion-dsettings'">
+                                Default Settings
                             </a>
                         </h4>
                     </div>
                     <div class="collapse show"
-                        :id="instance_id + '-accordion-style'"
+                        :id="instance_id + '-accordion-dsettings'"
                         :data-parent="'#' + instance_id + '-accordion'">
                         <div class="card-body">
                             <div class="row">
-                                <div class="form-group col-lg-12">
-                                    <label :for="instance_id + 'title'" class="detail-label">{{ $t('Title') }}</label>
-                                    <input type="text"
-                                        class="form-control "
-                                        :id="instance_id + 'title'">
-                                </div>
                                 <div class="form-group col-3">
                                     <label :for="instance_id + 'icon'" class="detail-label">{{ $t('Icon') }}</label>
                                     <button type="button" :id="instance_id + 'icon_picker'" class="btn btn-outline-secondary icon-picker">
@@ -34,31 +28,46 @@
                                         :id="instance_id + 'iconbackground'">
                                 </div>
                                 <div class="form-group col-lg-12">
+                                    <label :for="instance_id + 'title'" class="detail-label">
+                                        {{ $t('Title') }}
+                                        <insert-variable-button 
+                                            :variable_options="['query_result_fields','global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                            :target="instance_id + 'title'">
+                                        </insert-variable-button>
+                                    </label>
+                                    <input type="text" class="form-control " :id="instance_id + 'title'">
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label :for="instance_id + 'infobox_value'" class="detail-label">
+                                        {{ $t('Infobox Value') }}
+                                        <insert-variable-button 
+                                            :variable_options="['query_result_fields','global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                            :target="instance_id + 'infobox_value'">
+                                        </insert-variable-button>
+                                    </label>
+                                    <input type="text" class="form-control " :id="instance_id + 'infobox_value'">
+                                </div>
+                                <div class="form-group col-lg-12">
                                     <label :for="instance_id + 'redirectURL'" class="detail-label">{{ $t('Redirect URL') }}</label>
-                                    <input type="text"
-                                        class="form-control "
-                                        :id="instance_id + 'redirectURL'">
+                                    <input type="text" class="form-control " :id="instance_id + 'redirectURL'">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card card-primary">
+                <div class="card card-outline card-primary">
                     <div class="card-header">
                         <h4 class="card-title w-100">
-                            <a class="d-block w-100" data-toggle="collapse" :href="'#' + instance_id + '-accordion-value'">
-                                Value
+                            <a class="d-block w-100" data-toggle="collapse" :href="'#' + instance_id + '-accordion-query'">
+                                Query
                             </a>
                         </h4>
                     </div>
                     <div class="collapse"
-                        :id="instance_id + '-accordion-value'"
+                        :id="instance_id + '-accordion-query'"
                         :data-parent="'#' + instance_id + '-accordion'">
                         <div class="card-body">
                             <div class="row">
-                                <div class="form-group col-12">
-                                    <span>Calculation Type</span>
-                                </div>
                                 <div class="form-group col-6 clearfix">
                                     <div class="icheck-primary d-inline">
                                         <input type="radio" 
@@ -111,13 +120,44 @@
                             </div>
                             <div v-show="!show_calculation_type_simple" class="row">
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                                    <label :for="instance_id + 'query'" class="detail-label">{{ $t('SQL Query') }}</label>
+                                    <label :for="instance_id + 'query'" class="detail-label">
+                                        {{ $t('SQL Query') }}
+                                        <insert-variable-button 
+                                            :variable_options="['global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                            :target="instance_id + 'query'">
+                                        </insert-variable-button>
+                                    </label>
                                     <textarea rows="5"
                                         :id="instance_id + 'query'"
                                         :name="instance_id + 'query'"
                                         class="form-control"
                                         style="font-family: monospace;font-size: 15px;"></textarea>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-outline card-primary">
+                    <div class="card-header">
+                        <h4 class="card-title w-100">
+                            <a class="d-block w-100" data-toggle="collapse" :href="'#' + instance_id + '-accordion-csettings'">
+                                Conditional Settings
+                            </a>
+                        </h4>
+                    </div>
+                    <div class="collapse show"
+                        :id="instance_id + '-accordion-csettings'"
+                        :data-parent="'#' + instance_id + '-accordion'">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group col-lg-12">
+                                    <label for="listva" class="detail-label">{{ $t('Product/price > 1000') }}</label>
+                                    <ul>
+                                        <li>Title: Warning <i class="fas fa-pen"></i></li>
+                                        <li>iconbackground: #2CCC34 <i class="fas fa-pen"></i></li>
+                                    </ul>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -275,8 +315,12 @@
                 document.getElementById(instance_id + "redirectURL").value = data.content.redirectURL;
 
                 // Value
+                document.getElementById(instance_id + "infobox_value").value = data.content.infobox_value;
+
                 var selectorText = 'input[name="' + instance_id + 'calculation_type"][value="' + data.content.calculation_type + '"]';
                 $(selectorText).prop('checked', true);
+
+                self.show_calculation_type_simple = ("simple" == data.content.calculation_type);
 
                 $(document.getElementById(instance_id + "model")).val(data.content.model).trigger('change');
                 $(document.getElementById(instance_id + "property")).val(data.content.property).trigger('change');
@@ -293,6 +337,7 @@
                     "icon" : document.getElementById(instance_id + "icon").value,
                     "iconbackground" : document.getElementById(instance_id + "iconbackground").value,
                     "redirectURL" : document.getElementById(instance_id + "redirectURL").value,
+                    "infobox_value" : document.getElementById(instance_id + "infobox_value").value,
                     "calculation_type" : $(radioSelectorText).val(),
                     "model" : document.getElementById(instance_id + "model").value,
                     "property" : document.getElementById(instance_id + "property").value,

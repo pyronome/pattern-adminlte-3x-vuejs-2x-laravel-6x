@@ -25,6 +25,7 @@
             </div>
         </section>
 
+        <insert-variable-dialog></insert-variable-dialog>
         <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
 </template>

@@ -139,7 +139,6 @@ Route::namespace('API')
         Route::get('/get/{pageName}', 'AdminLTELayoutController@get_widgetconfig');
         Route::get('/get_attributes', 'AdminLTELayoutController@get_attributes');
         Route::post('/post/{pageName}', 'AdminLTELayoutController@post_widgetconfig');
-        Route::get('/get_infoboxvalue/{model}', 'AdminLTELayoutController@get_infoboxvalue');
         Route::get('/get_recordgraph/{pageName}/{model}', 'AdminLTELayoutController@get_recordgraph');
         Route::get('/get_recordlist/{pageName}/{model}', 'AdminLTELayoutController@get_recordlist');
         Route::get('/get_layout_page_options', 'AdminLTELayoutController@get_layout_page_options');
@@ -151,6 +150,9 @@ Route::namespace('API')
         Route::get('/get_page_widgets/{pagename}', 'AdminLTELayoutController@get_page_widgets');
         Route::get('/get_model_list', 'AdminLTELayoutController@get_model_list');
         Route::get('/get_model_properties/{model}', 'AdminLTELayoutController@get_model_properties');
+        Route::get('/get_global_parameter_list', 'AdminLTELayoutController@get_global_parameter_list');
+        Route::get('/get_user_parameter_list', 'AdminLTELayoutController@get_user_parameter_list');
+        Route::get('/get_infobox_data/{parameters}', 'AdminLTELayoutController@get_infobox_data');
     });
 
     Route::prefix('__modeldisplaytext')->group(function () {

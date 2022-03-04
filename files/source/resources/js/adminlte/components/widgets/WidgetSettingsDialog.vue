@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade widget-settings-dialog" :id="instance_id + 'ModalSettings'" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">{{ $t('Widget') }}</h4>
@@ -135,7 +135,7 @@ export default {
     mounted() {
         window.mainLayoutInstance.pageWidgets[this.instance_id].general_settings = this;
 
-        $(document.getElementById(this.instance_id + 'ModalSettings')).on('shown.bs.modal', function (e) { 
+        $(document.getElementById(this.instance_id + 'ModalSettings')).off("shown.bs.modal").on('shown.bs.modal', function (e) { 
             $(document).off('focusin.modal'); 
         });
     },
@@ -153,8 +153,6 @@ export default {
             document.getElementById(instance_id + "__small_screen_size").value = sizes[2];
 
             window.mainLayoutInstance.pageWidgets[instance_id].content_settings.setWidgetFormValues();
-
-            $(document).off('focusin.modal');
         },
         saveWidget: function() {
             var instance_id = this.instance_id;
