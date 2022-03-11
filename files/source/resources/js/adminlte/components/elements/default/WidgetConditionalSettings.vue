@@ -78,20 +78,6 @@
 <script>
 export default {
     props: ["instance_id", "conditional_fields"],
-    /* watch: {
-        instance_id: function(instance_id) {
-            console.log("watch:" + instance_id)
-            this.renderConditionList(instance_id);
-        },
-        conditional_fields: function(conditional_fields) {
-            console.log("watch conditional_fields:" + instance_id)
-        }
-    }, */
-    /* data() {
-        return {
-            state: this.data.general.enabled
-        };
-    },*/
     methods: {
         showConditionDialog: function () {
             window.widgetConditionDialog.showConditionDialog(this.instance_id, this.conditional_fields);

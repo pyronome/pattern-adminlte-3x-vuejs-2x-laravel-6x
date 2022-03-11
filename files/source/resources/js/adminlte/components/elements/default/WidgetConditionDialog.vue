@@ -373,7 +373,7 @@ export default {
                 var tableHTML = tableTemplateHTML
                     .replace(/__guid__/g, guid)
                     .replace(/__condition_json__/g, conditionJSON)
-                    .replace(/__condition_html__/g, conditionJSON)
+                    .replace(/__condition_html__/g, self.getConditionBeautyHTML(conditionJSON))
                     .replace(/__conditional_fields_html__/g, tbodyHTML);
 
                 document.getElementById(self.instance_id + "-conditionlist").innerHTML += tableHTML;
@@ -391,7 +391,7 @@ export default {
                 });
             } else {
                 document.getElementById(guid + "-table").setAttribute("data-condition-json", conditionJSON);
-                document.getElementById(guid + "-condition-html").innerHTML = conditionJSON;
+                document.getElementById(guid + "-condition-html").innerHTML = self.getConditionBeautyHTML(conditionJSON);
             }
 
             $("#divWidgetConditionDialog").modal("hide");
@@ -551,39 +551,69 @@ export default {
             });
         },
         inputJSQueryBuilder: function (rule, name) {
-                var self = this;
-                var options = [];
-                options.push.apply(options, self.global_parameter_options);
-                options.push.apply(options, self.user_parameter_options);
-                options.push.apply(options, self.custom_variable_options);
+            var self = this;
+            var options = [];
+            var variableCount = 0;
+            options.push.apply(options, self.global_parameter_options);
+            options.push.apply(options, self.user_parameter_options);
+            options.push.apply(options, self.custom_variable_options);
 
-                var templateHeaderHTML = document
-                        .getElementById(
-                        "action-operation-condition-rule-template-header")
-                        .innerHTML;
-                var templateFooterHTML = document
-                        .getElementById(
-                        "action-operation-condition-rule-template-footer")
-                        .innerHTML;
-                var variableOptionsHTML = "";
+            var templateHeaderHTML = document
+                    .getElementById(
+                    "action-operation-condition-rule-template-header")
+                    .innerHTML;
+            var templateFooterHTML = document
+                    .getElementById(
+                    "action-operation-condition-rule-template-footer")
+                    .innerHTML;
+            var variableOptionsHTML = "";
 
-                templateHeaderHTML = templateHeaderHTML.replace(/%id%/gi, name);
-                templateFooterHTML = templateFooterHTML.replace(/%id%/gi, name);
+            templateHeaderHTML = templateHeaderHTML.replace(/%id%/gi, name);
+            templateFooterHTML = templateFooterHTML.replace(/%id%/gi, name);
 
-                var variableCount = options.length;
+            variableOptionsHTML += '<optgroup label="Global Parameters">';
+            options = self.global_parameter_options;
+            variableCount = options.length;
 
-                for (var i = 0; i < variableCount; i++) {
-                    variableOptionsHTML += "<option value=\""
-                            + options[i]["id"]
-                            + "\">"
-                            + options[i]["text"]
-                            + "</option>";
-                }
+            for (var i = 0; i < variableCount; i++) {
+                variableOptionsHTML += "<option value=\""
+                        + options[i]["id"]
+                        + "\">"
+                        + options[i]["text"]
+                        + "</option>";
+            }
+            variableOptionsHTML += '</optgroup>';
 
-                return (templateHeaderHTML
-                        + variableOptionsHTML
-                        + templateFooterHTML);
-            },
+            variableOptionsHTML += '<optgroup label="User Parameters">';
+            options = self.user_parameter_options;
+            variableCount = options.length;
+
+            for (var i = 0; i < variableCount; i++) {
+                variableOptionsHTML += "<option value=\""
+                        + options[i]["id"]
+                        + "\">"
+                        + options[i]["text"]
+                        + "</option>";
+            }
+            variableOptionsHTML += '</optgroup>';
+
+            variableOptionsHTML += '<optgroup label="Custom Variables">';
+            options = self.custom_variable_options;
+            variableCount = options.length;
+
+            for (var i = 0; i < variableCount; i++) {
+                variableOptionsHTML += "<option value=\""
+                        + options[i]["id"]
+                        + "\">"
+                        + options[i]["text"]
+                        + "</option>";
+            }
+            variableOptionsHTML += '</optgroup>';
+
+            return (templateHeaderHTML
+                    + variableOptionsHTML
+                    + templateFooterHTML);
+        },
         setJSQueryBuilderInputValue: function (rule, value) {
             var self = this;
             var name = rule.id + "_value_0";
@@ -738,7 +768,6 @@ export default {
             $("#modalCustomVariableList").modal();
         },
         renderConditionList: function(instance_id, conditionalData) {
-            console.log("renderConditionList:" + instance_id)
             var self = this;
             var listHTML = "";
             var tableHTML = "";
@@ -763,10 +792,11 @@ export default {
             });
         },
         getConditionTableHTML: function(conditionData) {
+            var self = this;
             var tableTemplateHTML = document.getElementById("condition-table-template").innerHTML;
             var tbodyHTML = "";
             var trTemplateHTML = document.getElementById("conditional-field-row-template").innerHTML;
-            var guid = AdminLTEHelper.generateGUID("condition");
+            var guid = conditionData.guid;
 
             var condition = conditionData.condition_json;
             var conditionJSON = JSON.stringify(condition);
@@ -790,10 +820,273 @@ export default {
             var tableHTML = tableTemplateHTML
                 .replace(/__guid__/g, guid)
                 .replace(/__condition_json__/g, conditionJSON)
-                .replace(/__condition_html__/g, conditionJSON)
+                .replace(/__condition_html__/g, self.getConditionBeautyHTML(conditionJSON))
                 .replace(/__conditional_fields_html__/g, tbodyHTML);
 
             return tableHTML;
+        },
+        getConditionBeautyHTML: function(condition_json) {
+            var conditionHTML = "";
+
+            var conditionData = JSON.parse(condition_json);
+            var rules = conditionData.rules;
+            var rule = rules[0];
+            var leftSide = rule.field;
+            var operator = rule.operator;
+            var rightSide = "";
+            var tempParts = [];
+
+            switch (operator) {
+                case "equal":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> EQUAL </span>" + rightSide;
+                    break;
+
+                case "not_equal":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> NOT EQUAL </span>" + rightSide;
+                    break;
+
+                case "in":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> IN </span>" + rightSide;
+                    break;
+
+                case "not_in":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> NOT IN </span>" + rightSide;
+                    break;
+
+                case "less":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> LESS THAN </span>" + rightSide;
+                    break;
+
+                case "less_or_equal":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> LESS THAN OR EQUAL </span>" + rightSide;
+                    break;
+
+                case "greater":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> GREATER THAN </span>" + rightSide;
+                    break;
+
+                case "greater_or_equal":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> GREATER THAN OR EQUAL </span>" + rightSide;
+                    break;
+
+                case "begins_with":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> BEGINS WITH </span>" + rightSide;
+                    break;
+
+                case "not_begins_with":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> NOT BEGINS WITH </span>" + rightSide;
+                    break;
+
+                case "contains":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> CONTAINS </span>" + rightSide;
+                    break;
+
+                case "not_contains":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> NOT CONTAINS </span>" + rightSide;
+                    break;
+
+                case "ends_with":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> ENDS WITH </span>" + rightSide;
+                    break;
+
+                case "not_ends_with":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> NOT ENDS WITH </span>" + rightSide;
+                    break;
+
+                case "is_empty":
+                    conditionHTML = leftSide + "<span> IS EMPTY </span>";
+                    break;
+
+                case "is_not_empty":
+                    conditionHTML = leftSide + "<span> IS NOT EMPTY </span>";
+                    break;
+
+                case "is_null":
+                    conditionHTML = leftSide + "<span> IS NULL </span>";
+                    break;
+
+                case "is_not_null":
+                    conditionHTML = leftSide + "<span> IS NOT NULL </span>";
+                    break;
+
+                case "is_integer":
+                    conditionHTML = leftSide + "<span> IS INTEGER </span>";
+                    break;
+
+                case "is_not_integer":
+                    conditionHTML = leftSide + "<span> IS NOT INTEGER </span>";
+                    break;
+
+                case "is_numeric":
+                    conditionHTML = leftSide + "<span> IS NUMERIC </span>";
+                    break;
+
+                case "is_not_numeric":
+                    conditionHTML = leftSide + "<span> IS NOT NUMERIC </span>";
+                    break;
+
+                case "matching_regex":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> MATCHING REGEX </span>" + rightSide;
+                    break;
+
+                case "not_matching_regex":
+                    tempParts = rule.value.split(";");
+                    if ("1" == tempParts[0]) {
+                        // constant
+                        rightSide = tempParts[1];
+                    } else {
+                        // variable
+                        rightSide = tempParts[1];
+                    }
+
+                    conditionHTML = leftSide + "<span> NOT MATCHING REGEX </span>" + rightSide;
+                    break;
+
+                default:
+                    conditionHTML = condition_json;
+                    break;
+            }
+
+            if (rules.length > 1) {
+                conditionHTML = conditionHTML + "<span> ... </span>";
+            }
+
+            return conditionHTML;                
         }
     },
     mounted() {

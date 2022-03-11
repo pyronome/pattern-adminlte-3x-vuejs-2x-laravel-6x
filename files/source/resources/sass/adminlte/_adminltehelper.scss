@@ -1713,7 +1713,13 @@ table.condition-table > thead > tr > th {
 }
 
 table.condition-table > thead > tr > th:first-child {
-    word-break: break-all;
+    word-break: break-word;
+    font-weight:normal!important;
+}
+
+table.condition-table > thead > tr > th:first-child > span {
+    font-weight:bold;
+    display:block;
 }
 
 table.condition-table > thead > tr > th:last-child {
@@ -1725,7 +1731,7 @@ table.condition-table > tbody > tr > td:first-child {
 }
 
 table.condition-table > tbody > tr > td:nth-child(2) {
-    word-break: break-all;
+    word-break: break-word;
 }
 
 /* {{@snippet:end}} */

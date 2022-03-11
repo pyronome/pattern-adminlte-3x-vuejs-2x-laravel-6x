@@ -325,260 +325,228 @@ class AdminLTEWidgetHelper
 		switch ($rule->operator)
 		{
 			case 'equal':
-
-				$code .= '$' . 'variables[\''
-						. $rule->field
-						. '\']'
+				$code = $code 
+						. '$' . 'variables[\'' . $rule->field . '\']'
 						. ' == '
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history);
+						. $this->generateConditionRuleValueCode($rule->value, $history);
+				break;
 
-			break;
 			case 'not_equal':
-
-				$code .= '$' . 'variables[\''
-						. $rule->field
-						. '\']'
+				$code = $code
+						. '$' . 'variables[\'' . $rule->field . '\']'
 						. ' != '
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history);
+						. $this->generateConditionRuleValueCode($rule->value, $history);
+				break;
 
-			break;
 			case 'contains':
+				$code = $code
+						. 'strpos('
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ', '
+						. $this->generateConditionRuleValueCode($rule->value, $history)
+						. ')'
+						. ' !== false';
+				break;
+
 			case 'in':
-
-				$code .= 'strpos('
-						. '$' . 'variables[\''
-						. $rule->field
-						. '\']'
-						. ','
+				$code = $code
+						. 'strpos('
 						. $this->generateConditionRuleValueCode($rule->value, $history)
-						. ') !== false';
+						. ', '
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ')'
+						. ' !== false';
+				break;
 
-			break;
 			case 'not_in':
+				$code = $code
+						. 'strpos('
+						. $this->generateConditionRuleValueCode($rule->value, $history)
+						. ', '
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ')'
+						. ' === false';
+				break;
+
 			case 'not_contains':
-
-				$code .= 'strpos('
-						. '$' . 'variables[\''
-						. $rule->field
-						. '\']'
-						. ','
+				$code = $code
+						. 'strpos('
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ', '
 						. $this->generateConditionRuleValueCode($rule->value, $history)
-						. ') === false';
+						. ')'
+						. ' === false';
+				break;
 
-			break;
 			case 'less':
-
-				$code .= 'floatval($' . 'variables[\''
-						. $rule->field
-						. '\']'
-						. ') < floatval('
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history)
+				$code = $code
+						. 'floatval('
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ')'
+						. ' < '
+						. 'floatval('
+						. $this->generateConditionRuleValueCode($rule->value,$history)
 						. ')';
+				break;
 
-			break;
 			case 'less_or_equal':
-
-				$code .= 'floatval($' . 'variables[\''
-						. $rule->field
-						. '\']'
-						. ') <= floatval('
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history)
+				$code = $code
+						. 'floatval('
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ')'
+						. ' <= '
+						. 'floatval('
+						. $this->generateConditionRuleValueCode($rule->value,$history)
 						. ')';
+				break;
 
-			break;
 			case 'greater':
-
-				$code .= 'floatval($' . 'variables[\''
-						. $rule->field
-						. '\']'
-						. ') > floatval('
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history)
+				$code = $code
+						. 'floatval('
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ')'
+						. ' > '
+						. 'floatval('
+						. $this->generateConditionRuleValueCode($rule->value,$history)
 						. ')';
-
-			break;
+				break;
+	
 			case 'greater_or_equal':
-
-				$code .= 'floatval($' . 'variables[\''
-						. $rule->field
-						. '\']'
-						. ') >= floatval('
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history)
+				$code = $code
+						. 'floatval('
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ')'
+						. ' >= '
+						. 'floatval('
+						. $this->generateConditionRuleValueCode($rule->value,$history)
 						. ')';
+				break;
 
-			break;
 			case 'begins_with':
+				$code = $code
+						. 'strpos('
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ', '
+						. $this->generateConditionRuleValueCode($rule->value, $history)
+						. ')'
+						. ' === 0';
 
-				$code .= 'strpos('
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history)
-						. ',$' . 'variables[\''
-						. $rule->field
-						. '\']) === 0';
+				break;
 
-			break;
 			case 'not_begins_with':
+				$code = $code
+						. 'strpos('
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ', '
+						. $this->generateConditionRuleValueCode($rule->value, $history)
+						. ')'
+						. ' !== 0';
+				break;
 
-				$code .= 'strpos('
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history)
-						. ',$' . 'variables[\''
-						. $rule->field
-						. '\']) !== 0';
-
-			break;
 			case 'ends_with':
-
-				$code .= ('(strlen('
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history)
-						. ') - strlen('
-						. '$'
-						. 'variables[\''
-						. $rule->field
-						. '\']))'
+				$code = $code
+						. '('
+						. 'strlen(' . $this->generateConditionRuleValueCode($rule->value, $history) . ')'
+						. ' - '
+						. 'strlen(' . '$' . 'variables[\'' . $rule->field . '\'])'
+						. ')'
 						. ' == strrpos('
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history)
-						. ','
-						. '$'
-						. 'variables[\''
-						. $rule->field
-						. '\']'
-						. ')');
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ', '
+						. $this->generateConditionRuleValueCode($rule->value,$history)
+						. ')';
+				break;
 
-			break;
 			case 'not_ends_with':
+				$code = $code
+					. '('
+					. 'strlen(' . $this->generateConditionRuleValueCode($rule->value, $history) . ')'
+					. ' - '
+					. 'strlen(' . '$' . 'variables[\'' . $rule->field . '\'])'
+					. ')'
+					. ' != strrpos('
+					. '$' . 'variables[\'' . $rule->field . '\']'
+					. ', '
+					. $this->generateConditionRuleValueCode($rule->value,$history)
+					. ')';
+				break;
 
-				$code .= ('(strlen('
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history)
-						. ') - strlen('
-						. '$'
-						. 'variables[\''
-						. $rule->field
-						. '\']))'
-						. ' != strrpos('
-						. $this->generateConditionRuleValueCode(
-						$rule->value,
-						$history)
-						. ','
-						. '$'
-						. 'variables[\''
-						. $rule->field
-						. '\']'
-						. ')');
-
-			break;
 			case 'is_empty':
+				$code = $code
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ' == '
+						. '\'\'';
+				break;
 
-				$code .= '$' . 'variables[\''
-						. $rule->field
-						. '\']'
-						. ' == \'\'';
-
-			break;
 			case 'is_not_empty':
+				$code = $code
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ' != '
+						. '\'\'';
+				break;
 
-				$code .= '$' . 'variables[\''
-						. $rule->field
-						. '\']'
-						. ' != \'\'';
-
-			break;
 			case 'is_null':
-
-				$code .= '$' . 'variables[\''
-						. $rule->field
-						. '\']'
-						. ' == null';
-
-			break;
+				$code = $code
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ' === '
+						. 'null';
+				break;
+				
 			case 'is_not_null':
+				$code = $code
+						. '$' . 'variables[\'' . $rule->field . '\']'
+						. ' !== '
+						. 'null';
+				break;
 
-				$code .= '$' . 'variables[\''
-						. $rule->field
-						. '\']'
-						. ' != null';
-
-			break;
 			case 'is_integer':
-
-				$code .= 'is_int('
-						. '$' . 'variables[\''
-						. $rule->field
-						. '\']'
+				$code = $code
+						. 'is_int('
+						. '$' . 'variables[\'' . $rule->field . '\']'
 						. ')';
+				break;
 
-			break;
 			case 'is_not_integer':
-
-				$code .= '!is_int('
-						. '$' . 'variables[\''
-						. $rule->field
-						. '\']'
+				$code = $code
+						. '!is_int('
+						. '$' . 'variables[\'' . $rule->field . '\']'
 						. ')';
+				break;
 
-			break;
 			case 'is_numeric':
-
-				$code .= 'is_numeric('
-						. '$' . 'variables[\''
-						. $rule->field
-						. '\']'
+				$code = $code
+						. 'is_numeric(' 
+						. '$' . 'variables[\'' . $rule->field . '\']'
 						. ')';
+				break;
 
-			break;
 			case 'is_not_numeric':
-
-				$code .= '!is_numeric('
-						. '$' . 'variables[\''
-						. $rule->field
-						. '\']'
+				$code = $code
+						. '!is_numeric('
+						. '$' . 'variables[\'' . $rule->field . '\']'
 						. ')';
+				break;
 
-			break;
 			case 'matching_regex':
-
-				$code .= 'preg_match('
+				$code = $code
+						. 'preg_match('
 						. $this->generateConditionRuleValueCode($rule->value, $history)
 						. ', '
-						. '$' . 'variables[\''
-						. $rule->field
-						. '\']'
+						. '$' . 'variables[\'' . $rule->field . '\']'
 						. ')';
+				break;
 
-			break;
 			case 'not_matching_regex':
-
-				$code .= '!preg_match('
+				$code = $code
+						. '!preg_match('
 						. $this->generateConditionRuleValueCode($rule->value, $history)
 						. ', '
-						. '$' . 'variables[\''
-						. $rule->field
-						. '\']'
+						. '$' . 'variables[\'' . $rule->field . '\']'
 						. ')';
-
-			break;
+				break;
 		}
 
-		$code .= ')';
+		$code = $code . ')';
 		return $code;
 	}
 

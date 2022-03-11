@@ -55,8 +55,11 @@
                                     </div>
                                     <div class="row">
                                         <input type="hidden" :id="instance_id + 'size'">
+                                        <div class="col-lg-12">
+                                            <label class="detail-label">{{ $t('Screen Size') }}</label>
+                                        </div>
                                         <div class="col-md-4">
-                                            <label :for="instance_id + '__large_screen_size'">{{ $t('Large Screen Size') }}</label>
+                                            <label class="detail-label" :for="instance_id + '__large_screen_size'">{{ $t('Large') }}</label>
                                             <select :id="instance_id + '__large_screen_size'" class="form-control">
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
@@ -73,7 +76,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-4">
-                                            <label :for="instance_id + '__medium_screen_size'">{{ $t('Medium Screen Size') }}</label>
+                                            <label class="detail-label" :for="instance_id + '__medium_screen_size'">{{ $t('Medium') }}</label>
                                             <select :id="instance_id + '__medium_screen_size'" class="form-control">
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
@@ -90,7 +93,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-4">
-                                            <label :for="instance_id + '__small_screen_size'">{{ $t('Small Screen Size') }}</label>
+                                            <label class="detail-label" :for="instance_id + '__small_screen_size'">{{ $t('Small') }}</label>
                                             <select :id="instance_id + '__small_screen_size'" class="form-control">
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
