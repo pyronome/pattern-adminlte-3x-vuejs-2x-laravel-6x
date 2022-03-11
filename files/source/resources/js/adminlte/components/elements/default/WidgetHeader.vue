@@ -83,8 +83,21 @@ export default {
 
             document.getElementById(instance_id + "general-tab").click();
 
+            this.initializeConditionalSettingsTab(instance_id);
+
             var modal = document.getElementById(instance_id + "ModalSettings");
             $(modal).modal();
+        },
+        initializeConditionalSettingsTab: function(instance_id) {
+            console.log("renderConditionList")
+            if (window.mainLayoutInstance.pageWidgets[instance_id].data.general.conditional_data_json) {
+                console.log("if1:" + instance_id)
+                var condionalData = JSON.parse(window.mainLayoutInstance.pageWidgets[instance_id].data.general.conditional_data_json);
+                if (condionalData.length > 0) {
+                    console.log("if2:" + instance_id)
+                    window.widgetConditionDialog.renderConditionList(instance_id, condionalData);
+                }
+            }
         },
         copyWidget: function() {
             $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");

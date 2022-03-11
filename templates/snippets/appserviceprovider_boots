@@ -1,3 +1,4 @@
+        AdminLTECustomVariable::observe(AdminLTECustomVariableObserver::class);
         AdminLTEUser::observe(AdminLTEUserObserver::class);
         AdminLTEUserGroup::observe(AdminLTEUserGroupObserver::class);
 {{APPSERVICEPROVIDER_MODEL_BOOTS}}

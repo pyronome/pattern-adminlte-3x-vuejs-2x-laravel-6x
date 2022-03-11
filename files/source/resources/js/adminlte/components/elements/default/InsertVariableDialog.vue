@@ -18,6 +18,7 @@
                                         <option value=""></option>
                                         <option value="model_property">{{ $t('Model Property') }}</option>
                                         <option value="query_result_fields" data-prefix="QueryResultFields">{{ $t('Query Result Fields') }}</option>
+                                        <option value="custom_variables">{{ $t('Custom Variables') }}</option>
                                         <option value="global_parameters">{{ $t('Global Parameters') }}</option>
                                         <option value="user_parameters">{{ $t('User Parameters') }}</option>
                                         <option value="url_parameters">{{ $t('URL Parameters') }}</option>
@@ -56,6 +57,17 @@
                                         - Every query column can be use come from advanced calculation.<br>
                                     </div>
                                 </div> -->
+                            </div>
+
+                            <div v-show="('custom_variables' == insertForm.variable_type)" class="row">
+                                <div class="form-group col-lg-12">
+                                    <label for="__iv__custom_variable" class="detail-label">{{ $t('Custom Variable') }}</label>
+                                    <select2-element class="select2-element"
+                                        id="__iv__custom_variable"
+                                        name="__iv__custom_variable"
+                                        :options="custom_variable_options">
+                                    </select2-element>
+                                </div>
                             </div>
 
                             <div v-show="('global_parameters' == insertForm.variable_type)" class="row">
@@ -144,6 +156,7 @@ export default {
             property_options: [],
             global_parameter_options: [],
             user_parameter_options: [],
+            custom_variable_options: [],
             page: {
                 is_ready: false,
                 has_server_error: false,
@@ -155,6 +168,8 @@ export default {
                 is_global_parameter_options_loaded: false,
                 is_user_parameter_options_loading: false,
                 is_user_parameter_options_loaded: false,
+                is_custom_variable_options_loading: false,
+                is_custom_variable_options_loaded: false,
                 external_files: [
                     ("/js/adminlte/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
                     ("/js/adminlte/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
@@ -178,7 +193,8 @@ export default {
 
             if (!self.page.is_model_options_loaded 
                 && !self.page.is_global_parameter_options_loaded
-                && !self.page.is_user_parameter_options_loaded) {
+                && !self.page.is_user_parameter_options_loaded
+                && !self.page.is_custom_variable_options_loaded) {
                 self.$Progress.start();
             }
             
@@ -192,6 +208,10 @@ export default {
 
             if (!self.page.is_user_parameter_options_loaded) {
                 self.load_user_parameter_options();
+            }
+
+            if (!self.page.is_custom_variable_options_loaded) {
+                self.load_custom_variable_options();
             }
             
             self.initializePage();
@@ -247,7 +267,7 @@ export default {
 
             self.page.is_global_parameter_options_loading = true;
             
-            axios.get(AdminLTEHelper.getAPIURL("__layout/get_global_parameter_list"))
+            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_global_parameter_options"))
                 .then(({ data }) => {
                     self.page.is_global_parameter_options_loaded = true;
                     self.page.is_global_parameter_options_loading = false;
@@ -269,7 +289,7 @@ export default {
 
             self.page.is_user_parameter_options_loading = true;
             
-            axios.get(AdminLTEHelper.getAPIURL("__layout/get_user_parameter_list"))
+            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_user_parameter_options"))
                 .then(({ data }) => {
                     self.page.is_user_parameter_options_loaded = true;
                     self.page.is_user_parameter_options_loading = false;
@@ -278,6 +298,28 @@ export default {
                 }).catch(({ data }) => {
                     self.page.is_user_parameter_options_loaded = true;
                     self.page.is_user_parameter_options_loading = false;
+                    self.$Progress.fail();
+                    self.page.has_server_error = true;
+                    self.processLoadQueue();
+                });
+        },
+        load_custom_variable_options: function() {
+            var self = this;
+            if (self.page.is_custom_variable_options_loading) {
+                return;
+            }
+
+            self.page.is_custom_variable_options_loading = true;
+            
+            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_custom_variable_options"))
+                .then(({ data }) => {
+                    self.page.is_custom_variable_options_loaded = true;
+                    self.page.is_custom_variable_options_loading = false;
+                    self.custom_variable_options = data.list;
+                    self.processLoadQueue();
+                }).catch(({ data }) => {
+                    self.page.is_custom_variable_options_loaded = true;
+                    self.page.is_custom_variable_options_loading = false;
                     self.$Progress.fail();
                     self.page.has_server_error = true;
                     self.processLoadQueue();
@@ -368,6 +410,9 @@ export default {
                     break;
                 case "query_result_fields":
                     data = self.getQueryResultFieldVariable();
+                    break;
+                case "custom_variables":
+                    data = self.getCustomVariable();
                     break;   
                 case "global_parameters":
                     data = self.getGlobalParameterVariable();
@@ -450,6 +495,25 @@ export default {
 
             return result;
         },
+        getCustomVariable: function () {
+            var result = {
+                "has_error": false,
+                "msg": "",
+                "variable": ""
+            };
+
+            var customVariable = $("#__iv__custom_variable").val();
+
+            if ("" == customVariable) {
+                result.has_error = true;
+                result.msg = self.$t("Please select a custom variable.");
+                return result;
+            }
+
+            result.variable = "{{" + customVariable + "}}";
+
+            return result;
+        },
         getGlobalParameterVariable: function () {
             var result = {
                 "has_error": false,
@@ -465,7 +529,7 @@ export default {
                 return result;
             }
 
-            result.variable = "{{GlobalParameters/" + configParameter + "}}";
+            result.variable = "{{" + configParameter + "}}";
 
             return result;
         },
@@ -484,7 +548,7 @@ export default {
                 return result;
             }
 
-            result.variable = "{{UserParameters/" + configParameter + "}}";
+            result.variable = "{{" + configParameter + "}}";
 
             return result;
         },

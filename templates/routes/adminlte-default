@@ -30,6 +30,12 @@ Route::namespace('API')
     /* {{@snippet:begin_api_routes}} */
     Route::prefix('adminlte')->group(function () {
         Route::get('/get_page_variables/{componentName}', 'AdminLTEController@get_page_variables');
+        Route::get('/get_custom_variables', 'AdminLTEController@get_custom_variables');
+        Route::post('/post_custom_variable', 'AdminLTEController@post_custom_variable');
+        Route::post('/delete_custom_variable', 'AdminLTEController@delete_custom_variable');
+        Route::get('/get_global_parameter_options', 'AdminLTEController@get_global_parameter_options');
+        Route::get('/get_user_parameter_options', 'AdminLTEController@get_user_parameter_options');
+        Route::get('/get_custom_variable_options', 'AdminLTEController@get_custom_variable_options');
     });
     
     Route::prefix('register')->group(function () {
@@ -150,8 +156,6 @@ Route::namespace('API')
         Route::get('/get_page_widgets/{pagename}', 'AdminLTELayoutController@get_page_widgets');
         Route::get('/get_model_list', 'AdminLTELayoutController@get_model_list');
         Route::get('/get_model_properties/{model}', 'AdminLTELayoutController@get_model_properties');
-        Route::get('/get_global_parameter_list', 'AdminLTELayoutController@get_global_parameter_list');
-        Route::get('/get_user_parameter_list', 'AdminLTELayoutController@get_user_parameter_list');
         Route::get('/get_infobox_data/{parameters}', 'AdminLTELayoutController@get_infobox_data');
     });
 

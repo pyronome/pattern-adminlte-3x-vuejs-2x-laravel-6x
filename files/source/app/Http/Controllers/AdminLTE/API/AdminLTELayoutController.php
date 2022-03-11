@@ -12,8 +12,7 @@ use App\AdminLTE\AdminLTELayout;
 use App\AdminLTE\AdminLTEUser;
 use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTEUserLayout;
-use App\AdminLTE\AdminLTEConfig;
-use App\AdminLTE\AdminLTEUserConfig;
+use App\AdminLTE\AdminLTEWidgetHelper;
 use App\Http\Requests\AdminLTE\API\AdminLTELayoutPOSTRequest;
 
 
@@ -218,6 +217,7 @@ class AdminLTELayoutController extends Controller
     }
 
     public function post_layout(Request $request) {
+        $objectAdminLTE = new AdminLTE();
         $currentUser = auth()->guard('adminlteuser')->user();
         $currentGroupId = $currentUser->adminlteusergroup_id;
         $pagename = $request->input('pagename');
@@ -241,7 +241,16 @@ class AdminLTELayoutController extends Controller
             $object->grid_size = $general_data['grid_size'];
             $object->icon = $general_data['icon'];
             $object->meta_data_json = json_encode($content_data);
+            $object->conditional_data_json = isset($general_data['conditional_data_json']) 
+                ? $general_data['conditional_data_json']
+                : '[]';
             $object->save();
+
+            $conditional_data = json_decode($object->conditional_data_json);
+
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $objectAdminLTE->saveLayoutConditionalData($object->id, $conditional_data);
+            }
         }
     }
 
@@ -413,7 +422,7 @@ class AdminLTELayoutController extends Controller
                 ? htmlspecialchars($parameters['parameters'])
                 : '';
 
-        $objectAdminLTE = new AdminLTE();
+        $objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
         $widgetParameters = json_decode(base64_decode($widgetParametersEncoded), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 
         if (!isset($widgetParameters['layout_id'])) {
@@ -440,6 +449,22 @@ class AdminLTELayoutController extends Controller
                 $returnData[$key] = $this->getParsedValue($value, $queryResult, $url_parameters, $request_parameters);
             }
 
+            $conditionalData = json_decode($objectLayout->conditional_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            foreach ($conditionalData as $key => $conditionData) {
+                $function_name = $conditionData['guid'];
+
+                require_once(storage_path('app/widget/condition/'. $function_name . '.php'));
+                    
+                $conditionResultData = $function_name($objectAdminLTEWidgetHelper, $queryResult, $url_parameters, $request_parameters);
+
+                if ($conditionResultData['success']) {
+                    $conditionalFields = $conditionResultData['data'];
+                    foreach ($conditionalFields as $index => $fieldData) {
+                        $returnData[$fieldData->id] = $this->getParsedValue($fieldData->value, $queryResult, $url_parameters, $request_parameters);
+                    }
+                }
+            }
+
             $returnData['result'] = isset($queryResult['result']) 
                 ? $queryResult['result']
                 : 0;
@@ -451,17 +476,7 @@ class AdminLTELayoutController extends Controller
     public function getParsedValue($display_text, $queryResult, $url_parameters, $request_parameters)
     {
         $currentUser = auth()->guard('adminlteuser')->user();
-        //- Sabit 
-        //{{Model/Teacher/firstname}}                         - Model Property
-
-        //{{GlobalParameters/__key}}         - Global Parameter (settingsdekiler)
-        //{{UserParameters/__key}}           - User Parameter (kullanıcıya ait settings parameterlar)
-        
-        //{{URLParameters/parameterIndex}}          - URL Parameter (urlden)
-        //{{RequestParameters/parameterName}}           - Request Parameter (formdan)
-        
-        //{{QueryResultFields/key}}
-
+        $objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
         $objectAdminLTE = new AdminLTE();
         $parsed = $objectAdminLTE->getStringBetween($display_text, '{{', '}}');
 
@@ -470,9 +485,22 @@ class AdminLTELayoutController extends Controller
 			$partResult = '';
 
 			$textPart = explode('/', $parsed);
-			$countPart = count($textPart);
 
-            if ('GlobalParameters' == $textPart[0]) {
+            if ('CustomVariables' == $textPart[0]) {
+                $__key = $textPart[1];
+                $customVariableValue = $objectAdminLTEWidgetHelper->getCustomVariableValue(
+                        $currentUser->adminlteusergroup_id, 
+                        $__key, 
+                        $queryResult, 
+                        $url_parameters, 
+                        $request_parameters
+                );
+                
+				$partResult = ('' != $customVariableValue)
+                    ? $customVariableValue
+                    : $__key;
+
+            } else if ('GlobalParameters' == $textPart[0]) {
                 $__key = $textPart[1];
                 $partResult = $objectAdminLTE->getConfigParameterValue($__key);
             } else if ('UserParameters' == $textPart[0]) {
@@ -498,6 +526,7 @@ class AdminLTELayoutController extends Controller
                 $partResult = $__key;
             }
 
+            
             $display_text = str_replace($parsedWithMustache, $partResult, $display_text);
 			$temp_text = $display_text;
 			$parsed = $objectAdminLTE->getStringBetween($temp_text, '{{', '}}');
@@ -522,127 +551,7 @@ class AdminLTELayoutController extends Controller
         ];
     }
 
-    public function get_global_parameter_list(Request $request)
-    {
-        $parameters = $request->route()->parameters();
-
-        $objectList = AdminLTEConfig::where('deleted', 0)->get();
-
-        $list = [];
-        $index = 0;
-
-        foreach ($objectList as $object) {
-            if (('group' == $object->type) || ('selection_group' == $object->type)) {
-                continue;
-            }
-
-            $list[$index]['id'] = $object->__key;
-            $list[$index]['text'] = $this->getGlobalParameterOptionTitle($object->__key);
-            $index++;
-        }
-
-        return [
-            'list' => $list
-        ];
-    }
-
-    public function getGlobalParameterOptionTitle($key) {
-        $option_title = '';
-        $parts = explode('.', $key);
-        $parent_key = '';
-
-        foreach ($parts as $part) {
-            if ('' != $parent_key) {
-                $parent_key .= '.';
-            }
-
-            $parent_key .= $part;
-
-            $title = $this->getGlobalParameterTitle($parent_key);
-
-            if ('' != $option_title) {
-                $option_title .= ' / ';
-            }
-
-            $option_title .= $title;
-        }
-
-        return $option_title;
-    }
-
-    public function getGlobalParameterTitle($key) {
-        $element_title = '';
-
-        $object = AdminLTEConfig::where('deleted', 0)->where('__key', $key)->first();
-
-        if (null !== $object) {
-            $element_title = $object->title;
-        }
-
-        return $element_title;
-    }
-
-    public function get_user_parameter_list(Request $request)
-    {
-        $parameters = $request->route()->parameters();
-        $currentUser = auth()->guard('adminlteuser')->user();
-        $currentGroupId = $currentUser->adminlteusergroup_id;
-
-        $objectList = AdminLTEUserConfig::where('deleted', 0)->whereIn('owner_group', [0, $currentGroupId])->get();
-
-        $list = [];
-        $index = 0;
-
-        foreach ($objectList as $object) {
-            if (('group' == $object->type) || ('selection_group' == $object->type)) {
-                continue;
-            }
-
-            $list[$index]['id'] = $object->__key;
-            $list[$index]['text'] = $this->getUserParameterOptionTitle($object->__key);
-            $index++;
-        }
-
-        return [
-            'list' => $list
-        ];
-    }
-
-    public function getUserParameterOptionTitle($key) {
-        $option_title = '';
-        $parts = explode('.', $key);
-        $parent_key = '';
-
-        foreach ($parts as $part) {
-            if ('' != $parent_key) {
-                $parent_key .= '.';
-            }
-
-            $parent_key .= $part;
-
-            $title = $this->getUserParameterTitle($parent_key);
-
-            if ('' != $option_title) {
-                $option_title .= ' / ';
-            }
-
-            $option_title .= $title;
-        }
-
-        return $option_title;
-    }
-
-    public function getUserParameterTitle($key) {
-        $element_title = '';
-
-        $object = AdminLTEUserConfig::where('deleted', 0)->where('__key', $key)->first();
-
-        if (null !== $object) {
-            $element_title = $object->title;
-        }
-
-        return $element_title;
-    }
+    
 
     public function get_recordgraph(Request $request)
     {

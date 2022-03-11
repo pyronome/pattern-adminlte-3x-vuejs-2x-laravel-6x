@@ -31,7 +31,7 @@
                                     <label :for="instance_id + 'title'" class="detail-label">
                                         {{ $t('Title') }}
                                         <insert-variable-button 
-                                            :variable_options="['query_result_fields','global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                            :variable_options="['query_result_fields','custom_variables','global_parameters','user_parameters','url_parameters','request_parameters']" 
                                             :target="instance_id + 'title'">
                                         </insert-variable-button>
                                     </label>
@@ -137,31 +137,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card card-outline card-primary">
-                    <div class="card-header">
-                        <h4 class="card-title w-100">
-                            <a class="d-block w-100" data-toggle="collapse" :href="'#' + instance_id + '-accordion-csettings'">
-                                Conditional Settings
-                            </a>
-                        </h4>
-                    </div>
-                    <div class="collapse show"
-                        :id="instance_id + '-accordion-csettings'"
-                        :data-parent="'#' + instance_id + '-accordion'">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="form-group col-lg-12">
-                                    <label for="listva" class="detail-label">{{ $t('Product/price > 1000') }}</label>
-                                    <ul>
-                                        <li>Title: Warning <i class="fas fa-pen"></i></li>
-                                        <li>iconbackground: #2CCC34 <i class="fas fa-pen"></i></li>
-                                    </ul>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <widget-conditional-settings :instance_id="instance_id" :conditional_fields="conditional_fields"></widget-conditional-settings>
             </div>
         </widget-settings-dialog>
     </div>
@@ -172,6 +148,20 @@
         props: ["instance_id"],
         data() {
             return {
+                conditional_fields: [
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "Title",
+                        "value": ""
+                    },
+                    {
+                        "type": "text",
+                        "id": "iconbackground",
+                        "label": "Icon Background",
+                        "value": ""
+                    },
+                ],
                 model_options: [],
                 property_options: [],
                 page: {

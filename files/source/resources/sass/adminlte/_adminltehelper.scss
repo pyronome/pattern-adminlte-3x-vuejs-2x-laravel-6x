@@ -123,6 +123,14 @@ body {
     color: #007bff;
 }
 
+.btn-icon-danger {
+    color: #dc3545;
+}
+
+.btn-icon-success {
+    color: #28a745;
+}
+
 .btn.btn-secondary.btn-icon {
     color:#91979d;
 }
@@ -1683,4 +1691,41 @@ button.copyKey {
 .widget-container.widget-catalog > .widget-main-container  > .widget-body .widget-inner-container {
     display: none;
 }
+
+/* .rule-filter-container > select {
+    width: 100% !important;
+}
+
+.rule-operator-container > select {
+    width: 100% !important;
+}
+
+.rule-value-container > select {
+    width: 100% !important;
+}
+
+.rule-operator-container > input {
+    width: 100% !important;
+} */
+
+table.condition-table > thead > tr > th {
+    background: #f2f2f2;
+}
+
+table.condition-table > thead > tr > th:first-child {
+    word-break: break-all;
+}
+
+table.condition-table > thead > tr > th:last-child {
+    width: 60px;
+}
+
+table.condition-table > tbody > tr > td:first-child {
+    width: 150px;
+}
+
+table.condition-table > tbody > tr > td:nth-child(2) {
+    word-break: break-all;
+}
+
 /* {{@snippet:end}} */

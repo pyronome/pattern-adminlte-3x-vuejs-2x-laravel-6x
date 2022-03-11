@@ -168,6 +168,8 @@ export default {
 
             data.general.grid_size = large_screen_size + "," + medium_screen_size + "," + small_screen_size;
 
+            data.general.conditional_data_json = this.getConditionalDataJSON();
+
             // Content
             data.content = window.mainLayoutInstance.pageWidgets[instance_id].content_settings.getWidgetFormValues();
 
@@ -180,6 +182,33 @@ export default {
             setTimeout(function(){
                 window.mainLayoutInstance.vueComponent.hideLoader();
             }, 1000);
+        },
+        getConditionalDataJSON: function() {
+            var instance_id = this.instance_id;
+            var conditionTables = $(".condition-table", document.getElementById(instance_id + '-conditionlist'));
+            var arrConditionalData = [];
+
+            for (let i = 0; i < conditionTables.length; i++) {
+                const table = conditionTables[i];
+
+                let conditionalData = {
+                    "guid": table.getAttribute("data-guid"),
+                    "condition_json": JSON.parse(table.getAttribute("data-condition-json")),
+                    "conditional_fields": []
+                };
+
+                let fieldData = [];
+                const conditionalFieldButtons = $(".btn-edit-field", table);
+                for (let j = 0; j < conditionalFieldButtons.length; j++) {
+                    const btn = conditionalFieldButtons[j];
+                    fieldData.push(JSON.parse(btn.getAttribute("data-field-json")));
+                };
+                conditionalData.conditional_fields = fieldData;
+
+                arrConditionalData.push(conditionalData);
+            };
+
+            return JSON.stringify(arrConditionalData);
         }
     }
 };

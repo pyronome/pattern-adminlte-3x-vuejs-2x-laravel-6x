@@ -176,7 +176,7 @@
         "remove_whitespace":"0",
         "append":"1",
         "glue":"",
-        "prepend_crlf":"1",
+        "prepend_crlf":"0",
         "append_crlf":"1"
     },
     {

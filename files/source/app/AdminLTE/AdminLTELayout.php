@@ -26,7 +26,8 @@ class AdminLTELayout extends Model
 		'title',
 		'grid_size',
         'icon',
-		'meta_data_json'
+		'meta_data_json',
+		'conditional_data_json'
 	];
 
 	public static $property_list = [
@@ -80,6 +81,10 @@ class AdminLTELayout extends Model
         ],
         [
             'name' => 'meta_data_json',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'conditional_data_json',
             'type' => 'text'
         ]
     ];

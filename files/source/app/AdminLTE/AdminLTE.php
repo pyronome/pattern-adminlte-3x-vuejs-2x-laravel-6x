@@ -19,6 +19,9 @@ use App\AdminLTE\AdminLTEUserConfig;
 use App\AdminLTE\AdminLTEUserConfigVal;
 use App\AdminLTE\AdminLTEUserConfigFile;
 use App\AdminLTE\AdminLTELog;
+use App\AdminLTE\AdminLTEWidgetHelper;
+use App\AdminLTE\AdminLTEVariable;
+use App\AdminLTE\AdminLTECustomVariable;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use PDO;
@@ -2176,6 +2179,7 @@ class AdminLTE
 			'AdminLTEUserConfigFile',
 			'AdminLTEUserLayout',
 			'AdminLTEVariable',
+			'AdminLTECustomVariable',
 			'AdminLTELog',
 			'User'
 		];
@@ -3172,46 +3176,18 @@ class AdminLTE
 	}
 
 	public function getUserWidgets($pagename) {
-		$currentUser = auth()->guard('adminlteuser')->user();
-
-		$objectAdminLTELayout = null;
-        $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
-				->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
-				->where('pagename', $pagename)
-				->orderBy('__order','asc')
-				->get();
-
-        if (0 == count($objectAdminLTELayouts)) {
-            $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
-				->where('adminlteusergroup_id', null)
-				->where('pagename', $pagename)
-				->orderBy('__order','asc')
-				->get();
-        }
-
-		return $objectAdminLTELayouts;
+		$objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
+		return $objectAdminLTEWidgetHelper->getUserWidgets($pagename);
 	}
 
 	public function getUserActiveWidgets($pagename) {
-		$currentUser = auth()->guard('adminlteuser')->user();
+		$objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
+		return $objectAdminLTEWidgetHelper->getUserActiveWidgets($pagename);
+	}
 
-		$objectAdminLTELayout = null;
-        $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
-				->where('enabled', true)
-				->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
-				->where('pagename', $pagename)
-				->orderBy('__order','asc')
-				->get();
-
-        if (0 == count($objectAdminLTELayouts)) {
-            $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
-				->where('adminlteusergroup_id', null)
-				->where('pagename', $pagename)
-				->orderBy('__order','asc')
-				->get();
-        }
-
-		return $objectAdminLTELayouts;
+	public function saveLayoutConditionalData($layoutId, $conditional_data) {
+		$objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
+		$objectAdminLTEWidgetHelper->saveConditionalData($layoutId, $conditional_data);
 	}
 	
     /* {{@snippet:end_methods}} */

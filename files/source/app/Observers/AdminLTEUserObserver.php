@@ -37,7 +37,7 @@ class AdminLTEUserObserver
     {
         if (1 == $adminlteuser->deleted) {
             $objectLog = new AdminLTELog();
-            $objectLog->user_id = $adminlteuser->created_by;
+            $objectLog->user_id = $adminlteuser->updated_by;
             $objectLog->type = 'DELETE';
             $objectLog->title = 'AdminLTEUser';
             $objectLog->sub_title = '';
@@ -48,7 +48,7 @@ class AdminLTEUserObserver
             $objectLog->save();
         } else {
             $objectLog = new AdminLTELog();
-            $objectLog->user_id = $adminlteuser->created_by;
+            $objectLog->user_id = $adminlteuser->updated_by;
             $objectLog->type = 'UPDATE';
             $objectLog->title = 'AdminLTEUser';
             $objectLog->sub_title = '';
