@@ -133,7 +133,12 @@ window.mainVueApplication = new Vue({
     },
     mounted() {
         AdminLTEHelper.doVueApplicationMounted();
-    }
+    },
+    watch:{
+        $route (to, from){
+            AdminLTEHelper.doRouteChanged(to, from);
+        }
+    } 
 });
 
 if (document.getElementById("mainMenuVueApplication")) {

@@ -221,6 +221,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->string('grid_size');
                 $table->string('icon')->nullable();
                 $table->text('meta_data_json');
+                $table->text('conditional_data_json');
             });
         } else {
             Schema::table('adminltelayouttable', function (Blueprint $table) {
@@ -270,6 +271,12 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->text('meta_data_json')->change();
                 } else {
                     $table->text('meta_data_json');
+                }
+
+                if (Schema::hasColumn('adminltelayouttable', 'conditional_data_json')) { 
+                    $table->text('conditional_data_json')->change();
+                } else {
+                    $table->text('conditional_data_json');
                 }
             });
         }

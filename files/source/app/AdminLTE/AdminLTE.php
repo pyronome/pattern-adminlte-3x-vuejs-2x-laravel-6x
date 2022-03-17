@@ -49,6 +49,9 @@ class AdminLTE
 		'AdminLTEUserLayout',
 		'AdminLTEVariable',
 		'AdminLTELog',
+		'AdminLTECustomVariable',
+		'AdminLTEMedia',
+		'AdminLTEWidgetHelper',
 		'User'
 	];
 
@@ -2181,6 +2184,9 @@ class AdminLTE
 			'AdminLTEVariable',
 			'AdminLTECustomVariable',
 			'AdminLTELog',
+			'AdminLTECustomVariable',
+			'AdminLTEMedia',
+			'AdminLTEWidgetHelper',
 			'User'
 		];
 

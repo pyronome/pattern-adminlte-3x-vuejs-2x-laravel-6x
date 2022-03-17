@@ -1548,6 +1548,10 @@ export default {
         this.processLoadQueue();
         window.widgetConditionDialog = this;
         AdminLTEHelper.loadExternalFiles(this.page.external_files);
+
+        $("#divEditFieldDialog").off("shown.bs.modal").on('shown.bs.modal', function (e) { 
+            $(document).off('focusin.modal'); 
+        });
     }
 }
 </script>

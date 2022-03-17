@@ -189,7 +189,7 @@ class AdminLTEMediaController extends Controller
         return $return_data;
     }
 
-    public function upload_files(Request $request)
+    public function post_bulkupload(Request $request)
     {
         $User = auth()->guard('adminlteuser')->user();
         $has_error = false;
@@ -214,6 +214,35 @@ class AdminLTEMediaController extends Controller
         $return_data['error_msg'] = '';
 
         return $return_data;
+    }
+
+    private function saveFile($guid, $file) {
+        $User = auth()->guard('adminlteuser')->user();
+
+        $object = AdminLTEMedia::where('deleted', 0)->where('guid', $guid)->first();
+
+        if (null === $object) {
+            $object = new AdminLTEMedia();
+            $object->created_by = $User->id;
+            $object->updated_by = $User->id;
+        } else {
+            $object->updated_by = $User->id;
+        } // if (null === $object) {
+
+        $file_name = $file->getClientOriginalName();
+        
+        $temp = explode('.', $file_name);
+        $file_title = $temp[0];
+
+        $object->group = '';
+        $object->guid = $guid;
+        $object->file_title = $file_title;
+        $object->file_name = $file_name;
+        $object->mime_type = $file->getMimeType();
+        $object->file_size = $file->getSize();
+        $object->file = base64_encode(file_get_contents($file->getRealPath()));
+        $object->file_type = '';
+        $object->save();
     }
 
     public function delete_files(Request $request) {
@@ -255,41 +284,6 @@ class AdminLTEMediaController extends Controller
         $return_data['error_msg'] = $error_msg;
 
         return $return_data;
-    }
-
-    public function saveFile($guid, $file) {
-        /* //File Name
-        echo $file->getClientOriginalName() . '<br>';
-    
-        //Display File Extension
-        echo $file->getClientOriginalExtension() . '<br>';
-
-        //Display File Real Path
-        echo $file->getRealPath() . '<br>';
-
-        //Display File Size
-        echo $file->getSize() . '<br>';
-
-        //Display File Mime Type
-        echo $file->getMimeType() . '<br>'; */
-       
-        $object = AdminLTEMedia::where('deleted', 0)->where('guid', $guid)->first();
-
-        if (null === $object) {
-            $object = new AdminLTEMedia();
-            $object->created_by = $User->id;
-            $object->updated_by = $User->id;
-        } else {
-            $object->updated_by = $User->id;
-        } // if (null === $object) {
-
-        $object->guid = $guid;
-        $object->file_name = $file->getClientOriginalName();
-        $object->mime_type = $file->getMimeType();
-        $object->file_size = $file->getSize();
-        $object->file = base64_encode(file_get_contents($file->getRealPath()));
-        $object->file_type = 'uploaded';
-        $object->save();
     }
 
     public function download_file(Request $request) {

@@ -3,6 +3,13 @@
         <div class="card collapsed-card recordlist-card">
             <div class="card-header">
                 <h3 class="card-title">File List</h3>
+                <button id="buttonBulkUpload"
+                    @click="bulkUpload()"
+                    class="btn btn-primary btn-sm  float-right text-center sbp-item"
+                    menu-permission-token="adminltemedia"
+                    model-permission-token="adminltemedia-create">
+                    <i class="fas fa-upload"></i> <span class="hidden-xxs">{{ $t('Bulk Upload') }}</span>
+                </button>
             </div>
             <div class="card-body">
                 <div class="recordlist-search-container">
@@ -176,6 +183,60 @@
             </div>            
         </div>
         
+        <div class="modal fade" id="modalBulkUpload" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="model-log-title">{{ $t('Bulk Upload') }}</div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="__media__files" class="detail-label">
+                                    <span class="field-label">Files</span>
+                                </label>
+                                <div class="input-field">
+                                    <input type="file" multiple 
+                                        id="__media__files" name="__media__files" 
+                                        class="form-input d-none">
+                                    <button type="button" id="btnFilesTrigger" class="btn btn-primary">
+                                        Browse...
+                                    </button>
+                                </div>
+                                
+
+                            </div>
+                        </div>
+                        <div class="row" id="__media__file_list">
+                        </div>
+                        <script type="text/html" id="btnRemoveFileTemplate">
+                            <div class="col-lg-12">
+                                <span>__file_name__</span>
+                                <button type="button" 
+                                    class="text-btn text-danger btn_file_remove" 
+                                    data-guid="__guid__" 
+                                    title="Remove file">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </script>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t('Cancel') }}</button>
+                        <button 
+                            type="button" 
+                            @click="submitBulkUpload()"
+                            class="btn btn-success btn-md btn-on-table float-right ">
+                            {{ $t('Save') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="modalEditMedia" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -227,10 +288,10 @@
                             </div>
                             <div class="form-group col-lg-12">
                                 <label for="__media__file" class="detail-label">
-                                    <span id="__media__file-label" class="field-label">File</span>
+                                    <span class="field-label">File</span>
                                 </label>
                                 <div class="input-field">
-                                    <input type="file" multiple id="__media__file" name="__media__file" data-type="file" class="form-input d-none">
+                                    <input type="file" id="__media__file" name="__media__file" data-type="file" class="form-input d-none">
                                     <button type="button" id="btnFileTrigger" class="btn btn-primary">
                                         Browse...
                                     </button>
@@ -338,6 +399,7 @@
                     error_msg: ''
                 },
                 uploadedFile: null,
+                uploadedFiles: {},
                 page: {
                     is_ready: false,
                     has_server_error: false,
@@ -351,7 +413,14 @@
                 var self = this;
 
                 self.cleanCheckedBoxes();
-                        
+
+                $("#btnFilesTrigger").on('click', function(e){
+                    document.getElementById("__media__files").click();
+                }); 
+
+                $("#__media__files").on('change', function(e){
+                    self.updateFiles(this); 
+                });     
 
                 $("#btnFileTrigger").on('click', function(e){
                     document.getElementById("__media__file").click();
@@ -368,6 +437,124 @@
                 /* $(".file_remove").on('click', function(e){
                     self.removeFile(this.getAttribute("data-key"));
                 }); */
+            },
+            bulkUpload: function() {
+                document.getElementById("__media__file_list").innerHTML = "";
+                $("#modalBulkUpload").modal();
+            },
+            updateFiles(fileInput) {
+                var self = this;
+                var btnRemoveFileTemplate = document.getElementById("btnRemoveFileTemplate").innerHTML;
+                var fileListHTML = "";
+                let files = fileInput.files;
+
+                for (const key in files) {
+                    if (Object.hasOwnProperty.call(files, key)) {
+                        const file = files[key];
+                        let guid = AdminLTEHelper.generateGUID("media");
+                        self.uploadedFiles[guid] = file;
+                        
+                        fileListHTML = fileListHTML + btnRemoveFileTemplate.replace(/__file_name__/g, file.name).replace(/__guid__/g, guid);
+                    }
+                }
+
+                document.getElementById("__media__file_list").innerHTML = fileListHTML;
+
+                $(".btn_file_remove").off("click").on("click", function(e){
+                    self.removeFile(this);
+                });
+
+                /* let limit = 1024 * 1024 * 2;
+                if(file['size'] > limit){
+                    swal({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'You are uploading a large file',
+                    })
+                    return false;
+                } */
+            },
+            removeFile: function(btn) {
+                let guid = btn.getAttribute("data-guid");
+                this.uploadedFiles[guid] = null;
+                btn.parentNode.remove();
+            },
+            submitBulkUpload: function() {
+                var self = this;
+                let formData = new FormData();
+
+                var uploadedFiles = this.uploadedFiles;
+                var guid_csv = "";
+
+                for (const guid in uploadedFiles) {
+                    if (Object.hasOwnProperty.call(uploadedFiles, guid)) {
+                        if (null !== uploadedFiles[guid]) {
+                            formData.append(guid, uploadedFiles[guid]);
+
+                            if ("" != guid_csv) {
+                                guid_csv += ",";
+                            }
+
+                            guid_csv += guid;
+                        }
+                    }
+                }
+
+                formData.append('guid_csv', guid_csv);
+
+                if ("" == guid_csv) {
+                    $("#modalBulkUpload").modal("hide")
+                    return;
+                }
+
+                self.$Progress.start();
+
+                axios.post( 
+                        AdminLTEHelper.getAPIURL("adminltemedia/post_bulkupload"),
+                        formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }
+                    )
+                    .then(({ data }) => {
+                        self.$Progress.finish();
+                        self.id = data.id;
+                        self.page.has_post_error = data.has_error;
+                        self.page.post_error_msg = data.error_msg;
+                        self.page.has_server_error = false;
+                    }).catch(({ data }) => {
+                        self.$Progress.fail();
+                        self.page.has_server_error = true;
+                    }).finally(function() {
+                        if (!self.page.has_server_error) {
+                            if (!self.page.has_post_error) {
+                                self.loadData(function(){
+                                    Vue.swal.fire({
+                                        position: 'top-end',
+                                        title: self.$t("Your changes have been saved!"),
+                                        icon: 'success',
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                        timerProgressBar: true,
+                                        onClose: () => {
+                                            $("#modalBulkUpload").modal("hide")
+                                        }
+                                    });
+                                });
+                            } else {
+                                Vue.swal.fire({
+                                    position: 'top-end',
+                                    title: self.page.post_error_msg,
+                                    icon: 'error',
+                                    showConfirmButton: false,
+                                    timer: 10000,
+                                    timerProgressBar: true
+                                });
+                            }
+                        }
+                    });                    
             },
             updateFile(fileInput) {
                 var self = this;

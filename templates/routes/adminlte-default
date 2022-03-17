@@ -174,7 +174,7 @@ Route::namespace('API')
         Route::get('/get_recordlist', 'AdminLTEMediaController@get_recordlist');
         Route::get('/get_file_select_options', 'AdminLTEMediaController@get_file_select_options');
         Route::post('/post_media', 'AdminLTEMediaController@post_media');
-        Route::post('/upload_files', 'AdminLTEMediaController@upload_files');
+        Route::post('/post_bulkupload', 'AdminLTEMediaController@post_bulkupload');
         Route::post('/delete_files', 'AdminLTEMediaController@delete_files');
         Route::get('/download_file/{file_id}', 'AdminLTEMediaController@download_file');
     });

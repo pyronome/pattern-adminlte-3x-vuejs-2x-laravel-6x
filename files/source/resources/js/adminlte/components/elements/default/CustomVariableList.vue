@@ -407,6 +407,10 @@ export default {
         },
         saveVariable: function () {
             var self = this;
+
+            self.variableForm.default_value = document.getElementById("__cv_default_value").value;
+            self.variableForm.value = document.getElementById("__cv_value").value;
+
             self.$Progress.start();
             self.variableForm.post(AdminLTEHelper.getAPIURL("adminlte/post_custom_variable"))
                 .then(({ data }) => {

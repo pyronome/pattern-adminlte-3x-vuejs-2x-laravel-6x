@@ -89,6 +89,11 @@ var AdminLTEHelper = {
             }
         });
     },
+    "doRouteChanged": function(to, from) {
+        if (1 == document.getElementById("btnToggleEditMode").getAttribute("on-edit-mode")) {
+            document.getElementById("btnToggleEditMode").click();
+        }
+    },
     "getWidgetParameter": function(layoutId) {
         var widgetParameter = {
             "layout_id": layoutId,
