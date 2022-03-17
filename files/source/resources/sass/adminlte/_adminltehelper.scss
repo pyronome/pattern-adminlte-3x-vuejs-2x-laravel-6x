@@ -1734,4 +1734,19 @@ table.condition-table > tbody > tr > td:nth-child(2) {
     word-break: break-word;
 }
 
+.spanColorpickerHTML {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    vertical-align: bottom;
+    margin-right: 5px;
+}
+
+.spanIconpickerHTML > i {
+    font-size: 18px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
 /* {{@snippet:end}} */

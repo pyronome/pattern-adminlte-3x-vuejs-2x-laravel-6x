@@ -91,7 +91,7 @@
         <script id="conditional-field-row-template" type="text/html">
             <tr>
                 <td>__label__</td>
-                <td id="__field_guid__-html">__value__</td>
+                <td id="__field_guid__-html">__value_html__</td>
                 <td>
                     <button type="button" title="Edit Value" 
                         class="btn-icon btn-icon-primary btn-edit-field" 
@@ -114,18 +114,161 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row d-none" id="__cv_field_container__-text">
-                            <div class="form-group col-lg-12">
-                                <label for="__cv_field__-text" class="detail-label">
-                                    <span id="__cv_field_label__-text"></span>
-                                    <insert-variable-button 
-                                        :variable_options="['query_result_fields','global_parameters','user_parameters','url_parameters','request_parameters']" 
-                                        target="__cv_field__-text">
-                                    </insert-variable-button>
+                        <div class="row cv-field-container d-none" id="__cv_field_container__checkbox">
+                            <div class="icheck-primary d-inline">
+                                <input type="checkbox"
+                                    id="__cv_field__checkbox"
+                                    name="__cv_field__checkbox">
+                                <label for="__cv_field__checkbox" class="detail-label">
+                                    <span id="__cv_field_label__checkbox"></span>
                                 </label>
-                                <input type="text" class="form-control " id="__cv_field__-text">
                             </div>
                         </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__colorpicker">
+                            <label for="__cv_field__colorpicker" class="detail-label">
+                                <span id="__cv_field_label__colorpicker"></span>
+                            </label>
+                            <div class="input-group">
+                                <input type="text"
+                                    class="form-control color-picker"
+                                    id="__cv_field__colorpicker"
+                                    name="__cv_field__colorpicker">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="__cv_field__colorpickerappend" style="padding-left:100px;"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__datepicker">
+                            <label for="__cv_field__datepicker" class="detail-label">
+                                <span id="__cv_field_label__datepicker"></span>
+                            </label>
+                            <input type="date"
+                                class="form-control"
+                                data-type="datepicker"
+                                id="__cv_field__datepicker"
+                                name="__cv_field__datepicker">
+                        </div>
+                        
+                        <div class="row cv-field-container d-none" id="__cv_field_container__datetimepicker">
+                            <label for="__cv_field__datetimepicker" class="detail-label">
+                                <span id="__cv_field_label__datetimepicker"></span>
+                            </label>
+                            <input type="datetime-local"
+                                class="form-control"
+                                id="__cv_field__datetimepicker"
+                                name="__cv_field__datetimepicker">
+                        </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__file">
+                            <label for="__cv_field__file" class="detail-label" style="width:100%;">
+                                <span id="__cv_field_label__file"></span>
+                            </label>
+                            <select2-element multiple
+                                class="select2-element"
+                                id="__cv_field__file"
+                                name="__cv_field__file"
+                                :options="file_options">
+                            </select2-element>
+                        </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__htmleditor">
+                            <label for="__cv_field__htmleditor" class="detail-label">
+                                <span id="__cv_field_label__htmleditor"></span>
+                            </label>
+                            <textarea id="__cv_field__htmleditor"
+                                name="__cv_field__htmleditor"
+                                class="textarea vue-editor"
+                                rows="5"></textarea>
+                        </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__iconpicker">
+                            <label for="__cv_field__iconpicker" class="detail-label" style="width:100%;">
+                                <span id="__cv_field_label__iconpicker"></span>
+                            </label>
+                            <button type="button" id="__cv_field__iconpicker" class="btn btn-outline-secondary icon-picker"></button>
+                            <input type="hidden" id="__cv_field__iconpicker-value" name="__cv_field__iconpicker-value">
+                        </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__integer">
+                            <div class="form-group col-lg-12">
+                                <label for="__cv_field__integer" class="detail-label">
+                                    <span id="__cv_field_label__integer"></span>
+                                </label>
+                                <input type="number" step="1" class="form-control" id="__cv_field__integer">
+                            </div>
+                        </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__number">
+                            <div class="form-group col-lg-12">
+                                <label for="__cv_field__number" class="detail-label">
+                                    <span id="__cv_field_label__number"></span>
+                                </label>
+                                <input type="number" step="0.01" class="form-control " id="__cv_field__number">
+                            </div>
+                        </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__password">
+                            <div class="form-group col-lg-12">
+                                <label for="__cv_field__password" class="detail-label">
+                                    <span id="__cv_field_label__password"></span>
+                                </label>
+                                <input type="password" class="form-control " id="__cv_field__password">
+                            </div>
+                        </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__selection">
+                            <div class="form-group col-lg-12">
+                                <label for="__cv_field__selection" class="detail-label">
+                                    <span id="__cv_field_label__selection"></span>
+                                </label>
+                                <select class="form-control"
+                                    id="__cv_field__selection"
+                                    name="__cv_field__selection"
+                                    style="width:100%;">
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row cv-field-container d-none" id="__cv_field_container__shorttext">
+                            <div class="form-group col-lg-12">
+                                <label for="__cv_field__shorttext" class="detail-label">
+                                    <span id="__cv_field_label__shorttext"></span>
+                                    <insert-variable-button 
+                                        :variable_options="['query_result_fields','global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                        target="__cv_field__shorttext">
+                                    </insert-variable-button>
+                                </label>
+                                <input type="text" class="form-control " id="__cv_field__shorttext">
+                            </div>
+                        </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__textarea">
+                            <label for="__cv_field__textarea" class="detail-label">
+                                <span id="__cv_field_label__textarea"></span>
+                                <insert-variable-button 
+                                    :variable_options="['query_result_fields','global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                    target="__cv_field__textarea">
+                                </insert-variable-button>
+                            </label>
+                            <textarea rows="5"
+                                id="__cv_field__textarea"
+                                name="__cv_field__textarea"
+                                class="form-control"></textarea>
+                        </div>
+
+                        <div class="row cv-field-container d-none" id="__cv_field_container__timepicker">
+                            <label for="__cv_field__timepicker" class="detail-label">
+                                <span id="__cv_field_label__timepicker"></span>
+                            </label>
+                            <input type="time"
+                                class="form-control"
+                                data-type="timepicker"
+                                id="__cv_field__timepicker"
+                                name="__cv_field__timepicker">
+                        </div>
+
                     </div>
                     <div class="modalfooter justify-content-between show_by_permission_must_update">
                         <div class="row">
@@ -145,6 +288,27 @@
                 </div>
             </div>
         </div>
+
+        <script id="field-html-template-checkbox"  type="text/html">
+            <span class="text-success spanIcon spanIconEnabled__state__">
+                <i class="far fa-check-circle"></i>
+            </span>
+        </script>
+
+        <script id="field-html-template-colorpicker"  type="text/html">
+            <span class="spanColorpickerHTML" style="background:__color__;"></span><span>__color__</span>
+        </script>
+
+        <script id="field-html-template-iconpicker"  type="text/html">
+            <span class="spanIconpickerHTML"><i class="__icon__"></i>__icon__</span>
+        </script>
+
+        <script id="field-html-template-file"  type="text/html">
+            <button type="button" class="text-btn p-0 file_download__delete__" data-file-id="__file_id__">
+                <span>{{ $t('__file_name__') }}</span>
+            </button>
+        </script>
+        
     </div>
 </template>
 
@@ -166,6 +330,7 @@ export default {
             global_parameter_options: [],
             user_parameter_options: [],
             custom_variable_options: [],
+            file_options: [],
             page: {
                 is_ready: false,
                 has_server_error: false,
@@ -176,9 +341,18 @@ export default {
                 is_user_parameter_options_loaded: false,
                 is_custom_variable_options_loading: false,
                 is_custom_variable_options_loaded: false,
+                is_file_options_loading: false,
+                is_file_options_loaded: false,
                 external_files: [
                     ("/js/adminlte/jsquerybuilder/css/query-builder.default.min-custom.css"),
-                    ("/js/adminlte/jsquerybuilder/js/query-builder.standalone.min.js")
+                    ("/js/adminlte/jsquerybuilder/js/query-builder.standalone.min.js"),
+                    ("/js/adminlte/bootstrap-switch/js/bootstrap-switch.js"),
+                    ("/js/adminlte/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
+                    ("/js/adminlte/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
+                    ("/js/adminlte/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"),
+                    ("/js/adminlte/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"),
+                    ("/js/adminlte/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"),
+                    ("/js/adminlte/select2/dist/js/select2.min.js"),
                 ],
             }
         };
@@ -196,7 +370,8 @@ export default {
             if (!self.page.is_model_options_loaded 
                 && !self.page.is_global_parameter_options_loaded
                 && !self.page.is_user_parameter_options_loaded
-                && !self.page.is_custom_variable_options_loaded) {
+                && !self.page.is_custom_variable_options_loaded
+                && !self.page.is_file_options_loaded) {
                 self.$Progress.start();
             }
             
@@ -215,6 +390,49 @@ export default {
             if (!self.page.is_custom_variable_options_loaded) {
                 self.load_custom_variable_options(function(){});
             }
+
+            if (!self.page.is_file_options_loaded) {
+                self.load_file_options(function(){});
+            } else {
+                self.initializePage();
+            }
+        },
+        initializePage: function() {
+            var self = this;
+            $(".textarea.vue-editor").summernote({
+                "font-styles": false,
+                "height": 150,
+                codemirror: {
+                    theme: "monokai"
+                },
+                callbacks: {
+                    onBlur: function() {
+                        this.dispatchEvent(new Event('input'));
+                    }
+                }
+            });
+
+            $(".color-picker").colorpicker();
+
+            $(".color-picker").on("colorpickerChange", function(event) {
+                var colorHex = event.color.toString();
+                var elAppend = document.getElementById("__cv_field__colorpickerappend")
+                elAppend.style.background = colorHex;
+                elAppend.style.borderColor = colorHex;
+            });
+
+            var iconPickerOptions = {
+                searchText: "...",
+                labelHeader: "{0} / {1}",
+                cols: 4, rows: 4, 
+                footer: false, 
+                iconset: "fontawesome5"
+            };
+
+            var iconPicker = $(".icon-picker").iconpicker(iconPickerOptions);
+            iconPicker.on("change", function (e) {
+                document.getElementById("__cv_field__iconpicker-value").value = e.icon;
+            });
         },
         load_model_options: function() {
             var self = this;
@@ -329,6 +547,32 @@ export default {
                     }
                 });
         },
+        load_file_options: function(callback) {
+            var self = this;
+            if (self.page.is_file_options_loading) {
+                return;
+            }
+
+            self.page.is_file_options_loading = true;
+            
+            axios.get(AdminLTEHelper.getAPIURL("adminltemedia/get_file_select_options"))
+                .then(({ data }) => {
+                    self.page.is_file_options_loaded = true;
+                    self.page.is_file_options_loading = false;
+                    self.file_options = data.list;
+                    self.processLoadQueue();
+                }).catch(({ data }) => {
+                    self.page.is_file_options_loaded = true;
+                    self.page.is_file_options_loading = false;
+                    self.$Progress.fail();
+                    self.page.has_server_error = true;
+                    self.processLoadQueue();
+                }).finally(function() {
+                    if (!self.page.has_server_error) {
+                        callback();
+                    }
+                });
+        },
         showConditionDialog: function(instance_id, conditional_fields) {
             this.instance_id = instance_id;
             this.conditional_fields = conditional_fields;
@@ -364,7 +608,7 @@ export default {
                     let trHTML = trTemplateHTML
                         .replace(/__field_guid__/g, field_guid)
                         .replace(/__label__/g, field.label)
-                        .replace(/__value__/g, field.value)
+                        .replace(/__value_html__/g, self.getFieldValueHTML(field))
                         .replace(/__field_json__/g, JSON.stringify(field));
                         
                     tbodyHTML += trHTML;
@@ -394,6 +638,10 @@ export default {
                 document.getElementById(guid + "-condition-html").innerHTML = self.getConditionBeautyHTML(conditionJSON);
             }
 
+            $(".file_download").off("click").on("click", function(e){
+                self.downloadFile(this.getAttribute("data-file-id"));
+            });
+
             $("#divWidgetConditionDialog").modal("hide");
         },
         doEditCondition: function(elButton) {
@@ -419,27 +667,130 @@ export default {
             var objectField = JSON.parse(fieldJSON);
             var fieldType = objectField.type;
 
-            $(document.getElementById("__cv_field_container__-" + fieldType)).removeClass("d-none");
-            document.getElementById("__cv_field_label__-" + fieldType).innerHTML = objectField.label;
-            document.getElementById("__cv_field__-" + fieldType).value = objectField.value;
+            $(".cv-field-container").addClass("d-none");
+            $(document.getElementById("__cv_field_container__" + fieldType)).removeClass("d-none");
+            document.getElementById("__cv_field_label__" + fieldType).innerHTML = objectField.label;
+
+            this.setFieldValue(objectField);
+
+            /* document.getElementById("__cv_field__" + fieldType).value = objectField.value; */
 
             $("#divEditFieldDialog").modal();
         },
+        setFieldValue: function(objectField) {
+            var self = this;
+            var fieldInput = document.getElementById("__cv_field__" + objectField.type);
+            var fieldType = objectField.type;
+            var val = objectField.value;
+
+            if ("checkbox" == fieldType) {
+                if ("on" == val) {
+                    fieldInput.checked = true;
+                }
+            } else if (("colorpicker" == fieldType ) && ("" != val)) {
+                var colorPicker = fieldInput;
+                $(colorPicker).val(val);
+                $(colorPicker).trigger('change');
+            } else if ("datepicker" == fieldType) {
+                fieldInput.value = val;
+            } else if ("datetimepicker" == fieldType) {
+                fieldInput.value = val;
+            } else if ("file" == fieldType) {
+                if (undefined !== val) {
+                    $("#__cv_field__file").val(val.split(",")).trigger('change');
+                }
+            } else if ("selection" == fieldType) {
+                self.setDropdownOptions(objectField);
+
+                if (undefined !== val) {
+                    if (objectField.input_data.multiple) {
+                        $("#__cv_field__selection").val(val.split(",")).trigger('change');
+                    } else {
+                        $("#__cv_field__selection").val(val).trigger('change');
+                    }
+                }
+            } else if ("htmleditor" == fieldType) {
+                $(fieldInput).summernote("code", val);
+            } else if ("iconpicker" == fieldType) {
+                if ("" == val || undefined === val) {
+                    console.log("empty icon")
+                    /* $(document.getElementById(elementKey)).iconpicker('setIcon', 'empty'); */
+                } else{
+                    $(fieldInput).iconpicker('setIcon', val);
+                }
+            } else if ("integer" == fieldType) {
+                fieldInput.value = val;
+            } else if ("number" == fieldType) {
+                fieldInput.value = val;
+            } else if ("password" == fieldType) {
+                fieldInput.value = val;
+            } else if ("shorttext" == fieldType) {
+                fieldInput.value = val;
+            } else if ("textarea" == fieldType) {
+                $(fieldInput).val(val);
+            } else if ("timepicker" == fieldType) {
+                fieldInput.value = val;
+            }
+        },
+        setDropdownOptions(objectField) {
+            var select = document.getElementById("__cv_field__selection");
+            select.innerHTML = "";
+            
+            var options = objectField.input_data.options;
+
+            for (var key in options) {
+                select.innerHTML += '<option value="' + key + '">' + options[key] + '</option>'
+            }
+
+            if (objectField.input_data.multiple) {
+                $("#__cv_field__selection").select2({multiple: true});
+            } else {
+                $("#__cv_field__selection").select2({multiple: false});
+            }
+        },
         saveField: function() {
+            var self = this;
             var guid = document.getElementById("buttonSaveField").getAttribute("data-field-guid");
             var elEditButton = document.getElementById(guid + "-btn");
 
             var fieldJSON = elEditButton.getAttribute("data-field-json");
             var objectField = JSON.parse(fieldJSON);
+            var fieldType = objectField.type;
+            var fieldInput = document.getElementById("__cv_field__" + objectField.type);
 
-            objectField.value = document.getElementById("__cv_field__-" + objectField.type).value;
+            if ("checkbox" == fieldType) {
+                objectField.value = fieldInput.checked ? 'on' : 'off';
+            } else if ("colorpicker" == fieldType) {
+                objectField.value = fieldInput.value;
+            } else if ("file" == fieldType) {
+                objectField.value = $("#__cv_field__file").val().join(",");
+            } else if ("htmleditor" == fieldType) {
+                objectField.value = $(fieldInput).summernote('code');
+            } else if ("iconpicker" == fieldType) {
+                objectField.value = document.getElementById("__cv_field__iconpicker-value").value;
+            } else if ("selection" == fieldType) {
+                objectField.value = $("#__cv_field__selection").val();
+                   
+                var attr = $("#__cv_field__selection").attr('multiple');
+                if (typeof attr !== 'undefined' && attr !== false) {
+                    objectField.value = objectField.value.join(",");
+                }
+            } else {
+                objectField.value = fieldInput.value;
+            }
+            
             fieldJSON = JSON.stringify(objectField);
             elEditButton.setAttribute("data-field-json", fieldJSON);
 
-            document.getElementById(guid + "-html").innerHTML = objectField.value;
+            document.getElementById(guid + "-html").innerHTML = self.getFieldValueHTML(objectField);
+
+            $(".file_download").off("click").on("click", function(e){
+                self.downloadFile(this.getAttribute("data-file-id"));
+            });
 
             $("#divEditFieldDialog").modal("hide");
         },
+        
         // Helpers
         initializeJSQueryBuilder: function(container, condition) {
             var self = this;
@@ -790,6 +1141,10 @@ export default {
             $(".btn-edit-field").off("click").on("click", function () {
                 self.doEditField(this);
             });
+
+            $(".file_download").off("click").on("click", function(e){
+                self.downloadFile(this.getAttribute("data-file-id"));
+            });
         },
         getConditionTableHTML: function(conditionData) {
             var self = this;
@@ -811,7 +1166,7 @@ export default {
                 let trHTML = trTemplateHTML
                     .replace(/__field_guid__/g, field_guid)
                     .replace(/__label__/g, field.label)
-                    .replace(/__value__/g, field.value)
+                    .replace(/__value_html__/g, self.getFieldValueHTML(field))
                     .replace(/__field_json__/g, JSON.stringify(field));
                     
                 tbodyHTML += trHTML;
@@ -824,6 +1179,83 @@ export default {
                 .replace(/__conditional_fields_html__/g, tbodyHTML);
 
             return tableHTML;
+        },
+        getFieldValueHTML: function(field) {
+            var self = this;
+            var fieldType = field.type;
+            var fieldValue = field.value;
+            var templateHTML = "";
+            var fieldHTML = "";
+
+            if ("checkbox" == fieldType) {
+                let state = 0;
+                if ("on" == fieldValue) {
+                    state = 1;
+                }
+
+                templateHTML = document.getElementById("field-html-template-checkbox").innerHTML;
+                fieldHTML = templateHTML.replace(/__state__/g, state);
+            } else if (("colorpicker" == fieldType ) && ("" != fieldValue)) {
+                templateHTML = document.getElementById("field-html-template-colorpicker").innerHTML;
+                fieldHTML = templateHTML.replace(/__color__/g, fieldValue);
+            } else if ("datepicker" == fieldType) {
+                fieldHTML = fieldValue;
+            } else if ("datetimepicker" == fieldType) {
+                fieldHTML = fieldValue;
+            } else if ("file" == fieldType) {
+                if (undefined !== fieldValue) {
+                    templateHTML = document.getElementById("field-html-template-file").innerHTML;
+
+                    var fileIds = fieldValue.split(",");
+                    for (let index = 0; index < fileIds.length; index++) {
+                        const fileId = fileIds[index];
+                        const fileData = self.getFileData(fileId);
+                        fieldHTML = fieldHTML 
+                            + templateHTML.replace(/__delete__/g, "").replace(/__file_id__/g, fileId).replace(/__file_name__/g, fileData.text);
+                    }
+                }
+            } else if ("selection" == fieldType) {
+                if ("" == fieldValue || undefined === fieldValue) {
+                    fieldHTML = "";
+                } else {
+                    var options = field.input_data.options;
+                    var values = fieldValue.split(",");
+                    for (let index = 0; index < values.length; index++) {
+                        const key = values[index];
+                        
+                        if ("" != fieldHTML) {
+                            fieldHTML += ", ";
+                        }
+
+                        fieldHTML += options[key];
+                    }
+                }
+            } else if ("htmleditor" == fieldType) {
+                fieldHTML = fieldValue;
+            } else if ("iconpicker" == fieldType) {
+                if ("" == fieldValue || undefined === fieldValue) {
+                    fieldHTML = "";
+                } else {
+                    templateHTML = document.getElementById("field-html-template-iconpicker").innerHTML;
+                    fieldHTML = templateHTML.replace(/__icon__/g, fieldValue);
+                }
+            } else if ("integer" == fieldType) {
+                fieldHTML = fieldValue;
+            } else if ("number" == fieldType) {
+                fieldHTML = fieldValue;
+            } else if ("password" == fieldType) {
+                fieldHTML = "*****";
+            } else if ("shorttext" == fieldType) {
+                fieldHTML = fieldValue;
+            } else if ("textarea" == fieldType) {
+                fieldHTML = fieldValue;
+            } else if ("timepicker" == fieldType) {
+                fieldHTML = fieldValue;
+            } else {
+                fieldHTML = fieldValue;
+            }
+
+            return fieldHTML;
         },
         getConditionBeautyHTML: function(condition_json) {
             var conditionHTML = "";
@@ -1087,7 +1519,30 @@ export default {
             }
 
             return conditionHTML;                
-        }
+        },
+        getFileData: function(fileId) {
+            var options = this.file_options;
+            for (let index = 0; index < options.length; index++) {
+                const element = options[index];
+                if (element.id == fileId) {
+                    return element;
+                }
+            }
+
+            return {};
+        },
+        downloadFile: function (file_id) {
+            axios.get(AdminLTEHelper.getAPIURL("adminltemedia/download_file/" + file_id))
+                .then(({ data }) => {
+                    var a = document.createElement("a"); //Create <a>
+                    a.href = data.url; //Image Base64 Goes here
+                    a.download = data.filename; //File name Here
+                    a.click(); //Downloaded file
+                    URL.revokeObjectURL(a.href)
+                }).catch(({ data }) => {
+                    console.log("error!")
+                });
+        },
     },
     mounted() {
         this.processLoadQueue();

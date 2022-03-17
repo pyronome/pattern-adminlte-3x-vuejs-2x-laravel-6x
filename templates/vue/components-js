@@ -9,6 +9,7 @@ Vue.component('select2-element', require('./components/elements/default/Select2E
 Vue.component('dropzone', require('./components/elements/default/Dropzone.vue').default);
 Vue.component('location-display', require('./components/elements/default/LocationDisplay.vue').default);
 Vue.component('image-display', require('./components/elements/default/ImageDisplay.vue').default);
+Vue.component('media-list', require('./components/elements/default/MediaList.vue').default);
 Vue.component('widget-editor', require('./components/elements/default/WidgetEditor.vue').default);
 Vue.component('body-loader', require('./components/elements/default/BodyLoader.vue').default);
 Vue.component('permission-error', require('./components/elements/default/PermissionError.vue').default);

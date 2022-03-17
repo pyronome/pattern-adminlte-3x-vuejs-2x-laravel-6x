@@ -59,7 +59,7 @@
                     <div class="card-header">
                         <h4 class="card-title w-100">
                             <a class="d-block w-100" data-toggle="collapse" :href="'#' + instance_id + '-accordion-query'">
-                                Query
+                                Data Source
                             </a>
                         </h4>
                     </div>
@@ -84,7 +84,7 @@
                                             :id="instance_id + 'calculation_type2'" 
                                             :name="instance_id + 'calculation_type'"
                                             value="advanced">
-                                        <label class="detail-label" :for="instance_id + 'calculation_type2'">Advanced</label>
+                                        <label class="detail-label" :for="instance_id + 'calculation_type2'">SQL Query</label>
                                     </div>
                                 </div>
                             </div>
@@ -134,9 +134,48 @@
                                         style="font-family: monospace;font-size: 15px;"></textarea>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-striped table-bordered table-hover table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th><span>Variables</span>&nbsp;</th> 
+                                                <th style="width: 70px;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyVariableList">
+                                            <tr>
+                                                <td>
+                                                    <span>Product Price (productPrice)</span>
+                                                </td> 
+                                                <td>
+                                                    <button type="button" class="btn-icon btn-icon-primary" style="margin-bottom: 0px;">
+                                                        <span class="btn-label btn-label-right"><i class="fas fa-pen"></i></span>
+                                                    </button> 
+                                                    <button type="button" class="btn-icon btn-icon-danger">
+                                                        <span class="btn-label btn-label-right"><i class="fas fa-times"></i></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><span>Product Name (productName)</span></td>
+                                                <td>
+                                                    <button type="button" class="btn-icon btn-icon-primary" style="margin-bottom: 0px;">
+                                                        <span class="btn-label btn-label-right"><i class="fas fa-pen"></i></span>
+                                                    </button>
+                                                    <button type="button" class="btn-icon btn-icon-danger">
+                                                        <span class="btn-label btn-label-right"><i class="fas fa-times"></i></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <widget-conditional-settings :instance_id="instance_id" :conditional_fields="conditional_fields"></widget-conditional-settings>
             </div>
         </widget-settings-dialog>
@@ -150,17 +189,117 @@
             return {
                 conditional_fields: [
                     {
-                        "type": "text",
-                        "id": "title",
-                        "label": "Title",
+                        "type": "iconpicker",
+                        "id": "icon",
+                        "label": "Icon",
                         "value": ""
                     },
                     {
-                        "type": "text",
+                        "type": "colorpicker",
                         "id": "iconbackground",
                         "label": "Icon Background",
                         "value": ""
                     },
+                    {
+                        "type": "shorttext",
+                        "id": "title",
+                        "label": "Title",
+                        "value": ""
+                    },
+                    
+                    /* {
+                        "type": "checkbox",
+                        "id": "checkbox",
+                        "label": "Checkbox",
+                        "value": ""
+                    },
+                    {
+                        "type": "colorpicker",
+                        "id": "colorpicker",
+                        "label": "Colorpicker",
+                        "value": ""
+                    },
+                    {
+                        "type": "datepicker",
+                        "id": "datepicker",
+                        "label": "Datepicker",
+                        "value": ""
+                    },
+                    {
+                        "type": "datetimepicker",
+                        "id": "datetimepicker",
+                        "label": "Datetimepicker",
+                        "value": ""
+                    },
+                    {
+                        "type": "file",
+                        "id": "file",
+                        "label": "File",
+                        "value": ""
+                    },
+                    {
+                        "type": "selection",
+                        "input_data": {
+                            "multiple": true,
+                            "options": {
+                                // "value": "title"
+                                "a": "A", 
+                                "b": "B", 
+                                "c": "C"
+                            }
+                        },
+                        "id": "selection",
+                        "label": "Selection",
+                        "value": ""
+                    },
+                    {
+                        "type": "htmleditor",
+                        "id": "htmleditor",
+                        "label": "htmleditor",
+                        "value": ""
+                    },
+                    {
+                        "type": "iconpicker",
+                        "id": "iconpicker",
+                        "label": "iconpicker",
+                        "value": ""
+                    },
+                    {
+                        "type": "integer",
+                        "id": "integer",
+                        "label": "integer",
+                        "value": ""
+                    },
+                    {
+                        "type": "number",
+                        "id": "number",
+                        "label": "number",
+                        "value": ""
+                    },
+                    {
+                        "type": "password",
+                        "id": "password",
+                        "label": "password",
+                        "value": ""
+                    },
+                    {
+                        "type": "shorttext",
+                        "id": "shorttext",
+                        "label": "shorttext",
+                        "value": ""
+                    },
+                    {
+                        "type": "textarea",
+                        "id": "textarea",
+                        "label": "textarea",
+                        "value": ""
+                    },
+                    {
+                        "type": "timepicker",
+                        "id": "timepicker",
+                        "label": "timepicker",
+                        "value": ""
+                    }, */
                 ],
                 model_options: [],
                 property_options: [],

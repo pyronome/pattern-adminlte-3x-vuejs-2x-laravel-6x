@@ -82,6 +82,63 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
         }
         /* {{@snippet:end_adminltecustomvariabletable_migration}} */
 
+        /* {{@snippet:begin_adminlteuserconfigfiletable_migration}} */        
+        if (!Schema::hasTable('adminlteuserconfigfiletable')) {
+            Schema::create('adminlteuserconfigfiletable', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->timestamps();
+                $table->boolean('deleted')->default(0);
+                $table->longText('__key')->nullable();
+                $table->longText('file_name')->nullable();
+                $table->longText('description')->nullable();
+                $table->longText('mime_type')->nullable();
+                $table->bigInteger('file_size')->default(0);
+                $table->string('file_type')->nullable();
+                $table->binary('file')->nullable();
+            });
+        } else {
+            Schema::table('adminlteuserconfigfiletable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminlteuserconfigfiletable', '__key')) { 
+                    $table->longText('__key')->nullable()->change();
+                } else {
+                    $table->longText('__key')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'file_name')) { 
+                    $table->longText('file_name')->nullable()->change();
+                } else {
+                    $table->longText('file_name')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'description')) { 
+                    $table->longText('description')->nullable()->change();
+                } else {
+                    $table->longText('description')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'mime_type')) { 
+                    $table->longText('mime_type')->nullable()->change();
+                } else {
+                    $table->longText('mime_type')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'file_size')) { 
+                    $table->bigInteger('file_size')->default(0)->change();
+                } else {
+                    $table->bigInteger('file_size')->default(0);
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'file_type')) { 
+                    $table->string('file_type')->nullable()->change();
+                } else {
+                    $table->string('file_type')->nullable();
+                }
+                if (Schema::hasColumn('adminlteuserconfigfiletable', 'file')) { 
+                    $table->binary('file')->nullable()->change();
+                } else {
+                    $table->binary('file')->nullable();
+                }
+            });
+            
+        } // if (!Schema::hasTable('adminlteuserconfigfiletable')) {
+        
+        /* {{@snippet:end_adminlteuserconfigfiletable_migration}} */
+        
         /* {{@snippet:begin_adminltelogtable_migration}} */        
         if (!Schema::hasTable('adminltelogtable')) {
             Schema::create('adminltelogtable', function (Blueprint $table) {
@@ -217,6 +274,76 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             });
         }
         /* {{@snippet:end_adminltelayouttable_migration}} */
+        
+        /* {{@snippet:begin_adminltemediatable_migration}} */        
+        if (!Schema::hasTable('adminltemediatable')) {
+            Schema::create('adminltemediatable', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->timestamps();
+                $table->boolean('deleted')->default(0);
+                $table->bigInteger('created_by')->default(0);
+                $table->bigInteger('updated_by')->default(0);
+                $table->string('guid')->nullable();
+                $table->string('group')->nullable();
+                $table->string('file_title')->nullable();
+                $table->longText('file_name')->nullable();
+                $table->longText('description')->nullable();
+                $table->longText('mime_type')->nullable();
+                $table->bigInteger('file_size')->default(0);
+                $table->string('file_type')->nullable();
+                $table->binary('file')->nullable();
+            });
+        } else {
+            Schema::table('adminltemediatable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminltemediatable', 'guid')) { 
+                    $table->longText('guid')->nullable()->change();
+                } else {
+                    $table->longText('guid')->nullable();
+                }
+                if (Schema::hasColumn('adminltemediatable', 'group')) { 
+                    $table->longText('group')->nullable()->change();
+                } else {
+                    $table->longText('group')->nullable();
+                }
+                if (Schema::hasColumn('adminltemediatable', 'file_title')) { 
+                    $table->longText('file_title')->nullable()->change();
+                } else {
+                    $table->longText('file_title')->nullable();
+                }
+                if (Schema::hasColumn('adminltemediatable', 'file_name')) { 
+                    $table->longText('file_name')->nullable()->change();
+                } else {
+                    $table->longText('file_name')->nullable();
+                }
+                if (Schema::hasColumn('adminltemediatable', 'description')) { 
+                    $table->longText('description')->nullable()->change();
+                } else {
+                    $table->longText('description')->nullable();
+                }
+                if (Schema::hasColumn('adminltemediatable', 'mime_type')) { 
+                    $table->longText('mime_type')->nullable()->change();
+                } else {
+                    $table->longText('mime_type')->nullable();
+                }
+                if (Schema::hasColumn('adminltemediatable', 'file_size')) { 
+                    $table->bigInteger('file_size')->default(0)->change();
+                } else {
+                    $table->bigInteger('file_size')->default(0);
+                }
+                if (Schema::hasColumn('adminltemediatable', 'file_type')) { 
+                    $table->string('file_type')->nullable()->change();
+                } else {
+                    $table->string('file_type')->nullable();
+                }
+                if (Schema::hasColumn('adminltemediatable', 'file')) { 
+                    $table->binary('file')->nullable()->change();
+                } else {
+                    $table->binary('file')->nullable();
+                }
+            });
+            
+        } // if (!Schema::hasTable('adminltemediatable')) {
+        /* {{@snippet:end_adminltemediatable_migration}} */
 
         /* {{@snippet:begin_adminltemetatable_migration}} */        
         if (!Schema::hasTable('adminltemetatable')) {

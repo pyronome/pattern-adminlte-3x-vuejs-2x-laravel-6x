@@ -114,6 +114,16 @@
                                     <input type="text" class="form-control " id="__cv_title" v-model="variableForm.title">
                                 </div>
                                 <div class="form-group col-lg-12">
+                                    <label for="__cv_default_value" class="detail-label">
+                                        {{ $t('Default Value') }}
+                                        <insert-variable-button 
+                                            :variable_options="['global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                            target="__cv_default_value">
+                                        </insert-variable-button>
+                                    </label>
+                                    <input type="text" class="form-control " id="__cv_default_value" v-model="variableForm.default_value">
+                                </div>
+                                <div class="form-group col-lg-12">
                                     <label for="__cv_value" class="detail-label">
                                         {{ $t('Value') }}
                                         <insert-variable-button 
@@ -189,6 +199,7 @@ export default {
                 'id': 0,
                 'name': '',
                 'title': '',
+                'default_value': '',
                 'value': ''
             }),
             formDelete: new Form({

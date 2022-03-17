@@ -22,53 +22,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-lg-12" :id="instance_id + '-conditionlist'">
-                        <table class="table table-striped table-bordered table-hover table-sm">
-                            <thead>
-                                <tr>
-                                    <th colspan="2">
-                                        Product/price > 1000
-                                    </th>
-                                    <th width="60">
-                                        <button type="button" title="Edit Condition" class="btn-icon btn-icon-primary">
-                                            <span class="btn-label btn-label-right"><i class="fas fa-pen"></i></span>
-                                        </button>
-                                        <button type="button" title="Remove Condition" class="btn-icon btn-icon-danger">
-                                            <span class="btn-label btn-label-right"><i class="fas fa-times"></i></span>
-                                        </button>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td width="25%">
-                                        Title
-                                    </td>
-                                    <td>
-                                        Warning
-                                    </td>
-                                    <td>
-                                        <button type="button" title="Edit Value" class="btn-icon btn-icon-primary">
-                                            <span class="btn-label btn-label-right"><i class="fas fa-pen"></i></span>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        iconbackground
-                                    </td>
-                                    <td>
-                                        #2CCC34
-                                    </td>
-                                    <td>
-                                        <button type="button" title="Edit Value" class="btn-icon btn-icon-primary">
-                                            <span class="btn-label btn-label-right"><i class="fas fa-pen"></i></span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <div class="form-group col-lg-12" :id="instance_id + '-conditionlist'"></div>
                 </div>
             </div>
         </div>

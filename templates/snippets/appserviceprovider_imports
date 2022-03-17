@@ -1,5 +1,7 @@
 use App\AdminLTE\AdminLTECustomVariable;
 use App\Observers\AdminLTECustomVariableObserver;
+use App\AdminLTE\AdminLTEMedia;
+use App\Observers\AdminLTEMediaObserver;
 use App\AdminLTE\AdminLTEUser;
 use App\Observers\AdminLTEUserObserver;
 use App\AdminLTE\AdminLTEUserGroup;
