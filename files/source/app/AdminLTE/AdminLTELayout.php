@@ -27,6 +27,7 @@ class AdminLTELayout extends Model
 		'grid_size',
         'icon',
 		'meta_data_json',
+        'data_source_json',
 		'conditional_data_json'
 	];
 
@@ -81,6 +82,10 @@ class AdminLTELayout extends Model
         ],
         [
             'name' => 'meta_data_json',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'data_source_json',
             'type' => 'text'
         ],
         [

@@ -177,6 +177,7 @@ Route::namespace('API')
         Route::post('/post_bulkupload', 'AdminLTEMediaController@post_bulkupload');
         Route::post('/delete_files', 'AdminLTEMediaController@delete_files');
         Route::get('/download_file/{file_id}', 'AdminLTEMediaController@download_file');
+        Route::get('/get_file_contents/{idcsv}', 'AdminLTEMediaController@get_file_contents');
     });
 
 	Route::prefix('adminltemodeloption')->group(function () {

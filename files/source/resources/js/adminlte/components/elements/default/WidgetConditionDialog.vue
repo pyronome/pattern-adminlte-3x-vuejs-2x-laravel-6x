@@ -39,32 +39,27 @@
             </div>
         </div>
 
-        <script id="action-operation-condition-rule-template-footer" type="text/html">
-            <input class="form-control action-operation-condition-rule-constant"
+        <script id="condition-rule-template-footer" type="text/html">
+            <input class="form-control condition-rule-constant"
                     type="text"
                     id="%id%_constant"
                     data-rule-name="%id%" />
         </script>
-        <script id="action-operation-condition-rule-template-header" type="text/html">
-            <select class="form-control action-operation-condition-rule-type" id="%id%_type" data-rule-name="%id%">
+        <script id="condition-rule-template-header" type="text/html">
+            <select class="form-control condition-rule-type" id="%id%_type" data-rule-name="%id%">
                 <option value="1" selected>Constant</option>
                 <option value="2">Variable</option>
             </select>
-            <select class="form-control d-none action-operation-condition-rule-variable"
+            <select class="form-control d-none condition-rule-variable"
                     id="%id%_variable"
                     data-rule-name="%id%">
         </script>
-        <script id="action-operation-condition-rule-template-footer" type="text/html">
+        <script id="condition-rule-template-footer" type="text/html">
             </select>
-            <input class="form-control action-operation-condition-rule-constant"
+            <input class="form-control condition-rule-constant"
                     type="text"
                     id="%id%_constant"
                     data-rule-name="%id%" />
-        </script>
-        <script id="action-operation-list-item-template" type="text/html">
-            <span class="action-operation-title">%title%</span><br>
-            <span class="action-operation-result">%result%</span>
-            <span class="action-operation-parameters">%parameters%</span>
         </script>
 
         <script id="condition-table-template" type="text/html">
@@ -325,20 +320,12 @@ export default {
         return {
             instance_id: "",
             conditional_fields: [],
-            model_options: [],
-            property_options: [],
-            global_parameter_options: [],
-            user_parameter_options: [],
             custom_variable_options: [],
             file_options: [],
             page: {
                 is_ready: false,
                 has_server_error: false,
                 is_post_success: false,
-                is_global_parameter_options_loading: false,
-                is_global_parameter_options_loaded: false,
-                is_user_parameter_options_loading: false,
-                is_user_parameter_options_loaded: false,
                 is_custom_variable_options_loading: false,
                 is_custom_variable_options_loaded: false,
                 is_file_options_loading: false,
@@ -367,24 +354,9 @@ export default {
                 return;
             }
 
-            if (!self.page.is_model_options_loaded 
-                && !self.page.is_global_parameter_options_loaded
-                && !self.page.is_user_parameter_options_loaded
-                && !self.page.is_custom_variable_options_loaded
+            if (!self.page.is_custom_variable_options_loaded
                 && !self.page.is_file_options_loaded) {
                 self.$Progress.start();
-            }
-            
-            if (!self.page.is_model_options_loaded) {
-                self.load_model_options();
-            }
-            
-            if (!self.page.is_global_parameter_options_loaded) {
-                self.load_global_parameter_options();
-            }
-
-            if (!self.page.is_user_parameter_options_loaded) {
-                self.load_user_parameter_options();
             }
 
             if (!self.page.is_custom_variable_options_loaded) {
@@ -433,93 +405,6 @@ export default {
             iconPicker.on("change", function (e) {
                 document.getElementById("__cv_field__iconpicker-value").value = e.icon;
             });
-        },
-        load_model_options: function() {
-            var self = this;
-            if (self.page.is_model_options_loading) {
-                return;
-            }
-
-            self.page.is_model_options_loading = true;
-            
-            axios.get(AdminLTEHelper.getAPIURL("__layout/get_model_list"))
-                .then(({ data }) => {
-                    self.page.is_model_options_loaded = true;
-                    self.page.is_model_options_loading = false;
-                    self.model_options = data.list;
-                    self.processLoadQueue();
-                }).catch(({ data }) => {
-                    self.page.is_model_options_loaded = true;
-                    self.page.is_model_options_loading = false;
-                    self.$Progress.fail();
-                    self.page.has_server_error = true;
-                    self.processLoadQueue();
-                });
-        },
-        load_property_options: function(model) {
-            var self = this;
-            if (self.page.is_property_options_loading) {
-                return;
-            }
-
-            self.page.is_property_options_loading = true;
-
-            axios.get(AdminLTEHelper.getAPIURL("__layout/get_model_properties/" + model))
-                .then(({ data }) => {
-                    self.page.is_property_options_loaded = true;
-                    self.page.is_property_options_loading = false;
-                    self.property_options = data.list;
-                    self.processLoadQueue();
-                }).catch(({ data }) => {
-                    self.page.is_property_options_loaded = true;
-                    self.page.is_property_options_loading = false;
-                    self.$Progress.fail();
-                    self.processLoadQueue();
-                });
-        },
-        load_global_parameter_options: function() {
-            var self = this;
-            if (self.page.is_global_parameter_options_loading) {
-                return;
-            }
-
-            self.page.is_global_parameter_options_loading = true;
-            
-            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_global_parameter_options"))
-                .then(({ data }) => {
-                    self.page.is_global_parameter_options_loaded = true;
-                    self.page.is_global_parameter_options_loading = false;
-                    self.global_parameter_options = data.list;
-                    self.processLoadQueue();
-                }).catch(({ data }) => {
-                    self.page.is_global_parameter_options_loaded = true;
-                    self.page.is_global_parameter_options_loading = false;
-                    self.$Progress.fail();
-                    self.page.has_server_error = true;
-                    self.processLoadQueue();
-                });
-        },
-        load_user_parameter_options: function() {
-            var self = this;
-            if (self.page.is_user_parameter_options_loading) {
-                return;
-            }
-
-            self.page.is_user_parameter_options_loading = true;
-            
-            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_user_parameter_options"))
-                .then(({ data }) => {
-                    self.page.is_user_parameter_options_loaded = true;
-                    self.page.is_user_parameter_options_loading = false;
-                    self.user_parameter_options = data.list;
-                    self.processLoadQueue();
-                }).catch(({ data }) => {
-                    self.page.is_user_parameter_options_loaded = true;
-                    self.page.is_user_parameter_options_loading = false;
-                    self.$Progress.fail();
-                    self.page.has_server_error = true;
-                    self.processLoadQueue();
-                });
         },
         load_custom_variable_options: function(callback) {
             var self = this;
@@ -673,8 +558,6 @@ export default {
 
             this.setFieldValue(objectField);
 
-            /* document.getElementById("__cv_field__" + fieldType).value = objectField.value; */
-
             $("#divEditFieldDialog").modal();
         },
         setFieldValue: function(objectField) {
@@ -824,40 +707,6 @@ export default {
                 "not_matching_regex"
             ];
 
-            // Global Parameters
-            options = self.global_parameter_options;
-            var variableCount = options.length;
-            for (var i = 0; i < variableCount; i++) {
-                filters.push({
-                    "id": options[i]["id"],
-                    "label": options[i]["text"],
-                    "type": "string",
-                    "optgroup": "Global Parameters",
-                    "operators": operators,
-                    "input": self.inputJSQueryBuilder,
-                    "valueSetter": self.setJSQueryBuilderInputValue,
-                    "valueGetter": self.getJSQueryBuilderInputValue,
-                    "input_event": ""
-                });
-            }
-
-            // User Parameters
-            options = self.user_parameter_options;
-            var variableCount = options.length;
-            for (var i = 0; i < variableCount; i++) {
-                filters.push({
-                    "id": options[i]["id"],
-                    "label": options[i]["text"],
-                    "type": "string",
-                    "optgroup": "User Parameters",
-                    "operators": operators,
-                    "input": self.inputJSQueryBuilder,
-                    "valueSetter": self.setJSQueryBuilderInputValue,
-                    "valueGetter": self.getJSQueryBuilderInputValue,
-                    "input_event": ""
-                });
-            }
-
             // Custom Variables
             options = self.custom_variable_options;
             var variableCount = options.length;
@@ -866,7 +715,6 @@ export default {
                     "id": options[i]["id"],
                     "label": options[i]["text"],
                     "type": "string",
-                    "optgroup": "Custom Variables",
                     "operators": operators,
                     "input": self.inputJSQueryBuilder,
                     "valueSetter": self.setJSQueryBuilderInputValue,
@@ -905,50 +753,15 @@ export default {
             var self = this;
             var options = [];
             var variableCount = 0;
-            options.push.apply(options, self.global_parameter_options);
-            options.push.apply(options, self.user_parameter_options);
             options.push.apply(options, self.custom_variable_options);
 
-            var templateHeaderHTML = document
-                    .getElementById(
-                    "action-operation-condition-rule-template-header")
-                    .innerHTML;
-            var templateFooterHTML = document
-                    .getElementById(
-                    "action-operation-condition-rule-template-footer")
-                    .innerHTML;
+            var templateHeaderHTML = document.getElementById("condition-rule-template-header").innerHTML;
+            var templateFooterHTML = document.getElementById("condition-rule-template-footer").innerHTML;
             var variableOptionsHTML = "";
 
             templateHeaderHTML = templateHeaderHTML.replace(/%id%/gi, name);
             templateFooterHTML = templateFooterHTML.replace(/%id%/gi, name);
 
-            variableOptionsHTML += '<optgroup label="Global Parameters">';
-            options = self.global_parameter_options;
-            variableCount = options.length;
-
-            for (var i = 0; i < variableCount; i++) {
-                variableOptionsHTML += "<option value=\""
-                        + options[i]["id"]
-                        + "\">"
-                        + options[i]["text"]
-                        + "</option>";
-            }
-            variableOptionsHTML += '</optgroup>';
-
-            variableOptionsHTML += '<optgroup label="User Parameters">';
-            options = self.user_parameter_options;
-            variableCount = options.length;
-
-            for (var i = 0; i < variableCount; i++) {
-                variableOptionsHTML += "<option value=\""
-                        + options[i]["id"]
-                        + "\">"
-                        + options[i]["text"]
-                        + "</option>";
-            }
-            variableOptionsHTML += '</optgroup>';
-
-            variableOptionsHTML += '<optgroup label="Custom Variables">';
             options = self.custom_variable_options;
             variableCount = options.length;
 
@@ -961,9 +774,7 @@ export default {
             }
             variableOptionsHTML += '</optgroup>';
 
-            return (templateHeaderHTML
-                    + variableOptionsHTML
-                    + templateFooterHTML);
+            return (templateHeaderHTML + variableOptionsHTML + templateFooterHTML);
         },
         setJSQueryBuilderInputValue: function (rule, value) {
             var self = this;
@@ -1005,7 +816,7 @@ export default {
         },
         changeJSQueryBuilderContainer: function (sender) {
             var self = this;
-            $(".action-operation-condition-rule-type", sender).off("change").on("change", function () {
+            $(".condition-rule-type", sender).off("change").on("change", function () {
                 self.changeConditionRuleType(this);
             });
         },
@@ -1062,40 +873,6 @@ export default {
                 "not_matching_regex"
             ];
 
-            // Global Parameters
-            options = self.global_parameter_options;
-            var variableCount = options.length;
-            for (var i = 0; i < variableCount; i++) {
-                filters.push({
-                    "id": options[i]["id"],
-                    "label": options[i]["text"],
-                    "type": "string",
-                    "optgroup": "Global Parameters",
-                    "operators": operators,
-                    "input": self.inputJSQueryBuilder,
-                    "valueSetter": self.setJSQueryBuilderInputValue,
-                    "valueGetter": self.getJSQueryBuilderInputValue,
-                    "input_event": ""
-                });
-            }
-
-            // User Parameters
-            options = self.user_parameter_options;
-            var variableCount = options.length;
-            for (var i = 0; i < variableCount; i++) {
-                filters.push({
-                    "id": options[i]["id"],
-                    "label": options[i]["text"],
-                    "type": "string",
-                    "optgroup": "User Parameters",
-                    "operators": operators,
-                    "input": self.inputJSQueryBuilder,
-                    "valueSetter": self.setJSQueryBuilderInputValue,
-                    "valueGetter": self.getJSQueryBuilderInputValue,
-                    "input_event": ""
-                });
-            }
-
             // Custom Variables
             options = self.custom_variable_options;
             var variableCount = options.length;
@@ -1104,7 +881,6 @@ export default {
                     "id": options[i]["id"],
                     "label": options[i]["text"],
                     "type": "string",
-                    "optgroup": "Custom Variables",
                     "operators": operators,
                     "input": self.inputJSQueryBuilder,
                     "valueSetter": self.setJSQueryBuilderInputValue,

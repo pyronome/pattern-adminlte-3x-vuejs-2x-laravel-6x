@@ -47,7 +47,7 @@
                                             <tr v-for="(item, index) in variableList" :key="index"
                                                 :data-search-text="item.title + item.name + item.value">
                                                 <td>
-                                                   <span v-html="item.title + ' (' + item.name + ')'"></span>
+                                                   <span class="spanCustomVariableTitle" v-html="item.title + ' (' + item.name + ')'"></span>
                                                 </td>
                                                 <td>
                                                    <button type="button"

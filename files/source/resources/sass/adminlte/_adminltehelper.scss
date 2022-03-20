@@ -1692,22 +1692,6 @@ button.copyKey {
     display: none;
 }
 
-/* .rule-filter-container > select {
-    width: 100% !important;
-}
-
-.rule-operator-container > select {
-    width: 100% !important;
-}
-
-.rule-value-container > select {
-    width: 100% !important;
-}
-
-.rule-operator-container > input {
-    width: 100% !important;
-} */
-
 table.condition-table > thead > tr > th {
     background: #f2f2f2;
 }
@@ -1747,6 +1731,33 @@ table.condition-table > tbody > tr > td:nth-child(2) {
     font-size: 18px;
     vertical-align: middle;
     margin-right: 5px;
+}
+
+.spanCustomVariableTitle {
+    word-break: break-all;
+}
+
+.rule-filter-container > select {
+    width: 100% !important;
+}
+
+.rule-operator-container {
+    display: block !important;
+}
+
+select.condition-rule-type {
+    width: 100px !important;
+    display: inline-block !important;
+}
+
+.query-builder .rule-container .rule-value-container {
+    display: block !important;
+}
+
+input.condition-rule-constant,
+select.condition-rule-variable {
+    width: calc(100% - 110px) !important;
+    float: right;
 }
 
 /* {{@snippet:end}} */

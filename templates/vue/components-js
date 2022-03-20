@@ -10,6 +10,8 @@ Vue.component('dropzone', require('./components/elements/default/Dropzone.vue').
 Vue.component('location-display', require('./components/elements/default/LocationDisplay.vue').default);
 Vue.component('image-display', require('./components/elements/default/ImageDisplay.vue').default);
 Vue.component('media-list', require('./components/elements/default/MediaList.vue').default);
+Vue.component('file-select', require('./components/elements/default/FileSelect.vue').default);
+Vue.component('file-content', require('./components/elements/default/FileContent.vue').default);
 Vue.component('widget-editor', require('./components/elements/default/WidgetEditor.vue').default);
 Vue.component('body-loader', require('./components/elements/default/BodyLoader.vue').default);
 Vue.component('permission-error', require('./components/elements/default/PermissionError.vue').default);
@@ -21,12 +23,12 @@ Vue.component('widget-settings-dialog', require('./components/widgets/WidgetSett
 Vue.component('widget-preview-dialog', require('./components/widgets/WidgetPreviewDialog.vue').default);
 Vue.component('widget-list', require('./components/elements/default/WidgetList.vue').default);
 Vue.component('widget-header', require('./components/elements/default/WidgetHeader.vue').default);
+Vue.component('data-source', require('./components/elements/default/DataSource.vue').default);
 Vue.component('widget-conditional-settings', require('./components/elements/default/WidgetConditionalSettings.vue').default);
 Vue.component('widget-condition-dialog', require('./components/elements/default/WidgetConditionDialog.vue').default);
 Vue.component('insert-variable-button', require('./components/elements/default/InsertVariableButton.vue').default);
 Vue.component('insert-variable-dialog', require('./components/elements/default/InsertVariableDialog.vue').default);
 Vue.component('custom-variable-list', require('./components/elements/default/CustomVariableList.vue').default);
-
 
 /* {{@snippet:end_elements}} */
 /* Elements EOF */

@@ -140,7 +140,8 @@ export default {
                         "widget": window.Widgets[widgetname],
                         "data": {
                             "general": activeWidget,
-                            "content": JSON.parse(activeWidget["meta_data_json"])
+                            "content": JSON.parse(activeWidget["meta_data_json"]),
+                            "data_source": ("" == activeWidget["data_source_json"]) ? [] : JSON.parse(activeWidget["data_source_json"])
                         },
                         "grid_class": self.getWidgetGridClass(activeWidget["grid_size"]) + " " + (activeWidget.enabled ? "" : " widget-disabled")
                     }
@@ -325,7 +326,8 @@ export default {
                 "widget": winWidget,
                 "data": {
                     "general": general_data,
-                    "content": copy_data.content
+                    "content": copy_data.content,
+                    "data_source": copy_data.data_source
                 },
                 "grid_class": self.getWidgetGridClass(general_data.grid_size)
             };

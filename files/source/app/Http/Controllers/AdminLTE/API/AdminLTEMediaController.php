@@ -344,4 +344,66 @@ class AdminLTEMediaController extends Controller
             'list' => $list
         ];
     }
+
+    public function get_file_contents(Request $request) {
+        $parameters = $request->route()->parameters();
+        $idcsv = isset($parameters['idcsv'])
+            ? htmlspecialchars($parameters['idcsv'])
+            : '';
+
+        $ids = explode(',', $idcsv);
+
+        $objectList = AdminLTEMedia::whereIn('id', $ids)->get();
+
+        $list = [];
+        $index = 0;
+
+        foreach ($objectList as $object) {
+            $list[$index]['id'] = $object->id;
+            $list[$index]['file_title'] = $object->file_title;
+            $list[$index]['file_name'] = $object->file_name;
+            $list[$index]['description'] = $object->description;
+            $list[$index]['is_image'] = false;
+            $list[$index]['html'] = '';
+
+            $file_contents = base64_decode($object->file);
+
+            $response = response($object->file)
+                ->header('Cache-Control', 'no-cache private')
+                ->header('Content-Description', 'File Transfer')
+                ->header('Content-Type', $object->mime_type)
+                ->header('Content-length', strlen($file_contents))
+                ->header('Content-Disposition', 'attachment; filename=' . $object->file_name)
+                ->header('Content-Transfer-Encoding', 'binary');
+
+            $url = "data:" . $object->mime_type . ";base64," . $response->content();
+
+            $html = '';
+
+            if (false !== strpos($object->mime_type, 'image')) {
+                $list[$index]['is_image'] = true;
+                $html = '<img src="' . $url . '">';
+            } else {
+                $html = '<button type="button" class="text-btn p-0 file_download" data-file-id="' . $object->id . '">'
+                        . '<span>' . $object->file_title . '</span>'
+                        . '</button>';
+            }
+
+            $list[$index]['html'] = $html;
+            $index++;
+        }
+
+        return [
+            'list' => $list
+        ];
+
+
+        /* $image = imagecreatefromstring($blob); 
+
+        ob_start(); //You could also just output the $image via header() and bypass this buffer capture.
+        imagejpeg($image, null, 80);
+        $data = ob_get_contents();
+        ob_end_clean();
+        echo '<img src="data:image/jpg;base64,' .  base64_encode($data)  . '" />'; */
+    }
 }

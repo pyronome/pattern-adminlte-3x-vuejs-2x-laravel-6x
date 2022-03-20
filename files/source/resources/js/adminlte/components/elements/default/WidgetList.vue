@@ -252,9 +252,6 @@ export default {
             var selectedPageWidgetList = [];
             var index = 0;
 
-            console.log("renderPageWidgets")
-            console.log(self.selectedPageWidgets)
-
             self.selectedPageWidgets.forEach(page_widget => {
                 let widgetname = page_widget["widget"];
 

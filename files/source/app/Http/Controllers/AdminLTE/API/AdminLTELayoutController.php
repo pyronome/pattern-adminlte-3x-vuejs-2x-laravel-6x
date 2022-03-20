@@ -241,6 +241,7 @@ class AdminLTELayoutController extends Controller
             $object->grid_size = $general_data['grid_size'];
             $object->icon = $general_data['icon'];
             $object->meta_data_json = json_encode($content_data);
+            $object->data_source_json = isset($data['data_source']) ? json_encode($data_source) : '{}';
             $object->conditional_data_json = isset($general_data['conditional_data_json']) 
                 ? $general_data['conditional_data_json']
                 : '[]';
@@ -349,12 +350,12 @@ class AdminLTELayoutController extends Controller
 
     }
 
-    public function get_infoboxvalue_by_simple_calculation($metaData) {
+    public function get_infoboxvalue_by_simple_calculation($data_source) {
         $calculationResult = [];
 
-        $function = $metaData['function'];
-        $model = $metaData['model'];
-        $property = $metaData['property'];
+        $function = $data_source['function'];
+        $model = $data_source['model'];
+        $property = $data_source['property'];
         $condition = 1;
 
         $tablename = strtolower($model) . "table";
@@ -437,11 +438,12 @@ class AdminLTELayoutController extends Controller
 
         if (null !== $objectLayout) {
             $metaData = json_decode($objectLayout->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $data_source = json_decode($objectLayout->data_source_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
 
-            if ('simple' == $metaData['calculation_type']) {
-                $queryResult = $this->get_infoboxvalue_by_simple_calculation($metaData);
-            } else if ('advanced' == $metaData['calculation_type']) {
-                $query = $this->getParsedValue($metaData['query'], '', $url_parameters, $request_parameters);
+            if ('simple' == $data_source['calculation_type']) {
+                $queryResult = $this->get_infoboxvalue_by_simple_calculation($data_source);
+            } else if ('advanced' == $data_source['calculation_type']) {
+                $query = $this->getParsedValue($data_source['query'], '', $url_parameters, $request_parameters);
                 $queryResult = $this->get_infoboxvalue_by_advanced_calculation($query);
             }
 

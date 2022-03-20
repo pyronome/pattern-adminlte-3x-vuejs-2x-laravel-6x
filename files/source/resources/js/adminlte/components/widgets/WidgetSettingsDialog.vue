@@ -138,9 +138,15 @@ export default {
     mounted() {
         window.mainLayoutInstance.pageWidgets[this.instance_id].general_settings = this;
 
-        $(document.getElementById(this.instance_id + 'ModalSettings')).off("shown.bs.modal").on('shown.bs.modal', function (e) { 
-            $(document).off('focusin.modal'); 
+        $(document.getElementById(this.instance_id + "ModalSettings")).off("shown.bs.modal").on("shown.bs.modal", function (e) { 
+            $(document).off("focusin.modal"); 
         });
+
+        $(".modal.fade.widget-settings-dialog input").keydown(function(e){
+            if (e.keyCode == 65 && e.ctrlKey) {
+                e.target.select()
+            }
+        })
     },
     methods: {
         setWidgetFormValues: function(instance_id) {
@@ -156,6 +162,10 @@ export default {
             document.getElementById(instance_id + "__small_screen_size").value = sizes[2];
 
             window.mainLayoutInstance.pageWidgets[instance_id].content_settings.setWidgetFormValues();
+
+            if (window.mainLayoutInstance.pageWidgets[instance_id].data_source) {
+                window.mainLayoutInstance.pageWidgets[instance_id].data_source.setValues(data.data_source);
+            }
         },
         saveWidget: function() {
             var instance_id = this.instance_id;
@@ -176,6 +186,13 @@ export default {
             // Content
             data.content = window.mainLayoutInstance.pageWidgets[instance_id].content_settings.getWidgetFormValues();
 
+            // Data Source
+            var data_source = {};
+            if (window.mainLayoutInstance.pageWidgets[instance_id].data_source) {
+                data_source = window.mainLayoutInstance.pageWidgets[instance_id].data_source.getValues();
+            }
+            data.data_source = data_source;
+
             window.mainLayoutInstance.pageWidgets[instance_id].data = data;
 
             window.mainLayoutInstance.vueComponent.showLoader();
@@ -188,7 +205,7 @@ export default {
         },
         getConditionalDataJSON: function() {
             var instance_id = this.instance_id;
-            var conditionTables = $(".condition-table", document.getElementById(instance_id + '-conditionlist'));
+            var conditionTables = $(".condition-table", document.getElementById(instance_id + "-conditionlist"));
             var arrConditionalData = [];
 
             for (let i = 0; i < conditionTables.length; i++) {

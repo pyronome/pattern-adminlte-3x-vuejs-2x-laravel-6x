@@ -1,4 +1,28 @@
 var AdminLTEHelper = {
+    FileSelect: {
+        setValue: function(id, value) {
+            if (undefined !== value) {
+                var select2 = document.getElementById(id);
+                var multiple = $(select2).data('select2').options.options.multiple;
+                if (multiple) {
+                    $(select2).val(value.split(",")).trigger('change');
+                } else {
+                    $(select2).val(value).trigger('change');
+                }
+            }
+        },
+        getValue: function(id) {
+            var select2 = document.getElementById(id);
+            var multiple = $(select2).data('select2').options.options.multiple;
+
+            var value = $(select2).val();
+            if (multiple) {
+                value = $(select2).val().join(",");
+            }
+            
+            return value;
+        }
+    },
     "__externalFiles": [],
     "__externalFilesCompletedCallback": null,
     "__recordGraphCharts": [],
