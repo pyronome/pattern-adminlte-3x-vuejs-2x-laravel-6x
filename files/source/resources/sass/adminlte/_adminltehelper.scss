@@ -1380,6 +1380,10 @@ td > [class*="icheck-"] > input:first-child:checked + label::after {
     display: none;
 }
 
+.select2-dropdown {
+    z-index: 9999 !important;
+}
+
 .editor-title-container {
     display: inline-block;
     vertical-align: middle;

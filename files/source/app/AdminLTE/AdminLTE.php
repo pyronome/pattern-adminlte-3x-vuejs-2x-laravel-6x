@@ -2095,77 +2095,6 @@ class AdminLTE
 
 	public function setAdminLTEDefaultLayout()
 	{
-		$widgets = [];
-		$widgets = $this->getModelDefaultWidgets($widgets);
-		$widgets = $this->getAdminLTEDefaultWidgets($widgets);
-		
-		$countWidgets = count($widgets);
-		
-		try {
-			$connection = DB::connection()->getPdo();
-		} catch (PDOException $e) {
-			print($e->getMessage());
-		}
-
-		$SQLText = 'TRUNCATE adminltelayouttable;';
-		$objPDO = $connection->prepare($SQLText);
-		$objPDO->execute();
-
-		// set widgets order
-		for ($w=0; $w < $countWidgets; $w++) { 
-			$widgets[$w]['order'] = ($w + 1);
-		}
-	
-		// home
-		$temp_widgets = $widgets;
-		for ($w=0; $w < $countWidgets; $w++) { 
-			$temp_widgets[$w]['visibility'] = 1;
-		}
-		
-		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-		$SQLText = "INSERT INTO adminltelayouttable (deleted, pagename, widgets) VALUES ('0', 'home', '" . $encoded . "');";
-		$objPDO = $connection->prepare($SQLText);
-		$objPDO->execute();
-
-		// adminlteusergroup
-		$temp_widgets = $widgets;
-		for ($w=0; $w < $countWidgets; $w++) {
-			if ('AdminLTEUserGroup' == $temp_widgets[$w]['model']) {
-				$temp_widgets[$w]['visibility'] = 1;
-			}
-		}
-		
-		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-		$SQLText = "INSERT INTO adminltelayouttable (deleted, pagename, widgets) VALUES ('0', 'adminlteusergroup', '" . $encoded . "');";
-		$objPDO = $connection->prepare($SQLText);
-		$objPDO->execute();
-
-		// adminlteuser
-		$temp_widgets = $widgets;
-		for ($w=0; $w < $countWidgets; $w++) {
-			if ('AdminLTEUser' == $temp_widgets[$w]['model']) {
-				$temp_widgets[$w]['visibility'] = 1;
-			}
-		}
-		
-		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-		$SQLText = "INSERT INTO adminltelayouttable (deleted, pagename, widgets) VALUES ('0', 'adminlteuser', '" . $encoded . "');";
-		$objPDO = $connection->prepare($SQLText);
-		$objPDO->execute();
-
-		// adminlteconfig
-		$temp_widgets = $widgets;
-		for ($w=0; $w < $countWidgets; $w++) {
-			if ('AdminLTEConfig' == $temp_widgets[$w]['model']) {
-				$temp_widgets[$w]['visibility'] = 1;
-			}
-		}
-		
-		$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-		$SQLText = "INSERT INTO adminltelayouttable (deleted, pagename, widgets) VALUES ('0', 'adminlteconfig', '" . $encoded . "');";
-		$objPDO = $connection->prepare($SQLText);
-		$objPDO->execute();
-		
 		$exceptions = [
 			'AdminLTE',
 			'AdminLTEConfig',
@@ -2197,18 +2126,92 @@ class AdminLTE
 
 		for ($m=0; $m < $modelCount; $m++) { 
 			$model = $models[$m];
-			$temp_widgets = $widgets;
-			for ($w=0; $w < $countWidgets; $w++) {
-				if ($model == $temp_widgets[$w]['model']) {
-					$temp_widgets[$w]['visibility'] = 1;
-				}
+			$modelLowerCase = strtolower($model);
+
+			$object = AdminLTELayout::where('__system', 1)
+				->where('deleted', 0)
+				->where('pagename', $modelLowerCase)
+				->where('widget', 'recordlist')
+				->first();
+
+			if (null === $object) {
+				$AdminLTELayout = new AdminLTELayout();
+				$AdminLTELayout->__system = 1;
+				$AdminLTELayout->enabled = 1;
+				$AdminLTELayout->__order = 0;
+				$AdminLTELayout->adminlteusergroup_id = 1;
+				$AdminLTELayout->pagename = $modelLowerCase;
+				$AdminLTELayout->widget = 'recordlist';
+				$AdminLTELayout->title = 'Record List';
+				$AdminLTELayout->grid_size = '12,12,12';
+				$AdminLTELayout->icon = '';
+
+				$metaData = [];
+				$metaData['record_list_title'] = $model . ' List';
+
+				$column_index = 0;
+				$metaData['columns'] = [];
+
+				$metaData['columns'][$column_index] = '{'
+					. '"visible":"on",'
+					. '"type":"integer",'
+					. '"title":"Id",'
+					. '"name":"id",'
+					. '"value":"{{QueryResultFields/id}}",'
+					. '"style":""'
+					. '}';
+				$column_index++;
+
+				$metaData['columns'][$column_index] = '{'
+					. '"visible":"on",'
+					. '"type":"date",'
+					. '"title":"Created At",'
+					. '"name":"created_at",'
+					. '"value":"{{QueryResultFields/created_at}}",'
+					. '"style":""'
+					. '}';
+				$column_index++;
+
+				$metaData['columns'][$column_index] = '{'
+					. '"visible":"on",'
+					. '"type":"date",'
+					. '"title":"Updated At",'
+					. '"name":"updated_at",'
+					. '"value":"{{QueryResultFields/updated_at}}",'
+					. '"style":""'
+					. '}';
+				$column_index++;
+
+				$metaData['columns'][$column_index] = '{'
+					. '"visible":"on",'
+					. '"type":"button",'
+					. '"title":"<a class=\"btn btn-primary btn-xs btn-on-table\" href=\"/{{GlobalParameters/adminlte.generalsettings.mainfolder}}/' . $modelLowerCase . '/edit/new\">'
+							. '<i class=\"fa fa-plus\"></i> <span class=\"hidden-xxs\">Add</span>'
+							. '</a>",'
+					. '"name":"buttons",'
+					. '"value":"<a class=\"btn btn-outline-primary btn-xs btn-on-table\" href=\"/{{GlobalParameters/adminlte.generalsettings.mainfolder}}/' . $modelLowerCase . '/detail/{{QueryResultFields/id}}\">'
+							. '<i class=\"fa fa-info-circle\"></i> <span class=\"hidden-xxs\">Detail</span>'
+							. '</a>",'
+					. '"style":"width:130px;"'
+					. '}';
+				$column_index++;
+
+				$encodedData = json_encode($metaData);
+				$AdminLTELayout->meta_data_json = $encodedData;
+
+				$metaData = [];
+				$metaData['calculation_type'] = 'advanced';
+				$metaData['model'] = '';
+				$metaData['property'] = '';
+				$metaData['function'] = '';
+				$metaData['query'] = 'select * from ' . $modelLowerCase . 'table where deleted=0;';
+
+				$encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+				$AdminLTELayout->data_source_json = $encodedData;
+				
+				$AdminLTELayout->conditional_data_json = '{}';
+				$AdminLTELayout->save();
 			}
-			
-			$pagename = strtolower($model);
-			$encoded = $this->base64Encode(json_encode($temp_widgets, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS)));
-			$SQLText = "INSERT INTO adminltelayouttable (deleted, pagename, widgets) VALUES ('0', '" . $pagename . "', '" . $encoded . "');";
-			$objPDO = $connection->prepare($SQLText);
-			$objPDO->execute();
 		}
 
 		return;

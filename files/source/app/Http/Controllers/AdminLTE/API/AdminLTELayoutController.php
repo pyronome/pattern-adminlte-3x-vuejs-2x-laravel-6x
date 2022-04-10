@@ -742,6 +742,10 @@ class AdminLTELayoutController extends Controller
                 $list[$index]['displaytexts'] = [];
                 $list[$index]['styles'] = [];
     
+                foreach ($column_titles as $title_index => $column_title) {
+                    $column_titles[$title_index] = $this->getParsedValue($column_title, $row, $url_parameters, $request_parameters);
+                }
+
                 foreach ($column_variables as $column_name) {
                     $objectColumn = $visible_columns[$column_name];
                     $list[$index]['displaytexts'][] = $this->getParsedValue($objectColumn->value, $row, $url_parameters, $request_parameters);

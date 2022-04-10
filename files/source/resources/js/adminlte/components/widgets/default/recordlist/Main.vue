@@ -7,7 +7,7 @@
                     <thead>
                         <tr>
                             <th v-for="(pair, index) in title_pairs" :key="index">
-                                <span>{{pair.title}}</span>&nbsp;
+                                <span v-html="pair.title"></span>&nbsp;
                             </th>
                         </tr>
                     </thead>

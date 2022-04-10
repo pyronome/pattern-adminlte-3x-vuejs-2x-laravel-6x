@@ -18,6 +18,7 @@ class AdminLTELayout extends Model
     protected $table = 'adminltelayouttable';
 
 	protected $fillable = [
+        '__system',
         'enabled',
         '__order',
         'adminlteusergroup_id',
@@ -47,6 +48,10 @@ class AdminLTELayout extends Model
         [
             'name' => 'updated_at',
             'type' => 'date'
+        ],
+        [
+            'name' => '__system',
+            'type' => 'checkbox'
         ],
         [
             'name' => 'enabled',

@@ -213,6 +213,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->bigIncrements('id');
                 $table->timestamps();
                 $table->boolean('deleted');
+                $table->smallInteger('__system')->default(0);
                 $table->boolean('enabled')->default(0);
                 $table->bigInteger('__order')->default(0);
                 $table->string('pagename');
@@ -226,6 +227,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             });
         } else {
             Schema::table('adminltelayouttable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminltelayouttable', '__system')) { 
+                    $table->smallInteger('__system')->default(0)->change();
+                } else {
+                    $table->smallInteger('__system')->default(0);
+                }
                 if (Schema::hasColumn('adminltelayouttable', 'enabled')) { 
                     $table->boolean('enabled')->default(0)->change();
                 } else {

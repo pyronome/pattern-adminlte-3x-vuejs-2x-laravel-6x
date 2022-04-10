@@ -81,18 +81,23 @@
                                 </label>
                                 <select class="form-control" :id="instance_id + 'type'" style="width:100%;">
                                     <option value="boolean">Boolean</option>
+                                    <option value="button">Button</option>
                                     <option value="date">Date</option>
                                     <option value="integer">Integer</option>
                                     <option value="number">Number</option>
                                     <option value="text">Text</option>
                                 </select>
                             </div>
-                            
+
                             <div class="form-group col-lg-12">
                                 <label :for="instance_id + 'title'" class="detail-label">
                                     Title
+                                    <insert-variable-button 
+                                        :variable_options="['query_result_fields','custom_variables','global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                        :target="instance_id + 'title'">
+                                    </insert-variable-button>
                                 </label>
-                                <input type="text" class="form-control " :id="instance_id + 'title'">
+                                <textarea class="textarea vue-editor" :id="instance_id + 'title'" rows="5"></textarea>
                             </div>
 
                             <div class="form-group col-lg-12">
@@ -295,7 +300,7 @@
 
                 document.getElementById(instance_id + "visible").checked = true;
                 $(document.getElementById(instance_id + "type")).val("").trigger('change');
-                document.getElementById(instance_id + "title").value = "";
+                $(document.getElementById(instance_id + "title")).summernote("code", "");
                 document.getElementById(instance_id + "name").value = "";
                 $(document.getElementById(instance_id + "value")).summernote("code", "");
                 $(document.getElementById(instance_id + "style")).val("");
@@ -314,7 +319,7 @@
                 }
 
                 $(document.getElementById(instance_id + "type")).val(data["type"]).trigger('change');
-                document.getElementById(instance_id + "title").value = data["title"];
+                $(document.getElementById(instance_id + "title")).summernote("code", data["title"]);
                 document.getElementById(instance_id + "name").value = data["name"];
                 $(document.getElementById(instance_id + "value")).summernote("code", data["value"]);
                 $(document.getElementById(instance_id + "style")).val(data["style"]);
@@ -351,7 +356,7 @@
                 var columnData = {
                     "visible" : document.getElementById(instance_id + "visible").checked ? "on" : "off",
                     "type" : document.getElementById(instance_id + "type").value,
-                    "title" : document.getElementById(instance_id + "title").value,
+                    "title" : $(document.getElementById(instance_id + "title")).summernote("code"),
                     "name" : column_name,
                     "value" : $(document.getElementById(instance_id + "value")).summernote("code"),
                     "style" : document.getElementById(instance_id + "style").value,
