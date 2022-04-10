@@ -2,6 +2,7 @@ import widgetA from './a/Main.vue';
 import filebox from './filebox/Main.vue';
 import spacer from './spacer/Main.vue';
 import infobox from './infobox/Main.vue';
+import recordlist from './recordlist/Main.vue';
 import youtubeVideo from './youtube/Main.vue';
 
 export default {
@@ -60,6 +61,24 @@ export default {
             "icon" : "fas fa-cog",
             "iconbackground" : "#17a2b8",
             "redirectURL": "",
+            "calculation_type" : "simple",
+            "function" : "",
+            "model" : "",
+            "property" : "",
+            "query" : "",
+        },
+    },
+    "recordlist": {
+        "component": recordlist,
+        "enabled": true,
+        "name": "recordlist",
+        "title": "Record List",
+        "has_preview": true,
+        "grid_size": "12,12,12",
+        "icon": "",
+        "description": "",
+        "metadata" : {
+            "columns" : [],
             "calculation_type" : "simple",
             "function" : "",
             "model" : "",

@@ -79,6 +79,8 @@ export default {
 
             $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
 
+            window.mainLayoutInstance.current_editing_widget_instance_id = instance_id;
+
             window.mainLayoutInstance.pageWidgets[instance_id].general_settings.setWidgetFormValues(instance_id);
 
             document.getElementById(instance_id + "general-tab").click();

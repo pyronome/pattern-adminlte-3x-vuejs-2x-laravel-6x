@@ -370,6 +370,7 @@ export default {
         window.mainLayoutInstance = {};
         window.mainLayoutInstance.vueComponent = this;
         window.mainLayoutInstance.pageWidgets = [];
+        window.mainLayoutInstance.current_editing_widget_instance_id = 0;
     }
 }
 </script>

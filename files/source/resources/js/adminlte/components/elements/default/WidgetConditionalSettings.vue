@@ -34,7 +34,7 @@ export default {
     props: ["instance_id", "conditional_fields"],
     methods: {
         showConditionDialog: function () {
-            window.widgetConditionDialog.showConditionDialog(this.instance_id, this.conditional_fields);
+            window.widgetConditionDialog.showConditionDialog(this.conditional_fields);
         }
     }, 
     mounted() {

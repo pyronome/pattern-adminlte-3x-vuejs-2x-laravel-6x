@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="modal fade" id="ModalInsertVariableToTarget" tabindex="-1" role="dialog">
+        <div class="modal level4 fade" id="ModalInsertVariableToTarget" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form>
@@ -445,7 +445,12 @@ export default {
             var targetId = document.getElementById("buttonInsertVariableToTarget").getAttribute("data-target");
             if (document.getElementById(targetId)) {
                 var target = document.getElementById(targetId);
-                self.insertAtCursor(target, data.variable);
+
+                if ($(target).hasClass("vue-editor")) {
+                    $(target).summernote('editor.insertText', data.variable);
+                } else {
+                    self.insertAtCursor(target, data.variable);
+                }
             }
 
             $("#ModalInsertVariableToTarget").modal("hide");

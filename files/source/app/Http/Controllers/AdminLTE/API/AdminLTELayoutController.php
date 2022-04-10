@@ -230,6 +230,7 @@ class AdminLTELayoutController extends Controller
         foreach ($layoutdata as $__order => $data) {
             $general_data = $data['general'];
             $content_data = $data['content'];
+            $data_source = $data['data_source'];
 
             $object = new AdminLTELayout();
             $object->enabled = $general_data['enabled'];
@@ -241,7 +242,7 @@ class AdminLTELayoutController extends Controller
             $object->grid_size = $general_data['grid_size'];
             $object->icon = $general_data['icon'];
             $object->meta_data_json = json_encode($content_data);
-            $object->data_source_json = isset($data['data_source']) ? json_encode($data_source) : '{}';
+            $object->data_source_json = isset($data_source) ? json_encode($data_source) : '{}';
             $object->conditional_data_json = isset($general_data['conditional_data_json']) 
                 ? $general_data['conditional_data_json']
                 : '[]';
@@ -643,6 +644,153 @@ class AdminLTELayoutController extends Controller
             'text' => $text,
             'size' => $size,
             'graphJSON' => rawurlencode($graphJSON)
+        ];
+    }
+
+    public function get_recordlist_by_advanced_calculation($query) {
+        $calculationResult = [];
+        $condition = 1;
+
+        try {
+            $connection = DB::connection()->getPdo();
+        } catch (PDOException $e) {
+            print($e->getMessage());
+        }
+                
+        $objPDO = $connection->prepare($query);
+        $objPDO->execute();
+        $data = $objPDO->fetchAll();
+
+        /* echo '<div style="display:block">';
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+        echo '</div>';
+        die(); */
+
+        if (isset($data)) {
+            $calculationResult = $data;//["result"];
+        }
+
+        return $calculationResult;
+    }
+
+    public function get_recordlist_data(Request $request)
+    {
+        $returnData = null;
+
+        $parameters = $request->route()->parameters();
+
+        $widgetParametersEncoded = isset($parameters['parameters'])
+                ? htmlspecialchars($parameters['parameters'])
+                : '';
+
+        $objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
+        $widgetParameters = json_decode(base64_decode($widgetParametersEncoded), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+
+        if (!isset($widgetParameters['layout_id'])) {
+            return $returnData;
+        }
+
+        $layoutId = $widgetParameters['layout_id'];
+        $url_parameters = $widgetParameters['url_parameters'];
+        $request_parameters = $widgetParameters['request_parameters'];
+
+        $objectLayout = AdminLTELayout::where('id', $layoutId)->first();
+
+        $record_list_title = '';
+        $column_titles = [];
+        $column_variables = [];
+        $visible_columns = [];
+        $list = [];
+
+        if (null !== $objectLayout) {
+            $metaData = json_decode($objectLayout->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $data_source = json_decode($objectLayout->data_source_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+
+            if ('simple' == $data_source['calculation_type']) {
+                $queryResult = $this->get_infoboxvalue_by_simple_calculation($data_source);
+            } else if ('advanced' == $data_source['calculation_type']) {
+                $query = $this->getParsedValue($data_source['query'], '', $url_parameters, $request_parameters);
+                $queryResult = $this->get_recordlist_by_advanced_calculation($query);
+            }
+
+            $record_list_title = $this->getParsedValue($metaData['record_list_title'], $queryResult, $url_parameters, $request_parameters);
+
+            $columns = $metaData['columns'];
+            $index = 0;
+            foreach ($columns as $columnJSON) {
+                $column = json_decode($columnJSON, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+                $objectColumn = (object) $column;
+
+                if ('on' == $objectColumn->visible) {
+                    $column_name = $objectColumn->name;
+
+                    $visible_columns[$column_name] = $objectColumn;
+                    $column_titles[$index] = $objectColumn->title;
+                    $column_variables[$index] = $column_name;
+
+                    $index++;
+                }
+            }
+
+            $conditionalData = json_decode($objectLayout->conditional_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+
+            foreach ($queryResult as $row) {
+                $list[$index] = [];
+                $list[$index]['id'] = $row['id'];
+                $list[$index]['displaytexts'] = [];
+                $list[$index]['styles'] = [];
+    
+                foreach ($column_variables as $column_name) {
+                    $objectColumn = $visible_columns[$column_name];
+                    $list[$index]['displaytexts'][] = $this->getParsedValue($objectColumn->value, $row, $url_parameters, $request_parameters);
+                    $list[$index]['styles'][] = $objectColumn->style;
+                }
+
+                foreach ($conditionalData as $conditionData) {
+                    $function_name = $conditionData['guid'];
+    
+                    require_once(storage_path('app/widget/condition/'. $function_name . '.php'));
+                        
+                    $conditionResultData = $function_name($objectAdminLTEWidgetHelper, $row, $url_parameters, $request_parameters);
+    
+                    if ($conditionResultData['success']) {
+                        $conditionalFields = $conditionResultData['data'];
+    
+                        foreach ($conditionalFields as $fieldData) {
+                            // $returnData[$fieldData->id] = $this->getParsedValue($fieldData->value, $queryResult, $url_parameters, $request_parameters);
+                            if ('record_list_title' == $fieldData->id) {
+                                $record_list_title = $this->getParsedValue($fieldData->value, $row, $url_parameters, $request_parameters);
+                            } else if ('array' == $fieldData->type) {
+                                $list[$index]['displaytexts'] = [];
+                                $list[$index]['styles'] = [];
+
+                                $columns = $fieldData->items;
+    
+                                foreach ($columns as $column) {
+                                    $column_name = $column->name;
+                                    if (isset($visible_columns[$column_name])) {
+                                        $list[$index]['displaytexts'][] = $this->getParsedValue($column->value, $row, $url_parameters, $request_parameters);
+                                        $list[$index]['styles'][] = $column->style;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+    
+                $index++;
+            } // foreach ($objectList as $object)
+        }
+
+        return [
+            'record_list_title' => $record_list_title,
+            'table_header' => [
+                'titles' => $column_titles,
+                'variables' => $column_variables
+            ],
+            'list' => $list
         ];
     }
 

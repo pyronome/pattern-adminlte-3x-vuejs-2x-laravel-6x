@@ -157,6 +157,7 @@ Route::namespace('API')
         Route::get('/get_model_list', 'AdminLTELayoutController@get_model_list');
         Route::get('/get_model_properties/{model}', 'AdminLTELayoutController@get_model_properties');
         Route::get('/get_infobox_data/{parameters}', 'AdminLTELayoutController@get_infobox_data');
+        Route::get('/get_recordlist_data/{parameters}', 'AdminLTELayoutController@get_recordlist_data');
     });
 
     Route::prefix('__modeldisplaytext')->group(function () {

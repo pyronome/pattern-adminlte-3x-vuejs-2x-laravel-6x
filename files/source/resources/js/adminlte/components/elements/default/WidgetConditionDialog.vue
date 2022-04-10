@@ -109,6 +109,19 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="row cv-field-container d-none" id="__cv_field_container__array">
+                            <table class="table table-bordered table-hover table-sm condition-table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span id="__cv_field_label__array"></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="__cv_field__array_list"></tbody>
+                            </table>
+                        </div>
+
                         <div class="row cv-field-container d-none" id="__cv_field_container__checkbox">
                             <div class="icheck-primary d-inline">
                                 <input type="checkbox"
@@ -303,7 +316,56 @@
                 <span>{{ $t('__file_name__') }}</span>
             </button>
         </script>
-        
+        <script id="conditional-item-row-template" type="text/html">
+            <tr id="__guid__-tr" 
+                data-json='__data_json__' 
+                data-guid="__guid__" 
+                style= "__style__">
+                <td class="">
+                    <span id="__guid__-title">__label__</span>
+                    <button type="button" title="Edit Item" class="btn-icon btn-icon-primary float-right btn-edit-item" data-conditional-edit="true">
+                        <span class="btn-label btn-label-right"><i class="fas fa-pen"></i></span>
+                    </button>
+                </td>
+            </tr>
+        </script>
+
+        <div id="div_conditional_items_dialog" class="modal level1 fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="conditional_items_dialog-title"></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <table class="table table-bordered table-hover table-sm condition-table">
+                                    <tbody id="conditionalItemList"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modalfooter justify-content-between">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button
+                                    type="button"
+                                    id="buttonSaveConditionalItems"
+                                    @click="doSaveConditionalItems"
+                                    data-field-guid=""
+                                    class="btn btn-success btn-md btn-on-table float-right">
+                                    {{ $t('Save') }}
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary float-left" data-dismiss="modal" style="margin-right:10px;">{{ $t('Close') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -318,7 +380,6 @@ export default {
     },*/
     data() {
         return {
-            instance_id: "",
             conditional_fields: [],
             custom_variable_options: [],
             file_options: [],
@@ -458,8 +519,7 @@ export default {
                     }
                 });
         },
-        showConditionDialog: function(instance_id, conditional_fields) {
-            this.instance_id = instance_id;
+        showConditionDialog: function(conditional_fields) {
             this.conditional_fields = conditional_fields;
 
             document.getElementById("buttonSaveWidgetCondition").setAttribute("data-guid", "");
@@ -470,6 +530,7 @@ export default {
         },
         saveCondition: function() {
             var self = this;
+            var instance_id = window.mainLayoutInstance.current_editing_widget_instance_id;
             var newCondition = false;
             var guid = document.getElementById("buttonSaveWidgetCondition").getAttribute("data-guid");
             if ("" == guid) {
@@ -483,7 +544,7 @@ export default {
                 var tableTemplateHTML = document.getElementById("condition-table-template").innerHTML;
                 var tbodyHTML = "";
                 var trTemplateHTML = document.getElementById("conditional-field-row-template").innerHTML;
-                let fieldValues = window.mainLayoutInstance.pageWidgets[this.instance_id].content_settings.getWidgetFormValues();
+                let fieldValues = window.mainLayoutInstance.pageWidgets[instance_id].content_settings.getWidgetFormValues();
 
                 self.conditional_fields.forEach(field => {
                     field.value = fieldValues[field.id];
@@ -505,7 +566,7 @@ export default {
                     .replace(/__condition_html__/g, self.getConditionBeautyHTML(conditionJSON))
                     .replace(/__conditional_fields_html__/g, tbodyHTML);
 
-                document.getElementById(self.instance_id + "-conditionlist").innerHTML += tableHTML;
+                document.getElementById(instance_id + "-conditionlist").innerHTML += tableHTML;
 
                 $(".btn-edit-condition").off("click").on("click", function () {
                     self.doEditCondition(this);
@@ -543,7 +604,89 @@ export default {
             var guid = elButton.getAttribute("data-guid");
             document.getElementById(guid + "-table").remove();
         },
+        show_array_dialog: function(btnEditField, objectField) {
+            var instance_id = window.mainLayoutInstance.current_editing_widget_instance_id;
+
+            if (!(objectField.hasOwnProperty("get_items_function"))) {
+                return;
+            }
+
+            document.getElementById("conditional_items_dialog-title").innerHTML = objectField.label;
+
+            var get_items_function = objectField.get_items_function;
+            var edit_item_values_function = objectField.edit_item_values_function;
+
+            var items = [];
+
+            var fieldHasItems = false;
+            if (objectField.hasOwnProperty("items") && ("" != objectField.items)) {
+                items = objectField.items;
+                fieldHasItems = true;
+            } else {
+                items = window.mainLayoutInstance.pageWidgets[instance_id].content_settings[get_items_function]();
+            }
+
+            var itemLabelField = objectField.item_label_field;
+
+            var liTemplate = document.getElementById("conditional-item-row-template").innerHTML;
+            var ulInnerHTML = "";
+            var liHTML = "";
+
+            for (let index = 0; index < items.length; index++) {
+                const item_guid = AdminLTEHelper.generateGUID("item");
+                const item = items[index];
+                const itemJSON = JSON.stringify(item)
+
+                liHTML = liTemplate
+                    .replace(/__data_json__/g, itemJSON)
+                    .replace(/__guid__/g, item_guid)
+                    .replace(/__label__/g, item[itemLabelField]);
+                ulInnerHTML += liHTML;
+            }
+
+            if (!fieldHasItems) {
+                objectField.items = items;
+            }
+
+            btnEditField.setAttribute("data-field-json", JSON.stringify(objectField));
+
+            var columnsContainer = document.getElementById("conditionalItemList");
+            columnsContainer.innerHTML = ulInnerHTML;
+
+            $(".btn-edit-item", columnsContainer).off("click").on("click", function () {
+                window.mainLayoutInstance.pageWidgets[instance_id].content_settings[edit_item_values_function](
+                    this.parentNode.parentNode.getAttribute("data-guid"), 
+                    JSON.parse(this.parentNode.parentNode.getAttribute("data-json")),
+                    this.getAttribute("data-conditional-edit")
+                );
+            });
+
+            document.getElementById("buttonSaveConditionalItems").setAttribute("data-field-guid" , btnEditField.getAttribute("data-field-guid"));
+            $("#buttonSaveConditionalItems").data("field_data", objectField);
+
+            $("#div_conditional_items_dialog").modal();
+
+        },
+        doSaveConditionalItems: function() {
+            var guid = document.getElementById("buttonSaveConditionalItems").getAttribute("data-field-guid");
+            var field_data = $("#buttonSaveConditionalItems").data("field_data");
+
+            var itemList = $("#conditionalItemList > tr");
+            var items = [];
+
+            for (let index = 0; index < itemList.length; index++) {
+                const tr = itemList[index];
+                items.push(JSON.parse(tr.getAttribute("data-json")))
+            }
+
+            field_data["items"] = items;
+
+            document.getElementById(guid + "-btn").setAttribute("data-field-json", JSON.stringify(field_data));
+
+            $("#div_conditional_items_dialog").modal("hide");
+        },
         doEditField: function(elButton) {
+            console.log("doEditfield")
             var guid = elButton.getAttribute("data-field-guid");
 
             document.getElementById("buttonSaveField").setAttribute("data-field-guid", guid);
@@ -551,6 +694,11 @@ export default {
             var fieldJSON = elButton.getAttribute("data-field-json");
             var objectField = JSON.parse(fieldJSON);
             var fieldType = objectField.type;
+
+            if ("array" == fieldType) {
+                this.show_array_dialog(elButton, objectField);
+                return;
+            }
 
             $(".cv-field-container").addClass("d-none");
             $(document.getElementById("__cv_field_container__" + fieldType)).removeClass("d-none");
@@ -960,10 +1108,13 @@ export default {
             var self = this;
             var fieldType = field.type;
             var fieldValue = field.value;
+            var fieldLabel = field.label;
             var templateHTML = "";
             var fieldHTML = "";
 
-            if ("checkbox" == fieldType) {
+            if (("array" == fieldType ) && ("" != fieldValue)) {
+                fieldHTML = "";
+            } else if ("checkbox" == fieldType) {
                 let state = 0;
                 if ("on" == fieldValue) {
                     state = 1;

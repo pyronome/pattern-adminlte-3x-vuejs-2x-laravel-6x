@@ -1760,4 +1760,24 @@ select.condition-rule-variable {
     float: right;
 }
 
+.modal.level1 {
+    z-index: 1100;
+}
+
+.modal.level2 {
+    z-index: 1200;
+}
+
+.modal.level3 {
+    z-index: 1300;
+}
+
+.modal.level4 {
+    z-index: 1400;
+}
+
+.modal.level5 {
+    z-index: 1500;
+}
+
 /* {{@snippet:end}} */

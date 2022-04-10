@@ -192,7 +192,7 @@ export default {
                 data_source = window.mainLayoutInstance.pageWidgets[instance_id].data_source.getValues();
             }
             data.data_source = data_source;
-
+            
             window.mainLayoutInstance.pageWidgets[instance_id].data = data;
 
             window.mainLayoutInstance.vueComponent.showLoader();
