@@ -22,6 +22,7 @@ class AdminLTEConfig extends Model
         'locked',
         'owner',
 		'enabled',
+        'only_admins',
 		'required',
 		'__order',
 		'type',
@@ -94,6 +95,13 @@ class AdminLTEConfig extends Model
             'belongs_to' => 'AdminLTEConfig',
             'display_property' => 'enabled',
             'title' => 'Enabled'
+        ],
+        [
+            'name' => 'only_admins',
+            'type' => 'checkbox',
+            'belongs_to' => 'AdminLTEConfig',
+            'display_property' => 'only_admins',
+            'title' => 'Show For Only Admins'
         ],
         [
             'name' => 'required',

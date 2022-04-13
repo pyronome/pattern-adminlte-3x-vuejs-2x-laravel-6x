@@ -1,7 +1,7 @@
 <template>
     <div class="content-wrapper">
         <server-error v-if="page.has_server_error" ></server-error>
-        <permission-error v-else-if="!page.is_authorized" :type="page.unauthorized_type"></permission-error>
+        <permission-error v-else-if="!page.authorization.status" :authorization="page.authorization"></permission-error>
         <div v-else>
             <section class="content-header">
                 <div class="container-fluid">
@@ -969,8 +969,11 @@ export default {
                 has_post_error: false,
                 post_error_msg: '',
                 variables: [],
-                is_authorized: true,
-                unauthorized_type: '',
+                authorization: {
+                    status: true,
+                    type: "",
+                    msg: ""
+                },
                 is_variables_loading: false,
                 is_variables_loaded: false,
                 is_configlist_loading: false,
@@ -1013,7 +1016,7 @@ export default {
                 return;
             }
 
-            if (!self.page.is_authorized) {
+            if (!self.page.authorization.status) {
                 self.$Progress.finish();
                 self.page.is_ready = true;
                 return;
@@ -2030,11 +2033,15 @@ export default {
                     self.page.has_server_error = true;
                     self.processLoadQueue();
                 }).finally(function() {
-                   AdminLTEHelper.initializePermissions(self.page.variables, true);
-                   let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, "configuration");
-                   self.page.is_authorized = authorize.status;
-                   self.page.unauthorized_type = authorize.type;
-                   self.processLoadQueue();
+                    AdminLTEHelper.initializePermissions(self.page.variables, false);
+                    
+                    let authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, 'adminlteuser', 'read');
+                    if (authorization.status) {
+                        authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, 'adminlteuser', 'update');
+                    }
+                    
+                    self.page.authorization = authorization;
+                    self.processLoadQueue();
                 });
         },
         load_adminlteusergroup_id_options: function () {
@@ -2528,6 +2535,7 @@ export default {
         self.current_id = self.$route.params.current_id;
         self.body_loader_active = true;
         self.main_folder = AdminLTEHelper.getMainFolder();
+        self.pagename = AdminLTEHelper.getPagename();
         self.page.is_ready = false;
         AdminLTEHelper.loadExternalFiles(self.page.external_files, self.processLoadQueue());
     }

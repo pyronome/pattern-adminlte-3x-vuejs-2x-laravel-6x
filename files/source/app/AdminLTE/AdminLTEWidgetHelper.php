@@ -12,10 +12,49 @@ class AdminLTEWidgetHelper
 	{
 	}
 
+	/* public function getUserGroupWidgets($parameters) {
+		$default_parameters = [
+			'filters' => [
+				'group_id' => 0,
+				'enabled' => 1
+			],
+			'order_by' => [
+				'property' => '__order',
+				'direction' => 'asc'
+			]
+		];
+
+		if (null == $parameters) {
+			return [];
+		}
+
+		if (!isset($parameters['filters']['group_id'])) {
+			return [];
+		}
+
+		if (!isset($parameters['order_by'])) {
+			$parameters['order_by'] = [
+				'property' => '__order',
+				'direction' => 'asc'
+			];
+		}
+
+        $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
+				->where('adminlteusergroup_id', $parameters['filters']['group_id'])
+				->where('enabled', $parameters['filters']['group_id'])
+				->orderBy($parameters['order_by']['property'], $parameters['order_by']['direction'])
+				->get();
+
+        if (0 == count($objectAdminLTELayouts)) {
+            $objectAdminLTELayouts = [];
+        }
+
+		return $objectAdminLTELayouts;
+	} */
+
 	public function getUserWidgets($pagename) {
 		$currentUser = auth()->guard('adminlteuser')->user();
 
-		$objectAdminLTELayout = null;
         $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
 				->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
 				->where('pagename', $pagename)

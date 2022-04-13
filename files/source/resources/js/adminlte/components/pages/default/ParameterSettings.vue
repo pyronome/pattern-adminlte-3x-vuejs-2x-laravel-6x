@@ -1,7 +1,7 @@
 <template>
     <div class="content-wrapper">
         <server-error v-if="page.has_server_error" ></server-error>
-        <permission-error v-else-if="!page.is_authorized" :type="page.unauthorized_type"></permission-error>
+        <permission-error v-else-if="!page.authorization.status" :authorization="page.authorization"></permission-error>
         <div v-else>
             <div class="content-header">
                 <div class="container-fluid">
@@ -97,6 +97,20 @@
                                                     class="item-menu">
                                                 <label for="enabled" class="">
                                                     {{ $t('Enabled') }}  
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-12">
+                                        <div class="">
+                                            <div class="icheck-primary d-inline">
+                                                <input type="checkbox"
+                                                    id="only_admins"
+                                                    name="only_admins"
+                                                    class="item-menu">
+                                                <label for="only_admins" class="">
+                                                    {{ $t('Show For Only Admins') }}  
                                                 </label>
                                             </div>
                                         </div>
@@ -624,8 +638,11 @@ export default {
                 is_ready: false,
                 has_server_error: false,
                 variables: [],
-                is_authorized: true,
-                unauthorized_type: '',
+                authorization: {
+                    status: true,
+                    type: "",
+                    msg: ""
+                },
                 is_variables_loading: false,
                 is_variables_loaded: false,
                 is_listbykey_loading: false,
@@ -666,6 +683,7 @@ export default {
             document.getElementById("owner").value = current_data["owner"];
             this.is_owner = current_data["is_owner"];
             document.getElementById("enabled").checked = current_data["enabled"];
+            document.getElementById("only_admins").checked = current_data["only_admins"];
             document.getElementById("required").checked = current_data["required"];
             this.multiple = current_data["multiple"];
             $("#__parent").val(current_data["__parent"]).trigger('change');
@@ -783,7 +801,7 @@ export default {
                 return;
             }
 
-            if (!this.page.is_authorized) {
+            if (!this.page.authorization.status) {
                 this.$Progress.finish();
                 this.page.is_ready = true;
                 return;
@@ -837,9 +855,7 @@ export default {
                     self.processLoadQueue();
                 }).finally(function() {
                     AdminLTEHelper.initializePermissions(self.page.variables, false);
-                    let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename);
-                    self.page.is_authorized = authorize.status;
-                    self.page.unauthorized_type = authorize.type;
+                    self.page.authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename);
                     self.processLoadQueue();
                 });
         },
@@ -966,6 +982,7 @@ export default {
             document.getElementById("editable").value = 1;
 
             document.getElementById("enabled").checked = true;
+            document.getElementById("only_admins").checked = false;
             document.getElementById("required").checked = false;
             document.getElementById("multiple").checked = false;
             $("#__parent").val("").trigger('change');

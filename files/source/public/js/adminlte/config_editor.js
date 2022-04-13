@@ -1017,6 +1017,7 @@
                 "content" : li.data("content"),
                 "default_value" : li.data("default_value"),
                 "enabled" : li.data("enabled"),
+                "only_admins" : li.data("only_admins"),
                 "file_types" : li.data("file_types"),
                 "max" : li.data("max"),
                 "min" : li.data("min"),
@@ -1280,6 +1281,7 @@ function MenuEditor(idSelector, options) {
             "content" : copyingData["content"],
             "default_value" : copyingData["default_value"],
             "enabled" : copyingData["enabled"],
+            "only_admins" : copyingData["only_admins"],
             "file_types" : copyingData["file_types"],
             "max" : copyingData["max"],
             "min" : copyingData["min"],
@@ -1408,6 +1410,7 @@ function MenuEditor(idSelector, options) {
                 "content" : copyingData["content"],
                 "default_value" : copyingData["default_value"],
                 "enabled" : copyingData["enabled"],
+                "only_admins" : copyingData["only_admins"],
                 "file_types" : copyingData["file_types"],
                 "max" : copyingData["max"],
                 "min" : copyingData["min"],
@@ -1599,6 +1602,7 @@ function MenuEditor(idSelector, options) {
                 content: "",
                 default_value: "",
                 enabled: true,
+                only_admins: false,
                 file_types: "",
                 max: 0.00,
                 min: 0.00,
@@ -1786,6 +1790,7 @@ function MenuEditor(idSelector, options) {
             "content" : document.getElementById("content").value,
             "default_value" : this.getItemDefaultValue(document.getElementById("type").value),
             "enabled" : document.getElementById("enabled").checked,
+            "only_admins" : document.getElementById("only_admins").checked,
             "file_types" : document.getElementById("file_types").value,
             "max" : document.getElementById("max").value,
             "min" : document.getElementById("min").value,
@@ -1948,6 +1953,7 @@ function MenuEditor(idSelector, options) {
             "content" : "",
             "default_value" : null,
             "enabled" : true,
+            "only_admins": false,
             "file_types" : "",
             "max" : 0.00,
             "min" : 0.00,
@@ -2022,6 +2028,7 @@ function MenuEditor(idSelector, options) {
             "content" : "",
             "default_value" : null,
             "enabled" : true,
+            "only_admins": false,
             "file_types" : "",
             "max" : 0.00,
             "min" : 0.00,
@@ -2072,6 +2079,7 @@ function MenuEditor(idSelector, options) {
             objectData["content"] = element["content"];
             objectData["default_value"] = element["default_value"];
             objectData["enabled"] = element["enabled"];
+            objectData["only_admins"] = element["only_admins"];
             objectData["file_types"] = element["file_types"];
             objectData["max"] = element["max"];
             objectData["min"] = element["min"];
@@ -2190,6 +2198,7 @@ function MenuEditor(idSelector, options) {
             "content" : document.getElementById("content").value,
             "default_value" : this.getItemDefaultValue(document.getElementById("type").value),
             "enabled" : document.getElementById("enabled").checked,
+            "only_admins" : document.getElementById("only_admins").checked,
             "file_types" : document.getElementById("file_types").value,
             "max" : document.getElementById("max").value,
             "min" : document.getElementById("min").value,

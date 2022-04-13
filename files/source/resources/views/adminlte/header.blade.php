@@ -1,4 +1,4 @@
-<div class="wrapper">
+        <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand {{ $customization['navbar'] }}">
             <!-- Left navbar links -->
@@ -10,8 +10,18 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
+                @if ($user['impersonated'])
+                    <li class="nav-item dropdown">
+                        <a href="/{{ $main_folder }}/administration" class="btn btn-block btn-info btn-md impersonated-info">
+                            <span>
+                                {{ __('Impersonated') }}
+                            </span>
+                        </a>
+                    </li>
+                @endif
                 <!-- Widget Configuration -->
-                <li class="nav-item dropdown">
+                @if ($user['admin'])
+                <li class="nav-item dropdown" style="margin-left:10px;">
                     <button type="button" id="btnToggleEditMode" class="btn btn-block btn-default btn-md" on-edit-mode="0">
                         <i class="fas fa-lock nav-icon"></i><i class="fas fa-unlock nav-icon"></i> <span>{{ __('Edit Mode') }}</span>
                     </button>
@@ -26,22 +36,20 @@
                         {{ __('Save')}}
                     </button>
                 </li>
+                @endif
             </ul>
         </nav>
         <!-- Main Sidebar Container -->
         <aside id="mainMenuVueApplication" class="main-sidebar {{ $customization['main-sidebar'] }} elevation-4">
             <!-- Brand Logo -->
-            <router-link to="/{{ $main_folder }}/home"
-                    class="brand-link {{ $customization['brand'] }}">
+            <router-link to="/{{ $main_folder }}/home" class="brand-link {{ $customization['brand'] }}">
                 <img src="{{ $brand['logo']}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
                 <span class="brand-text font-weight-light">{{ $brand['name']}}</span>
             </router-link>
-            <router-link to="/{{ $main_folder }}/profile/detail"
-                    class="brand-link">
+            <router-link to="/{{ $main_folder }}/profile/detail" class="brand-link">
                 <img src="{{ $user['image'] }}" alt="User Image" class="brand-image img-circle elevation-3">
                 <span class="brand-text font-weight-light">{{ $user['name'] }}</span>
             </router-link>
-
             <!-- Sidebar -->
             <div class="sidebar">
                 @include('adminlte.divmenulayer')

@@ -1,6 +1,6 @@
 <template>
     <section class="content">
-        <div class="container-fluid inner-swal-container" id="swalContainer"></div>
+        <div class="container-fluid inner-swal-container" id="swalContainer" style="height:250px"></div>
     </section>
 </template>
 

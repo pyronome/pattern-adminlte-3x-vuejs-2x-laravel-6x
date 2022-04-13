@@ -514,7 +514,6 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->boolean('enabled')->default(0);
                 $table->boolean('admin')->default(0);
                 $table->string('title')->nullable();
-                $table->boolean('widget_permission')->default(0);
             });
 
             DB::table('adminlteusergrouptable')->insert(
@@ -528,7 +527,6 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     'title' => 'Administrators',
                     'enabled' => 1,
                     'admin' => 1,
-                    'widget_permission' => 1
                 )
             );
     
@@ -543,7 +541,6 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     'title' => 'Users',
                     'enabled' => 1,
                     'admin' => 0,
-                    'widget_permission' => 1
                 )
             );
 
@@ -636,12 +633,6 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->string('title')->nullable()->change();
                 } else {
                     $table->string('title')->nullable();
-                }
-
-                if (Schema::hasColumn('adminlteusergrouptable', 'widget_permission')) { 
-                    $table->boolean('widget_permission')->default(0)->change();
-                } else {
-                    $table->boolean('widget_permission')->default(0);
                 }
             });
         }

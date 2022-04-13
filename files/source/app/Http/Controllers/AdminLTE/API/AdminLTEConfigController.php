@@ -10,6 +10,7 @@ use App\AdminLTE\AdminLTEModelOption;
 use App\AdminLTE\AdminLTEConfig;
 use App\AdminLTE\AdminLTEConfigFile;
 use App\Http\Requests\AdminLTE\API\AdminLTEConfigPOSTRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use PDO;
 
@@ -61,15 +62,14 @@ class AdminLTEConfigController extends Controller
 
         foreach ($objectList as $object) {
             $user_can_view = $User->can('viewAny', $object);
-
             if ($user_can_view && (1 == $object->enabled)) {
                 $configList[$object->__key]['object'] = $object;
                 $configList[$object->__key]['searched'] = false;
             }
         } // foreach ($objectList as $object)
-
+        
         $this->setConfigTree($configList);
-
+ 
         $keys = array_keys($configList);
         
         $basekeyOrders = $this->getBasekeyOrders($configList);
@@ -111,6 +111,7 @@ class AdminLTEConfigController extends Controller
             $list[$index]['created_at'] = $object->created_at;
             $list[$index]['updated_at'] = $object->updated_at;
             $list[$index]['enabled'] = $object->enabled;
+            $list[$index]['only_admins'] = $object->only_admins;
             $list[$index]['required'] = $object->required;
             $list[$index]['__order'] = $object->__order;
             $list[$index]['type'] = $object->type;
@@ -214,18 +215,17 @@ class AdminLTEConfigController extends Controller
     }
 
     public function setConfigTree(&$configList) {
+        $User = auth()->guard('adminlteuser')->user();
         $need_search = false;
         $list = $configList;
         foreach ($list as $__key => $item) {
             $object = $item['object'];
-            //echo 'objectKey:' . $object->__key . '<br>';
             $parentKey = $this->getParentKey($object->__key);
-            //echo 'parentKey:' . $parentKey . '<br>';
 
-             if ( ('' != $parentKey) && !isset($configList[$parentKey]) ) {
+            if ( ('' != $parentKey) && !isset($configList[$parentKey]) ) {
                 $parentObject = $this->getConfigObject($parentKey);
-
-                if ((null !== $parentObject) && (1 == $parentObject->enabled)) {
+                $user_can_view = $User->can('viewAny', $parentObject);
+                if ($user_can_view && (null !== $parentObject) && (1 == $parentObject->enabled)) {
                     $configList[$parentKey]['object'] = $parentObject;
                     $configList[$parentKey]['searched'] = false;
                     $need_search = true;
@@ -748,6 +748,7 @@ class AdminLTEConfigController extends Controller
             $parent_data[$index]['editable'] = $editable;
 
             $parent_data[$index]['enabled'] = (1 == $object->enabled);
+            $parent_data[$index]['only_admins'] = (1 == $object->only_admins);
             $parent_data[$index]['required'] = (1 == $object->required);
             $parent_data[$index]['__key'] = $object->__key;
             $parent_data[$index]['basekey'] = $this->getBasekey($object->__key);
@@ -817,6 +818,7 @@ class AdminLTEConfigController extends Controller
             $children_data[$index]['editable'] = $editable;
 
             $children_data[$index]['enabled'] = (1 == $object->enabled);
+            $children_data[$index]['only_admins'] = (1 == $object->only_admins);
             $children_data[$index]['required'] = (1 == $object->required);
             $children_data[$index]['__key'] = $object->__key;
             $children_data[$index]['basekey'] = $this->getBasekey($object->__key);
@@ -952,6 +954,7 @@ class AdminLTEConfigController extends Controller
             } */
 
 			$AdminLTEConfig->enabled = $data['enabled'];
+            $AdminLTEConfig->only_admins = $data['only_admins'];
             $AdminLTEConfig->system = $data['system'];
 			$AdminLTEConfig->required = $data['required'];
             $AdminLTEConfig->locked = $data['locked'];
@@ -1017,6 +1020,7 @@ class AdminLTEConfigController extends Controller
             $AdminLTEConfig = new AdminLTEConfig();
 
 			$AdminLTEConfig->enabled = $data['enabled'];
+            $AdminLTEConfig->only_admins = $data['only_admins'];
             $AdminLTEConfig->system = $data['system'];
 			$AdminLTEConfig->required = $data['required'];
             $AdminLTEConfig->locked = $data['locked'];

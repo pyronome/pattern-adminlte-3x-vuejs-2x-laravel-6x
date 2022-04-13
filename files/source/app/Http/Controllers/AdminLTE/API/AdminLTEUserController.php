@@ -13,7 +13,6 @@ use App\AdminLTE\AdminLTEUserConfigVal;
 use App\AdminLTE\AdminLTEUserConfigFile;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
-use App\AdminLTE\AdminLTEUserLayout;
 use App\Http\Requests\AdminLTE\API\AdminLTEUserPOSTRequest;
 
 class AdminLTEUserController extends Controller
@@ -159,28 +158,6 @@ class AdminLTEUserController extends Controller
         $profile_img = $request->input('profile_img');
 
         $objectAdminLTEUser->save();
-
-        if ($bNewUser) {
-            // Copy UserLayout from first enabled User layout in same group
-            $baseUser = AdminLTEUser::where('adminlteusergroup_id', $objectAdminLTEUser->adminlteusergroup_id)
-                ->where('deleted', 0)
-                ->where('enabled', 1)
-                ->first();
-
-            if (null !== $baseUser) {
-                $layoutList = AdminLTEUserLayout::where('deleted', false)->where('adminlteuser_id', $baseUser->id)->get();
-                foreach ($layoutList as $layout) {
-                    $newLayout = new AdminLTEUserLayout();
-                    
-                    $newLayout->created_at = time();
-                    $newLayout->updated_at = time();
-                    $newLayout->adminlteuser_id = $objectAdminLTEUser->id;
-                    $newLayout->pagename = $layout->pagename;
-                    $newLayout->widgets = $layout->widgets;
-                    $newLayout->save();
-                } // foreach ($objectList as $object)
-            }
-        }
         
         $objectAdminLTE = new AdminLTE();
         $objectAdminLTE->updateModelFileObject('AdminLTEUser', $objectAdminLTEUser->id, 'profile_img', $profile_img);

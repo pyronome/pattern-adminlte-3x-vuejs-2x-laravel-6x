@@ -22,7 +22,6 @@ class AdminLTEUserGroup extends Model
         'enabled',
         'admin',
         'title',
-        'widget_permission'
     ];
 
     public static $property_list = [
@@ -88,13 +87,6 @@ class AdminLTEUserGroup extends Model
             'belongs_to' => 'AdminLTEUserGroup',
             'display_property' => 'title',
             'title' => 'Title'
-        ],
-        [
-            'name' => 'widget_permission',
-            'type' => 'checkbox',
-            'belongs_to' => 'AdminLTEUserGroup',
-            'display_property' => 'widget_permission',
-            'title' => 'Edit Widget Permission'
         ]
     ];
 

@@ -148,17 +148,12 @@ class AdminLTEUser extends Authenticatable
         return $this->belongsTo(AdminLTEUserGroup::class, 'adminlteusergroup_id');
     }
 
-    public function get_widget_permission() {
-        $objectAdminLTEUserGroup = AdminLTEUserGroup::find($this->adminlteusergroup_id);
-                
-        if (null != $objectAdminLTEUserGroup) {
-            return (1 == $objectAdminLTEUserGroup->widget_permission);
+    public function is_admin() {
+        if (session()->has(sha1('adminlte_impersonate')))
+        {
+            return true;
         }
 
-        return false;
-    }
-
-    public function is_admin() {
         $objectAdminLTEUserGroup = AdminLTEUserGroup::find($this->adminlteusergroup_id);
                 
         if (null != $objectAdminLTEUserGroup) {

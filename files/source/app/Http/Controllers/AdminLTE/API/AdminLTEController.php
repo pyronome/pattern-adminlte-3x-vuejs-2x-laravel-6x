@@ -13,6 +13,7 @@ use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTECustomVariable;
 use App\AdminLTE\AdminLTEConfig;
 use App\AdminLTE\AdminLTEUserConfig;
+use App\AdminLTE\AdminLTELayout;
 
 class AdminLTEController extends Controller
 {
@@ -45,12 +46,14 @@ class AdminLTEController extends Controller
         // Permissions
         $menu_permissions = $objectAdminLTE->getUserMenuPermissions();
         $model_permissions = $objectAdminLTE->getUserModelPermissions();
+        $plugins_permissions = $objectAdminLTE->getUserPluginsPermissions();
 
         return [
             'is_admin' => $admin,
             'show_widget_config_button' => $show_widget_config_button,
             'menu_permissions' => $menu_permissions,
             'model_permissions' => $model_permissions,
+            'plugins_permissions' => $plugins_permissions,
             'active_widgets' => $active_widgets
         ];
     }
@@ -307,5 +310,196 @@ class AdminLTEController extends Controller
         return [
             'list' => $list
         ];
+    }
+
+    public function get_impersonation_users(Request $request)
+    {
+        /* $parameters = $request->route()->parameters();
+        $currentUser = auth()->guard('adminlteuser')->user(); */
+
+        $list = [];
+        $AdminLTEUserGroupList = AdminLTEUserGroup::where('deleted', 0)->orderBy('title', 'asc')->get();
+
+        foreach ($AdminLTEUserGroupList as $AdminLTEUserGroup) {
+            $list[$AdminLTEUserGroup->id]['group_id'] = $AdminLTEUserGroup->id;
+            $list[$AdminLTEUserGroup->id]['group_title'] = $AdminLTEUserGroup->title;
+            $list[$AdminLTEUserGroup->id]['children'] = [];
+        }
+
+        $objectList = AdminLTEUser::where('deleted', 0)
+            /* ->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id) */
+            ->orderBy('email', 'asc')
+            ->get();
+
+        /* $list = [];
+        $index = 0; */
+
+        foreach ($objectList as $object) {
+            $list[$object->adminlteusergroup_id]['children'][] = [
+                'id' => $object->id,
+                'email' => $object->email
+            ];
+            /* $list[$index]['id'] = $object->id;
+            $list[$index]['text'] = '<b>sss' . $userGroupTitles[$object->adminlteusergroup_id] . '</b>/' . $object->email;
+            $index++; */
+        }
+
+        /* echo '<div style="display:block">';
+        echo '<pre>';
+        print_r($userGroupTitles);
+        echo '</pre>';
+        echo '</div>';
+        die();
+ */
+        return [
+            'list' => $list
+        ];
+    }
+
+    public function get_impersonation_data() {
+        $impersonated_id = 0;
+        $key = sha1('adminlte_impersonate');
+
+        if (session()->has($key)) {
+            $impersonated_id = intval(session($key));
+        }
+
+        return [
+            'impersonated_id' => $impersonated_id
+        ];
+    }
+
+    public function post_impersonation_data(Request $request)
+    {
+        $currentUser = auth()->guard('adminlteuser')->user();
+        $has_error = false;
+        $error_msg = '';
+        $return_data = [];
+        
+        $user_id = intval($request->input('user_id'));
+        $key = sha1('adminlte_impersonate');
+
+        if ($user_id > 0) {
+            session()->forget($key);
+            session()->put($key, $user_id);
+        } else {
+            $has_error = true;
+            $error_msg = __('Please select an user for impersonation.');
+        }
+
+        if ($has_error) {
+            $return_data['id'] = 1;
+            $return_data['has_error'] = $has_error;
+            $return_data['error_msg'] = $error_msg;
+
+            return $return_data;
+        }
+        
+        $return_data['id'] = 1;
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
+    }
+
+    public function get_source_widgets(Request $request)
+    {   
+        $parameters = $request->route()->parameters();
+
+        $source_group_id = isset($parameters['source_group_id'])
+                ? intval($parameters['source_group_id'])
+                : 0;
+
+        $widgets = [];
+        
+        if (0 != $source_group_id) {
+            $widgets = AdminLTELayout::where('deleted', false)
+				->where('adminlteusergroup_id', $source_group_id)
+				->where('enabled', 1)
+				->orderBy('pagename', 'asc')
+                ->orderBy('id', 'asc')
+				->get();
+
+            if (0 == count($widgets)) {
+                $widgets = [];
+            }
+        }
+        
+        return [
+            'source_widgets' => $widgets
+        ];
+    }
+    
+    public function post_copy_widgets(Request $request)
+    {
+        $currentUser = auth()->guard('adminlteuser')->user();
+        $has_error = false;
+        $error_msg = '';
+        $return_data = [];
+        
+        $source_group_id = intval($request->input('source_group_id'));
+        $target_group_id = intval($request->input('target_group_id'));
+        $selected_widget_ids = $request->input('selected_widget_ids');
+            
+        if (0 == $source_group_id) {
+            $has_error = true;
+            $error_msg = __('Please select source user group.');
+        }
+
+        if (0 == $target_group_id) {
+            $has_error = true;
+
+            if ('' != $error_msg) {
+                $error_msg .= '<br>';
+            }
+
+            $error_msg .= __('Please select target user group.');
+        }
+
+        if (empty($selected_widget_ids)) {
+            $has_error = true;
+
+            if ('' != $error_msg) {
+                $error_msg .= '<br>';
+            }
+            
+            $error_msg .= __('Please select widgets for copy process.');
+        }
+
+        if ($has_error) {
+            $return_data['id'] = 1;
+            $return_data['has_error'] = $has_error;
+            $return_data['error_msg'] = $error_msg;
+
+            return $return_data;
+        }
+        
+        $objectAdminLTELayouts = AdminLTELayout::where('deleted', false)
+            ->whereIn('id', $selected_widget_ids)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        foreach ($objectAdminLTELayouts as $source_layout) {
+            $target_layout = new AdminLTELayout();
+            $target_layout->__system = $source_layout->__system;
+            $target_layout->enabled = $source_layout->enabled;
+            $target_layout->__order = $source_layout->__order;
+            $target_layout->adminlteusergroup_id = $target_group_id;
+            $target_layout->pagename = $source_layout->pagename;
+            $target_layout->widget = $source_layout->widget;
+            $target_layout->title = $source_layout->title;
+            $target_layout->grid_size = $source_layout->grid_size;
+            $target_layout->icon = $source_layout->icon;
+            $target_layout->meta_data_json = $source_layout->meta_data_json;
+            $target_layout->data_source_json = $source_layout->data_source_json;
+            $target_layout->conditional_data_json = $source_layout->conditional_data_json;
+            $target_layout->save();
+        }
+        
+        $return_data['id'] = 1;
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
     }
 }

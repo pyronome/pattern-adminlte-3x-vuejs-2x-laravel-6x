@@ -1,7 +1,7 @@
 <template>
     <div class="content-wrapper">
         <!--server-error v-if="page.has_server_error" ></server-error>
-        <permission-error v-else-if="!page.is_authorized" :type="page.unauthorized_type"></permission-error>
+        <permission-error v-else-if="!page.authorization.status" :authorization="page.authorization"></permission-error>
         <div v-else>
             <section class="content-header">
                 <div class="container-fluid">
@@ -44,8 +44,11 @@ export default {
                 is_ready: false,
                 has_server_error: false,
                 variables: [],
-                is_authorized: true,
-                unauthorized_type: '',
+                authorization: {
+                    status: true,
+                    type: "",
+                    msg: ""
+                },
                 is_variables_loading: false,
                 is_variables_loaded: false,
             },
@@ -62,7 +65,7 @@ export default {
                 return;
             }
 
-            if (!self.page.is_authorized) {
+            if (!self.page.authorization.status) {
                 self.$Progress.finish();
                 self.page.is_ready = true;
                 return;
@@ -105,9 +108,7 @@ export default {
                     self.processLoadQueue();
                 }).finally(function() {
                    AdminLTEHelper.initializePermissions(self.page.variables, true);
-                   let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename);
-                   self.page.is_authorized = authorize.status;
-                   self.page.unauthorized_type = authorize.type;
+                   self.page.authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename);
                    self.processLoadQueue();
                 });
         },

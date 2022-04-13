@@ -65,8 +65,6 @@ class AdminLTEUserGroupController extends Controller
             $data['admin__displaytext__'] = $displayTexts['admin'];
             $data['title'] = $objectAdminLTEUserGroup->title;
             $data['title__displaytext__'] = $displayTexts['title'];
-            $data['widget_permission'] = $objectAdminLTEUserGroup->widget_permission;
-            $data['widget_permission__displaytext__'] = $displayTexts['widget_permission'];
         } // if (null !== $objectAdminLTEUserGroup) {
 
         return [
@@ -121,9 +119,6 @@ class AdminLTEUserGroupController extends Controller
                 ? intval($request->input('admin'))
                 : 0;         
         $objectAdminLTEUserGroup->title = $request->input('title');
-        $objectAdminLTEUserGroup->widget_permission = ('' != $request->input('widget_permission'))
-                ? intval($request->input('widget_permission'))
-                : 0;
 
         $objectAdminLTEUserGroup->save();
         

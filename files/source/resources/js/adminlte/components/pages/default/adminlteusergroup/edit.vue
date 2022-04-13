@@ -1,7 +1,7 @@
 <template>
     <div class="content-wrapper">
         <server-error v-if="page.has_server_error" ></server-error>
-        <permission-error v-else-if="!page.is_authorized" :type="page.unauthorized_type"></permission-error>
+        <permission-error v-else-if="!page.authorization.status" :authorization="page.authorization"></permission-error>
         <div v-else>
             <section class="content-header">
                 <div class="container-fluid">
@@ -80,18 +80,6 @@
                                                 </div>
                                             </div>
                                             <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
-                                                <div class="icheck-primary d-inline">
-                                                    <input type="checkbox"
-                                                        id="AdminLTEUserGroupForm_widget_permission"
-                                                        name="AdminLTEUserGroupForm_widget_permission"
-                                                        class=""
-                                                        v-model="AdminLTEUserGroupForm.widget_permission"/>
-                                                    <label for="AdminLTEUserGroupForm_widget_permission" class="detail-label">
-                                                        {{ $t('Widget Edit Permission') }}  
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12 ">
                                                 <label for="AdminLTEUserGroupForm_title" class="detail-label">{{ $t('Title') }}  </label>
                                                 <input type="text"
                                                     v-model="AdminLTEUserGroupForm.title"
@@ -152,15 +140,17 @@ export default {
                 'id': this.id,
                 'enabled': false,
                 'admin': false,
-                'widget_permission': false,
                 'title': ''
             }),
             page: {
                 is_ready: false,
                 has_server_error: false,
                 variables: [],
-                is_authorized: true,
-                unauthorized_type: '',
+                authorization: {
+                    status: true,
+                    type: "",
+                    msg: ""
+                },
                 is_variables_loading: false,
                 is_variables_loaded: false,
                 has_post_error: false,
@@ -197,7 +187,7 @@ export default {
                 return;
             }
 
-            if (!this.page.is_authorized) {
+            if (!this.page.authorization.status) {
                 this.$Progress.finish();
                 this.page.is_ready = true;
                 return;
@@ -247,20 +237,9 @@ export default {
                     self.page.has_server_error = true;
                     self.processLoadQueue();
                 }).finally(function() {
-                   AdminLTEHelper.initializePermissions(self.page.variables, false);
-                   let authorize = {};
-                   if ("new" == self.id) {
-                       authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, 'AdminLTEUserGroup', 'create');
-                   } else {
-                       authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, 'AdminLTEUserGroup', 'read');
-                       if (authorize.status) {
-                           authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, 'AdminLTEUserGroup', 'update');
-                       }
-                   }
-
-                   self.page.is_authorized = authorize.status;
-                   self.page.unauthorized_type = authorize.type;
-                   self.processLoadQueue();
+                    AdminLTEHelper.initializePermissions(self.page.variables, false);
+                    self.page.authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, 'adminlteusergroup', 'create');
+                    self.processLoadQueue();
                 });
         },
 		load_files: function () {

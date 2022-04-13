@@ -15,6 +15,7 @@ import AdminLTEUserGroupEdit from "./components/pages/default/adminlteusergroup/
 import AdminLTEUserGroupLayout from "./components/pages/default/adminlteusergroup/layout.vue";
 import AdminLTEUserParameterSettings from "./components/pages/default/adminlteusergroup/parametersettings.vue";
 import AdminLTEUserGroupConfiguration from "./components/pages/default/adminlteusergroup/configuration.vue";
+import Administration from "./components/pages/default/Administration.vue";
 import AdminLTELogs from "./components/pages/default/AdminLTELogs.vue";
 import AdminLTEMedia from "./components/pages/default/AdminLTEMedia.vue";
 {{ROUTES_MODEL_DEFAULT_IMPORT_DEFINITONS}}
@@ -40,6 +41,7 @@ export default {
     "/adminlteusergroup/edit/:id": AdminLTEUserGroupEdit,
     "/adminlteusergroup/layout/:id": AdminLTEUserGroupLayout,
     "/adminlteusergroup/parametersettings/:owner_group": AdminLTEUserParameterSettings,
+    "/administration": Administration,
     "/adminltelogs": AdminLTELogs,
     "/adminlte_media": AdminLTEMedia,
 {{ROUTES_MODEL_DEFAULT_EXPORT_DEFINITONS}}

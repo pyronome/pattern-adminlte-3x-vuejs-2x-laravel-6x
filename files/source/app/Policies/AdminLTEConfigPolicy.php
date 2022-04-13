@@ -18,20 +18,24 @@ class AdminLTEConfigPolicy
      * @param  \App\AdminLTE\AdminLTEUser  $user
      * @return mixed
      */
-    public function viewAny(AdminLTEUser $user)
+    public function viewAny(AdminLTEUser $user, AdminLTEConfig $adminlteconfig)
     {
         if (Gate::allows('isAdmin')) {
             return true;
         }
 
+        if (1 == $adminlteconfig->only_admins) {
+            return false;
+        }
+
         $has_permission = false;
-        
+
         $objectAdminLTE = new AdminLTE();
         $menu_permissions = $objectAdminLTE->getUserMenuPermissions();
 
-        if (isset($menu_permissions['adminlteconfig']))
+        if (isset($menu_permissions['configuration']))
         {
-            $has_permission = $menu_permissions['adminlteconfig'];
+            $has_permission = $menu_permissions['configuration'];
         }
 
         return $has_permission;

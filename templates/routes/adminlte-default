@@ -36,6 +36,11 @@ Route::namespace('API')
         Route::get('/get_global_parameter_options', 'AdminLTEController@get_global_parameter_options');
         Route::get('/get_user_parameter_options', 'AdminLTEController@get_user_parameter_options');
         Route::get('/get_custom_variable_options', 'AdminLTEController@get_custom_variable_options');
+        Route::get('/get_impersonation_users', 'AdminLTEController@get_impersonation_users');
+        Route::get('/get_impersonation_data', 'AdminLTEController@get_impersonation_data');
+        Route::post('/post_impersonation_data', 'AdminLTEController@post_impersonation_data');
+        Route::get('/get_source_widgets/{source_group_id}', 'AdminLTEController@get_source_widgets');
+        Route::post('/post_copy_widgets', 'AdminLTEController@post_copy_widgets');
     });
     
     Route::prefix('register')->group(function () {

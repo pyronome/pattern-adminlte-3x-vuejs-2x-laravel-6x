@@ -114,8 +114,11 @@ export default {
                 is_ready: false,
                 has_server_error: false,
                 variables: [],
-                is_authorized: true,
-                unauthorized_type: '',
+                authorization: {
+                    status: true,
+                    type: "",
+                    msg: ""
+                },
                 is_variables_loading: false,
                 is_variables_loaded: false,
             },
@@ -132,7 +135,7 @@ export default {
                 return;
             }
 
-            if (!self.page.is_authorized) {
+            if (!self.page.authorization.status) {
                 self.$Progress.finish();
                 self.page.is_ready = true;
                 return;
@@ -181,8 +184,6 @@ export default {
                     self.processLoadQueue();
                 }).finally(function() {
                    AdminLTEHelper.initializePermissions(self.page.variables, false);
-                   self.page.is_authorized = true;
-                   self.page.unauthorized_type = "";
                    self.processLoadQueue();
                 });
         },

@@ -1,31 +1,23 @@
 <template>
     <div class="content-wrapper">
         <server-error v-if="page.has_server_error" ></server-error>
-        <permission-error v-else-if="!page.is_authorized" :type="page.unauthorized_type"></permission-error>
+        <permission-error v-else-if="!page.authorization.status" :authorization="page.authorization"></permission-error>
         <div v-else>
             <section class="content-header">
                 <div class="container-fluid">
-                    <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>{{ $t("AdminLTEUserGroup List") }}</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
-                            <li class="breadcrumb-item"><a href="configuration">{{ $t('Configuration') }}</a></li>
-                        </ol>
-                    </div>
+                    <div class="row mb-0">
+                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="home">{{ $t('Home') }}</a></li>
+                                <li class="breadcrumb-item"><a href="configuration">{{ $t('Configuration') }}</a></li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </section>
-            <section class="content">
-                <div class="container-fluid">
-                    <widgets :widgets="widgets" :pagename="pagename"></widgets>
-                </div>
-            </section>
-            <section>
-                <widget-editor :pagename="pagename"></widget-editor>
-            </section>
+            <layout :pagename="pagename" :pagevariables="page.variables"></layout>
         </div>
         <input type="hidden" id="controller" :value="pagename">
     </div>
@@ -36,19 +28,19 @@
 export default {
     data() {
         return {
-            widgets: [],
             main_folder: '',
             pagename: '',
             page: {
                 is_ready: false,
                 has_server_error: false,
                 variables: [],
-                is_authorized: true,
-                unauthorized_type: '',
+                authorization: {
+                    status: true,
+                    type: "",
+                    msg: ""
+                },
                 is_variables_loading: false,
                 is_variables_loaded: false,
-                is_widgets_loading: false,
-                is_widgets_loaded: false,
             }
         };
     },
@@ -60,25 +52,18 @@ export default {
                 return;
             }
 
-            if (!this.page.is_authorized) {
+            if (!this.page.authorization.status) {
                 this.$Progress.finish();
                 this.page.is_ready = true;
                 return;
             }
 
-            if (!this.page.is_variables_loaded && !this.page.is_widgets_loaded) {
-                this.$Progress.start();
-            }
-
             if (!this.page.is_variables_loaded) {
+                this.$Progress.start();
                 this.loadPageVariables();
             } else {
-                if (this.page.is_widgets_loaded) {
-                    this.$Progress.finish();
-                    this.page.is_ready = true;
-                } else {
-                    this.loadWidgets();
-                }
+                this.$Progress.finish();
+                this.page.is_ready = true;
             }
         },
         loadPageVariables: function () {
@@ -102,46 +87,17 @@ export default {
                     self.page.has_server_error = true;
                     self.processLoadQueue();
                 }).finally(function() {
-                   AdminLTEHelper.initializePermissions(self.page.variables, true);
-                   let authorize = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename);
-                   self.page.is_authorized = authorize.status;
-                   self.page.unauthorized_type = authorize.type;
-                   self.processLoadQueue();
-                });
-        },
-        loadWidgets: function () {
-            if (this.page.is_widgets_loading) {
-                return;
-            }
-
-            this.page.is_widgets_loading = true;
-
-            axios.get(AdminLTEHelper.getAPIURL("__layout/get_page_widgets/" + this.pagename))
-                .then(({ data }) => {
-                    this.page.is_widgets_loaded = true;
-                    this.page.is_widgets_loading = false;
-                    this.widgets = data;
-                    this.processLoadQueue();
-                }).catch(({ data }) => {
-                    this.page.is_widgets_loaded = true;
-                    this.page.is_widgets_loading = false;
-                    this.$Progress.fail();
-                    this.page.has_server_error = true;
-                    this.processLoadQueue();
+                    AdminLTEHelper.initializePermissions(self.page.variables, true);
+                    self.page.authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename);
+                    self.processLoadQueue();
                 });
         }
     },
     mounted() {
-        var self = this;
-
-        self.main_folder = AdminLTEHelper.getMainFolder();
-        self.pagename = AdminLTEHelper.getPagename();
-        self.page.is_ready = false;
-        self.processLoadQueue();
-
-        self.$root.$on('recordlist-rendered', (model) => {
-            AdminLTEHelper.initializePermissions(self.page.variables, true);
-        });
+        this.main_folder = AdminLTEHelper.getMainFolder();
+        this.pagename = AdminLTEHelper.getPagename();
+        this.page.is_ready = false;
+        this.processLoadQueue();
     }
 }
 </script>

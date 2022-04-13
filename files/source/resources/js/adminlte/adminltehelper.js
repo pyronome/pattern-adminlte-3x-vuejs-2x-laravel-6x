@@ -1330,6 +1330,7 @@ var AdminLTEHelper = {
         var authorize = {};
         authorize["status"] = true;
         authorize["type"] = "";
+        authorize["msg"] = "";
 
         if (page_variables.is_admin) {
             return authorize;
@@ -1498,9 +1499,15 @@ var AdminLTEHelper = {
         document.cookie = name+'=; Max-Age=-99999999;';  
     },
     "initializeOtherPermissions": function(page_variables) {
-        /* {{@snippet:begin_initialize_other_permissions}} */
-        /* {{@snippet:end_initialize_other_permissions}} */
+        if ('undefined' !== typeof page_variables.plugins_permissions) {
+            AdminLTEHelper.initializePluginPermissions(page_variables.plugins_permissions);
+        }
+    },
+    "initializePluginPermissions": function(plugins_permissions) {
+        /* {{@snippet:begin_initialize_plugin_permissions}} */
+        /* {{@snippet:end_initialize_plugin_permissions}} */
     }
+
     /* {{@snippet:end_methods}} */
 }
 

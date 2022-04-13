@@ -448,6 +448,18 @@ class AdminLTE
 		return $values;
 	}
 
+	public function getUserGroupTitle($group_id) {
+		$title = '';
+
+		$objectAdminLTEUserGroup = AdminLTEUserGroup::where('id', $group_id)->first();
+
+		if (null != $objectAdminLTEUserGroup) {
+			$title = $objectAdminLTEUserGroup->title;
+		}
+
+		return $title;
+	}
+
 	public function getUserData()
 	{
         $adminLTEUser = auth()->guard('adminlteuser')->user();
@@ -461,6 +473,9 @@ class AdminLTE
 			'updated_at' => 0,
 			'enabled' => true,
 			'adminlteusergroup_id' => 0,
+			'adminlteusergroup_title' => '',
+			'admin' => false,
+			'impersonated' => false,
 			'type' => 'user',
 			'email' => '',
 			'username' => '',
@@ -468,7 +483,6 @@ class AdminLTE
 			'fullname' => '',
 			'menu_permission' => '',
 			'service_permission' => '',
-			'widget_permission' => '',
 			'image' => $image_path
 		];
 
@@ -488,6 +502,12 @@ class AdminLTE
 				$image_path = asset('storage/' . $fileDetail['path']);
 			}
 
+			// is user admin ?
+			$admin = false;
+			if (Gate::allows('isAdmin')) {
+				$admin = true;
+			}
+
 			$userData = [
 				'id' => $adminLTEUser->id,
 				'deleted' => $adminLTEUser->deleted,
@@ -495,6 +515,9 @@ class AdminLTE
 				'updated_at' => $adminLTEUser->updated_at->timestamp,
 				'enabled' => $adminLTEUser->enabled,
 				'adminlteusergroup_id' => $adminLTEUser->adminlteusergroup_id,
+				'adminlteusergroup_title' => $this->getUserGroupTitle($adminLTEUser->adminlteusergroup_id),
+				'admin' => $admin,
+				'impersonated' => false,
 				'type' => $userType,
 				'email' => $adminLTEUser->email,
 				'username' => $adminLTEUser->username,
@@ -502,23 +525,19 @@ class AdminLTE
 				'fullname' => $adminLTEUser->fullname,
 				'menu_permission' => $this->getUserMenuPermission($adminLTEUser),
 				'service_permission' => $this->getUserServicePermission($adminLTEUser),
-				'widget_permission' => '',
 				'image' => $image_path
 			];
 
-            $adminLTEUserGroup = AdminLTEUserGroup::find(
-					$adminLTEUser->adminlteusergroup_id);
-
-			if ($adminLTEUserGroup != null)
+			if (session()->has(sha1('adminlte_impersonate')))
 			{
-				$userData['widget_permission']
-						= $adminLTEUserGroup->widget_permission;
-			} // if ($adminLTEUserGroup != null)
-
+				$userData['admin'] = true;
+				$userData['impersonated'] = true;
+			}
 		} // if ($adminLTEUser == null) {
 
 		return $userData;
 	}
+
 
 	public function getContentFromURI($URIContent) {
 		$dataPosition = strpos($URIContent, 'base64,', 11);
@@ -2214,6 +2233,201 @@ class AdminLTE
 			}
 		}
 
+		$object = AdminLTELayout::where('__system', 1)
+			->where('deleted', 0)
+			->where('pagename', 'adminlteusergroup')
+			->where('widget', 'recordlist')
+			->first();
+
+		if (null === $object) {
+			$AdminLTELayout = new AdminLTELayout();
+			$AdminLTELayout->__system = 1;
+			$AdminLTELayout->enabled = 1;
+			$AdminLTELayout->__order = 0;
+			$AdminLTELayout->adminlteusergroup_id = 1;
+			$AdminLTELayout->pagename = 'adminlteusergroup';
+			$AdminLTELayout->widget = 'recordlist';
+			$AdminLTELayout->title = 'Record List';
+			$AdminLTELayout->grid_size = '12,12,12';
+			$AdminLTELayout->icon = '';
+
+			$metaData = [];
+			$metaData['record_list_title'] = 'User Groups';
+
+			$column_index = 0;
+			$metaData['columns'] = [];
+
+			$metaData['columns'][$column_index] = '{'
+				. '"visible":"on",'
+				. '"type":"integer",'
+				. '"title":"Id",'
+				. '"name":"id",'
+				. '"value":"{{QueryResultFields/id}}",'
+				. '"style":""'
+				. '}';
+			$column_index++;
+
+			$metaData['columns'][$column_index] = '{'
+				. '"visible":"on",'
+				. '"type":"text",'
+				. '"title":"Title",'
+				. '"name":"title",'
+				. '"value":"{{QueryResultFields/title}}",'
+				. '"style":""'
+				. '}';
+			$column_index++;
+
+			$metaData['columns'][$column_index] = '{'
+				. '"visible":"on",'
+				. '"type":"boolean",'
+				. '"title":"Admin",'
+				. '"name":"admin",'
+				. '"value":"<span class=\"text-success spanIcon spanIconEnabled{{QueryResultFields/admin}}\">'
+                		. '<i class=\"far fa-check-circle\"></i>'
+            			. '</span>",'
+				. '"style":""'
+				. '}';
+			$column_index++;
+
+			$metaData['columns'][$column_index] = '{'
+				. '"visible":"on",'
+				. '"type":"boolean",'
+				. '"title":"Enabled",'
+				. '"name":"enabled",'
+				. '"value":"<span class=\"text-success spanIcon spanIconEnabled{{QueryResultFields/enabled}}\">'
+                		. '<i class=\"far fa-check-circle\"></i>'
+            			. '</span>",'
+				. '"style":""'
+				. '}';
+			$column_index++;
+
+			$metaData['columns'][$column_index] = '{'
+				. '"visible":"on",'
+				. '"type":"button",'
+				. '"title":"<a class=\"btn btn-primary btn-xs btn-on-table\" href=\"/{{GlobalParameters/adminlte.generalsettings.mainfolder}}/adminlteusergroup/edit/new\">'
+						. '<i class=\"fa fa-plus\"></i> <span class=\"hidden-xxs\">Add</span>'
+						. '</a>",'
+				. '"name":"buttons",'
+				. '"value":"<a class=\"btn btn-outline-primary btn-xs btn-on-table\" href=\"/{{GlobalParameters/adminlte.generalsettings.mainfolder}}/adminlteusergroup/detail/{{QueryResultFields/id}}\">'
+						. '<i class=\"fa fa-info-circle\"></i> <span class=\"hidden-xxs\">Detail</span>'
+						. '</a>",'
+				. '"style":"width:130px;"'
+				. '}';
+			$column_index++;
+
+			$encodedData = json_encode($metaData);
+			$AdminLTELayout->meta_data_json = $encodedData;
+
+			$metaData = [];
+			$metaData['calculation_type'] = 'advanced';
+			$metaData['model'] = '';
+			$metaData['property'] = '';
+			$metaData['function'] = '';
+			$metaData['query'] = 'select * from adminlteusergrouptable where deleted=0;';
+
+			$encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			$AdminLTELayout->data_source_json = $encodedData;
+			
+			$AdminLTELayout->conditional_data_json = '{}';
+			$AdminLTELayout->save();
+		}
+
+		$object = AdminLTELayout::where('__system', 1)
+			->where('deleted', 0)
+			->where('pagename', 'adminlteuser')
+			->where('widget', 'recordlist')
+			->first();
+
+		if (null === $object) {
+			$AdminLTELayout = new AdminLTELayout();
+			$AdminLTELayout->__system = 1;
+			$AdminLTELayout->enabled = 1;
+			$AdminLTELayout->__order = 0;
+			$AdminLTELayout->adminlteusergroup_id = 1;
+			$AdminLTELayout->pagename = 'adminlteuser';
+			$AdminLTELayout->widget = 'recordlist';
+			$AdminLTELayout->title = 'Record List';
+			$AdminLTELayout->grid_size = '12,12,12';
+			$AdminLTELayout->icon = '';
+
+			$metaData = [];
+			$metaData['record_list_title'] = 'Users';
+
+			$column_index = 0;
+			$metaData['columns'] = [];
+
+			$metaData['columns'][$column_index] = '{'
+				. '"visible":"on",'
+				. '"type":"integer",'
+				. '"title":"Id",'
+				. '"name":"id",'
+				. '"value":"{{QueryResultFields/id}}",'
+				. '"style":""'
+				. '}';
+			$column_index++;
+
+			$metaData['columns'][$column_index] = '{'
+				. '"visible":"on",'
+				. '"type":"text",'
+				. '"title":"Name",'
+				. '"name":"fullname",'
+				. '"value":"{{QueryResultFields/fullname}}",'
+				. '"style":""'
+				. '}';
+			$column_index++;
+
+            $metaData['columns'][$column_index] = '{'
+				. '"visible":"on",'
+				. '"type":"text",'
+				. '"title":"User Group",'
+				. '"name":"usergroup_title",'
+				. '"value":"{{QueryResultFields/usergroup_title}}",'
+				. '"style":""'
+				. '}';
+			$column_index++;
+
+			$metaData['columns'][$column_index] = '{'
+				. '"visible":"on",'
+				. '"type":"boolean",'
+				. '"title":"Enabled",'
+				. '"name":"enabled",'
+				. '"value":"<span class=\"text-success spanIcon spanIconEnabled{{QueryResultFields/enabled}}\">'
+                		. '<i class=\"far fa-check-circle\"></i>'
+            			. '</span>",'
+				. '"style":""'
+				. '}';
+			$column_index++;
+
+			$metaData['columns'][$column_index] = '{'
+				. '"visible":"on",'
+				. '"type":"button",'
+				. '"title":"<a class=\"btn btn-primary btn-xs btn-on-table\" href=\"/{{GlobalParameters/adminlte.generalsettings.mainfolder}}/adminlteuser/edit/new\">'
+						. '<i class=\"fa fa-plus\"></i> <span class=\"hidden-xxs\">Add</span>'
+						. '</a>",'
+				. '"name":"buttons",'
+				. '"value":"<a class=\"btn btn-outline-primary btn-xs btn-on-table\" href=\"/{{GlobalParameters/adminlte.generalsettings.mainfolder}}/adminlteuser/detail/{{QueryResultFields/id}}\">'
+						. '<i class=\"fa fa-info-circle\"></i> <span class=\"hidden-xxs\">Detail</span>'
+						. '</a>",'
+				. '"style":"width:130px;"'
+				. '}';
+			$column_index++;
+
+			$encodedData = json_encode($metaData);
+			$AdminLTELayout->meta_data_json = $encodedData;
+
+			$metaData = [];
+			$metaData['calculation_type'] = 'advanced';
+			$metaData['model'] = '';
+			$metaData['property'] = '';
+			$metaData['function'] = '';
+			$metaData['query'] = 'select *, (select title from adminlteusergrouptable where id=aut.adminlteusergroup_id) as usergroup_title FROM `adminlteusertable` as aut where deleted=0;';
+			$encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+			$AdminLTELayout->data_source_json = $encodedData;
+			
+			$AdminLTELayout->conditional_data_json = '{}';
+			$AdminLTELayout->save();
+		}
+
 		return;
 	}
 	
@@ -2776,6 +2990,7 @@ class AdminLTE
 				$AdminLTEConfig->locked = $config_item['locked'];
 				$AdminLTEConfig->owner = $config_item['owner'];
 				$AdminLTEConfig->enabled = $config_item['enabled'];
+				$AdminLTEConfig->only_admins = $config_item['only_admins'];
 				$AdminLTEConfig->__order = $__order;
 
 				$parent_id = 0;
@@ -3182,6 +3397,60 @@ class AdminLTE
 		}
 		
 		return $model_permissions;
+	}
+
+	public function getUserPluginsPermissions() {
+		$currentUser = auth()->guard('adminlteuser')->user();
+		$plugin_permissions = [];
+
+		$objConfigList = AdminLTEUserConfig::where('deleted', 0)
+			->where('__key', 'like', 'permission.plugins.%')
+			->get();
+
+		foreach ($objConfigList as $objConfig) {
+			$config_key = $objConfig->__key;
+			$config_value = ('on' == $this->getUserConfigParameterValue($config_key, 'user', $currentUser->id));
+
+			$parentKey = $this->getConfigParameterParentKey($config_key);
+			$basekey = $this->getConfigParameterBasekey($config_key);
+
+			if ('permission.plugins' != $parentKey) {
+				$parentBasekey = $this->getConfigParameterBasekey($parentKey);
+
+				if (!isset($plugin_permissions[$parentBasekey])) {
+					$plugin_permissions[$parentBasekey] = [];
+				}
+
+				$plugin_permissions[$parentBasekey][$basekey] = $config_value;
+			} else {
+				if (!isset($plugin_permissions[$basekey])) {
+					$plugin_permissions[$basekey] = [];
+				}
+			}
+		}
+		
+		return $plugin_permissions;
+	}
+
+	public function getConfigParameterParentKey($key) {
+        $parent = '';
+
+        if ('' != $key) {
+           $parts = explode('.', $key);
+           $length = count($parts);
+           $base = $parts[$length-1];
+
+           if ($length > 1) {
+               $parent = str_replace(('.'.$base), '', $key);
+           }
+        }
+
+        return $parent;
+    }
+
+	public function getUserGroupWidgets($group_id) {
+		$objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
+		return $objectAdminLTEWidgetHelper->getUserGroupWidgets($group_id);
 	}
 
 	public function getUserWidgets($pagename) {
