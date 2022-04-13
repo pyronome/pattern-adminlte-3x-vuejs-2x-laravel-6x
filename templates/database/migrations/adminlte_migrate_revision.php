@@ -740,6 +740,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->boolean('deleted')->default(0);
                 $table->smallInteger('system')->default(0);
                 $table->smallInteger('enabled')->default(0);
+                $table->smallInteger('only_admins')->default(0);
                 $table->smallInteger('required')->default(0);
                 $table->smallInteger('locked')->default(0);
                 $table->smallInteger('owner')->default(0);
@@ -765,6 +766,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->smallInteger('enabled')->default(0)->change();
                 } else {
                     $table->smallInteger('enabled')->default(0);
+                }
+                if (Schema::hasColumn('adminlteconfigtable', 'only_admins')) { 
+                    $table->smallInteger('only_admins')->default(0)->change();
+                } else {
+                    $table->smallInteger('only_admins')->default(0);
                 }
                 if (Schema::hasColumn('adminlteconfigtable', 'required')) { 
                     $table->smallInteger('required')->default(0)->change();
