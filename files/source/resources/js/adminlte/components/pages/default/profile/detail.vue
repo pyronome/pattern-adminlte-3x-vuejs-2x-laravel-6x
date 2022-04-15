@@ -93,6 +93,31 @@
                         </div>
                     </div>
                 </div>
+                <div class="row" v-if="page.variables.is_admin">
+                    <div class="col-lg-4 col-md-4 col-xs-12 ">
+                        <h4 class="form-part-header">{{  $t('Impersonation') }}</h4>
+                        <h6 class="form-part-instructions text-muted">
+                            {{  $t('You can impersonate any user.') }}
+                        </h6>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-xs-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-xs-12">
+                                        <div class="input-field">
+                                            <button type="button"
+                                                class="btn btn-info btn-md btn-on-card btn-card-default text-white"
+                                                @click="showImpersonationDialog">
+                                                <span>{{ $t('Impersonation') }}</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -214,6 +239,9 @@ export default {
         },
         initializePage: function () {
             var self = this;
+        },
+        showImpersonationDialog: function() {
+            $("#divImpersonationDialog").modal();
         }
     },
     mounted() {

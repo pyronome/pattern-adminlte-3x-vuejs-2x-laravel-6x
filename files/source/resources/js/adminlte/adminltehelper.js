@@ -34,6 +34,14 @@ var AdminLTEHelper = {
         $("#buttonElements").off("click").on("click", function () {
             $("#modal-Elements").modal();
         });
+
+        $("#buttonTopbarImpersonated").off("click").on("click", function () {
+            $("#divImpersonationDialog").modal();
+        });
+
+        $(".modal").off("shown.bs.modal").on("shown.bs.modal", function (e) { 
+            $(document).off("focusin.modal"); 
+        });
     },
     "initializeSideMenu": function () {
         $(".main-sidebar .active").removeClass("active");

@@ -29,6 +29,7 @@ Vue.component('widget-condition-dialog', require('./components/elements/default/
 Vue.component('insert-variable-button', require('./components/elements/default/InsertVariableButton.vue').default);
 Vue.component('insert-variable-dialog', require('./components/elements/default/InsertVariableDialog.vue').default);
 Vue.component('custom-variable-list', require('./components/elements/default/CustomVariableList.vue').default);
+Vue.component('impersonation-dialog', require('./components/elements/default/ImpersonationDialog.vue').default);
 
 /* {{@snippet:end_elements}} */
 /* Elements EOF */

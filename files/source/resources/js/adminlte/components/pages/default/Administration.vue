@@ -21,45 +21,6 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-xs-12">
-                            <form id="ImpersonationForm"
-                                class=""
-                                @submit.prevent="submitImpersonationForm"
-                                @keydown="ImpersonationForm.onKeydown($event)">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">{{ $t("Impersonation") }}</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                                                <label for="ImpersonationForm_user_id" class="detail-label">{{  $t('User') }}  </label>
-                                                <select id="ImpersonationForm_user_id">
-                                                    <optgroup v-for="(data,index) in impersonation_users" :key="index" :label="data.group_title">
-                                                        <option v-for="(child, c_index) in data.children" :key="c_index" v-html="child.email"  :value="child.id">
-                                                        </option>
-                                                    </optgroup>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer ">
-                                        <button type="button"
-                                            class="btn btn-success btn-md btn-on-table float-right"
-                                            @click="submitImpersonationForm"
-                                            :disabled="ImpersonationForm.busy">
-                                            {{ $t('Impersonate') }}
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-xs-12">
                             <form id="LayoutForm"
                                 class=""
                                 @submit.prevent="submitLayoutForm"
@@ -175,10 +136,6 @@ export default {
         return {
             main_folder: '',
             pagename: '',
-            impersonation_users: [],
-            ImpersonationForm: new Form({
-                'user_id': 0,
-            }),
             source_widgets: [],
             LayoutForm: new Form({
                 'source_group_id': 0,
@@ -198,10 +155,6 @@ export default {
                 },
                 is_variables_loading: false,
                 is_variables_loaded: false,
-                is_impersonation_users_loading: false,
-                is_impersonation_users_loaded: false,
-                is_impersonation_data_loading: false,
-                is_impersonation_data_loaded: false,
                 is_source_widgets_loading: false,
                 is_source_widgets_loaded: false,
                 external_files: [
@@ -228,8 +181,6 @@ export default {
             }
 
             if (!self.page.is_variables_loaded 
-                && !self.page.is_impersonation_users_loaded
-                && !self.page.is_impersonation_data_loaded
                 && !self.page.is_source_widgets_loaded) {
                 self.$Progress.start();
             }
@@ -237,11 +188,7 @@ export default {
             if (!self.page.is_variables_loaded) {
                 self.loadPageVariables();
             } else {
-                if (!self.page.is_impersonation_users_loaded) {
-                    self.load_impersonation_users();
-                } else if (!self.page.is_impersonation_data_loaded) {
-                    self.load_impersonation_data();
-                } else if (!self.page.is_source_widgets_loaded) {
+                if (!self.page.is_source_widgets_loaded) {
                     self.load_source_widgets();
                 } else {
                     self.$nextTick(function () {
@@ -263,9 +210,6 @@ export default {
         },
         initailizeSelect2(){
             var self = this;
-
-            $("#ImpersonationForm_user_id").select2();
-            $("#ImpersonationForm_user_id").val(this.ImpersonationForm.user_id).trigger("change");
 
             $("#LayoutForm_source_group_id").select2();
             $("#LayoutForm_source_group_id").off("change").on("change", function () {
@@ -318,98 +262,6 @@ export default {
                    AdminLTEHelper.initializePermissions(self.page.variables, true);
                    self.page.authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename);
                    self.processLoadQueue();
-                });
-        },
-        load_impersonation_users: function () {
-            var self = this;
-
-            if (self.page.is_impersonation_users_loading) {
-                return;
-            }
-
-            self.page.is_impersonation_users_loading = true;
-            
-            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_impersonation_users"))
-                .then(({ data }) => {
-                    self.page.is_impersonation_users_loaded = true;
-                    self.page.is_impersonation_users_loading = false;
-                    self.impersonation_users = data.list;
-                    self.processLoadQueue();
-                }).catch(({ data }) => {
-                    self.page.is_impersonation_users_loaded = true;
-                    self.page.is_impersonation_users_loading = false;
-                    self.$Progress.fail();
-                    self.page.has_server_error = true;
-                    self.processLoadQueue();
-                });
-        },
-        load_impersonation_data: function () {
-            if (this.page.is_impersonation_data_loading) {
-                return;
-            }
-
-            this.page.is_impersonation_data_loading = true;
-
-            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_impersonation_data"))
-                .then(({ data }) => {
-                    this.page.is_impersonation_data_loaded = true;
-                    this.page.is_impersonation_data_loading = false;
-                    this.ImpersonationForm.user_id = data.impersonated_id;
-                    this.processLoadQueue();
-                }).catch(({ data }) => {
-                    this.page.is_impersonation_data_loaded = true;
-                    this.page.is_impersonation_data_loading = false;
-                    this.$Progress.fail();
-                    this.page.has_server_error = true;
-                    this.processLoadQueue();
-                });
-        },
-        submitImpersonationForm: function () {
-            var self = this;
-            self.$Progress.start();
-            self.ImpersonationForm.user_id = document.getElementById("ImpersonationForm_user_id").value;
-            
-            self.ImpersonationForm.post(AdminLTEHelper.getAPIURL("adminlte/post_impersonation_data"))
-                .then(({ data }) => {
-                    self.$Progress.finish();
-                    self.page.has_post_error = data.has_error;
-                    self.page.post_message = data.error_msg;
-                    self.page.has_server_error = false;
-                }).catch(({ data }) => {
-                    self.$Progress.fail();
-                    Vue.swal.fire({
-                        position: 'top-end',
-                        title: self.$t("An error occurred while processing your request."),
-                        icon: 'error',
-                        showConfirmButton: false,
-                        timer: 10000,
-                        timerProgressBar: true
-                    });
-                }).finally(function() {
-                    if (!self.page.has_server_error) {
-                        if (!self.page.has_post_error) {
-                            Vue.swal.fire({
-                                position: 'top-end',
-                                title: self.$t("Your changes have been saved!"),
-                                icon: 'success',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                timerProgressBar: true,
-                                onClose: () => {
-                                    window.location.reload()
-                                }
-                            });
-                        } else {
-                            Vue.swal.fire({
-                                position: 'top-end',
-                                title: self.page.post_message,
-                                icon: 'error',
-                                showConfirmButton: false,
-                                timer: 10000,
-                                timerProgressBar: true
-                            });
-                        }
-                    }
                 });
         },
         load_source_widgets: function () {

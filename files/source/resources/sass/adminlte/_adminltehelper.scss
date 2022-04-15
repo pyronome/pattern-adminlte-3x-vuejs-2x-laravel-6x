@@ -455,6 +455,9 @@ transform: scale(1, 1);
     border: 1px solid #dddddd;
     padding: 10px;
 }
+.modal.note-modal {
+    z-index: 3333;
+}
 .note-editor.card {
     margin-bottom:0;
 }

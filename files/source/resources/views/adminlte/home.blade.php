@@ -4,6 +4,7 @@
     <div id="mainVueApplication">
         <router-view></router-view>
         <vue-progress-bar></vue-progress-bar>
+        <impersonation-dialog></impersonation-dialog>
     </div>
     
     <div>

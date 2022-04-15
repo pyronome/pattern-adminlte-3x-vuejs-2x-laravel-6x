@@ -402,6 +402,31 @@ class AdminLTEController extends Controller
         return $return_data;
     }
 
+    public function remove_impersonation(Request $request)
+    {
+        $currentUser = auth()->guard('adminlteuser')->user();
+        $has_error = false;
+        $error_msg = '';
+        $return_data = [];
+        
+        $key = sha1('adminlte_impersonate');
+        session()->forget($key);
+
+        if ($has_error) {
+            $return_data['id'] = 1;
+            $return_data['has_error'] = $has_error;
+            $return_data['error_msg'] = $error_msg;
+
+            return $return_data;
+        }
+        
+        $return_data['id'] = 1;
+        $return_data['has_error'] = false;
+        $return_data['error_msg'] = '';
+
+        return $return_data;
+    }
+
     public function get_source_widgets(Request $request)
     {   
         $parameters = $request->route()->parameters();

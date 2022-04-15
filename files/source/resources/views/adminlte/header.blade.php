@@ -12,11 +12,12 @@
             <ul class="navbar-nav ml-auto">
                 @if ($user['impersonated'])
                     <li class="nav-item dropdown">
-                        <a href="/{{ $main_folder }}/administration" class="btn btn-block btn-info btn-md impersonated-info">
-                            <span>
-                                {{ __('Impersonated') }}
-                            </span>
-                        </a>
+                        <button type="button" 
+                            id="buttonTopbarImpersonated" 
+                            class="btn btn-block btn-info btn-md impersonated-info"
+                            data-toggle="tooltip" data-placement="bottom" title="{{ $user['adminlteusergroup_title'] }} / {{ $user['name'] }}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </button>
                     </li>
                 @endif
                 <!-- Widget Configuration -->

@@ -39,6 +39,7 @@ Route::namespace('API')
         Route::get('/get_impersonation_users', 'AdminLTEController@get_impersonation_users');
         Route::get('/get_impersonation_data', 'AdminLTEController@get_impersonation_data');
         Route::post('/post_impersonation_data', 'AdminLTEController@post_impersonation_data');
+        Route::post('/remove_impersonation', 'AdminLTEController@remove_impersonation');
         Route::get('/get_source_widgets/{source_group_id}', 'AdminLTEController@get_source_widgets');
         Route::post('/post_copy_widgets', 'AdminLTEController@post_copy_widgets');
     });

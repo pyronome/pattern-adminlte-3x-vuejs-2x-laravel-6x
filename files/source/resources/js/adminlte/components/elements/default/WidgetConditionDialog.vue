@@ -1024,6 +1024,11 @@ export default {
             // Custom Variables
             options = self.custom_variable_options;
             var variableCount = options.length;
+
+            /* if (0 == variableCount) {
+                return;
+            } */
+            
             for (var i = 0; i < variableCount; i++) {
                 filters.push({
                     "id": options[i]["id"],

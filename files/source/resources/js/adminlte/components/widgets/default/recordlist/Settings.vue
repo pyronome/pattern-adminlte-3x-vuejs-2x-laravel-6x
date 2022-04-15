@@ -300,8 +300,10 @@
 
                 document.getElementById(instance_id + "visible").checked = true;
                 $(document.getElementById(instance_id + "type")).val("").trigger('change');
+                $(document.getElementById(instance_id + "title")).summernote("reset");
                 $(document.getElementById(instance_id + "title")).summernote("code", "");
                 document.getElementById(instance_id + "name").value = "";
+                $(document.getElementById(instance_id + "value")).summernote("reset");
                 $(document.getElementById(instance_id + "value")).summernote("code", "");
                 $(document.getElementById(instance_id + "style")).val("");
                 /* document.getElementById(instance_id + "conditional_data_json").value = ""; */
