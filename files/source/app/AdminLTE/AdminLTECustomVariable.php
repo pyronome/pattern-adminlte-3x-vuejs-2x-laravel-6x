@@ -21,6 +21,7 @@ class AdminLTECustomVariable extends Model
 	protected $fillable = [
         'created_by',
         'updated_by',
+        '__system',
         'adminlteusergroup_id',
         'group',
         'name',

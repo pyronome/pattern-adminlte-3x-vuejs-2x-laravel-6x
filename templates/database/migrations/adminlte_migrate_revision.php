@@ -29,6 +29,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->boolean('deleted');
                 $table->bigInteger('created_by')->default(0);
                 $table->bigInteger('updated_by')->default(0);
+                $table->smallInteger('__system')->default(0);
                 $table->string('title');
                 $table->string('group');
                 $table->string('name');
@@ -47,6 +48,12 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->bigInteger('updated_by')->default(0)->change();
                 } else {
                     $table->bigInteger('updated_by')->default(0);
+                }
+
+                if (Schema::hasColumn('adminltecustomvariabletable', '__system')) { 
+                    $table->smallInteger('__system')->default(0)->change();
+                } else {
+                    $table->smallInteger('__system')->default(0);
                 }
 
                 if (Schema::hasColumn('adminltecustomvariabletable', 'title')) { 

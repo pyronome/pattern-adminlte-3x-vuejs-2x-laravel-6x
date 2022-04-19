@@ -1156,6 +1156,20 @@ export default {
                     } else {
                         document.getElementById("AdminLTEConfigFormContainer").innerHTML += elementHTML;
                     }
+
+                    $(document.getElementById(element.__key)).summernote({
+                        "font-styles": false,
+                        "height": 150,
+                        codemirror: {
+                            theme: "monokai"
+                        },
+                        callbacks: {
+                            onBlur: function() {
+                                this.dispatchEvent(new Event('input'));
+                            }
+                        }
+                    });
+
                 } else if ("timepicker" == element.type) {
                     elementHTML = self.getTimePickerHTML(element);
 
@@ -1187,19 +1201,6 @@ export default {
             });
 
             self.initToggleElements();
-
-            $(".textarea.vue-editor").summernote({
-                "font-styles": false,
-                "height": 150,
-                codemirror: {
-                    theme: "monokai"
-                },
-                callbacks: {
-                    onBlur: function() {
-                        this.dispatchEvent(new Event('input'));
-                    }
-                }
-            });
 
             $(".color-picker").colorpicker();
 

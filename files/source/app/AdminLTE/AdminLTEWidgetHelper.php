@@ -151,15 +151,22 @@ class AdminLTEWidgetHelper
 		$resultValue = '';
 
 		$object = AdminLTECustomVariable::where('deleted', 0)
-            ->where('adminlteusergroup_id', $adminlteusergroup_id)
+            ->where('adminlteusergroup_id', 0)
             ->where('name', $variableName)
             ->first();
 
-			
-
         if (null !== $object) {
             $resultValue = $this->getVariableCalculatedValue($object->value, $queryResult, $url_parameters, $request_parameters);
-        }
+        } else {
+			$object = AdminLTECustomVariable::where('deleted', 0)
+				->where('adminlteusergroup_id', $adminlteusergroup_id)
+				->where('name', $variableName)
+				->first();
+
+			if (null !== $object) {
+				$resultValue = $this->getVariableCalculatedValue($object->value, $queryResult, $url_parameters, $request_parameters);
+			}
+		}
 
 		return $resultValue;
 	}
@@ -197,6 +204,9 @@ class AdminLTEWidgetHelper
                 $partResult = isset($queryResult[$__key]) 
                     ? $queryResult[$__key] 
                     : $__key;
+            } else if ('CurrentUser' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = $currentUser->$__key;
             } else {
                 $__key = $textPart[1];
                 $partResult = $__key;

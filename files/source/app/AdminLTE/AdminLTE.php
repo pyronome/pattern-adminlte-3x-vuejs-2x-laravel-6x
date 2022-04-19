@@ -2431,6 +2431,107 @@ class AdminLTE
 		return;
 	}
 	
+	public function setAdminLTECustomVariables() {
+		DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+		$object = AdminLTECustomVariable::where('__system', 1)
+			->where('deleted', 0)
+			->where('name', 'currentuser_id')
+			->first();
+
+		if (null === $object) {
+			$AdminLTECustomVariable = new AdminLTECustomVariable();
+			$AdminLTECustomVariable->created_by = 0;
+			$AdminLTECustomVariable->updated_by = 0;
+			$AdminLTECustomVariable->__system = 1;
+			$AdminLTECustomVariable->adminlteusergroup_id = 0;
+			$AdminLTECustomVariable->group = '';
+			$AdminLTECustomVariable->name = 'currentuser_id';
+			$AdminLTECustomVariable->title = 'Current User Id';
+			$AdminLTECustomVariable->value = '{{CurrentUser/id}}';
+			$AdminLTECustomVariable->__order = 0;
+			$AdminLTECustomVariable->save();
+		}
+		
+		$object = AdminLTECustomVariable::where('__system', 1)
+			->where('deleted', 0)
+			->where('name', 'currentuser_email')
+			->first();
+
+		if (null === $object) {
+			$AdminLTECustomVariable = new AdminLTECustomVariable();
+			$AdminLTECustomVariable->created_by = 0;
+			$AdminLTECustomVariable->updated_by = 0;
+			$AdminLTECustomVariable->__system = 1;
+			$AdminLTECustomVariable->adminlteusergroup_id = 0;
+			$AdminLTECustomVariable->group = '';
+			$AdminLTECustomVariable->name = 'currentuser_email';
+			$AdminLTECustomVariable->title = 'Current User Email';
+			$AdminLTECustomVariable->value = '{{CurrentUser/email}}';
+			$AdminLTECustomVariable->__order = 0;
+			$AdminLTECustomVariable->save();
+		}
+
+		$object = AdminLTECustomVariable::where('__system', 1)
+			->where('deleted', 0)
+			->where('name', 'currentuser_group_id')
+			->first();
+
+		if (null === $object) {
+			$AdminLTECustomVariable = new AdminLTECustomVariable();
+			$AdminLTECustomVariable->created_by = 0;
+			$AdminLTECustomVariable->updated_by = 0;
+			$AdminLTECustomVariable->__system = 1;
+			$AdminLTECustomVariable->adminlteusergroup_id = 0;
+			$AdminLTECustomVariable->group = '';
+			$AdminLTECustomVariable->name = 'currentuser_group_id';
+			$AdminLTECustomVariable->title = 'Current User Group Id';
+			$AdminLTECustomVariable->value = '{{CurrentUser/adminlteusergroup_id}}';
+			$AdminLTECustomVariable->__order = 0;
+			$AdminLTECustomVariable->save();
+		}
+
+		$object = AdminLTECustomVariable::where('__system', 1)
+			->where('deleted', 0)
+			->where('name', 'adminlte_default_language')
+			->first();
+
+		if (null === $object) {
+			$AdminLTECustomVariable = new AdminLTECustomVariable();
+			$AdminLTECustomVariable->created_by = 0;
+			$AdminLTECustomVariable->updated_by = 0;
+			$AdminLTECustomVariable->__system = 1;
+			$AdminLTECustomVariable->adminlteusergroup_id = 0;
+			$AdminLTECustomVariable->group = '';
+			$AdminLTECustomVariable->name = 'adminlte_default_language';
+			$AdminLTECustomVariable->title = 'AdminLTE Default Language';
+			$AdminLTECustomVariable->value = '{{GlobalParameters/adminlte.generalsettings.defaultlanguage}}';
+			$AdminLTECustomVariable->__order = 0;
+			$AdminLTECustomVariable->save();
+		}
+
+		$object = AdminLTECustomVariable::where('__system', 1)
+			->where('deleted', 0)
+			->where('name', 'adminlte_timezone')
+			->first();
+
+		if (null === $object) {
+			$AdminLTECustomVariable = new AdminLTECustomVariable();
+			$AdminLTECustomVariable->created_by = 0;
+			$AdminLTECustomVariable->updated_by = 0;
+			$AdminLTECustomVariable->__system = 1;
+			$AdminLTECustomVariable->adminlteusergroup_id = 0;
+			$AdminLTECustomVariable->group = '';
+			$AdminLTECustomVariable->name = 'adminlte_timezone';
+			$AdminLTECustomVariable->title = 'AdminLTE Timezone';
+			$AdminLTECustomVariable->value = '{{GlobalParameters/adminlte.generalsettings.timezone}}';
+			$AdminLTECustomVariable->__order = 0;
+			$AdminLTECustomVariable->save();
+		}
+
+		DB::statement('SET FOREIGN_KEY_CHECKS=1');
+	}
+	
 	public function updateModelFileObject($className, $classId, $propertyName, $fileIdCSV)
 	{
 		// initialize variables

@@ -234,7 +234,7 @@
                 var self = this;
                 var instance_id = self.instance_id;
 
-                $(".textarea.vue-editor").summernote({
+                var summernoteOptions = {
                     "font-styles": false,
                     "height": 150,
                     codemirror: {
@@ -245,7 +245,10 @@
                             this.dispatchEvent(new Event('input'));
                         }
                     }
-                });
+                };
+
+                $(document.getElementById(instance_id + "title")).summernote();
+                $(document.getElementById(instance_id + "value")).summernote();
             },
             setWidgetFormValues: function() {
                 var self = this;

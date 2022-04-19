@@ -50,7 +50,8 @@
                                                    <span class="spanCustomVariableTitle" v-html="item.title + ' (' + item.name + ')'"></span>
                                                 </td>
                                                 <td>
-                                                   <button type="button"
+                                                   <button v-if="(0 == item.__system)"
+                                                        type="button"
                                                         class="btn-icon btn-icon-primary"
                                                         @click="showEdit(item.name)"
                                                         style="margin-bottom:0;">
@@ -58,7 +59,8 @@
                                                             <i class="fas fa-pen"></i>
                                                         </span>                    
                                                     </button> 
-                                                    <button type="button" 
+                                                    <button v-if="(0 == item.__system)"
+                                                        type="button" 
                                                         class="btn-icon btn-icon-danger"
                                                         @click="showDeleteDialog(item.id)">
                                                         <span class="btn-label btn-label-right"><i class="fas fa-times"></i></span>
@@ -101,6 +103,7 @@
                         </div>
                         <div class="modal-body">
                             <input type="hidden" id="__cv_id" v-model="variableForm.id">
+                            <input type="hidden" id="__cv___system" v-model="variableForm.__system">
                             <div class="row">
                                 <div class="form-group col-lg-12">
                                     <label for="__cv_name" class="detail-label">{{ $t('Name') }}</label>
@@ -197,6 +200,7 @@ export default {
             variableForm: new Form({
                 'debug_mode': false,
                 'id': 0,
+                '__system': 0,
                 'name': '',
                 'title': '',
                 'default_value': '',
@@ -297,6 +301,7 @@ export default {
         showEdit: function(name) {
             var self = this;
             self.variableForm.id = 0;
+            self.variableForm.__system = 0;
             self.variableForm.name = "";
             self.variableForm.title = "";
             self.variableForm.value = "";

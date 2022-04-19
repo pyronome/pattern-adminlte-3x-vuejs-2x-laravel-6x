@@ -63,14 +63,32 @@ class AdminLTEController extends Controller
         $currentUser = auth()->guard('adminlteuser')->user();
 
         $objectList = AdminLTECustomVariable::where('deleted', 0)
-            ->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
+            ->where('__system', 1)
+            ->where('adminlteusergroup_id', 0)
             ->get();
-
+        
         $list = [];
         $index = 0;
 
         foreach ($objectList as $object) {
             $list[$index]['id'] = $object->id;
+            $list[$index]['__system'] = $object->__system;
+            $list[$index]['group'] = $object->group;
+            $list[$index]['adminlteusergroup_id'] = $object->adminlteusergroup_id;
+            $list[$index]['title'] = $object->title;
+            $list[$index]['name'] = $object->name;
+            $list[$index]['value'] = $object->value;
+
+            $index++;
+        }
+
+        $objectList = AdminLTECustomVariable::where('deleted', 0)
+            ->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
+            ->get();
+
+        foreach ($objectList as $object) {
+            $list[$index]['id'] = $object->id;
+            $list[$index]['__system'] = $object->__system;
             $list[$index]['group'] = $object->group;
             $list[$index]['adminlteusergroup_id'] = $object->adminlteusergroup_id;
             $list[$index]['title'] = $object->title;
@@ -131,6 +149,7 @@ class AdminLTEController extends Controller
             $objectAdminLTECustomVariable->updated_by = $currentUser->id;
         } // if ($id > 0) {
 
+        $objectAdminLTECustomVariable->__system = 0;
         $objectAdminLTECustomVariable->adminlteusergroup_id = $currentUser->adminlteusergroup_id;         
         $objectAdminLTECustomVariable->title = $title;
         $objectAdminLTECustomVariable->name = $name;
@@ -295,11 +314,22 @@ class AdminLTEController extends Controller
         $currentUser = auth()->guard('adminlteuser')->user();
 
         $objectList = AdminLTECustomVariable::where('deleted', 0)
-            ->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
+            ->where('__system', 1)
+            ->where('adminlteusergroup_id', 0)
             ->get();
 
         $list = [];
         $index = 0;
+
+        foreach ($objectList as $object) {
+            $list[$index]['id'] = 'CustomVariables/' . $object->name;
+            $list[$index]['text'] = $object->title;
+            $index++;
+        }
+
+        $objectList = AdminLTECustomVariable::where('deleted', 0)
+            ->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
+            ->get();
 
         foreach ($objectList as $object) {
             $list[$index]['id'] = 'CustomVariables/' . $object->name;

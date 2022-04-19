@@ -284,7 +284,7 @@
                                         <textarea id="description"
                                             name="description"
                                             data-type="html_editor"
-                                            class="textarea vue-editor item-menu"
+                                            class="textarea html-editor item-menu"
                                             rows="5"></textarea>
                                     </div>
 
@@ -402,7 +402,7 @@
                                         <textarea id="content"
                                             name="content"
                                             data-type="html_editor"
-                                            class="textarea vue-editor item-menu"
+                                            class="textarea html-editor item-menu"
                                             rows="5"></textarea>
                                     </div>
                                 </div>
@@ -491,7 +491,7 @@
                                             <textarea id="default_value_html_editor"
                                                 name="default_value_html_editor"
                                                 data-type="html_editor"
-                                                class="textarea vue-editor"
+                                                class="textarea html-editor"
                                                 rows="5"></textarea>
                                         </div>
                                         <div class="input-group" v-show="('colorpicker' == parameter_type)">
@@ -1073,7 +1073,7 @@ export default {
             $( "#ulConfigEditor" ).sortable();
             $( "#ulConfigEditor" ).disableSelection();
 
-            $(".textarea.vue-editor").summernote({
+            var summernoteOptions = {
                 "font-styles": false,
                 "height": 150,
                 codemirror: {
@@ -1084,7 +1084,11 @@ export default {
                         this.dispatchEvent(new Event('input'));
                     }
                 }
-            });
+            };
+
+            $("#description").summernote(summernoteOptions);
+            $("#content").summernote(summernoteOptions);
+            $("#default_value_html_editor").summernote(summernoteOptions);
 
             $(".color-picker").colorpicker();
 

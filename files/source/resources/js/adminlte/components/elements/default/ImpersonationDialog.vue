@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="divImpersonationDialog" class="modal fade" tabindex="-1" role="dialog">
+        <div id="divImpersonationDialog" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -70,10 +70,7 @@ export default {
                 is_impersonation_users_loading: false,
                 is_impersonation_users_loaded: false,
                 is_impersonation_data_loading: false,
-                is_impersonation_data_loaded: false,
-                external_files: [
-                    ("/js/adminlte/select2/dist/js/select2.min.js"),
-                ],
+                is_impersonation_data_loaded: false
             }
         };
     },
@@ -110,7 +107,6 @@ export default {
         },
         initializePage: function () {
             var self = this;
-
             self.initailizeSelect2();
         },
         initailizeSelect2(){
@@ -173,6 +169,7 @@ export default {
                     this.page.is_impersonation_data_loaded = true;
                     this.page.is_impersonation_data_loading = false;
                     this.ImpersonationForm.user_id = data.impersonated_id;
+
                     this.processLoadQueue();
                 }).catch(({ data }) => {
                     this.page.is_impersonation_data_loaded = true;
@@ -282,10 +279,12 @@ export default {
     mounted() {
         var self = this;
 
-        AdminLTEHelper.loadExternalFiles(
-            self.page.external_files, 
-            self.processLoadQueue()
-        );
+        var scriptTag = document.createElement("script");
+        scriptTag.src = "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js";
+        scriptTag.id = "select2min";
+        document.getElementsByTagName('head')[0].appendChild(scriptTag);
+
+        self.processLoadQueue()
 
         $('[data-toggle="tooltip"]').tooltip();
     }
