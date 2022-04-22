@@ -119,6 +119,11 @@ class AdminLTEUserGroup extends Model
     {
         return $this->hasMany(AdminLTECustomVariable::class);
     }
+
+    public function AdminLTECustomVariableValue_adminlteusergroup_id()
+    {
+        return $this->hasMany(AdminLTECustomVariableValue::class);
+    }
     
     /* {{@snippet:end_methods}} */
 }

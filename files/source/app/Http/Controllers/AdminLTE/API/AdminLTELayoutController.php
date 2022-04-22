@@ -398,12 +398,36 @@ class AdminLTELayoutController extends Controller
         $objPDO->execute();
         $data = $objPDO->fetchAll();
 
-        /* echo '<div style="display:block">';
+        if (isset($data)) {
+            if (isset($data[0])) {
+                $calculationResult = $data[0];//["result"];
+            }
+        }
+
+        return $calculationResult;
+    }
+
+    public function get_infoboxvalue_by_extreme_calculation($data_source) {
+        $calculationResult = [];
+        $condition = 1;
+
+        try {
+            $connection = DB::connection()->getPdo();
+        } catch (PDOException $e) {
+            print($e->getMessage());
+        }
+                
+        //$objPDO = $connection->prepare($query);
+        $objPDO = $connection->prepare("select * from countrytable where deleted=0;");
+        $objPDO->execute();
+        $data = $objPDO->fetchAll();
+
+        echo '<div style="display:block">';
         echo '<pre>';
         print_r($data);
         echo '</pre>';
         echo '</div>';
-        die(); */
+        die();
 
         if (isset($data)) {
             if (isset($data[0])) {
@@ -446,7 +470,9 @@ class AdminLTELayoutController extends Controller
             } else if ('advanced' == $data_source['calculation_type']) {
                 $query = $this->getParsedValue($data_source['query'], '', $url_parameters, $request_parameters);
                 $queryResult = $this->get_infoboxvalue_by_advanced_calculation($query);
-            }
+            } else if ('extreme' == $data_source['calculation_type']) {
+                $queryResult = $this->get_infoboxvalue_by_extreme_calculation($data_source);
+            } 
 
             foreach ($metaData as $key => $value) {
                 $returnData[$key] = $this->getParsedValue($value, $queryResult, $url_parameters, $request_parameters);
@@ -675,6 +701,35 @@ class AdminLTELayoutController extends Controller
         return $calculationResult;
     }
 
+    public function get_recordlist_by_extreme_calculation($query) {
+        $calculationResult = [];
+        $condition = 1;
+
+        try {
+            $connection = DB::connection()->getPdo();
+        } catch (PDOException $e) {
+            print($e->getMessage());
+        }
+                
+        //$objPDO = $connection->prepare($query);
+        $objPDO = $connection->prepare("select * from countrytable where deleted=0;");
+        $objPDO->execute();
+        $data = $objPDO->fetchAll();
+
+        /* echo '<div style="display:block">';
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+        echo '</div>';
+        die(); */
+
+        if (isset($data)) {
+            $calculationResult = $data;//["result"];
+        }
+
+        return $calculationResult;
+    }
+
     public function get_recordlist_data(Request $request)
     {
         $returnData = null;
@@ -713,14 +768,15 @@ class AdminLTELayoutController extends Controller
             } else if ('advanced' == $data_source['calculation_type']) {
                 $query = $this->getParsedValue($data_source['query'], '', $url_parameters, $request_parameters);
                 $queryResult = $this->get_recordlist_by_advanced_calculation($query);
+            } else if ('extreme' == $data_source['calculation_type']) {
+                $queryResult = $this->get_recordlist_by_extreme_calculation($data_source);
             }
 
             $record_list_title = $this->getParsedValue($metaData['record_list_title'], $queryResult, $url_parameters, $request_parameters);
 
             $columns = $metaData['columns'];
             $index = 0;
-            foreach ($columns as $columnJSON) {
-                $column = json_decode($columnJSON, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            foreach ($columns as $column) {
                 $objectColumn = (object) $column;
 
                 if ('on' == $objectColumn->visible) {

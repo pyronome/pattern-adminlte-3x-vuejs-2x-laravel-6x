@@ -34,6 +34,9 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->string('group');
                 $table->string('name');
                 $table->string('value');
+                $table->string('default_value')->nullable();
+                $table->smallInteger('remember')->default(0);
+                $table->string('remember_type')->nullable();
                 $table->bigInteger('__order', false, true);
             });
         } else {
@@ -80,6 +83,24 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->string('value');
                 }
 
+                if (Schema::hasColumn('adminltecustomvariabletable', 'default_value')) { 
+                    $table->longText('default_value')->nullable()->change();
+                } else {
+                    $table->longText('default_value')->nullable();
+                }
+
+                if (Schema::hasColumn('adminltecustomvariabletable', 'remember')) { 
+                    $table->smallInteger('remember')->default(0)->change();
+                } else {
+                    $table->smallInteger('remember')->default(0);
+                }
+
+                if (Schema::hasColumn('adminltecustomvariabletable', 'remember_type')) { 
+                    $table->longText('remember_type')->nullable()->change();
+                } else {
+                    $table->longText('remember_type')->nullable();
+                }
+
                 if (Schema::hasColumn('adminltecustomvariabletable', '__order')) { 
                     $table->bigInteger('__order', false, true)->change();
                 } else {
@@ -88,6 +109,25 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
             });
         }
         /* {{@snippet:end_adminltecustomvariabletable_migration}} */
+
+        /* {{@snippet:begin_adminltecustomvariablevaluetable_migration}} */        
+        if (!Schema::hasTable('adminltecustomvariablevaluetable')) {
+            Schema::create('adminltecustomvariablevaluetable', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->timestamps();
+                $table->boolean('deleted');
+                $table->text('value');
+            });
+        } else {
+            Schema::table('adminltecustomvariablevaluetable', function (Blueprint $table) {
+                if (Schema::hasColumn('adminltecustomvariablevaluetable', 'value')) { 
+                    $table->text('value')->change();
+                } else {
+                    $table->text('value');
+                }
+            });
+        }
+        /* {{@snippet:end_adminltelayouttable_migration}} */
 
         /* {{@snippet:begin_adminlteuserconfigfiletable_migration}} */        
         if (!Schema::hasTable('adminlteuserconfigfiletable')) {
@@ -609,6 +649,30 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 if (!in_array('adminltecustomvariabletable_adminlteusergroup_id_foreign', $foreignKeys)) {
                     $table->foreign('adminlteusergroup_id')->references('id')->on('adminlteusergrouptable'); 
                 }     
+            });
+
+            Schema::table('adminltecustomvariablevaluetable', function(Blueprint $table) {
+                if (Schema::hasColumn('adminltecustomvariablevaluetable', 'adminlteusergroup_id')) { 
+                    $table->unsignedBigInteger('adminlteusergroup_id')->nullable()->unsigned()->change();
+                } else {
+                    $table->unsignedBigInteger('adminlteusergroup_id')->nullable()->unsigned();
+                }
+
+                if (Schema::hasColumn('adminltecustomvariablevaluetable', 'customvariable_id')) { 
+                    $table->unsignedBigInteger('customvariable_id')->nullable()->unsigned()->change();
+                } else {
+                    $table->unsignedBigInteger('customvariable_id')->nullable()->unsigned();
+                }
+    
+                $foreignKeys = $this->listTableForeignKeys('adminltecustomvariablevaluetable');
+    
+                if (!in_array('adminltecustomvariablevaluetable_adminlteusergroup_id_foreign', $foreignKeys)) {
+                    $table->foreign('adminlteusergroup_id')->references('id')->on('adminlteusergrouptable'); 
+                }  
+                
+                if (!in_array('adminltecustomvariablevaluetable_customvariable_id_foreign', $foreignKeys)) {
+                    $table->foreign('customvariable_id')->references('id')->on('adminltecustomvariabletable'); 
+                }
             });
         } else {
             Schema::table('adminlteusergrouptable', function (Blueprint $table) {

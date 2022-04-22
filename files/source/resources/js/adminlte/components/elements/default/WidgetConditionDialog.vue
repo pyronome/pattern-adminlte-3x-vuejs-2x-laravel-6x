@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="divWidgetConditionDialog" class="modal fade" tabindex="-1" role="dialog">
+        <div id="divWidgetConditionDialog" class="modal level2 fade" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -421,7 +421,7 @@ export default {
             }
 
             if (!self.page.is_custom_variable_options_loaded) {
-                self.load_custom_variable_options(function(){});
+                self.load_custom_variable_options();
             }
 
             if (!self.page.is_file_options_loaded) {
@@ -467,7 +467,26 @@ export default {
                 document.getElementById("__cv_field__iconpicker-value").value = e.icon;
             });
         },
-        load_custom_variable_options: function(callback) {
+        load_custom_variable_options: function() {
+            var custom_variables = window.__custom_variables.list
+            var options = [];
+
+            for (let index = 0; index < custom_variables.length; index++) {
+                const element = custom_variables[index];
+                let option = {
+                    "id" : "CustomVariables/" + element.name,
+                    "text": element.title
+                }
+
+                options.push(option);
+            }
+
+            this.custom_variable_options = options;
+
+            this.refreshFilters();
+
+            return;
+
             var self = this;
             if (self.page.is_custom_variable_options_loading) {
                 return;
@@ -983,12 +1002,6 @@ export default {
                 $(selectElement).removeClass("d-none");
             }
         },
-        refreshCustomVariables: function() {
-            var self = this;
-            self.load_custom_variable_options(function(){
-                self.refreshFilters();
-            })
-        },
         refreshFilters: function() {
             var self = this;
             var options = [];
@@ -1025,10 +1038,10 @@ export default {
             options = self.custom_variable_options;
             var variableCount = options.length;
 
-            /* if (0 == variableCount) {
+            if (0 == variableCount) {
                 return;
-            } */
-            
+            }
+
             for (var i = 0; i < variableCount; i++) {
                 filters.push({
                     "id": options[i]["id"],
@@ -1478,7 +1491,7 @@ export default {
     },
     mounted() {
         this.processLoadQueue();
-        window.widgetConditionDialog = this;
+        window.__condition_dialog = this;
         AdminLTEHelper.loadExternalFiles(this.page.external_files);
 
         $("#divEditFieldDialog").off("shown.bs.modal").on('shown.bs.modal', function (e) { 

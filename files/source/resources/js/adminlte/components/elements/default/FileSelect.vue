@@ -28,8 +28,10 @@ export default {
 
         self.load_file_options(function() {
             if (self.multiple) {
+                //console.log("select2 multiple")
                 $(selectElement).select2({multiple: true});
             } else {
+                //console.log("select2 ")
                 $(selectElement).select2({multiple: false});
             }
         });

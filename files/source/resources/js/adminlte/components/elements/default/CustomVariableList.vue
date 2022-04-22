@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="modal fade" id="modalCustomVariableList" tabindex="-1" role="dialog">
+        <div class="modal level3 fade" id="modalCustomVariableList" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <form>
@@ -13,7 +13,7 @@
                         <div class="modal-body" style="padding-top:0px;">
                             <div class="row">
                                 <div class="col-6 mt-3 mb-3">
-                                    <button type="button" class="btn btn-primary btn-md btn-on-card text-white float-sm-right" @click="showEdit('')">
+                                    <button type="button" class="btn btn-primary btn-md btn-on-card text-white float-sm-right" @click="addNewCustomVariable">
                                         <i class="fas fa-plus" aria-hidden="true"></i> <span>{{ $t('Add Variable') }}</span>
                                     </button>
                                 </div>
@@ -53,7 +53,7 @@
                                                    <button v-if="(0 == item.__system)"
                                                         type="button"
                                                         class="btn-icon btn-icon-primary"
-                                                        @click="showEdit(item.name)"
+                                                        @click="showEdit(item.id)"
                                                         style="margin-bottom:0;">
                                                         <span class="btn-label btn-label-right">
                                                             <i class="fas fa-pen"></i>
@@ -91,7 +91,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modalAddCustomVariable" tabindex="-1" role="dialog">
+        <div class="modal level4 fade" id="modalAddCustomVariable" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form>
@@ -109,7 +109,7 @@
                                     <label for="__cv_name" class="detail-label">{{ $t('Name') }}</label>
                                     <input type="text" class="form-control " id="__cv_name" v-model="variableForm.name">
                                     <span class="text-muted">
-                                        {{ $t('This value must contain only English letters or numbers.') }}
+                                        {{ $t('This value must contain only English letters, numbers and "_".') }}
                                     </span>
                                 </div>
                                 <div class="form-group col-lg-12">
@@ -126,7 +126,7 @@
                                     </label>
                                     <input type="text" class="form-control " id="__cv_default_value" v-model="variableForm.default_value">
                                 </div>
-                                <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-12 d-none">
                                     <label for="__cv_value" class="detail-label">
                                         {{ $t('Value') }}
                                         <insert-variable-button 
@@ -135,6 +135,41 @@
                                         </insert-variable-button>
                                     </label>
                                     <input type="text" class="form-control " id="__cv_value" v-model="variableForm.value">
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <div class="">
+                                        <div class="icheck-primary d-inline">
+                                            <input type="checkbox"
+                                                id="__cv_remember"
+                                                name="__cv_remember"
+                                                class="item-menu"
+                                                v-model="remember_value">
+                                            <label for="__cv_remember" class="">
+                                                {{ $t('Remember Value') }}  
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" v-show="remember_value">
+                                <div class="form-group col-6 clearfix">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="radio" 
+                                            id="__cv_remember_type1" 
+                                            name="__cv_remember_type" 
+                                            value="session"
+                                            checked>
+                                        <label class="detail-label" for="__cv_remember_type1">Remember in Session</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-6 clearfix">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="radio" 
+                                            id="__cv_remember_type2" 
+                                            name="__cv_remember_type"
+                                            value="database">
+                                        <label class="detail-label" for="__cv_remember_type2">Remember in Database</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +193,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modalCustomVariableDelete" tabindex="3" role="dialog">
+        <div class="modal level4 fade" id="modalCustomVariableDelete" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -195,8 +230,8 @@
 export default {
     data() {
         return {
+            remember_value: false,
             variableList: [],
-            listByKey: {},
             variableForm: new Form({
                 'debug_mode': false,
                 'id': 0,
@@ -204,6 +239,8 @@ export default {
                 'name': '',
                 'title': '',
                 'default_value': '',
+                'remember': '',
+                'remember_type': '',
                 'value': ''
             }),
             formDelete: new Form({
@@ -213,6 +250,7 @@ export default {
                 has_error: false,
                 error_msg: ''
             },
+            lastAddedVariableId: 0,
             page: {
                 is_ready: false,
                 has_server_error: false,
@@ -235,9 +273,7 @@ export default {
             }
 
             if (!self.page.is_variables_loaded) {
-                self.load_variables(function(){
-                    self.refreshListByKey();
-                });
+                self.load_variables();
             } else {
                 self.initializePage();
             }
@@ -264,6 +300,8 @@ export default {
                     self.page.is_variables_loaded = true;
                     self.page.is_variables_loading = false;
                     self.variableList = data.list;
+                    window.__custom_variables.list = data.list;
+                    self.refreshRelatedWithCustomVariableList();
                     self.processLoadQueue();
                 }).catch(({ data }) => {
                     self.page.is_variables_loaded = true;
@@ -271,11 +309,20 @@ export default {
                     self.$Progress.fail();
                     self.page.has_server_error = true;
                     self.processLoadQueue();
-                }).finally(function() {
-                    if (!self.page.has_server_error) {
-                        callback();
-                    }
                 });
+        },
+        refreshRelatedWithCustomVariableList: function() {
+            if (window.__insert_variable_dialog) {
+                window.__insert_variable_dialog.load_custom_variable_options();
+            }
+
+            if (window.__ds_fields) {
+                window.__ds_fields.load_customvariables(this.lastAddedVariableId);
+            }
+
+            if (window.__condition_dialog) {
+                window.__condition_dialog.load_custom_variable_options();
+            }
         },
         doSearchVariable: function(sender) {
             if (!sender) {
@@ -298,25 +345,51 @@ export default {
                 }
             }
         },
-        showEdit: function(name) {
+        addNewCustomVariable: function() {
+            this.showEdit(0);
+        },
+        showEdit: function(id) {
             var self = this;
             self.variableForm.id = 0;
             self.variableForm.__system = 0;
             self.variableForm.name = "";
             self.variableForm.title = "";
             self.variableForm.value = "";
+            self.variableForm.default_value = "";
+            self.variableForm.remember = 0;
+            self.variableForm.remember_type = "";
 
-            if ("" != name) {
-                if (null !== self.listByKey[name]) {
-                    var element = self.listByKey[name]
-                    self.variableForm.id = element.id;
-                    self.variableForm.name = element.name;
-                    self.variableForm.title = element.title;
-                    self.variableForm.value = element.value;
+            if (0 != id) {
+                var element = self.getItemById(id);
+                self.variableForm.id = element.id;
+                self.variableForm.name = element.name;
+                self.variableForm.title = element.title;
+                self.variableForm.value = element.value;
+                self.variableForm.default_value = element.default_value;
+                self.variableForm.remember = element.remember;
+                self.variableForm.remember_type = element.remember_type;
+
+                var selectorText = 'input[name="__cv_remember_type"][value="' + element.remember_type + '"]';
+                $(selectorText).prop('checked', true);
+            }
+
+            self.remember_value = (1 == self.variableForm.remember);
+
+            $("#modalAddCustomVariable").modal();
+        },
+        getItemById: function(id) {
+            var elements = this.variableList;
+            var item = {};
+
+            for (let index = 0; index < elements.length; index++) {
+                const element = elements[index];
+                if (id == element.id) {
+                    item = element;
+                    return item;
                 }
             }
 
-            $("#modalAddCustomVariable").modal();
+            return item;
         },
         isValid: function() {
             var self = this;
@@ -328,7 +401,7 @@ export default {
                     title: self.$t("Variable name is required."),
                     icon: 'error',
                     showConfirmButton: false,
-                    timer: 10000,
+                    timer: 3000,
                     timerProgressBar: true
                 });
                 return false;
@@ -337,30 +410,16 @@ export default {
             if (!self.isKeyValid(__cv_name)) {
                 Vue.swal.fire({
                     position: 'top-end',
-                    title: self.$t("Variable name must contain only English letters. You cannot be use special characters and numbers."),
+                    title: self.$t("Variable name must contain only English letters, numbers and \"_\"."),
                     icon: 'error',
                     showConfirmButton: false,
-                    timer: 10000,
+                    timer: 3000,
                     timerProgressBar: true
                 });
                 return false;
             }
 
             document.getElementById("__cv_name").value = __cv_name;
-
-            if (self.listByKey.hasOwnProperty(__cv_name)) {
-                if (self.listByKey[__cv_name]["id"] != document.getElementById("__cv_id").value) {
-                    Vue.swal.fire({
-                        title: self.$t("This variable name is in use. Please try different name."),
-                        icon: 'error',
-                        showConfirmButton: false,
-                        timer: 10000,
-                        timerProgressBar: true
-                    });
-                    return false;
-                }
-            }
-
             return true;
         },
         isKeyValid: function(__key) {
@@ -371,7 +430,7 @@ export default {
                 "g","h","i","j","k","l",
                 "m","n","o","p","q","r",
                 "s","t","u","v","w","x","y","z",
-                "0","1","2","3","4","5","6","7","8","9"];
+                "0","1","2","3","4","5","6","7","8","9", "_"];
 
             for (let i = 0; i < __key.length; i++) {
                 let char = __key.charAt(i);
@@ -384,37 +443,17 @@ export default {
             
             return valid;
         },
-        refreshListByKey: function() {
-            this.listByKey = {};
-            var listByKey = {};
-            var elements = this.variableList;
-
-            for (let index = 0; index < elements.length; index++) {
-                const element = elements[index];
-                listByKey[element.name] = element;
-            }
-
-            this.listByKey = listByKey;
-
-            if (document.body.getAttribute("custom-variables-first-read")) {
-                if (window.insertVariableDialog) {
-                    window.insertVariableDialog.load_custom_variable_options();
-                }
-
-                if (window.widgetConditionDialog) {
-                    window.widgetConditionDialog.refreshCustomVariables();
-                }
-            } else {
-                document.body.setAttribute("custom-variables-first-read", 1);
-            }
-
-            $('#modalAddCustomVariable').modal("hide");
-        },
         saveVariable: function () {
             var self = this;
 
+            if (!self.isValid()) {
+                return false;
+            }
+
             self.variableForm.default_value = document.getElementById("__cv_default_value").value;
             self.variableForm.value = document.getElementById("__cv_value").value;
+            self.variableForm.remember = ("on" == document.getElementById("__cv_remember").value);
+            self.variableForm.remember_type = $("input[name='__cv_remember_type']:checked").val();
 
             self.$Progress.start();
             self.variableForm.post(AdminLTEHelper.getAPIURL("adminlte/post_custom_variable"))
@@ -422,6 +461,7 @@ export default {
                     self.$Progress.finish();
                     self.page.has_post_error = data.has_error;
                     self.page.post_error_msg = data.error_msg;
+                    self.lastAddedVariableId = data.id;
                     self.page.has_server_error = false;
                 }).catch(({ data }) => {
                     self.$Progress.fail();
@@ -440,13 +480,11 @@ export default {
                                 title: self.$t("Your changes have been saved!"),
                                 icon: 'success',
                                 showConfirmButton: false,
-                                timer: 2000,
+                                timer: 3000,
                                 timerProgressBar: true,
                                 onClose: () => {
-                                    self.load_variables(function(){
-                                        self.refreshListByKey();
-                                    });
-
+                                    self.load_variables();
+                                    $("#modalAddCustomVariable").modal("hide");
                                 }
                             });
                         } else {
@@ -455,7 +493,7 @@ export default {
                                 title: self.page.post_error_msg,
                                 icon: 'error',
                                 showConfirmButton: false,
-                                timer: 10000,
+                                timer: 3000,
                                 timerProgressBar: true
                             });
                         }
@@ -483,7 +521,7 @@ export default {
                             title: self.$t("Selected variable have been deleted."),
                             icon: 'success',
                             showConfirmButton: false,
-                            timer: 2000,
+                            timer: 3000,
                             timerProgressBar: true,
                             onClose: () => {
                                 $("#modalCustomVariableDelete").modal("hide");
@@ -495,7 +533,7 @@ export default {
                             title: self.delete_form.error_msg,
                             icon: 'error',
                             showConfirmButton: false,
-                            timer: 10000,
+                            timer: 3000,
                             timerProgressBar: true
                         });
                     }
@@ -503,6 +541,8 @@ export default {
         },
     },
     mounted() {
+        window.__custom_variables = this;
+        window.__custom_variables.list = [];
         this.$Progress.start();
         this.page.is_ready = false;
         this.processLoadQueue();

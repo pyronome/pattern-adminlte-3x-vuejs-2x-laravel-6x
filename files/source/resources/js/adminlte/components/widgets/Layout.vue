@@ -24,11 +24,7 @@
                 </div>
             </div>
         </section>
-        
-        <widget-condition-dialog></widget-condition-dialog>
-        <custom-variable-list></custom-variable-list>
-        <insert-variable-dialog></insert-variable-dialog>
-        
+                
         <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
 </template>

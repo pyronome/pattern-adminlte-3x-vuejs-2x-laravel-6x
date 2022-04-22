@@ -304,7 +304,23 @@ export default {
                 });
         },
         load_custom_variable_options: function() {
-            var self = this;
+            var custom_variables = window.__custom_variables.list
+            var options = [];
+
+            for (let index = 0; index < custom_variables.length; index++) {
+                const element = custom_variables[index];
+                let option = {
+                    "id" : "CustomVariables/" + element.name,
+                    "text": element.title
+                }
+
+                options.push(option);
+            }
+
+            this.custom_variable_options = options;
+
+            return;
+
             if (self.page.is_custom_variable_options_loading) {
                 return;
             }
@@ -620,7 +636,7 @@ export default {
     },
     mounted() {
         this.processLoadQueue();
-        window.insertVariableDialog = this;
+        window.__insert_variable_dialog = this;
     }
 }
 </script>

@@ -152,20 +152,15 @@
         </div>
 
         <script id="column-row-template" type="text/html">
-            <tr id="__guid__-tr" 
-                data-json='__data_column_json__' 
-                data-guid="__guid__" 
-                style= "__style__">
-                <td class="">
-                    <span id="__guid__-title">__label__</span>
-                    <button type="button" title="Remove Column" class="btn-icon btn-icon-danger float-right btn-remove-column">
-                        <span class="btn-label btn-label-right"><i class="fas fa-times"></i></span>
-                    </button>
-                    <button type="button" title="Edit Column" class="btn-icon btn-icon-primary float-right btn-edit-column" data-conditional-edit="false">
-                        <span class="btn-label btn-label-right"><i class="fas fa-pen"></i></span>
-                    </button>
-                </td>
-            </tr>
+            <td class="">
+                <span id="__guid__-title">__label__</span>
+                <button type="button" title="Remove Column" class="btn-icon btn-icon-danger float-right btn-remove-column">
+                    <span class="btn-label btn-label-right"><i class="fas fa-times"></i></span>
+                </button>
+                <button type="button" title="Edit Column" class="btn-icon btn-icon-primary float-right btn-edit-column" data-conditional-edit="false">
+                    <span class="btn-label btn-label-right"><i class="fas fa-pen"></i></span>
+                </button>
+            </td>
         </script>
 
         
@@ -234,7 +229,7 @@
                 var self = this;
                 var instance_id = self.instance_id;
 
-                var summernoteOptions = {
+                $(".textarea.vue-editor").summernote({
                     "font-styles": false,
                     "height": 150,
                     codemirror: {
@@ -245,10 +240,7 @@
                             this.dispatchEvent(new Event('input'));
                         }
                     }
-                };
-
-                $(document.getElementById(instance_id + "title")).summernote();
-                $(document.getElementById(instance_id + "value")).summernote();
+                });
             },
             setWidgetFormValues: function() {
                 var self = this;
@@ -257,12 +249,50 @@
 
                 document.getElementById(instance_id + "record_list_title").value = data.content.record_list_title;
 
-                self.renderColumnList(data.content.columns);
+                if (data.content.columns.length > 0) {
+                    self.renderColumnList(data.content.columns);
+                }
             },
             renderColumnList: function(columns) {
                 var self = this;
                 var instance_id = self.instance_id;
-                var liTemplate = document.getElementById("column-row-template").innerHTML;
+                var columnsContainer = document.getElementById(instance_id + "columnList");
+                columnsContainer.innerHTML = "";
+                var trTemplateHTML = document.getElementById("column-row-template").innerHTML;
+
+                for (let index = 0; index < columns.length; index++) {
+                    let column_data = columns[index];
+                    let column_guid = AdminLTEHelper.generateGUID("column");
+
+                    let trHTML = trTemplateHTML.replace(/__guid__/g, column_guid).replace(/__label__/g, column_data.title);
+
+                    let tr = document.createElement("tr");
+                    tr.innerHTML = trHTML;
+                    tr.id = (column_guid + "-tr");
+                    tr.setAttribute("data-guid", column_guid);
+
+                    let style = ("on" == column_data.visible) ? "" : "opacity:0.5";
+                    tr.style = style;
+
+                    columnsContainer.appendChild(tr);
+
+                    $(document.getElementById(column_guid + "-tr")).data("column_data", column_data);
+                }
+
+                $(".btn-edit-column", columnsContainer).off("click").on("click", function () {
+                    self.doEditColumn(this.parentNode.parentNode.getAttribute("data-guid"), this.getAttribute("data-conditional-edit"));
+                });
+
+                $(".btn-remove-column", columnsContainer).off("click").on("click", function () {
+                    self.doRemoveColumn(this);
+                });
+
+                $(columnsContainer).sortable();
+                $(columnsContainer).disableSelection();
+
+
+
+                /* var liTemplate = document.getElementById("column-row-template").innerHTML;
                 var ulInnerHTML = "";
                 var liHTML = "";
 
@@ -283,11 +313,7 @@
                 columnsContainer.innerHTML = ulInnerHTML;
 
                 $(".btn-edit-column", columnsContainer).off("click").on("click", function () {
-                    self.doEditColumn(
-                        this.parentNode.parentNode.getAttribute("data-guid"), 
-                        JSON.parse(this.parentNode.parentNode.getAttribute("data-json")),
-                        this.getAttribute("data-conditional-edit")
-                    );
+                    self.doEditColumn(this.parentNode.parentNode.getAttribute("data-guid"), this.getAttribute("data-conditional-edit"));
                 });
 
                 $(".btn-remove-column", columnsContainer).off("click").on("click", function () {
@@ -295,7 +321,7 @@
                 });
 
                 $(columnsContainer).sortable();
-                $(columnsContainer).disableSelection();
+                $(columnsContainer).disableSelection(); */
             },
             addNewColumn: function() {
                 var instance_id = this.instance_id;
@@ -313,21 +339,24 @@
 
                 $(document.getElementById(instance_id + "column_dialog")).modal();
             },
-            doEditColumn: function(guid, data, conditional_edit) {
+            doEditColumn: function(guid, conditional_edit) {
                 var instance_id = this.instance_id;
                 document.getElementById(instance_id + "column_guid").value = guid;
+
+                var elTR = document.getElementById(guid + "-tr");
+                var column_data = $(elTR).data("column_data");
                 
-                if ("on" == data["visible"]) {
+                if ("on" == column_data["visible"]) {
                     document.getElementById(instance_id + "visible").checked = true;
                 } else {
                     document.getElementById(instance_id + "visible").checked = false;
                 }
 
-                $(document.getElementById(instance_id + "type")).val(data["type"]).trigger('change');
-                $(document.getElementById(instance_id + "title")).summernote("code", data["title"]);
-                document.getElementById(instance_id + "name").value = data["name"];
-                $(document.getElementById(instance_id + "value")).summernote("code", data["value"]);
-                $(document.getElementById(instance_id + "style")).val(data["style"]);
+                $(document.getElementById(instance_id + "type")).val(column_data["type"]).trigger('change');
+                $(document.getElementById(instance_id + "title")).summernote("code", column_data["title"]);
+                document.getElementById(instance_id + "name").value = column_data["name"];
+                $(document.getElementById(instance_id + "value")).summernote("code", column_data["value"]);
+                $(document.getElementById(instance_id + "style")).val(column_data["style"]);
                 /*  document.getElementById(instance_id + "conditional_data_json").value = data["conditional_data_json"]; */
 
                 if ("true" == conditional_edit) {
@@ -365,9 +394,7 @@
                     "name" : column_name,
                     "value" : $(document.getElementById(instance_id + "value")).summernote("code"),
                     "style" : document.getElementById(instance_id + "style").value,
-                    /* "conditional_data_json" : document.getElementById(instance_id + "conditional_data_json").value, */
                 }
-                var columnJSON = JSON.stringify(columnData);
 
                 var trStyle = ("on" == columnData.visible) ? "" : "opacity:0.5";
 
@@ -375,25 +402,26 @@
                     // edit column
                     document.getElementById(guid + "-title").innerHTML = columnData.title;
                     document.getElementById(guid + "-tr").setAttribute("style", trStyle);
-                    document.getElementById(guid + "-tr").setAttribute("data-json", columnJSON);
+                    $(document.getElementById(guid + "-tr")).data("column_data", columnData);
                 } else {
-                    // new column
-                    var liTemplate = document.getElementById("column-row-template").innerHTML;
-                    var liHTML = liTemplate
-                            .replace(/__data_column_json__/g, columnJSON)
-                            .replace(/__guid__/g, guid)
-                            .replace(/__label__/g, columnData.title)
-                            .replace(/__style__/g, trStyle);
-
                     var columnsContainer = document.getElementById(instance_id + "columnList");
-                    columnsContainer.innerHTML += liHTML;
+
+                    // new column
+                    var trTemplateHTML = document.getElementById("column-row-template").innerHTML;
+                    var trHTML = trTemplateHTML.replace(/__guid__/g, guid).replace(/__label__/g, columnData.title);
+
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = trHTML;
+                    tr.id = (guid + "-tr");
+                    tr.setAttribute("data-guid", guid);
+                    tr.style = trStyle;
+
+                    columnsContainer.appendChild(tr);
+
+                    $(document.getElementById(guid + "-tr")).data("column_data", columnData);
 
                     $(".btn-edit-column", columnsContainer).off("click").on("click", function () {
-                        self.doEditColumn(
-                            this.parentNode.parentNode.getAttribute("data-guid"), 
-                            JSON.parse(this.parentNode.parentNode.getAttribute("data-json")),
-                            this.getAttribute("data-conditional-edit")
-                        );
+                        self.doEditColumn(this.parentNode.parentNode.getAttribute("data-guid"), this.getAttribute("data-conditional-edit"));
                     });
 
                     $(".btn-remove-column", columnsContainer).off("click").on("click", function () {
@@ -429,10 +457,10 @@
                 var columnList = $("tr", document.getElementById(instance_id + 'columnList'));
                 var columnNameInUse = false;
                 for (let index = 0; index < columnList.length; index++) {
-                    const tr = columnList[index];
+                    let tr = columnList[index];
                     if (guid != tr.getAttribute("data-guid")) {
-                        const data = JSON.parse(tr.getAttribute("data-json"));
-                        if (column_name == data["name"]) {
+                        let column_data = $(tr).data("column_data");
+                        if (column_name == column_data["name"]) {
                             columnNameInUse = true;
                         }
                     }
@@ -470,16 +498,28 @@
             },
             collectColumnData: function() {
                 var instance_id = this.instance_id
-                var columnList = $("tr", document.getElementById(instance_id + 'columnList'));
+
+                var arrTR = $("tr", document.getElementById(instance_id + "columnList"));
                 var columns = [];
 
-                for (let index = 0; index < columnList.length; index++) {
-                    const tr = columnList[index];
-                    columns.push(tr.getAttribute("data-json"))
+                for (let index = 0; index < arrTR.length; index++) {
+                    let column_data = $(arrTR[index]).data("column_data");
+
+                    let columnData = {
+                        "visible" : column_data.visible,
+                        "type" : column_data.type,
+                        "title" : column_data.title,
+                        "name" : column_data.name,
+                        "value" : column_data.value,
+                        "style" : column_data.style
+                    }
+
+                    columns.push(columnData);
                 }
 
-                return (columns);
+                return columns;
             },
+
             getWidgetFormValues: function() {
                 var self = this;
                 var instance_id = this.instance_id;

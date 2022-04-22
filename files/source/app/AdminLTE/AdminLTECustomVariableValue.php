@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /* {{@snippet:begin_class}} */
 
-class AdminLTECustomVariable extends Model
+class AdminLTECustomVariableValue extends Model
 {
 
 	/* {{@snippet:begin_properties}} */
@@ -16,21 +16,12 @@ class AdminLTECustomVariable extends Model
      *
      * @var string
      */
-    protected $table = 'adminltecustomvariabletable';
+    protected $table = 'adminltecustomvariablevaluetable';
 
 	protected $fillable = [
-        'created_by',
-        'updated_by',
-        '__system',
         'adminlteusergroup_id',
-        'group',
-        'name',
-		'title',
-        'default_value',
-        'remember',
-        'remember_type',
-		'value',
-		'__order'
+        'customvariable_id',
+		'value'
 	];
 
 	/* {{@snippet:end_properties}} */
@@ -42,9 +33,9 @@ class AdminLTECustomVariable extends Model
         return $this->belongsTo(AdminLTEUserGroup::class, 'adminlteusergroup_id');
     }
 
-    public function AdminLTECustomVariableValue_customvariable_id()
+    public function customvariable_id()
     {
-        return $this->hasMany(AdminLTECustomVariableValue::class);
+        return $this->belongsTo(AdminLTECustomVariable::class, 'customvariable_id');
     }
 
 	/* {{@snippet:end_methods}} */

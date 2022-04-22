@@ -1125,6 +1125,9 @@ td .showBigPhoto {
     position: absolute;
     margin-top: 25%;
 }
+.swal2-container {
+    z-index: 9999 !important;
+}
 .preferences-button {
     width: 40px;
     height: 20px;
@@ -1728,6 +1731,28 @@ table.condition-table > tbody > tr > td:first-child {
 }
 
 table.condition-table > tbody > tr > td:nth-child(2) {
+    word-break: break-word;
+}
+
+table.field-table > thead > tr > th {
+    background: #f2f2f2;
+}
+
+table.field-table > thead > tr > th:first-child {
+    word-break: break-word;
+    font-weight:normal!important;
+}
+
+table.field-table > thead > tr > th:first-child > span {
+    font-weight:bold;
+    display:block;
+}
+
+table.field-table > thead > tr > th:last-child {
+    width: 60px;
+}
+
+table.field-table > tbody > tr > td:nth-child(2) {
     word-break: break-word;
 }
 

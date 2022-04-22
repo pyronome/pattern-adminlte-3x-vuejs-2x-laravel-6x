@@ -15,7 +15,7 @@ export default {
     props: ["variable_options", "target"],
     methods: {
         showInsertVariableDialog: function () {
-            window.insertVariableDialog.showInsertVariableDialog(this.variable_options, this.target);
+            window.__insert_variable_dialog.showInsertVariableDialog(this.variable_options, this.target);
         }
     },
     mounted() {

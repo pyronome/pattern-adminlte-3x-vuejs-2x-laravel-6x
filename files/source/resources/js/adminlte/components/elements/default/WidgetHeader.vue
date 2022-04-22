@@ -94,7 +94,7 @@ export default {
             if (window.mainLayoutInstance.pageWidgets[instance_id].data.general.conditional_data_json) {
                 var condionalData = JSON.parse(window.mainLayoutInstance.pageWidgets[instance_id].data.general.conditional_data_json);
                 if (condionalData.length > 0) {
-                    window.widgetConditionDialog.renderConditionList(instance_id, condionalData);
+                    window.__condition_dialog.renderConditionList(instance_id, condionalData);
                 }
             }
         },

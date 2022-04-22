@@ -5,6 +5,10 @@
         <router-view></router-view>
         <vue-progress-bar></vue-progress-bar>
         <impersonation-dialog></impersonation-dialog>
+        <custom-variable-list></custom-variable-list>
+        <data-source-fields></data-source-fields>
+        <widget-condition-dialog></widget-condition-dialog>
+        <insert-variable-dialog></insert-variable-dialog>
     </div>
     
     <div>

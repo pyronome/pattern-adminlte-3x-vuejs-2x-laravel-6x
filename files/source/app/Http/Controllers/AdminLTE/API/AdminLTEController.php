@@ -78,6 +78,9 @@ class AdminLTEController extends Controller
             $list[$index]['title'] = $object->title;
             $list[$index]['name'] = $object->name;
             $list[$index]['value'] = $object->value;
+            $list[$index]['default_value'] = $object->default_value;
+            $list[$index]['remember'] = $object->remember;
+            $list[$index]['remember_type'] = $object->remember_type;
 
             $index++;
         }
@@ -94,6 +97,9 @@ class AdminLTEController extends Controller
             $list[$index]['title'] = $object->title;
             $list[$index]['name'] = $object->name;
             $list[$index]['value'] = $object->value;
+            $list[$index]['default_value'] = $object->default_value;
+            $list[$index]['remember'] = $object->remember;
+            $list[$index]['remember_type'] = $object->remember_type;
 
             $index++;
         }
@@ -113,9 +119,9 @@ class AdminLTEController extends Controller
         $id = intval($request->input('id'));
 
         if ($id > 0) {
-            $objectAdminLTECustomVariable = AdminLTECustomVariable::find($id);
+            $updatedObject = AdminLTECustomVariable::find($id);
         } else {
-            $objectAdminLTECustomVariable = new AdminLTECustomVariable();
+            $updatedObject = new AdminLTECustomVariable();
         } // if ($id > 0) {
 
         $title = $request->input('title');
@@ -141,23 +147,26 @@ class AdminLTEController extends Controller
             return $return_data;
         }
         
-        $objectAdminLTECustomVariable->deleted = 0;
+        $updatedObject->deleted = 0;
         if ($id > 0) {
-            $objectAdminLTECustomVariable->updated_by = $currentUser->id;
+            $updatedObject->updated_by = $currentUser->id;
         } else {
-            $objectAdminLTECustomVariable->created_by = $currentUser->id;
-            $objectAdminLTECustomVariable->updated_by = $currentUser->id;
+            $updatedObject->created_by = $currentUser->id;
+            $updatedObject->updated_by = $currentUser->id;
         } // if ($id > 0) {
 
-        $objectAdminLTECustomVariable->__system = 0;
-        $objectAdminLTECustomVariable->adminlteusergroup_id = $currentUser->adminlteusergroup_id;         
-        $objectAdminLTECustomVariable->title = $title;
-        $objectAdminLTECustomVariable->name = $name;
-        $objectAdminLTECustomVariable->value = $value;
-        $objectAdminLTECustomVariable->__order = 0;
-        $objectAdminLTECustomVariable->save();
+        $updatedObject->__system = 0;
+        $updatedObject->adminlteusergroup_id = $currentUser->adminlteusergroup_id;         
+        $updatedObject->title = $title;
+        $updatedObject->name = $name;
+        $updatedObject->value = $value;
+        $updatedObject->default_value = $request->input('default_value');
+        $updatedObject->remember = $request->input('remember');
+        $updatedObject->remember_type = $request->input('remember_type');
+        $updatedObject->__order = 0;
+        $updatedObject->save();
         
-        $return_data['id'] = $objectAdminLTECustomVariable->id;
+        $return_data['id'] = $updatedObject->id;
         $return_data['has_error'] = false;
         $return_data['error_msg'] = '';
 
