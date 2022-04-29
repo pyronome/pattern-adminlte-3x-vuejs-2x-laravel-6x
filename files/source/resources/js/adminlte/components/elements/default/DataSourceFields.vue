@@ -30,7 +30,7 @@
                             <label for="__ds_field__property" class="detail-label">{{ $t('Property') }}</label>
                             <select id="__ds_field__property"  class="form-control">
                                 <option value="">{{ $t('Please select') }}</option>
-                                <option v-for="(property, index) in property_options" :key="index" :value="property.id">
+                                <option v-for="(property, index) in property_options" :key="index" :value="property.id" :name="property.text">
                                     {{property.text}}
                                 </option>
                             </select>
@@ -197,7 +197,7 @@ export default {
             var self = this;
             var field_data = {
                 "guid" : AdminLTEHelper.generateGUID("__ds_field__"),
-                "model" : document.getElementById(instance_id + "__ds_extreme_model").value,
+                "model" : document.getElementById(instance_id + "__ds_simple_model").value,
                 "property" : "",
                 "function" : "",
                 "customvariable" : "",
@@ -257,7 +257,8 @@ export default {
                 functionName = "";
             }
 
-            var property = document.getElementById("__ds_field__property").value;
+            var propertySelectElement = document.getElementById("__ds_field__property");
+            var property = propertySelectElement.value;
             if ((null === property) || ("" == property)) {
                 self.show_swal_error(self.$t("Please select a property."));
                 return;
@@ -270,15 +271,16 @@ export default {
                 return;
             }
 
+            var selectedProperty = propertySelectElement.options[propertySelectElement.selectedIndex];
             var selectedCustomVariable = customvariableSelectElement.options[customvariableSelectElement.selectedIndex];
 
             var fieldData = {
                 "guid" : guid,
-                "model": document.getElementById(instance_id + "__ds_extreme_model").value,
+                "model": document.getElementById(instance_id + "__ds_simple_model").value,
                 "function" : functionName,
                 "property" : property,
                 "customvariable" : customvariable,
-                "sql_text": self.getSQLText(functionName, property, selectedCustomVariable.getAttribute("name"))
+                "sql_text": self.getSQLText(functionName, selectedProperty.getAttribute("name"), selectedCustomVariable.getAttribute("name"))
             }
 
             if (document.getElementById(guid + "-sql_text")) {
@@ -286,7 +288,7 @@ export default {
                 document.getElementById(guid + "-sql_text").innerHTML = fieldData.sql_text;
                 $(document.getElementById(guid + "-tr")).data("field_data", fieldData);
             } else {
-                var fieldsContainer = document.getElementById(instance_id + "__ds_extreme_fields");
+                var fieldsContainer = document.getElementById(instance_id + "__ds_simple_fields");
 
                 // new field
                 var trTemplateHTML = document.getElementById("__ds_field__rowtemplate").innerHTML;
@@ -327,7 +329,7 @@ export default {
             return sql_text;
         },
         collectFieldData: function(instance_id) {
-            var arrTR = $("tr", document.getElementById(instance_id + "__ds_extreme_fields"));
+            var arrTR = $("tr", document.getElementById(instance_id + "__ds_simple_fields"));
             var fields = [];
 
             for (let index = 0; index < arrTR.length; index++) {
@@ -349,7 +351,7 @@ export default {
         },
         renderFields: function(instance_id, fields) {
             var self = this;
-            var fieldsContainer = document.getElementById(instance_id + "__ds_extreme_fields");
+            var fieldsContainer = document.getElementById(instance_id + "__ds_simple_fields");
             fieldsContainer.innerHTML = "";
             var trTemplateHTML = document.getElementById("__ds_field__rowtemplate").innerHTML;
 

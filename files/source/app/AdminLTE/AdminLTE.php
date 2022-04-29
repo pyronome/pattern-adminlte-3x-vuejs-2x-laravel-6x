@@ -22,6 +22,7 @@ use App\AdminLTE\AdminLTELog;
 use App\AdminLTE\AdminLTEWidgetHelper;
 use App\AdminLTE\AdminLTEVariable;
 use App\AdminLTE\AdminLTECustomVariable;
+use App\AdminLTE\AdminLTECustomVariableValue;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use PDO;
@@ -2132,7 +2133,7 @@ class AdminLTE
 			'AdminLTEVariable',
 			'AdminLTECustomVariable',
 			'AdminLTELog',
-			'AdminLTECustomVariable',
+			'AdminLTECustomVariableValue',
 			'AdminLTEMedia',
 			'AdminLTEWidgetHelper',
 			'User'
@@ -2171,62 +2172,59 @@ class AdminLTE
 				$column_index = 0;
 				$metaData['columns'] = [];
 
-				$metaData['columns'][$column_index] = '{'
-					. '"visible":"on",'
-					. '"type":"integer",'
-					. '"title":"Id",'
-					. '"name":"id",'
-					. '"value":"{{QueryResultFields/id}}",'
-					. '"style":""'
-					. '}';
+				$column = new \stdClass();
+				$column->visible = 'on';
+				$column->type = 'integer';
+				$column->title = 'Id';
+				$column->name = 'id';
+				$column->value = '{{QueryResultFields/id}}';
+				$column->style = '';
+
+				$metaData['columns'][$column_index] = $column;
 				$column_index++;
 
-				$metaData['columns'][$column_index] = '{'
-					. '"visible":"on",'
-					. '"type":"date",'
-					. '"title":"Created At",'
-					. '"name":"created_at",'
-					. '"value":"{{QueryResultFields/created_at}}",'
-					. '"style":""'
-					. '}';
+				$column = new \stdClass();
+				$column->visible = 'on';
+				$column->type = 'date';
+				$column->title = 'Created At';
+				$column->name = 'created_at';
+				$column->value = '{{QueryResultFields/created_at}}';
+				$column->style = '';
+
+				$metaData['columns'][$column_index] = $column;
 				$column_index++;
 
-				$metaData['columns'][$column_index] = '{'
-					. '"visible":"on",'
-					. '"type":"date",'
-					. '"title":"Updated At",'
-					. '"name":"updated_at",'
-					. '"value":"{{QueryResultFields/updated_at}}",'
-					. '"style":""'
-					. '}';
+				$column = new \stdClass();
+				$column->visible = 'on';
+				$column->type = 'date';
+				$column->title = 'Updated At';
+				$column->name = 'updated_at';
+				$column->value = '{{QueryResultFields/updated_at}}';
+				$column->style = '';
+
+				$metaData['columns'][$column_index] = $column;
 				$column_index++;
 
-				$metaData['columns'][$column_index] = '{'
-					. '"visible":"on",'
-					. '"type":"button",'
-					. '"title":"<a class=\"btn btn-primary btn-xs btn-on-table\" href=\"' . $modelLowerCase . '/edit/new\">'
-							. '<i class=\"fa fa-plus\"></i> <span class=\"hidden-xxs\">Add</span>'
-							. '</a>",'
-					. '"name":"buttons",'
-					. '"value":"<a class=\"btn btn-outline-primary btn-xs btn-on-table\" href=\"' . $modelLowerCase . '/detail/{{QueryResultFields/id}}\">'
-							. '<i class=\"fa fa-info-circle\"></i> <span class=\"hidden-xxs\">Detail</span>'
-							. '</a>",'
-					. '"style":"width:130px;"'
-					. '}';
+				$column = new \stdClass();
+				$column->visible = 'on';
+				$column->type = 'button';
+				$column->title = '<a class="btn btn-primary btn-xs btn-on-table" href="' . $modelLowerCase . '/edit/new"><i class="fa fa-plus"></i> <span class="hidden-xxs">Add</span></a>';
+				$column->name = 'buttons';
+				$column->value = '<a class="btn btn-outline-primary btn-xs btn-on-table" href="' . $modelLowerCase . '/detail/{{QueryResultFields/id}}"><i class="fa fa-info-circle"></i> <span class="hidden-xxs">Detail</span></a>';
+				$column->style = 'width:130px;';
+
+				$metaData['columns'][$column_index] = $column;
 				$column_index++;
 
 				$encodedData = json_encode($metaData);
 				$AdminLTELayout->meta_data_json = $encodedData;
 
-				$metaData = [];
-				$metaData['calculation_type'] = 'advanced';
-				$metaData['model'] = '';
-				$metaData['property'] = '';
-				$metaData['function'] = '';
-				$metaData['query'] = 'select * from ' . $modelLowerCase . 'table where deleted=0;';
-
-				$encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
-				$AdminLTELayout->data_source_json = $encodedData;
+				$data_source = new \stdClass();
+				$data_source->calculation_type = 'advanced';
+				$meta_data = new \stdClass();
+				$meta_data->query = 'select * from ' . $modelLowerCase . 'table where deleted=0;';
+				$data_source->meta_data = $meta_data;
+				$AdminLTELayout->data_source_json = json_encode($data_source, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 				
 				$AdminLTELayout->conditional_data_json = '{}';
 				$AdminLTELayout->save();
@@ -2257,76 +2255,70 @@ class AdminLTE
 			$column_index = 0;
 			$metaData['columns'] = [];
 
-			$metaData['columns'][$column_index] = '{'
-				. '"visible":"on",'
-				. '"type":"integer",'
-				. '"title":"Id",'
-				. '"name":"id",'
-				. '"value":"{{QueryResultFields/id}}",'
-				. '"style":""'
-				. '}';
+			$column = new \stdClass();
+			$column->visible = 'on';
+			$column->type = 'integer';
+			$column->title = 'Id';
+			$column->name = 'id';
+			$column->value = '{{QueryResultFields/id}}';
+			$column->style = '';
+
+			$metaData['columns'][$column_index] = $column;
 			$column_index++;
 
-			$metaData['columns'][$column_index] = '{'
-				. '"visible":"on",'
-				. '"type":"text",'
-				. '"title":"Title",'
-				. '"name":"title",'
-				. '"value":"{{QueryResultFields/title}}",'
-				. '"style":""'
-				. '}';
+			$column = new \stdClass();
+			$column->visible = 'on';
+			$column->type = 'date';
+			$column->title = 'Title';
+			$column->name = 'title';
+			$column->value = '{{QueryResultFields/title}}';
+			$column->style = '';
+
+			$metaData['columns'][$column_index] = $column;
 			$column_index++;
 
-			$metaData['columns'][$column_index] = '{'
-				. '"visible":"on",'
-				. '"type":"boolean",'
-				. '"title":"Admin",'
-				. '"name":"admin",'
-				. '"value":"<span class=\"text-success spanIcon spanIconEnabled{{QueryResultFields/admin}}\">'
-                		. '<i class=\"far fa-check-circle\"></i>'
-            			. '</span>",'
-				. '"style":""'
-				. '}';
+			$column = new \stdClass();
+			$column->visible = 'on';
+			$column->type = 'boolean';
+			$column->title = 'Admin';
+			$column->name = 'admin';
+			$column->value = '<span class="text-success spanIcon spanIconEnabled{{QueryResultFields/admin}}"><i class="far fa-check-circle"></i></span>';
+			$column->style = '';
+
+			$metaData['columns'][$column_index] = $column;
 			$column_index++;
 
-			$metaData['columns'][$column_index] = '{'
-				. '"visible":"on",'
-				. '"type":"boolean",'
-				. '"title":"Enabled",'
-				. '"name":"enabled",'
-				. '"value":"<span class=\"text-success spanIcon spanIconEnabled{{QueryResultFields/enabled}}\">'
-                		. '<i class=\"far fa-check-circle\"></i>'
-            			. '</span>",'
-				. '"style":""'
-				. '}';
+			$column = new \stdClass();
+			$column->visible = 'on';
+			$column->type = 'boolean';
+			$column->title = 'Enabled';
+			$column->name = 'enabled';
+			$column->value = '<span class="text-success spanIcon spanIconEnabled{{QueryResultFields/enabled}}"><i class="far fa-check-circle"></i></span>';
+			$column->style = '';
+
+			$metaData['columns'][$column_index] = $column;
 			$column_index++;
 
-			$metaData['columns'][$column_index] = '{'
-				. '"visible":"on",'
-				. '"type":"button",'
-				. '"title":"<a class=\"btn btn-primary btn-xs btn-on-table\" href=\"adminlteusergroup/edit/new\">'
-						. '<i class=\"fa fa-plus\"></i> <span class=\"hidden-xxs\">Add</span>'
-						. '</a>",'
-				. '"name":"buttons",'
-				. '"value":"<a class=\"btn btn-outline-primary btn-xs btn-on-table\" href=\"adminlteusergroup/detail/{{QueryResultFields/id}}\">'
-						. '<i class=\"fa fa-info-circle\"></i> <span class=\"hidden-xxs\">Detail</span>'
-						. '</a>",'
-				. '"style":"width:130px;"'
-				. '}';
+			$column = new \stdClass();
+			$column->visible = 'on';
+			$column->type = 'button';
+			$column->title = '<a class="btn btn-primary btn-xs btn-on-table" href="adminlteusergroup/edit/new"><i class="fa fa-plus"></i> <span class="hidden-xxs">Add</span></a>';
+			$column->name = 'buttons';
+			$column->value = '<a class="btn btn-outline-primary btn-xs btn-on-table" href="adminlteusergroup/detail/{{QueryResultFields/id}}"><i class="fa fa-info-circle"></i> <span class="hidden-xxs">Detail</span></a>';
+			$column->style = 'width:130px;';
+
+			$metaData['columns'][$column_index] = $column;
 			$column_index++;
 
 			$encodedData = json_encode($metaData);
 			$AdminLTELayout->meta_data_json = $encodedData;
 
-			$metaData = [];
-			$metaData['calculation_type'] = 'advanced';
-			$metaData['model'] = '';
-			$metaData['property'] = '';
-			$metaData['function'] = '';
-			$metaData['query'] = 'select * from adminlteusergrouptable where deleted=0;';
-
-			$encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
-			$AdminLTELayout->data_source_json = $encodedData;
+			$data_source = new \stdClass();
+			$data_source->calculation_type = 'advanced';
+			$meta_data = new \stdClass();
+			$meta_data->query = 'select * from adminlteusergrouptable where deleted=0;';
+			$data_source->meta_data = $meta_data;
+			$AdminLTELayout->data_source_json = json_encode($data_source, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 			
 			$AdminLTELayout->conditional_data_json = '{}';
 			$AdminLTELayout->save();
@@ -2356,73 +2348,70 @@ class AdminLTE
 			$column_index = 0;
 			$metaData['columns'] = [];
 
-			$metaData['columns'][$column_index] = '{'
-				. '"visible":"on",'
-				. '"type":"integer",'
-				. '"title":"Id",'
-				. '"name":"id",'
-				. '"value":"{{QueryResultFields/id}}",'
-				. '"style":""'
-				. '}';
+			$column = new \stdClass();
+			$column->visible = 'on';
+			$column->type = 'integer';
+			$column->title = 'Id';
+			$column->name = 'id';
+			$column->value = '{{QueryResultFields/id}}';
+			$column->style = '';
+
+			$metaData['columns'][$column_index] = $column;
 			$column_index++;
 
-			$metaData['columns'][$column_index] = '{'
-				. '"visible":"on",'
-				. '"type":"text",'
-				. '"title":"Name",'
-				. '"name":"fullname",'
-				. '"value":"{{QueryResultFields/fullname}}",'
-				. '"style":""'
-				. '}';
+			$column = new \stdClass();
+			$column->visible = 'on';
+			$column->type = 'text';
+			$column->title = 'Name';
+			$column->name = 'fullname';
+			$column->value = '{{QueryResultFields/fullname}}';
+			$column->style = '';
+
+			$metaData['columns'][$column_index] = $column;
 			$column_index++;
 
-            $metaData['columns'][$column_index] = '{'
-				. '"visible":"on",'
-				. '"type":"text",'
-				. '"title":"User Group",'
-				. '"name":"usergroup_title",'
-				. '"value":"{{QueryResultFields/usergroup_title}}",'
-				. '"style":""'
-				. '}';
+			$column = new \stdClass();
+			$column->visible = 'on';
+			$column->type = 'boolean';
+			$column->title = 'User Group';
+			$column->name = 'usergroup_title';
+			$column->value = '{{QueryResultFields/usergroup_title}}';
+			$column->style = '';
+
+			$metaData['columns'][$column_index] = $column;
 			$column_index++;
 
-			$metaData['columns'][$column_index] = '{'
-				. '"visible":"on",'
-				. '"type":"boolean",'
-				. '"title":"Enabled",'
-				. '"name":"enabled",'
-				. '"value":"<span class=\"text-success spanIcon spanIconEnabled{{QueryResultFields/enabled}}\">'
-                		. '<i class=\"far fa-check-circle\"></i>'
-            			. '</span>",'
-				. '"style":""'
-				. '}';
+			$column = new \stdClass();
+			$column->visible = 'on';
+			$column->type = 'boolean';
+			$column->title = 'Enabled';
+			$column->name = 'enabled';
+			$column->value = '<span class="text-success spanIcon spanIconEnabled{{QueryResultFields/enabled}}"><i class="far fa-check-circle"></i></span>';
+			$column->style = '';
+
+			$metaData['columns'][$column_index] = $column;
 			$column_index++;
 
-			$metaData['columns'][$column_index] = '{'
-				. '"visible":"on",'
-				. '"type":"button",'
-				. '"title":"<a class=\"btn btn-primary btn-xs btn-on-table\" href=\"adminlteuser/edit/new\">'
-						. '<i class=\"fa fa-plus\"></i> <span class=\"hidden-xxs\">Add</span>'
-						. '</a>",'
-				. '"name":"buttons",'
-				. '"value":"<a class=\"btn btn-outline-primary btn-xs btn-on-table\" href=\"adminlteuser/detail/{{QueryResultFields/id}}\">'
-						. '<i class=\"fa fa-info-circle\"></i> <span class=\"hidden-xxs\">Detail</span>'
-						. '</a>",'
-				. '"style":"width:130px;"'
-				. '}';
+			$column = new \stdClass();
+			$column->visible = 'on';
+			$column->type = 'button';
+			$column->title = '<a class="btn btn-primary btn-xs btn-on-table" href="adminlteuser/edit/new"><i class="fa fa-plus"></i> <span class="hidden-xxs">Add</span></a>';
+			$column->name = 'buttons';
+			$column->value = '<a class="btn btn-outline-primary btn-xs btn-on-table" href="adminlteuser/detail/{{QueryResultFields/id}}"><i class="fa fa-info-circle"></i> <span class="hidden-xxs">Detail</span></a>';
+			$column->style = 'width:130px;';
+
+			$metaData['columns'][$column_index] = $column;
 			$column_index++;
 
 			$encodedData = json_encode($metaData);
 			$AdminLTELayout->meta_data_json = $encodedData;
 
-			$metaData = [];
-			$metaData['calculation_type'] = 'advanced';
-			$metaData['model'] = '';
-			$metaData['property'] = '';
-			$metaData['function'] = '';
-			$metaData['query'] = 'select *, (select title from adminlteusergrouptable where id=aut.adminlteusergroup_id) as usergroup_title FROM `adminlteusertable` as aut where deleted=0;';
-			$encodedData = json_encode($metaData, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
-			$AdminLTELayout->data_source_json = $encodedData;
+			$data_source = new \stdClass();
+			$data_source->calculation_type = 'advanced';
+			$meta_data = new \stdClass();
+			$meta_data->query = 'select *, (select title from adminlteusergrouptable where id=aut.adminlteusergroup_id) as usergroup_title FROM `adminlteusertable` as aut where deleted=0;';
+			$data_source->meta_data = $meta_data;
+			$AdminLTELayout->data_source_json = json_encode($data_source, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 			
 			$AdminLTELayout->conditional_data_json = '{}';
 			$AdminLTELayout->save();
@@ -3582,6 +3571,30 @@ class AdminLTE
 	public function saveLayoutConditionalData($layoutId, $conditional_data) {
 		$objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
 		$objectAdminLTEWidgetHelper->saveConditionalData($layoutId, $conditional_data);
+	}
+
+	public function getCurrentCustomVariables() {
+		$custom_variables = [];
+
+		// Session
+		$sessionVariables = session()->all();
+		foreach ($sessionVariables as $key => $value) {
+			if (false !== strpos($key, 'customvariable')) {
+				$custom_variables[$key] = $value;
+			}
+		}
+
+		// Database
+		$currentUser = auth()->guard('adminlteuser')->user();
+		$objectList = AdminLTECustomVariableValue::where('deleted', 0)
+            ->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
+            ->get();
+
+		foreach ($objectList as $object) {
+			$custom_variables['customvariable' . $object->customvariable_id] = $object->value;
+		}
+
+		return $custom_variables;
 	}
 	
     /* {{@snippet:end_methods}} */

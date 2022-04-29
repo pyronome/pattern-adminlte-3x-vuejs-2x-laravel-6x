@@ -242,7 +242,8 @@ class AdminLTELayoutController extends Controller
             $object->grid_size = $general_data['grid_size'];
             $object->icon = $general_data['icon'];
             $object->meta_data_json = json_encode($content_data);
-            $object->data_source_json = isset($data_source) ? json_encode($data_source) : '{}';
+            $object->data_source_json = $this->getFormattedDataSource($data_source);
+
             $object->conditional_data_json = isset($general_data['conditional_data_json']) 
                 ? $general_data['conditional_data_json']
                 : '[]';
@@ -253,6 +254,65 @@ class AdminLTELayoutController extends Controller
             if (json_last_error() === JSON_ERROR_NONE) {
                 $objectAdminLTE->saveLayoutConditionalData($object->id, $conditional_data);
             }
+        }
+    }
+
+    public function getFormattedDataSource($data_source) {
+        if ('' == $data_source) {
+            return '{}';
+        }
+
+        if ('simple' == $data_source['calculation_type']) {
+            $meta_data = $data_source['meta_data'];
+            $meta_data['query'] = $this->getQueryFromExtremeDataSource($meta_data);
+            $data_source['meta_data'] = $meta_data;
+        }
+
+        return json_encode($data_source, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
+    }
+
+    public function getQueryFromExtremeDataSource($meta_data) {
+        $objectAdminLTE = new AdminLTE();
+
+        $model = $meta_data['model'];
+        $basemodel_table_name = strtolower($model) . 'table';
+        $basemodel_alias_name = strtolower($model) . '__table__';
+
+        $fields_SQL = $basemodel_alias_name . '.*';
+        $from_SQL = 'FROM ' . $basemodel_table_name . ' as ' . $basemodel_alias_name;
+        $join_SQL = '';
+        $where_SQL = '';
+
+        foreach ($meta_data['fields'] as $field) {
+            $propertyParts = explode('/', $field['property']);
+            $this->setSQLPart($fields_SQL, $join_SQL, $basemodel_alias_name, $basemodel_alias_name, $field['function'], $propertyParts, $field['customvariable']);
+        }
+
+        $query = 'SELECT ' . $fields_SQL . ' ' . $from_SQL . ' ' . $join_SQL;
+        return $query;
+    }
+
+    public function setSQLPart(&$fields_SQL, &$join_SQL, $first_alias_table, $final_alias_table, $function, $propertyParts, $customvariableId) {
+        $objectAdminLTE = new AdminLTE();
+        // $field['property'] ----> City/title
+        // $field['property'] ----> City/country_id/Country/population
+
+        $current_model = array_shift($propertyParts);
+        $current_field = array_shift($propertyParts);
+
+        if (empty($propertyParts)) {
+            $fields_SQL = $fields_SQL . ', ';
+            $fields_SQL = $fields_SQL . $function . '(' . $final_alias_table . '.' . $current_field . ') as customvariable' . $customvariableId;
+        } else {
+            $next_model = $propertyParts[0];
+            $nextmodel_table_name = strtolower($next_model) . 'table';
+            $final_alias_table = strtolower($current_model) . '_' . strtolower($current_field) . '_' . strtolower($next_model);
+
+            $join_SQL = $join_SQL
+                . ' LEFT JOIN ' . $nextmodel_table_name . ' as ' . $final_alias_table
+                . ' on ' . $first_alias_table . '.' . $current_field . '=' . $final_alias_table . '.id';
+
+            $this->setSQLPart($fields_SQL, $join_SQL, $final_alias_table, $final_alias_table, $function, $propertyParts, $customvariableId);
         }
     }
 
@@ -311,8 +371,10 @@ class AdminLTELayoutController extends Controller
 		$countModels = count($Models);
 
 		for ($i=0; $i < $countModels; $i++) {
-            $list[$index]['id'] = $Models[$i];
-            $list[$index]['text'] = $Models[$i];
+            $model = $Models[$i];
+
+            $list[$index]['id'] = $model;
+            $list[$index]['text'] = $model;
             $index++;
         }
 
@@ -328,63 +390,72 @@ class AdminLTELayoutController extends Controller
         $model = isset($parameters['model'])
                 ? htmlspecialchars($parameters['model'])
                 : '';
-
-        $list = array();
+        
+        $properties = [];
         $index = 0;
-
         $objectAdminLTE = new AdminLTE();
         $property_list = $objectAdminLTE->getModelPropertyList($model);
-        $countProperty = count($property_list);
+        
+        foreach ($property_list as$property_data) {
+            $id = $model . '/' . $property_data['name'];
+            $text = $model . '/' . $property_data['title'];
 
-        for ($j=0; $j < $countProperty; $j++) { 
-            $property = 
+            $index = count($properties);
+            $properties[$index]['id'] = $id;
+            $properties[$index]['text'] = $text;
 
-            $list[$index]['id'] = $property_list[$j]['name'];
-            $list[$index]['text'] = $property_list[$j]['title'];
-
-            $index++;
-        } // for ($j=0; $j < $countProperty; $j++) { 
+            if ('class_selection_single' == $property_data['type']) {
+                $this->setPropertyChildrenProperties($properties, $id, $text, $property_data['belongs_to']);
+            }
+        }
 
         return [
-            'list' => $list
+            'list' => $properties
         ];
 
     }
 
-    public function get_infoboxvalue_by_simple_calculation($data_source) {
-        $calculationResult = [];
+    public function setPropertyChildrenProperties(&$properties, $id_prefix, $text_prefix, $model) {
+        $objectAdminLTE = new AdminLTE();
+        $property_list = $objectAdminLTE->getModelPropertyList($model);
 
-        $function = $data_source['function'];
-        $model = $data_source['model'];
-        $property = $data_source['property'];
+        foreach ($property_list as $property_data) {
+            $id = $id_prefix . '/' . $model . '/' . $property_data['name'];
+            $text = $text_prefix . '/' . $property_data['title'];
+
+            $index = count($properties);
+            $properties[$index]['id'] = $id;
+            $properties[$index]['text'] = $text;
+            
+            if ('class_selection_single' == $property_data['type']) {
+                $properties[$index]['children'] = $this->getPropertyChildrenProperties($properties, $id, $text, $property_data['belongs_to']);
+            }
+        }
+    }
+
+    public function get_queryresult_by_simple_calculation($query) {
+        $calculationResult = [];
         $condition = 1;
 
-        $tablename = strtolower($model) . "table";
-
-        $selectSQL = 'SELECT ' . $function . '(' . $property . ') as result '
-            . ' FROM ' . $tablename
-            . ' WHERE ' . $condition;
-        
         try {
             $connection = DB::connection()->getPdo();
         } catch (PDOException $e) {
             print($e->getMessage());
         }
                 
-        $objPDO = $connection->prepare($selectSQL);
+
+        $objPDO = $connection->prepare($query);
         $objPDO->execute();
         $data = $objPDO->fetchAll();
 
         if (isset($data)) {
-            if (isset($data[0])) {
-                $calculationResult = $data[0];//["result"];
-            }
+            $calculationResult = $data;
         }
 
         return $calculationResult;
     }
 
-    public function get_infoboxvalue_by_advanced_calculation($query) {
+    public function get_queryresult_by_advanced_calculation($query) {
         $calculationResult = [];
         $condition = 1;
 
@@ -399,40 +470,7 @@ class AdminLTELayoutController extends Controller
         $data = $objPDO->fetchAll();
 
         if (isset($data)) {
-            if (isset($data[0])) {
-                $calculationResult = $data[0];//["result"];
-            }
-        }
-
-        return $calculationResult;
-    }
-
-    public function get_infoboxvalue_by_extreme_calculation($data_source) {
-        $calculationResult = [];
-        $condition = 1;
-
-        try {
-            $connection = DB::connection()->getPdo();
-        } catch (PDOException $e) {
-            print($e->getMessage());
-        }
-                
-        //$objPDO = $connection->prepare($query);
-        $objPDO = $connection->prepare("select * from countrytable where deleted=0;");
-        $objPDO->execute();
-        $data = $objPDO->fetchAll();
-
-        echo '<div style="display:block">';
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
-        echo '</div>';
-        die();
-
-        if (isset($data)) {
-            if (isset($data[0])) {
-                $calculationResult = $data[0];//["result"];
-            }
+            $calculationResult = $data;
         }
 
         return $calculationResult;
@@ -466,268 +504,52 @@ class AdminLTELayoutController extends Controller
             $data_source = json_decode($objectLayout->data_source_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
 
             if ('simple' == $data_source['calculation_type']) {
-                $queryResult = $this->get_infoboxvalue_by_simple_calculation($data_source);
+                $meta_data = $data_source['meta_data'];
+                $queryResult = $this->get_queryresult_by_simple_calculation($meta_data['query']);
             } else if ('advanced' == $data_source['calculation_type']) {
                 $query = $this->getParsedValue($data_source['query'], '', $url_parameters, $request_parameters);
-                $queryResult = $this->get_infoboxvalue_by_advanced_calculation($query);
-            } else if ('extreme' == $data_source['calculation_type']) {
-                $queryResult = $this->get_infoboxvalue_by_extreme_calculation($data_source);
-            } 
-
-            foreach ($metaData as $key => $value) {
-                $returnData[$key] = $this->getParsedValue($value, $queryResult, $url_parameters, $request_parameters);
+                $queryResult = $this->get_queryresult_by_advanced_calculation($query);
             }
 
             $conditionalData = json_decode($objectLayout->conditional_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
-            foreach ($conditionalData as $key => $conditionData) {
-                $function_name = $conditionData['guid'];
+            $index = 0;
+            $last_row_index = count($queryResult) - 1;
 
-                require_once(storage_path('app/widget/condition/'. $function_name . '.php'));
-                    
-                $conditionResultData = $function_name($objectAdminLTEWidgetHelper, $queryResult, $url_parameters, $request_parameters);
+            foreach ($queryResult as $row) {
+                $row['__is_last_row'] = 0;
 
-                if ($conditionResultData['success']) {
-                    $conditionalFields = $conditionResultData['data'];
-                    foreach ($conditionalFields as $index => $fieldData) {
-                        $returnData[$fieldData->id] = $this->getParsedValue($fieldData->value, $queryResult, $url_parameters, $request_parameters);
+                if ($index == $last_row_index) {
+                    $row['__is_last_row'] = 1;
+                }
+
+                foreach ($metaData as $key => $value) {
+                    $returnData[$key] = $this->getParsedValue($value, $row, $url_parameters, $request_parameters);
+                }
+
+                foreach ($conditionalData as $conditionData) {
+                    $function_name = $conditionData['guid'];
+    
+                    require_once(storage_path('app/widget/condition/'. $function_name . '.php'));
+                        
+                    $conditionResultData = $function_name($objectAdminLTEWidgetHelper, $row, $url_parameters, $request_parameters);
+    
+                    if ($conditionResultData['success']) {
+                        $conditionalFields = $conditionResultData['data'];
+                        foreach ($conditionalFields as $index => $fieldData) {
+                            $returnData[$fieldData->id] = $this->getParsedValue($fieldData->value, $queryResult, $url_parameters, $request_parameters);
+                        }
                     }
                 }
-            }
+    
+                $index++;
+            } // foreach ($objectList as $object)
 
-            $returnData['result'] = isset($queryResult['result']) 
+            /* $returnData['result'] = isset($queryResult['result']) 
                 ? $queryResult['result']
-                : 0;
+                : 0; */
         }
 
         return $returnData;
-    }
-
-    public function getParsedValue($display_text, $queryResult, $url_parameters, $request_parameters)
-    {
-        $currentUser = auth()->guard('adminlteuser')->user();
-        $objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
-        $objectAdminLTE = new AdminLTE();
-        $parsed = $objectAdminLTE->getStringBetween($display_text, '{{', '}}');
-
-		while (strlen($parsed) > 0) {
-            $parsedWithMustache = '{{' . $parsed . '}}';
-			$partResult = '';
-
-			$textPart = explode('/', $parsed);
-
-            if ('CustomVariables' == $textPart[0]) {
-                $__key = $textPart[1];
-                $customVariableValue = $objectAdminLTEWidgetHelper->getCustomVariableValue(
-                        $currentUser->adminlteusergroup_id, 
-                        $__key, 
-                        $queryResult, 
-                        $url_parameters, 
-                        $request_parameters
-                );
-                
-				$partResult = ('' != $customVariableValue)
-                    ? $customVariableValue
-                    : $__key;
-
-            } else if ('GlobalParameters' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = $objectAdminLTE->getConfigParameterValue($__key);
-            } else if ('UserParameters' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = $objectAdminLTE->getUserConfigParameterValue($__key, 'user', $currentUser->id);
-            } else if ('URLParameters' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = isset($url_parameters[$__key]) 
-                    ? $url_parameters[$__key]
-                    : $__key;
-            } else if ('RequestParameters' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = isset($request_parameters[$__key]) 
-                    ? $request_parameters[$__key]
-                    : $__key;
-            } else if ('QueryResultFields' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = isset($queryResult[$__key]) 
-                    ? $queryResult[$__key] 
-                    : $__key;
-            } else {
-                $__key = $textPart[1];
-                $partResult = $__key;
-            }
-
-            
-            $display_text = str_replace($parsedWithMustache, $partResult, $display_text);
-			$temp_text = $display_text;
-			$parsed = $objectAdminLTE->getStringBetween($temp_text, '{{', '}}');
-		} // while (strlen($parsed) > 0) {
-
-        return htmlspecialchars_decode($display_text);
-    }
-    
-    public function __EX__get_infoboxvalue(Request $request)
-    {   
-        $parameters = $request->route()->parameters();
-
-        $model = isset($parameters['model'])
-                ? htmlspecialchars($parameters['model'])
-                : '';
-
-        $objectAdminLTE = new AdminLTE();
-        $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
-
-        return [
-            'count' => $modelNameWithNamespace::where('deleted', false)->count()
-        ];
-    }
-
-    
-
-    public function get_recordgraph(Request $request)
-    {
-        $parameters = $request->route()->parameters();
-
-        $pageName = isset($parameters['pageName'])
-                ? htmlspecialchars($parameters['pageName'])
-                : '';
-        $model = isset($parameters['model'])
-                ? htmlspecialchars($parameters['model'])
-                : '';
-
-        $objectAdminLTE = new AdminLTE();
-
-        $dateFormat = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.dateformat');
-        $yearMonthFormat = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.yearmonthformat');
-        
-        $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
-
-        $Widgets = $objectAdminLTE->getPageLayout($pageName);
-        $graphProperties = $objectAdminLTE->getRecordGraphProperties($Widgets, $model);
-        
-        $text = $graphProperties['text'];
-        $sizes = explode(',', $graphProperties['sizeCSV']);
-        $size = 'col-lg-' . $sizes[0] . ' col-md-' . $sizes[1] . ' col-xs-' . $sizes[2];
-
-        $graphType = $graphProperties['type'];
-
-        $period = (0 - $graphProperties['period']);
-        $fromDate = strtotime($period . ' month');
-
-        $graphData = array();
-
-        $objectList = $modelNameWithNamespace::where('deleted', false)
-                ->whereDate('created_at', '>=', date('Y-m-d H:i:s', $fromDate))
-                ->orderBy('created_at', 'asc')
-                ->get();
-
-        $object = NULL;
-        $index = 0;
-            
-        if ('daily' == $graphType) {
-            foreach ($objectList as $object)
-            {
-                $created_at = $object->created_at->format($dateFormat);
-
-                if (!isset($graphData[$created_at])) {
-                    $graphData[$created_at] = 0;
-                }
-
-                $graphData[$created_at]++;
-            } // foreach ($objectList as $object)
-        } else if ('monthly' == $graphType) {
-            foreach ($objectList as $object)
-            {
-                $created_at = $object->created_at->format($yearMonthFormat);
-
-                if (!isset($graphData[$created_at])) {
-                    $graphData[$created_at] = 0;
-                }
-
-                $graphData[$created_at]++;
-            } // foreach ($objectList as $object)
-        } // if ('daily' == $graphType) {
-        
-        $keys = array_keys($graphData);
-        $countKeys = count($keys);
-        
-        $graphJSON = '';
-        for ($i=0; $i < $countKeys; $i++) {
-            $created_at = $keys[$i];
-            $countRecord = $graphData[$created_at];
-
-            if ($graphJSON != '') {
-                $graphJSON .= ',';
-            } // if ($graphJSON != '') {
-
-            $graphJSON .= '{';
-            $graphJSON .= ('"date":"' . $created_at . '",');
-            $graphJSON .= ('"record":' . $countRecord . '');
-            $graphJSON .= '}';
-        }
-        $graphJSON = ('[' . $graphJSON . ']');
-
-        return [
-            'id' => 1,
-            'text' => $text,
-            'size' => $size,
-            'graphJSON' => rawurlencode($graphJSON)
-        ];
-    }
-
-    public function get_recordlist_by_advanced_calculation($query) {
-        $calculationResult = [];
-        $condition = 1;
-
-        try {
-            $connection = DB::connection()->getPdo();
-        } catch (PDOException $e) {
-            print($e->getMessage());
-        }
-                
-        $objPDO = $connection->prepare($query);
-        $objPDO->execute();
-        $data = $objPDO->fetchAll();
-
-        /* echo '<div style="display:block">';
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
-        echo '</div>';
-        die(); */
-
-        if (isset($data)) {
-            $calculationResult = $data;//["result"];
-        }
-
-        return $calculationResult;
-    }
-
-    public function get_recordlist_by_extreme_calculation($query) {
-        $calculationResult = [];
-        $condition = 1;
-
-        try {
-            $connection = DB::connection()->getPdo();
-        } catch (PDOException $e) {
-            print($e->getMessage());
-        }
-                
-        //$objPDO = $connection->prepare($query);
-        $objPDO = $connection->prepare("select * from countrytable where deleted=0;");
-        $objPDO->execute();
-        $data = $objPDO->fetchAll();
-
-        /* echo '<div style="display:block">';
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
-        echo '</div>';
-        die(); */
-
-        if (isset($data)) {
-            $calculationResult = $data;//["result"];
-        }
-
-        return $calculationResult;
     }
 
     public function get_recordlist_data(Request $request)
@@ -764,12 +586,12 @@ class AdminLTELayoutController extends Controller
             $data_source = json_decode($objectLayout->data_source_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
 
             if ('simple' == $data_source['calculation_type']) {
-                $queryResult = $this->get_infoboxvalue_by_simple_calculation($data_source);
+                $meta_data = $data_source['meta_data'];
+                $queryResult = $this->get_queryresult_by_simple_calculation($meta_data['query']);
             } else if ('advanced' == $data_source['calculation_type']) {
-                $query = $this->getParsedValue($data_source['query'], '', $url_parameters, $request_parameters);
-                $queryResult = $this->get_recordlist_by_advanced_calculation($query);
-            } else if ('extreme' == $data_source['calculation_type']) {
-                $queryResult = $this->get_recordlist_by_extreme_calculation($data_source);
+                $meta_data = $data_source['meta_data'];
+                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters);
+                $queryResult = $this->get_queryresult_by_advanced_calculation($query);
             }
 
             $record_list_title = $this->getParsedValue($metaData['record_list_title'], $queryResult, $url_parameters, $request_parameters);
@@ -792,12 +614,21 @@ class AdminLTELayoutController extends Controller
 
             $conditionalData = json_decode($objectLayout->conditional_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
 
+            $index = 0;
+            $last_row_index = count($queryResult) - 1;
+
             foreach ($queryResult as $row) {
                 $list[$index] = [];
                 $list[$index]['id'] = $row['id'];
                 $list[$index]['displaytexts'] = [];
                 $list[$index]['styles'] = [];
-    
+
+                $row['__is_last_row'] = 0;
+
+                if ($index == $last_row_index) {
+                    $row['__is_last_row'] = 1;
+                }
+                
                 foreach ($column_titles as $title_index => $column_title) {
                     $column_titles[$title_index] = $this->getParsedValue($column_title, $row, $url_parameters, $request_parameters);
                 }
@@ -1020,6 +851,161 @@ class AdminLTELayoutController extends Controller
             'show_pagination' => $show_pagination,
             'data' => $data
         ];
+    }
+
+    public function get_recordgraph(Request $request)
+    {
+        $parameters = $request->route()->parameters();
+
+        $pageName = isset($parameters['pageName'])
+                ? htmlspecialchars($parameters['pageName'])
+                : '';
+        $model = isset($parameters['model'])
+                ? htmlspecialchars($parameters['model'])
+                : '';
+
+        $objectAdminLTE = new AdminLTE();
+
+        $dateFormat = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.dateformat');
+        $yearMonthFormat = $objectAdminLTE->getConfigParameterValue('adminlte.generalsettings.yearmonthformat');
+        
+        $modelNameWithNamespace = $objectAdminLTE->getModelNameWithNamespace($model);
+
+        $Widgets = $objectAdminLTE->getPageLayout($pageName);
+        $graphProperties = $objectAdminLTE->getRecordGraphProperties($Widgets, $model);
+        
+        $text = $graphProperties['text'];
+        $sizes = explode(',', $graphProperties['sizeCSV']);
+        $size = 'col-lg-' . $sizes[0] . ' col-md-' . $sizes[1] . ' col-xs-' . $sizes[2];
+
+        $graphType = $graphProperties['type'];
+
+        $period = (0 - $graphProperties['period']);
+        $fromDate = strtotime($period . ' month');
+
+        $graphData = array();
+
+        $objectList = $modelNameWithNamespace::where('deleted', false)
+                ->whereDate('created_at', '>=', date('Y-m-d H:i:s', $fromDate))
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+        $object = NULL;
+        $index = 0;
+            
+        if ('daily' == $graphType) {
+            foreach ($objectList as $object)
+            {
+                $created_at = $object->created_at->format($dateFormat);
+
+                if (!isset($graphData[$created_at])) {
+                    $graphData[$created_at] = 0;
+                }
+
+                $graphData[$created_at]++;
+            } // foreach ($objectList as $object)
+        } else if ('monthly' == $graphType) {
+            foreach ($objectList as $object)
+            {
+                $created_at = $object->created_at->format($yearMonthFormat);
+
+                if (!isset($graphData[$created_at])) {
+                    $graphData[$created_at] = 0;
+                }
+
+                $graphData[$created_at]++;
+            } // foreach ($objectList as $object)
+        } // if ('daily' == $graphType) {
+        
+        $keys = array_keys($graphData);
+        $countKeys = count($keys);
+        
+        $graphJSON = '';
+        for ($i=0; $i < $countKeys; $i++) {
+            $created_at = $keys[$i];
+            $countRecord = $graphData[$created_at];
+
+            if ($graphJSON != '') {
+                $graphJSON .= ',';
+            } // if ($graphJSON != '') {
+
+            $graphJSON .= '{';
+            $graphJSON .= ('"date":"' . $created_at . '",');
+            $graphJSON .= ('"record":' . $countRecord . '');
+            $graphJSON .= '}';
+        }
+        $graphJSON = ('[' . $graphJSON . ']');
+
+        return [
+            'id' => 1,
+            'text' => $text,
+            'size' => $size,
+            'graphJSON' => rawurlencode($graphJSON)
+        ];
+    }
+
+    public function getParsedValue($display_text, $queryResult, $url_parameters, $request_parameters)
+    {
+        $currentUser = auth()->guard('adminlteuser')->user();
+        $objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
+        $objectAdminLTE = new AdminLTE();
+        $parsed = $objectAdminLTE->getStringBetween($display_text, '{{', '}}');
+
+		while (strlen($parsed) > 0) {
+            $parsedWithMustache = '{{' . $parsed . '}}';
+			$partResult = '';
+
+			$textPart = explode('/', $parsed);
+
+            if ('CustomVariables' == $textPart[0]) {
+                $__key = $textPart[1];
+                $customVariableValue = $objectAdminLTEWidgetHelper->getCustomVariableValue(
+                        $currentUser->adminlteusergroup_id, 
+                        $__key, 
+                        $queryResult, 
+                        $url_parameters, 
+                        $request_parameters
+                );
+                
+				$partResult = ('' != $customVariableValue)
+                    ? $customVariableValue
+                    : $__key;
+
+            } else if ('GlobalParameters' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = $objectAdminLTE->getConfigParameterValue($__key);
+            } else if ('UserParameters' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = $objectAdminLTE->getUserConfigParameterValue($__key, 'user', $currentUser->id);
+            } else if ('URLParameters' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = isset($url_parameters[$__key]) 
+                    ? $url_parameters[$__key]
+                    : $__key;
+            } else if ('RequestParameters' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = isset($request_parameters[$__key]) 
+                    ? $request_parameters[$__key]
+                    : $__key;
+            } else if ('QueryResultFields' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = isset($queryResult[$__key]) 
+                    ? $queryResult[$__key] 
+                    : $__key;
+            } else {
+                $__key = $parsed;
+                $partResult = isset($queryResult[$__key]) 
+                    ? $queryResult[$__key] 
+                    : $__key;
+            }
+
+            
+            $display_text = str_replace($parsedWithMustache, $partResult, $display_text);
+			$temp_text = $display_text;
+			$parsed = $objectAdminLTE->getStringBetween($temp_text, '{{', '}}');
+		} // while (strlen($parsed) > 0) {
+
+        return htmlspecialchars_decode($display_text);
     }
 
     public function get_layout_page_options(Request $request) {

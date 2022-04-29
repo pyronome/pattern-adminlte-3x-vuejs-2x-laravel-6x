@@ -51,12 +51,6 @@
                                     <label for="__iv__query_result_field" class="detail-label">{{ $t('Query Variable') }}</label>
                                     <input type="text" class="form-control " id="__iv__query_result_field">
                                 </div>
-                                <!-- <div class="col-lg-12">
-                                    <div class="text-muted" style="font-size:14px;" v-pre>
-                                        - "result" is single variable in simple calculation.<br>
-                                        - Every query column can be use come from advanced calculation.<br>
-                                    </div>
-                                </div> -->
                             </div>
 
                             <div v-show="('custom_variables' == insertForm.variable_type)" class="row">
@@ -115,12 +109,6 @@
                                     <label for="__iv__request_parameter" class="detail-label">{{ $t('Parameter Name') }}</label>
                                     <input type="text" class="form-control " id="__iv__request_parameter">
                                 </div>
-                                <!-- <div class="col-lg-12">
-                                    <div class="text-muted" style="font-size:14px;" v-pre>
-                                        - "result" is single variable in simple calculation.<br>
-                                        - Every query column can be use come from advanced calculation.<br>
-                                    </div>
-                                </div> -->
                             </div>
                         </div>
                         <div class="modalfooter justify-content-between">

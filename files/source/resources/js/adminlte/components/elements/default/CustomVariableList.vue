@@ -159,7 +159,7 @@
                                             name="__cv_remember_type" 
                                             value="session"
                                             checked>
-                                        <label class="detail-label" for="__cv_remember_type1">Remember in Session</label>
+                                        <label class="detail-label" for="__cv_remember_type1">Store in the session</label>
                                     </div>
                                 </div>
                                 <div class="form-group col-6 clearfix">
@@ -168,7 +168,7 @@
                                             id="__cv_remember_type2" 
                                             name="__cv_remember_type"
                                             value="database">
-                                        <label class="detail-label" for="__cv_remember_type2">Remember in Database</label>
+                                        <label class="detail-label" for="__cv_remember_type2">Store in the database</label>
                                     </div>
                                 </div>
                             </div>
@@ -320,6 +320,10 @@ export default {
                 window.__ds_fields.load_customvariables(this.lastAddedVariableId);
             }
 
+            if (window.__ds_condition) {
+                window.__ds_condition.load_custom_variable_options();
+            }
+
             if (window.__condition_dialog) {
                 window.__condition_dialog.load_custom_variable_options();
             }
@@ -452,8 +456,11 @@ export default {
 
             self.variableForm.default_value = document.getElementById("__cv_default_value").value;
             self.variableForm.value = document.getElementById("__cv_value").value;
-            self.variableForm.remember = ("on" == document.getElementById("__cv_remember").value);
-            self.variableForm.remember_type = $("input[name='__cv_remember_type']:checked").val();
+            self.variableForm.remember = document.getElementById("__cv_remember").checked;
+            self.variableForm.remember_type = '';
+            if (self.variableForm.remember) {
+                self.variableForm.remember_type = $("input[name='__cv_remember_type']:checked").val();
+            }
 
             self.$Progress.start();
             self.variableForm.post(AdminLTEHelper.getAPIURL("adminlte/post_custom_variable"))

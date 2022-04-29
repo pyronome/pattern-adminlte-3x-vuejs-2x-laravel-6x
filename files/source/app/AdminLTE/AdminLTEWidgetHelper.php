@@ -4,6 +4,7 @@ namespace App\AdminLTE;
 use Illuminate\Support\Facades\Storage;
 use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTECustomVariable;
+use App\AdminLTE\AdminLTECustomVariableValue;
 use App\AdminLTE\AdminLTELayout;
 
 class AdminLTEWidgetHelper
@@ -137,8 +138,10 @@ class AdminLTEWidgetHelper
                     ? $customVariableValue
                     : $__key;
             } else {
-                $__key = $keyPart[1];
-                $partResult = $__key;
+                $__key = $key;
+                $partResult = isset($queryResult[$__key]) 
+                    ? $queryResult[$__key] 
+                    : $__key;
             }
 
 			$variables[$key] = $partResult;
@@ -156,7 +159,7 @@ class AdminLTEWidgetHelper
             ->first();
 
         if (null !== $object) {
-            $resultValue = $this->getVariableCalculatedValue($object->value, $queryResult, $url_parameters, $request_parameters);
+            $resultValue = $this->getVariableCalculatedValue($object, $queryResult, $url_parameters, $request_parameters);
         } else {
 			$object = AdminLTECustomVariable::where('deleted', 0)
 				->where('adminlteusergroup_id', $adminlteusergroup_id)
@@ -164,58 +167,157 @@ class AdminLTEWidgetHelper
 				->first();
 
 			if (null !== $object) {
-				$resultValue = $this->getVariableCalculatedValue($object->value, $queryResult, $url_parameters, $request_parameters);
+				$resultValue = $this->getVariableCalculatedValue($object, $queryResult, $url_parameters, $request_parameters);
 			}
 		}
 
 		return $resultValue;
 	}
 
-	public function getVariableCalculatedValue($variableValue, $queryResult, $url_parameters, $request_parameters) {
+	public function getVariableCalculatedValue($objCV, $queryResult, $url_parameters, $request_parameters) {
+		$customvariable_key = 'customvariable' . $objCV->id;
+		$remember_type = $objCV->remember_type;
+		$defaultValue = $objCV->default_value;
+		$variableValue = $defaultValue;
+		$remember = (1 == $objCV->remember);
+
 		$objectAdminLTE = new AdminLTE();
 		$currentUser = auth()->guard('adminlteuser')->user();
 
 		$parsed = $objectAdminLTE->getStringBetween($variableValue, '{{', '}}');
 
-		while (strlen($parsed) > 0) {
-            $parsedWithMustache = '{{' . $parsed . '}}';
-			$partResult = '';
+		$is_last_row = false;
+		if (isset($queryResult['__is_last_row'])) {
+			$is_last_row = (1 == $queryResult['__is_last_row']);
+		}
+		
+		if (strlen($parsed) > 0) {
+			// GlobalParameters
+			// UserParameters
+			// URLParameters
+			// RequestParameters
+			// QueryResultFields
+			// CurrentUser
 
-			$textPart = explode('/', $parsed);
+			while (strlen($parsed) > 0) {
+				$parsedWithMustache = '{{' . $parsed . '}}';
+				$partResult = '';
 
-            if ('GlobalParameters' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = $objectAdminLTE->getConfigParameterValue($__key);
-            } else if ('UserParameters' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = $objectAdminLTE->getUserConfigParameterValue($__key, 'user', $currentUser->id);
-            } else if ('URLParameters' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = isset($url_parameters[$__key]) 
-                    ? $url_parameters[$__key]
-                    : $__key;
-            } else if ('RequestParameters' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = isset($request_parameters[$__key]) 
-                    ? $request_parameters[$__key]
-                    : $__key;
-            } else if ('QueryResultFields' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = isset($queryResult[$__key]) 
-                    ? $queryResult[$__key] 
-                    : $__key;
-            } else if ('CurrentUser' == $textPart[0]) {
-                $__key = $textPart[1];
-                $partResult = $currentUser->$__key;
-            } else {
-                $__key = $textPart[1];
-                $partResult = $__key;
-            }
+				$textPart = explode('/', $parsed);
 
-            $variableValue = str_replace($parsedWithMustache, $partResult, $variableValue);
-			$temp_text = $variableValue;
-			$parsed = $objectAdminLTE->getStringBetween($temp_text, '{{', '}}');
-		} // while (strlen($parsed) > 0) {
+				if ('GlobalParameters' == $textPart[0]) {
+					$__key = $textPart[1];
+					$partResult = $objectAdminLTE->getConfigParameterValue($__key);
+				} else if ('UserParameters' == $textPart[0]) {
+					$__key = $textPart[1];
+					$partResult = $objectAdminLTE->getUserConfigParameterValue($__key, 'user', $currentUser->id);
+				} else if ('URLParameters' == $textPart[0]) {
+					$__key = $textPart[1];
+					$partResult = isset($url_parameters[$__key]) 
+						? $url_parameters[$__key]
+						: $__key;
+				} else if ('RequestParameters' == $textPart[0]) {
+					$__key = $textPart[1];
+					$partResult = isset($request_parameters[$__key]) 
+						? $request_parameters[$__key]
+						: $__key;
+				} else if ('QueryResultFields' == $textPart[0]) {
+					$__key = $textPart[1];
+					$partResult = isset($queryResult[$__key]) 
+						? $queryResult[$__key] 
+						: $__key;
+				} else if ('CurrentUser' == $textPart[0]) {
+					$__key = $textPart[1];
+					$partResult = $currentUser->$__key;
+				} else {
+					$partResult = isset($queryResult[$customvariable_key]) 
+						? $queryResult[$customvariable_key] 
+						: $defaultValue;
+				}
+
+				if($remember) {
+					if ('session' == $remember_type) {
+						if (session()->has($customvariable_key)) {
+							$partResult = session()->get($customvariable_key);
+						}
+					} else if ('database' == $remember_type) {
+						$object = AdminLTECustomVariableValue::where('deleted', 0)
+							->where('customvariable_id', $objCV->id)
+							->where('adminlteusergroup_id', $objCV->adminlteusergroup_id)
+							->first();
+			
+						if (null !== $object) {
+							$partResult = $object->value;
+						}
+					}
+				}
+
+				$variableValue = str_replace($parsedWithMustache, $partResult, $variableValue);
+				$temp_text = $variableValue;
+				$parsed = $objectAdminLTE->getStringBetween($temp_text, '{{', '}}');
+			} // while (strlen($parsed) > 0) {
+		} else {
+			if (isset($queryResult[$customvariable_key]) ) {
+				$variableValue = $queryResult[$customvariable_key];
+			} else {
+				if ($remember) {
+					if ('session' == $remember_type) {
+						if (session()->has($customvariable_key)) {
+							$variableValue = session()->get($customvariable_key);
+						} /* else {
+							$variableValue = isset($queryResult[$customvariable_key]) 
+								? $queryResult[$customvariable_key] 
+								: $variableValue;
+	
+							session()->put($customvariable_key, $variableValue);
+						} */
+					} else if ('database' == $remember_type) {
+						$object = AdminLTECustomVariableValue::where('deleted', 0)
+							->where('customvariable_id', $objCV->id)
+							->where('adminlteusergroup_id', $objCV->adminlteusergroup_id)
+							->first();
+			
+						if (null !== $object) {
+							$variableValue = $object->value;
+						} /* else {
+							$variableValue = isset($queryResult[$customvariable_key]) 
+								? $queryResult[$customvariable_key] 
+								: $variableValue;
+	
+							$object = new AdminLTECustomVariableValue();
+							$object->customvariable_id = $objCV->id;
+							$object->adminlteusergroup_id = $objCV->adminlteusergroup_id;
+							$object->value = $variableValue;
+							$object->save();
+						} */
+					}
+				}
+			}
+		}
+
+		if ($is_last_row) {
+			if ($remember) {
+				if ('session' == $remember_type) {
+					session()->put($customvariable_key, $variableValue);
+				} else if ('database' == $remember_type) {
+					$object = AdminLTECustomVariableValue::where('deleted', 0)
+						->where('customvariable_id', $objCV->id)
+						->where('adminlteusergroup_id', $objCV->adminlteusergroup_id)
+						->first();
+		
+					if (null !== $object) {
+						$object->value = $variableValue;
+						$object->save();
+					} else {
+						$object = new AdminLTECustomVariableValue();
+						$object->customvariable_id = $objCV->id;
+						$object->adminlteusergroup_id = $objCV->adminlteusergroup_id;
+						$object->value = $variableValue;
+						$object->save();
+					}
+				}
+			}
+		}
 
         return htmlspecialchars_decode($variableValue);
 	}

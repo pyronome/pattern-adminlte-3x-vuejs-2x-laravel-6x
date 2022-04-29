@@ -7,6 +7,7 @@
         <impersonation-dialog></impersonation-dialog>
         <custom-variable-list></custom-variable-list>
         <data-source-fields></data-source-fields>
+        <data-source-condition></data-source-condition>
         <widget-condition-dialog></widget-condition-dialog>
         <insert-variable-dialog></insert-variable-dialog>
     </div>

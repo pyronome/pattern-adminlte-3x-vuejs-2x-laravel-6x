@@ -11,6 +11,7 @@ use App\AdminLTE\AdminLTE;
 use App\AdminLTE\AdminLTEUser;
 use App\AdminLTE\AdminLTEUserGroup;
 use App\AdminLTE\AdminLTECustomVariable;
+use App\AdminLTE\AdminLTECustomVariableValue;
 use App\AdminLTE\AdminLTEConfig;
 use App\AdminLTE\AdminLTEUserConfig;
 use App\AdminLTE\AdminLTELayout;
@@ -48,13 +49,17 @@ class AdminLTEController extends Controller
         $model_permissions = $objectAdminLTE->getUserModelPermissions();
         $plugins_permissions = $objectAdminLTE->getUserPluginsPermissions();
 
+        // customvariables
+        $custom_variables = $objectAdminLTE->getCurrentCustomVariables();
+
         return [
             'is_admin' => $admin,
             'show_widget_config_button' => $show_widget_config_button,
             'menu_permissions' => $menu_permissions,
             'model_permissions' => $model_permissions,
             'plugins_permissions' => $plugins_permissions,
-            'active_widgets' => $active_widgets
+            'active_widgets' => $active_widgets,
+            'custom_variables' => $custom_variables
         ];
     }
 
@@ -127,7 +132,7 @@ class AdminLTEController extends Controller
         $title = $request->input('title');
         $name = $request->input('name');
         $value = $request->input('value');
-        
+
         $object = AdminLTECustomVariable::where('deleted', 0)
             ->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
             ->where('name', $name)
@@ -161,7 +166,7 @@ class AdminLTEController extends Controller
         $updatedObject->name = $name;
         $updatedObject->value = $value;
         $updatedObject->default_value = $request->input('default_value');
-        $updatedObject->remember = $request->input('remember');
+        $updatedObject->remember = intval($request->input('remember'));
         $updatedObject->remember_type = $request->input('remember_type');
         $updatedObject->__order = 0;
         $updatedObject->save();
