@@ -279,7 +279,7 @@ class AdminLTELayoutController extends Controller
         $basemodel_alias_name = strtolower($model) . '__table__';
         $join_alias_names = [];
 
-        $fields_SQL = $basemodel_alias_name . '.*';
+        $fields_SQL = $basemodel_alias_name . '.id';
         $from_SQL = 'FROM ' . $basemodel_table_name . ' as ' . $basemodel_alias_name;
         $join_SQL = '';
         $where_SQL = '';
@@ -290,6 +290,8 @@ class AdminLTELayoutController extends Controller
         }
 
         $query = 'SELECT ' . $fields_SQL . ' ' . $from_SQL . ' ' . $join_SQL;
+      /*   echo $query;
+        die(); */
         return $query;
     }
 
@@ -301,43 +303,69 @@ class AdminLTELayoutController extends Controller
         $current_model = array_shift($propertyParts);
         $current_field = array_shift($propertyParts);
 
+        $current_field_multiple_selection = $this->is_field_multiple_selection($current_model, $current_field);
+
         if (empty($propertyParts)) {
             $fields_SQL = $fields_SQL . ', ';
             $fields_SQL = $fields_SQL . $function . '(' . $final_alias_table . '.' . $current_field . ') as customvariable' . $customvariableId;
         } else {
             $next_model = $propertyParts[0];
-            $nextmodel_table_name = strtolower($next_model) . 'table';
-            $final_alias_table = strtolower($current_model) . '_' . strtolower($current_field) . '_' . strtolower($next_model);
 
-            if (!isset($join_alias_names[$final_alias_table])) {
-                $join_alias_names[$final_alias_table] = 1;
+            if ($current_field_multiple_selection) {
+                // multiple selection
+                $relation_table_name = strtolower($current_model) . '_' . strtolower($current_field);
+                $final_alias_table = $relation_table_name . '_' . strtolower($next_model) . 's';
 
-                $join_SQL = $join_SQL
-                    . ' LEFT JOIN ' . $nextmodel_table_name . ' as ' . $final_alias_table
-                    . ' on ' . $first_alias_table . '.' . $current_field . '=' . $final_alias_table . '.id';
+                if (!isset($join_alias_names[$final_alias_table])) {
+                    $join_alias_names[$final_alias_table] = 1;
+    
+                    $join_SQL = $join_SQL
+                        . ' LEFT JOIN ' . $relation_table_name . ' as ' . $final_alias_table
+                        . ' on ' . $first_alias_table . '.id' . '=' . $final_alias_table . '.' . (strtolower($current_model).'_id');
+                }
+
+                $first_alias_table = $final_alias_table;
+                $nextmodel_table_name = strtolower($next_model) . 'table';
+                $final_alias_table = $relation_table_name . '_' . strtolower($next_model);
+
+                if (!isset($join_alias_names[$final_alias_table])) {
+                    $join_alias_names[$final_alias_table] = 1;
+
+                    $join_SQL = $join_SQL
+                        . ' LEFT JOIN ' . $nextmodel_table_name . ' as ' . $final_alias_table
+                        . ' on ' . $first_alias_table . '.' . (strtolower($next_model).'_id') . '=' . $final_alias_table . '.id';
+                }
+            } else {
+                // single selection
+                $nextmodel_table_name = strtolower($next_model) . 'table';
+                $final_alias_table = strtolower($current_model) . '_' . strtolower($current_field) . '_' . strtolower($next_model);
+
+                if (!isset($join_alias_names[$final_alias_table])) {
+                    $join_alias_names[$final_alias_table] = 1;
+
+                    $join_SQL = $join_SQL
+                        . ' LEFT JOIN ' . $nextmodel_table_name . ' as ' . $final_alias_table
+                        . ' on ' . $first_alias_table . '.' . $current_field . '=' . $final_alias_table . '.id';
+                }
             }
 
             $this->setSQLPart($fields_SQL, $join_SQL, $join_alias_names, $final_alias_table, $final_alias_table, $function, $propertyParts, $customvariableId);
         }
+    }
 
+    public function is_field_multiple_selection($model, $property) {
+        $objectAdminLTE = new AdminLTE();
+        $property_list = $objectAdminLTE->getModelPropertyList($model);
         
-        /*
-        SELECT 
-            town__table__.*, 
-            (city_country_id_country.title) as customvariable20, 
-            (town_city_id_city.title) as customvariable22, 
-            (town__table__.title) as customvariable24,
-            (
-                select 
-                    GROUP_CONCAT(title) 
-                from colortable where colortable.id in (
-                        select country_flag_colors.color_id from country_flag_colors where country_flag_colors.country_id=city_country_id_country.id
-                    )
-            ) as color_title
-        FROM towntable as town__table__  
-        LEFT JOIN citytable as town_city_id_city on town__table__.city_id=town_city_id_city.id 
-        LEFT JOIN countrytable as city_country_id_country on town_city_id_city.country_id=city_country_id_country.id;
-        */
+        foreach ($property_list as $property_data) {
+            if ($property == $property_data['name']) {
+                if ('class_selection_multiple' == $property_data['type']) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public function get_filter_options(Request $request) {    
@@ -420,7 +448,7 @@ class AdminLTELayoutController extends Controller
         $objectAdminLTE = new AdminLTE();
         $property_list = $objectAdminLTE->getModelPropertyList($model);
         
-        foreach ($property_list as$property_data) {
+        foreach ($property_list as $property_data) {
             $id = $model . '/' . $property_data['name'];
             $text = $model . '/' . $property_data['title'];
 

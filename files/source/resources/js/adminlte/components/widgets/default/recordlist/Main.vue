@@ -6,14 +6,14 @@
                 <table class="table table-striped table-bordered table-hover table-sm">
                     <thead>
                         <tr>
-                            <th v-for="(pair, index) in title_pairs" :key="index">
+                            <th v-for="(pair, title_index) in title_pairs" :key="title_index">
                                 <span v-html="pair.title"></span>&nbsp;
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="row in list" :key="row.id">
-                            <td v-for="(displaytext, index) in row.displaytexts" :key="index" v-html="displaytext" :style="row.styles[index]">
+                        <tr v-for="(row, row_index) in list" :key="row_index">
+                            <td v-for="(displaytext, column_index) in row.displaytexts" :key="column_index" v-html="displaytext" :style="row.styles[column_index]">
                             </td>
                         </tr>
                     </tbody>

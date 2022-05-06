@@ -51,6 +51,7 @@ class AdminLTE
 		'AdminLTEVariable',
 		'AdminLTELog',
 		'AdminLTECustomVariable',
+		'AdminLTECustomVariableValue',
 		'AdminLTEMedia',
 		'AdminLTEWidgetHelper',
 		'User'
