@@ -277,6 +277,7 @@ class AdminLTELayoutController extends Controller
         $model = $meta_data['model'];
         $basemodel_table_name = strtolower($model) . 'table';
         $basemodel_alias_name = strtolower($model) . '__table__';
+        $join_alias_names = [];
 
         $fields_SQL = $basemodel_alias_name . '.*';
         $from_SQL = 'FROM ' . $basemodel_table_name . ' as ' . $basemodel_alias_name;
@@ -285,14 +286,14 @@ class AdminLTELayoutController extends Controller
 
         foreach ($meta_data['fields'] as $field) {
             $propertyParts = explode('/', $field['property']);
-            $this->setSQLPart($fields_SQL, $join_SQL, $basemodel_alias_name, $basemodel_alias_name, $field['function'], $propertyParts, $field['customvariable']);
+            $this->setSQLPart($fields_SQL, $join_SQL, $join_alias_names, $basemodel_alias_name, $basemodel_alias_name, $field['function'], $propertyParts, $field['customvariable']);
         }
 
         $query = 'SELECT ' . $fields_SQL . ' ' . $from_SQL . ' ' . $join_SQL;
         return $query;
     }
 
-    public function setSQLPart(&$fields_SQL, &$join_SQL, $first_alias_table, $final_alias_table, $function, $propertyParts, $customvariableId) {
+    public function setSQLPart(&$fields_SQL, &$join_SQL, &$join_alias_names, $first_alias_table, $final_alias_table, $function, $propertyParts, $customvariableId) {
         $objectAdminLTE = new AdminLTE();
         // $field['property'] ----> City/title
         // $field['property'] ----> City/country_id/Country/population
@@ -308,12 +309,35 @@ class AdminLTELayoutController extends Controller
             $nextmodel_table_name = strtolower($next_model) . 'table';
             $final_alias_table = strtolower($current_model) . '_' . strtolower($current_field) . '_' . strtolower($next_model);
 
-            $join_SQL = $join_SQL
-                . ' LEFT JOIN ' . $nextmodel_table_name . ' as ' . $final_alias_table
-                . ' on ' . $first_alias_table . '.' . $current_field . '=' . $final_alias_table . '.id';
+            if (!isset($join_alias_names[$final_alias_table])) {
+                $join_alias_names[$final_alias_table] = 1;
 
-            $this->setSQLPart($fields_SQL, $join_SQL, $final_alias_table, $final_alias_table, $function, $propertyParts, $customvariableId);
+                $join_SQL = $join_SQL
+                    . ' LEFT JOIN ' . $nextmodel_table_name . ' as ' . $final_alias_table
+                    . ' on ' . $first_alias_table . '.' . $current_field . '=' . $final_alias_table . '.id';
+            }
+
+            $this->setSQLPart($fields_SQL, $join_SQL, $join_alias_names, $final_alias_table, $final_alias_table, $function, $propertyParts, $customvariableId);
         }
+
+        
+        /*
+        SELECT 
+            town__table__.*, 
+            (city_country_id_country.title) as customvariable20, 
+            (town_city_id_city.title) as customvariable22, 
+            (town__table__.title) as customvariable24,
+            (
+                select 
+                    GROUP_CONCAT(title) 
+                from colortable where colortable.id in (
+                        select country_flag_colors.color_id from country_flag_colors where country_flag_colors.country_id=city_country_id_country.id
+                    )
+            ) as color_title
+        FROM towntable as town__table__  
+        LEFT JOIN citytable as town_city_id_city on town__table__.city_id=town_city_id_city.id 
+        LEFT JOIN countrytable as city_country_id_country on town_city_id_city.country_id=city_country_id_country.id;
+        */
     }
 
     public function get_filter_options(Request $request) {    
@@ -404,7 +428,7 @@ class AdminLTELayoutController extends Controller
             $properties[$index]['id'] = $id;
             $properties[$index]['text'] = $text;
 
-            if ('class_selection_single' == $property_data['type']) {
+            if (('class_selection_single' == $property_data['type']) || ('class_selection_multiple' == $property_data['type'])) {
                 $this->setPropertyChildrenProperties($properties, $id, $text, $property_data['belongs_to']);
             }
         }
@@ -427,8 +451,8 @@ class AdminLTELayoutController extends Controller
             $properties[$index]['id'] = $id;
             $properties[$index]['text'] = $text;
             
-            if ('class_selection_single' == $property_data['type']) {
-                $properties[$index]['children'] = $this->getPropertyChildrenProperties($properties, $id, $text, $property_data['belongs_to']);
+            if (('class_selection_single' == $property_data['type']) || ('class_selection_multiple' == $property_data['type'])) {
+                $properties[$index]['children'] = $this->setPropertyChildrenProperties($properties, $id, $text, $property_data['belongs_to']);
             }
         }
     }
