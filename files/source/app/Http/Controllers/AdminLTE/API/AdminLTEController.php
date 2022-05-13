@@ -82,7 +82,7 @@ class AdminLTEController extends Controller
             $list[$index]['adminlteusergroup_id'] = $object->adminlteusergroup_id;
             $list[$index]['title'] = $object->title;
             $list[$index]['name'] = $object->name;
-            $list[$index]['value'] = $object->value;
+            $list[$index]['value'] = $this->getCustomVariableValue($object);
             $list[$index]['default_value'] = $object->default_value;
             $list[$index]['remember'] = $object->remember;
             $list[$index]['remember_type'] = $object->remember_type;
@@ -101,7 +101,7 @@ class AdminLTEController extends Controller
             $list[$index]['adminlteusergroup_id'] = $object->adminlteusergroup_id;
             $list[$index]['title'] = $object->title;
             $list[$index]['name'] = $object->name;
-            $list[$index]['value'] = $object->value;
+            $list[$index]['value'] = $this->getCustomVariableValue($object);
             $list[$index]['default_value'] = $object->default_value;
             $list[$index]['remember'] = $object->remember;
             $list[$index]['remember_type'] = $object->remember_type;
@@ -112,6 +112,33 @@ class AdminLTEController extends Controller
         return [
             'list' => $list
         ];
+    }
+
+    public function getCustomVariableValue($objCV) {
+        $customvariable_key = 'customvariable' . $objCV->id;
+		$remember_type = $objCV->remember_type;
+		$defaultValue = $objCV->default_value;
+		$variableValue = $defaultValue;
+		$remember = (1 == $objCV->remember);
+
+        if ($remember) {
+            if ('session' == $remember_type) {
+                if (session()->has($customvariable_key)) {
+                    $variableValue = session()->get($customvariable_key);
+                }
+            } else if ('database' == $remember_type) {
+                $object = AdminLTECustomVariableValue::where('deleted', 0)
+                    ->where('customvariable_id', $objCV->id)
+                    ->where('adminlteusergroup_id', $objCV->adminlteusergroup_id)
+                    ->first();
+    
+                if (null !== $object) {
+                    $variableValue = $object->value;
+                }
+            }
+        }
+
+        return $variableValue;
     }
 
     public function post_custom_variable(Request $request)

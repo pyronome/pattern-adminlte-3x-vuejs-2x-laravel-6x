@@ -130,7 +130,8 @@ var AdminLTEHelper = {
         var widgetParameter = {
             "layout_id": layoutId,
             "url_parameters": [],
-            "request_parameters": {}
+            "request_parameters": {},
+            "custom_variables": window.__custom_variables.values
         };
 
         // url_parameters

@@ -1798,6 +1798,20 @@ select.condition-rule-variable {
     float: right;
 }
 
+.condition-html-container > span {
+    font-weight:bold;
+    display:block;
+}
+
+.__fo__-checkbox-label {
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+.span_selected_order_fields {
+    display: block;
+}
+
 .modal.level1 {
     z-index: 1100;
 }

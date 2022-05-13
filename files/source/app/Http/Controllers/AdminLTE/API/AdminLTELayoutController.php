@@ -268,7 +268,7 @@ class AdminLTELayoutController extends Controller
             $data_source['meta_data'] = $meta_data;
         }
 
-        return json_encode($data_source, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
+        return json_encode($data_source);
     }
 
     public function getQueryFromExtremeDataSource($meta_data) {
@@ -280,22 +280,31 @@ class AdminLTELayoutController extends Controller
         $join_alias_names = [];
 
         $fields_SQL = $basemodel_alias_name . '.id';
-        $from_SQL = 'FROM ' . $basemodel_table_name . ' as ' . $basemodel_alias_name;
+        $from_SQL = 'FROM (' . $basemodel_table_name . ' as ' . $basemodel_alias_name;
         $join_SQL = '';
         $where_SQL = '';
+        $order_SQL = '';
+
+        $field_aliases = [];
 
         foreach ($meta_data['fields'] as $field) {
+            $field_alias = 'customvariable' . $field['customvariable'];
+            $field_aliases[$field['guid']] = $field_alias;
+
             $propertyParts = explode('/', $field['property']);
-            $this->setSQLPart($fields_SQL, $join_SQL, $join_alias_names, $basemodel_alias_name, $basemodel_alias_name, $field['function'], $propertyParts, $field['customvariable']);
+            $this->setFieldsAndJoinSQL($fields_SQL, $join_SQL, $join_alias_names, $basemodel_alias_name, $basemodel_alias_name, $field['function'], $propertyParts, $field_alias);
         }
 
-        $query = 'SELECT ' . $fields_SQL . ' ' . $from_SQL . ' ' . $join_SQL;
-      /*   echo $query;
-        die(); */
+        $this->setWhereSQL($where_SQL, $meta_data['conditions']);
+
+        $this->setOrderSQL($order_SQL, $field_aliases, $meta_data['order_fields']);
+
+        $query = 'SELECT ' . $fields_SQL . ' ' . $from_SQL . ' ' . $join_SQL . ') ' . $where_SQL . ' ' . $order_SQL;
+        
         return $query;
     }
 
-    public function setSQLPart(&$fields_SQL, &$join_SQL, &$join_alias_names, $first_alias_table, $final_alias_table, $function, $propertyParts, $customvariableId) {
+    public function setFieldsAndJoinSQL(&$fields_SQL, &$join_SQL, &$join_alias_names, $first_alias_table, $final_alias_table, $function, $propertyParts, $field_alias) {
         $objectAdminLTE = new AdminLTE();
         // $field['property'] ----> City/title
         // $field['property'] ----> City/country_id/Country/population
@@ -307,7 +316,7 @@ class AdminLTELayoutController extends Controller
 
         if (empty($propertyParts)) {
             $fields_SQL = $fields_SQL . ', ';
-            $fields_SQL = $fields_SQL . $function . '(' . $final_alias_table . '.' . $current_field . ') as customvariable' . $customvariableId;
+            $fields_SQL = $fields_SQL . $function . '(' . $final_alias_table . '.' . $current_field . ') as ' . $field_alias;
         } else {
             $next_model = $propertyParts[0];
 
@@ -349,7 +358,7 @@ class AdminLTELayoutController extends Controller
                 }
             }
 
-            $this->setSQLPart($fields_SQL, $join_SQL, $join_alias_names, $final_alias_table, $final_alias_table, $function, $propertyParts, $customvariableId);
+            $this->setFieldsAndJoinSQL($fields_SQL, $join_SQL, $join_alias_names, $final_alias_table, $final_alias_table, $function, $propertyParts, $field_alias);
         }
     }
 
@@ -366,6 +375,27 @@ class AdminLTELayoutController extends Controller
         }
 
         return false;
+    }
+
+    public function setWhereSQL(&$where_SQL, $conditions) {
+        $objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
+        $objectAdminLTEWidgetHelper->__setWhereSQL($where_SQL, $conditions);
+    }
+
+    public function setOrderSQL(&$order_SQL, $field_aliases, $orders) {
+        $orderSQL = '';
+
+        foreach ($orders as $order_data) {
+            if ('' != $orderSQL) {
+                $orderSQL .= ',';
+            }
+            
+            $orderSQL = $orderSQL . ' ' . $field_aliases[$order_data['field_guid']] . ' ' . $order_data['type'];
+        }
+
+        if ('' != $orderSQL) {
+            $order_SQL = ' ORDER BY ' . $orderSQL;
+        }
     }
 
     public function get_filter_options(Request $request) {    
@@ -403,6 +433,24 @@ class AdminLTELayoutController extends Controller
     }
 
     public function get_model_list(Request $request) {    
+        /*
+        
+        ####################TEST#############
+        
+        */
+
+        /* $objectLayout = AdminLTELayout::where('id', 38)->first();
+        $data_source = json_decode($objectLayout->data_source_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+        $data_source_json = $this->getFormattedDataSource($data_source);
+
+        die(); */
+
+        /*
+        
+        ####################TEST#############
+        
+        */
+
         $list = [];
         $index = 0;
 
@@ -548,6 +596,7 @@ class AdminLTELayoutController extends Controller
         $layoutId = $widgetParameters['layout_id'];
         $url_parameters = $widgetParameters['url_parameters'];
         $request_parameters = $widgetParameters['request_parameters'];
+        $custom_variables = $widgetParameters['custom_variables'];
 
         $objectLayout = AdminLTELayout::where('id', $layoutId)->first();
 
@@ -557,9 +606,11 @@ class AdminLTELayoutController extends Controller
 
             if ('simple' == $data_source['calculation_type']) {
                 $meta_data = $data_source['meta_data'];
-                $queryResult = $this->get_queryresult_by_simple_calculation($meta_data['query']);
+                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters, $custom_variables);
+                $queryResult = $this->get_queryresult_by_simple_calculation($query);
             } else if ('advanced' == $data_source['calculation_type']) {
-                $query = $this->getParsedValue($data_source['query'], '', $url_parameters, $request_parameters);
+                $meta_data = $data_source['meta_data'];
+                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters, $custom_variables);
                 $queryResult = $this->get_queryresult_by_advanced_calculation($query);
             }
 
@@ -575,7 +626,7 @@ class AdminLTELayoutController extends Controller
                 }
 
                 foreach ($metaData as $key => $value) {
-                    $returnData[$key] = $this->getParsedValue($value, $row, $url_parameters, $request_parameters);
+                    $returnData[$key] = $this->getParsedValue($value, $row, $url_parameters, $request_parameters, $custom_variables);
                 }
 
                 foreach ($conditionalData as $conditionData) {
@@ -588,7 +639,7 @@ class AdminLTELayoutController extends Controller
                     if ($conditionResultData['success']) {
                         $conditionalFields = $conditionResultData['data'];
                         foreach ($conditionalFields as $index => $fieldData) {
-                            $returnData[$fieldData->id] = $this->getParsedValue($fieldData->value, $queryResult, $url_parameters, $request_parameters);
+                            $returnData[$fieldData->id] = $this->getParsedValue($fieldData->value, $queryResult, $url_parameters, $request_parameters, $custom_variables);
                         }
                     }
                 }
@@ -624,6 +675,7 @@ class AdminLTELayoutController extends Controller
         $layoutId = $widgetParameters['layout_id'];
         $url_parameters = $widgetParameters['url_parameters'];
         $request_parameters = $widgetParameters['request_parameters'];
+        $custom_variables = $widgetParameters['custom_variables'];
 
         $objectLayout = AdminLTELayout::where('id', $layoutId)->first();
 
@@ -639,14 +691,15 @@ class AdminLTELayoutController extends Controller
 
             if ('simple' == $data_source['calculation_type']) {
                 $meta_data = $data_source['meta_data'];
-                $queryResult = $this->get_queryresult_by_simple_calculation($meta_data['query']);
+                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters, $custom_variables);
+                $queryResult = $this->get_queryresult_by_simple_calculation($query);
             } else if ('advanced' == $data_source['calculation_type']) {
                 $meta_data = $data_source['meta_data'];
-                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters);
+                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters, $custom_variables);
                 $queryResult = $this->get_queryresult_by_advanced_calculation($query);
             }
 
-            $record_list_title = $this->getParsedValue($metaData['record_list_title'], $queryResult, $url_parameters, $request_parameters);
+            $record_list_title = $this->getParsedValue($metaData['record_list_title'], $queryResult, $url_parameters, $request_parameters, $custom_variables);
 
             $columns = $metaData['columns'];
             $index = 0;
@@ -682,12 +735,12 @@ class AdminLTELayoutController extends Controller
                 }
                 
                 foreach ($column_titles as $title_index => $column_title) {
-                    $column_titles[$title_index] = $this->getParsedValue($column_title, $row, $url_parameters, $request_parameters);
+                    $column_titles[$title_index] = $this->getParsedValue($column_title, $row, $url_parameters, $request_parameters, $custom_variables);
                 }
 
                 foreach ($column_variables as $column_name) {
                     $objectColumn = $visible_columns[$column_name];
-                    $list[$index]['displaytexts'][] = $this->getParsedValue($objectColumn->value, $row, $url_parameters, $request_parameters);
+                    $list[$index]['displaytexts'][] = $this->getParsedValue($objectColumn->value, $row, $url_parameters, $request_parameters, $custom_variables);
                     $list[$index]['styles'][] = $objectColumn->style;
                 }
 
@@ -704,7 +757,7 @@ class AdminLTELayoutController extends Controller
                         foreach ($conditionalFields as $fieldData) {
                             // $returnData[$fieldData->id] = $this->getParsedValue($fieldData->value, $queryResult, $url_parameters, $request_parameters);
                             if ('record_list_title' == $fieldData->id) {
-                                $record_list_title = $this->getParsedValue($fieldData->value, $row, $url_parameters, $request_parameters);
+                                $record_list_title = $this->getParsedValue($fieldData->value, $row, $url_parameters, $request_parameters, $custom_variables);
                             } else if ('array' == $fieldData->type) {
                                 $list[$index]['displaytexts'] = [];
                                 $list[$index]['styles'] = [];
@@ -714,7 +767,7 @@ class AdminLTELayoutController extends Controller
                                 foreach ($columns as $column) {
                                     $column_name = $column->name;
                                     if (isset($visible_columns[$column_name])) {
-                                        $list[$index]['displaytexts'][] = $this->getParsedValue($column->value, $row, $url_parameters, $request_parameters);
+                                        $list[$index]['displaytexts'][] = $this->getParsedValue($column->value, $row, $url_parameters, $request_parameters, $custom_variables);
                                         $list[$index]['styles'][] = $column->style;
                                     }
                                 }
@@ -996,7 +1049,7 @@ class AdminLTELayoutController extends Controller
         ];
     }
 
-    public function getParsedValue($display_text, $queryResult, $url_parameters, $request_parameters)
+    public function getParsedValue($display_text, $queryResult, $url_parameters, $request_parameters, $custom_variables)
     {
         $currentUser = auth()->guard('adminlteuser')->user();
         $objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
@@ -1009,7 +1062,12 @@ class AdminLTELayoutController extends Controller
 
 			$textPart = explode('/', $parsed);
 
-            if ('CustomVariables' == $textPart[0]) {
+            if ('__custom_variable__' == $textPart[0]) {
+                $id = $textPart[1];
+                $partResult = isset($custom_variables[$id]) 
+                    ? $custom_variables[$id]
+                    : '-';
+            } else if ('CustomVariables' == $textPart[0]) {
                 $__key = $textPart[1];
                 $customVariableValue = $objectAdminLTEWidgetHelper->getCustomVariableValue(
                         $currentUser->adminlteusergroup_id, 

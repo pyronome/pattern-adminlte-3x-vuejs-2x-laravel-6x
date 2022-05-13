@@ -724,5 +724,350 @@ class AdminLTEWidgetHelper
 
 		return $code;
 	}
+
+	public function __setWhereSQL(&$where_SQL, $conditions) {
+		$history = [];
+		$sql = '';
+
+		if (!empty($conditions)) {
+			foreach ($conditions as $condition_data) {
+				$condition = (object) $condition_data['condition'];
+
+				if ('' != $sql) {
+					$sql = $sql . ' AND ';
+				}
+
+				$sql = $sql . $this->__sql__generateWhereConditionCode($where_SQL, $condition, $history);
+			}
+		}
+		
+		if ('' == $sql) {
+			$where_SQL = ' WHERE 1';
+		} else {
+			$where_SQL = ' HAVING ' . $sql;
+		}
+		
+		return;
+	}
+
+	private function __sql__generateWhereConditionCode(&$where_SQL, $condition_data, &$history)
+	{
+		
+		$operationHeaderCode = '';
+
+		if (isset($condition_data->condition))
+		{
+			$operationHeaderCode = $operationHeaderCode . $this->__sql__generateConditionCode(
+					$condition_data->rules,
+					$history,
+					$condition_data->condition);
+		}
+
+		return $operationHeaderCode;
+	}
+
+	private function __sql__generateConditionCode($rules, &$history, $condition = 'AND')
+	{
+		$ruleCount = count($rules);
+		$rule = null;
+		$andOr = ' AND ';
+
+		if ($condition[0] == 'A')
+		{
+			$andOr = ' AND ';
+		} else {
+			$andOr = ' OR ';
+		}
+
+		$code = '(';
+
+		for ($i = 0; $i < $ruleCount; $i++)
+		{
+			if ($i > 0)
+			{
+				$code .= $andOr;
+			}
+
+			$rule = $rules[$i];
+
+			if (isset($rule->rules))
+			{
+				$code .= $this->__sql__generateConditionCode(
+						$rule->rules,
+						$history,
+						$rule->condition);
+			} else {
+				$code .= $this->__sql__generateConditionRuleCode(
+						(object) $rule,
+						$history);
+			}
+		}
+
+		$code .= ')';
+
+		if ($code == '()')
+		{
+			$code = '(1)';
+		}
+
+		return $code;
+	}
+
+	private function __sql__generateConditionRuleCode($rule, &$history)
+	{
+		$code = '';
+
+		if (!isset($rule->field))
+		{
+			return $code;
+		}
+
+		$history['used_variables'][$rule->field] = 1;
+
+		$fieldName = 'customvariable' . $rule->id;
+
+		$code = '(';
+		
+		switch ($rule->operator)
+		{
+			case 'equal':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'' . $ruleValue . '\'';
+
+				$code = $code 
+					. $fieldName
+					. ' = '
+					. $ruleValue;
+				break;
+
+			case 'not_equal':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'' . $ruleValue . '\'';
+
+				$code = $code 
+					. $fieldName
+					. ' != '
+					. $ruleValue;
+				break;
+
+			case 'contains':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'%' . $ruleValue . '%\'';
+
+				$code = $code 
+					. $fieldName
+					. ' like '
+					. $ruleValue;
+				break;
+
+			case 'not_contains':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'%' . $ruleValue . '%\'';
+
+				$code = $code 
+					. $fieldName
+					. ' not like '
+					. $ruleValue;
+				break;
+
+			case 'in':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '(' . $ruleValue . ')';
+
+				$code = $code 
+					. $fieldName
+					. ' in '
+					. $ruleValue;
+				break;
+
+			case 'not_in':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '(' . $ruleValue . ')';
+
+				$code = $code 
+					. $fieldName
+					. ' in '
+					. $ruleValue;
+				break;
+
+			case 'less':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'' . $ruleValue . '\'';
+
+				$code = $code 
+					. $fieldName
+					. ' < '
+					. $ruleValue;
+				break;
+
+			case 'less_or_equal':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'' . $ruleValue . '\'';
+
+				$code = $code 
+					. $fieldName
+					. ' <= '
+					. $ruleValue;
+				break;
+
+			case 'greater':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'' . $ruleValue . '\'';
+
+				$code = $code 
+					. $fieldName
+					. ' > '
+					. $ruleValue;
+				break;
+	
+			case 'greater_or_equal':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'' . $ruleValue . '\'';
+
+				$code = $code 
+					. $fieldName
+					. ' >= '
+					. $ruleValue;
+				break;
+
+			case 'begins_with':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'' . $ruleValue . '%\'';
+
+				$code = $code 
+					. $fieldName
+					. ' like '
+					. $ruleValue;
+				break;
+
+			case 'not_begins_with':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'' . $ruleValue . '%\'';
+
+				$code = $code 
+					. $fieldName
+					. ' not like '
+					. $ruleValue;
+				break;
+
+			case 'ends_with':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'%' . $ruleValue . '\'';
+
+				$code = $code 
+					. $fieldName
+					. ' like '
+					. $ruleValue;
+				break;
+
+			case 'not_ends_with':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$ruleValue = '\'%' . $ruleValue . '\'';
+
+				$code = $code 
+					. $fieldName
+					. ' not like '
+					. $ruleValue;
+				break;
+
+			case 'is_empty':
+				$code = $code 
+					. $fieldName
+					. ' = \'\'';
+				break;
+
+			case 'is_not_empty':
+				$code = $code 
+					. $fieldName
+					. ' != \'\'';
+				break;
+
+			case 'is_null':
+				$code = $code 
+					. $fieldName
+					. ' is null';
+				break;
+				
+			case 'is_not_null':
+				$code = $code 
+					. $fieldName
+					. ' is not null';
+				break;
+
+			case 'is_integer':
+				$code = $code
+					. ' (' . $fieldName
+					. ' regexp \'^[-+]?[0-9]+$\''
+					. ') = 1 ';
+				break;
+
+			case 'is_not_integer':
+				$code = $code
+					. ' ((' . $fieldName . ' regexp \'^[-+]?[0-9]+$\') is null)'
+					. ' OR '
+					. ' ((' . $fieldName . ' regexp \'^[-+]?[0-9]+$\') = 0)';
+				break;
+
+			case 'is_numeric':
+				$code = $code
+					. ' (' . $fieldName
+					. ' regexp \'^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$\''
+					. ') = 1 ';
+				break;
+
+			case 'is_not_numeric':
+				$code = $code
+					. ' ((' . $fieldName . ' regexp \'^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$\') is null)'
+					. ' OR '
+					. ' ((' . $fieldName . ' regexp \'^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$\') = 0)';
+				break;
+
+			case 'matching_regex':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$regex = '\'' . $ruleValue . '\'';
+
+				$code = $code
+					. ' (' . $fieldName
+					. ' regexp ' . $ruleValue
+					. ') = 1 ';
+				break;
+
+			case 'not_matching_regex':
+				$ruleValue = $this->__sql__generateConditionRuleValueCode($rule->value, $history);
+				$regex = '\'' . $ruleValue . '\'';
+
+				$code = $code
+					. ' ((' . $fieldName . ' regexp ' . $regex . ') is null)'
+					. ' OR '
+					. ' ((' . $fieldName . ' regexp ' . $regex . ') = 0)';
+				break;
+		}
+
+		$code = $code . ')';
+
+		return $code;
+	}
+
+	private function __sql__generateConditionRuleValueCode($value, &$history)
+	{
+		$code = '';
+		if ('' == $value)
+		{
+			return 'null';
+		}
+
+		$valueType = intval($value[0]);
+		$value = substr($value, 2);
+
+		if (2 == $valueType)
+		{
+			$history['used_variables'][$value] = 1;
+			$code = '{{__custom_variable__/' . $value . '}}';
+		} else {
+			$code = $value;
+		}
+
+		return $code;
+	}
 }
 /* {{@snippet:end_class}} */

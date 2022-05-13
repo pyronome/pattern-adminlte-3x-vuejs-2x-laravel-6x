@@ -312,21 +312,36 @@ export default {
                 });
         },
         refreshRelatedWithCustomVariableList: function() {
+            this.renderCustomVariableValues();
+
             if (window.__insert_variable_dialog) {
                 window.__insert_variable_dialog.load_custom_variable_options();
             }
 
-            if (window.__ds_fields) {
-                window.__ds_fields.load_customvariables(this.lastAddedVariableId);
+            if (window.__ds_simple__fields) {
+                window.__ds_simple__fields.load_customvariables(this.lastAddedVariableId);
             }
 
-            if (window.__ds_condition) {
-                window.__ds_condition.load_custom_variable_options();
+            if (window.__ds_simple__condition) {
+                window.__ds_simple__condition.load_custom_variable_options();
             }
 
             if (window.__condition_dialog) {
                 window.__condition_dialog.load_custom_variable_options();
             }
+        },
+        renderCustomVariableValues: function() {
+            window.__custom_variables.values = {};
+            var values = {};
+
+            var length = window.__custom_variables.list.length;
+
+            for (let index = 0; index < length; index++) {
+                const element = window.__custom_variables.list[index];
+                values[element.id] = element.value;
+            }
+
+            window.__custom_variables.values = values;
         },
         doSearchVariable: function(sender) {
             if (!sender) {
@@ -550,6 +565,7 @@ export default {
     mounted() {
         window.__custom_variables = this;
         window.__custom_variables.list = [];
+        window.__custom_variables.values = {};
         this.$Progress.start();
         this.page.is_ready = false;
         this.processLoadQueue();

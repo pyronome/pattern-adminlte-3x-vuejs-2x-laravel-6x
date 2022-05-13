@@ -45,6 +45,7 @@
                                     :key="index" 
                                     :value="customvariable.id" 
                                     :name="customvariable.name"
+                                    :title="customvariable.title"
                                     :selected="(customvariable.id == selected_customvariable_id)">
                                     {{customvariable.title}}
                                 </option>
@@ -78,7 +79,7 @@
         </div>
         <script id="__ds_field__rowtemplate" type="text/html">
             <td class="">
-                <span id="__guid__-sql_text">__sql_text__</span>
+                <span id="__guid__-label">__label__</span>
                 <button type="button" title="Remove Field" class="btn-icon btn-icon-danger float-right btn-remove-field">
                     <span class="btn-label btn-label-right"><i class="fas fa-times"></i></span>
                 </button>
@@ -87,10 +88,32 @@
                 </button>
             </td>
         </script>
+
+        <script id="__ds__fo__rowtemplate" type="text/html">
+            <td class="">
+                <div class="icheck-primary m-0">
+                    <input type="checkbox"
+                        id="__guid__-__fo__asc"
+                        class="select__fo__"
+                        data-label="__label__">
+                    <label for="__guid__-__fo__asc">
+                        <span class="__fo__-checkbox-label" id="__guid__-__fo__asc-label">__label__</span> ASC
+                    </label>
+                </div>
+                <div class="icheck-primary m-0">
+                    <input type="checkbox"
+                        id="__guid__-__fo__desc"
+                        class="select__fo__"
+                        data-label="__label__">
+                    <label for="__guid__-__fo__desc">
+                        <span class="__fo__-checkbox-label" id="__guid__-__fo__desc-label">__label__</span> DESC
+                    </label>
+                </div>
+            </td>
+        </script>
+
     </div>
 </template>
-
-
 
 <script>
 export default {
@@ -107,7 +130,7 @@ export default {
         }
     },
     mounted() {
-        window.__ds_fields = this;
+        window.__ds_simple__fields = this;
 
         var self = this;
 
@@ -280,19 +303,28 @@ export default {
                 "function" : functionName,
                 "property" : property,
                 "customvariable" : customvariable,
-                "sql_text": self.getSQLText(functionName, selectedProperty.getAttribute("name"), selectedCustomVariable.getAttribute("name"))
+                "label": self.getFieldLabel(functionName, selectedProperty.getAttribute("name"), selectedCustomVariable.getAttribute("title"))
             }
 
-            if (document.getElementById(guid + "-sql_text")) {
+            if (document.getElementById(guid + "-label")) {
                 // edit field
-                document.getElementById(guid + "-sql_text").innerHTML = fieldData.sql_text;
+                document.getElementById(guid + "-label").innerHTML = fieldData.label;
                 $(document.getElementById(guid + "-tr")).data("field_data", fieldData);
+
+                document.getElementById(guid + "-__fo__asc-label").innerHTML = fieldData.label;
+                document.getElementById(guid + "-__fo__desc-label").innerHTML = fieldData.label;
+
+                if (document.getElementById(guid + "__selected_fo__-asc"))
+                    document.getElementById(guid + "__selected_fo__-asc").innerHTML = fieldData.label + " <b>ASC</b>";
+
+                if (document.getElementById(guid + "__selected_fo__-desc"))
+                    document.getElementById(guid + "__selected_fo__-desc").innerHTML = fieldData.label + " <b>DESC</b>";
             } else {
                 var fieldsContainer = document.getElementById(instance_id + "__ds_simple_fields");
 
                 // new field
                 var trTemplateHTML = document.getElementById("__ds_field__rowtemplate").innerHTML;
-                var trHTML = trTemplateHTML.replace(/__guid__/g, guid).replace(/__sql_text__/g, fieldData.sql_text);
+                var trHTML = trTemplateHTML.replace(/__guid__/g, guid).replace(/__label__/g, fieldData.label);
 
                 const tr = document.createElement("tr");
                 tr.innerHTML = trHTML;
@@ -311,22 +343,52 @@ export default {
                 $(".btn-remove-field", fieldsContainer).off("click").on("click", function () {
                     self.doRemoveField(this);
                 });
+
+                // Order
+                var ordersContainer = document.getElementById(instance_id + "__ds_simple_orders");
+
+                var __fo__trTemplateHTML = document.getElementById("__ds__fo__rowtemplate").innerHTML;
+                var __fo__trHTML = __fo__trTemplateHTML.replace(/__guid__/g, guid).replace(/__label__/g, fieldData.label);
+
+                const __fo__tr = document.createElement("tr");
+                __fo__tr.innerHTML = __fo__trHTML;
+                __fo__tr.id = (guid + "-__fo__-tr");
+                __fo__tr.setAttribute("data-instance-id", instance_id);
+                __fo__tr.setAttribute("data-guid", guid);
+
+                ordersContainer.appendChild(__fo__tr);
             }
 
             $("#__ds_fields").modal("hide");
         },
         doRemoveField: function(sender) {
-            sender.parentNode.parentNode.remove();
-        },
-        getSQLText: function (functionName, property, customvariable_name) {
-            var sql_text = "";
-            if ("" == functionName) {
-                sql_text = property;
-            } else {
-                sql_text = functionName + "(" + property + ") as " + customvariable_name;
-            }
+            var field_guid = sender.parentNode.parentNode.getAttribute("data-guid");
 
-            return sql_text;
+            // field
+            sender.parentNode.parentNode.remove();
+
+            // field order
+            document.getElementById(field_guid + "-__fo__-tr").remove();
+
+            // selected field
+            if (document.getElementById(field_guid + "__selected_fo__-asc")) {
+                document.getElementById(field_guid + "__selected_fo__-asc").remove();
+            }
+            if (document.getElementById(field_guid + "__selected_fo__-desc")) {
+                document.getElementById(field_guid + "__selected_fo__-desc").remove();
+            }
+        },
+        getFieldLabel: function (functionName, property, customvariable_name) {
+            var label = "";
+            /* if ("" == functionName) {
+                label = property;
+            } else {
+                label = functionName + "(" + property + ") as " + customvariable_name;
+            } */
+
+            label = customvariable_name/*  + "(" + property + ")" */;
+
+            return label;
         },
         collectFieldData: function(instance_id) {
             var arrTR = $("tr", document.getElementById(instance_id + "__ds_simple_fields"));
@@ -341,7 +403,7 @@ export default {
                     "function" : field_data.function,
                     "property" : field_data.property,
                     "customvariable" : field_data.customvariable,
-                    "sql_text" : field_data.sql_text
+                    "label" : field_data.label
                 }
 
                 fields.push(fieldData);
@@ -355,20 +417,36 @@ export default {
             fieldsContainer.innerHTML = "";
             var trTemplateHTML = document.getElementById("__ds_field__rowtemplate").innerHTML;
 
+            var ordersContainer = document.getElementById(instance_id + "__ds_simple_orders");
+            ordersContainer.innerHTML = "";
+            var __fo__trTemplateHTML = document.getElementById("__ds__fo__rowtemplate").innerHTML;
+
             for (let index = 0; index < fields.length; index++) {
                 let field_data = fields[index];
+                let field_guid = field_data.guid;
                 
-                let trHTML = trTemplateHTML.replace(/__guid__/g, field_data.guid).replace(/__sql_text__/g, field_data.sql_text);
+                let trHTML = trTemplateHTML.replace(/__guid__/g, field_guid).replace(/__label__/g, field_data.label);
 
                 let tr = document.createElement("tr");
                 tr.innerHTML = trHTML;
-                tr.id = (field_data.guid + "-tr");
+                tr.id = (field_guid + "-tr");
                 tr.setAttribute("data-instance-id", instance_id);
-                tr.setAttribute("data-guid", field_data.guid);
+                tr.setAttribute("data-guid", field_guid);
 
                 fieldsContainer.appendChild(tr);
 
-                $(document.getElementById(field_data.guid + "-tr")).data("field_data", field_data);
+                $(document.getElementById(field_guid + "-tr")).data("field_data", field_data);
+
+                // Order
+                let __fo__trHTML = __fo__trTemplateHTML.replace(/__guid__/g, field_guid).replace(/__label__/g, field_data.label);
+
+                const __fo__tr = document.createElement("tr");
+                __fo__tr.innerHTML = __fo__trHTML;
+                __fo__tr.id = (field_guid + "-__fo__-tr");
+                __fo__tr.setAttribute("data-instance-id", instance_id);
+                __fo__tr.setAttribute("data-guid", field_guid);
+
+                ordersContainer.appendChild(__fo__tr);
             }
 
             $(".btn-edit-field", fieldsContainer).off("click").on("click", function () {
@@ -378,7 +456,32 @@ export default {
             $(".btn-remove-field", fieldsContainer).off("click").on("click", function () {
                 self.doRemoveField(this);
             });
-        }
+        }/* ,
+        collectOrderData: function(instance_id) {
+            var arrCheckedBoxes = $(".select__fo__:checked", document.getElementById(instance_id + "__ds_simple_orders"));
+            var orders_data = [];
+
+            for (let index = 0; index < arrCheckedBoxes.length; index++) {
+                let data = arrCheckedBoxes[index].id.split("-__fo__");
+
+                let order_data = {
+                    "field_guid" : data[0],
+                    "type" : data[1]
+                }
+
+                orders_data.push(order_data);
+            }
+
+            return orders_data;
+        },
+        setOrderCheckboxes: function(instance_id, orders_data) {
+            for (let index = 0; index < orders_data.length; index++) {
+                let order_data = orders_data[index];
+
+                let checkboxId = order_data.field_guid + "-__fo__" + order_data.type;
+                document.getElementById(checkboxId).checked = true;
+            }
+        } */
     }
 }
 </script>

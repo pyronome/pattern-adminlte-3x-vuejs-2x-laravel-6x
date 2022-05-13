@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="divConditionDialog" class="modal level2 fade" tabindex="-1" role="dialog">
+        <div id="__ds_conditionDialog" class="modal level2 fade" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -62,39 +62,16 @@
                     data-rule-name="%id%" />
         </script>
 
-        <script id="__ds_field__rowtemplate" type="text/html">
-            <td class="">
-                <span id="__guid__-__condition_html__">____condition_html____</span>
-                <button type="button" title="Remove Field" class="btn-icon btn-icon-danger float-right btn-remove-field">
-                    <span class="btn-label btn-label-right"><i class="fas fa-times"></i></span>
-                </button>
-                <button type="button" title="Edit Field" class="btn-icon btn-icon-primary float-right btn-edit-field">
+        <script id="__ds_condition-template" type="text/html">
+            <td class="condition-html-container" id="__guid__-html">__condition_html__</td>
+            <td width="70">
+                <button type="button" title="Edit Condition" class="btn-icon btn-icon-primary btn-edit-condition" data-guid="__guid__">
                     <span class="btn-label btn-label-right"><i class="fas fa-pen"></i></span>
                 </button>
+                <button type="button" title="Remove Condition" class="btn-icon btn-icon-danger btn-remove-condition" data-guid="__guid__">
+                    <span class="btn-label btn-label-right"><i class="fas fa-times"></i></span>
+                </button>
             </td>
-        </script>
-
-
-        <script id="condition-table-template" type="text/html">
-            <table class="table table-bordered table-hover table-sm condition-table"
-                data-guid="__guid__" 
-                id="__guid__-table" 
-                data-condition-json='__condition_json__'>
-                <thead>
-                    <tr>
-                        <th colspan="2" id="__guid__-condition-html">__condition_html__</th>
-                        <th>
-                            <button type="button" title="Edit Condition" class="btn-icon btn-icon-primary btn-edit-condition" data-guid="__guid__">
-                                <span class="btn-label btn-label-right"><i class="fas fa-pen"></i></span>
-                            </button>
-                            <button type="button" title="Remove Condition" class="btn-icon btn-icon-danger btn-remove-condition" data-guid="__guid__">
-                                <span class="btn-label btn-label-right"><i class="fas fa-times"></i></span>
-                            </button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>__conditional_fields_html__</tbody>
-            </table>
         </script>
     </div>
 </template>
@@ -110,7 +87,7 @@ export default {
     },*/
     data() {
         return {
-            conditional_fields: [],
+            current_fields: [],
             custom_variable_options: [],
             page: {
                 is_ready: false,
@@ -194,7 +171,8 @@ export default {
                 const element = custom_variables[index];
                 let option = {
                     "id" : "CustomVariables/" + element.name,
-                    "text": element.title
+                    "text": element.title,
+                    "database_id": element.id
                 }
 
                 options.push(option);
@@ -234,7 +212,7 @@ export default {
         showConditionDialog: function() {
             document.getElementById("button_save__ds_condition").setAttribute("data-guid", "");
             this.initializeJSQueryBuilder(document.getElementById("__ds_condition_builder_container"), null);
-            $("#divConditionDialog").modal();
+            $("#__ds_conditionDialog").modal();
         },
         saveCondition: function() {
             var self = this;
@@ -245,289 +223,73 @@ export default {
                 newCondition = true;
                 guid = AdminLTEHelper.generateGUID("condition");
             }
-
-            var conditionJSON = JSON.stringify($("#__ds_condition_builder_container").queryBuilder("getRules", { allow_invalid: true }));
+            var conditionContainer = document.getElementById(instance_id + "__ds_simple_conditions");
+            var conditionData = $("#__ds_condition_builder_container").queryBuilder("getRules", { allow_invalid: true });
 
             if (newCondition) {
-                var tableTemplateHTML = document.getElementById("condition-table-template").innerHTML;
-                var tbodyHTML = "";
-                var trTemplateHTML = document.getElementById("conditional-field-row-template").innerHTML;
-                let fieldValues = window.mainLayoutInstance.pageWidgets[instance_id].content_settings.getWidgetFormValues();
+                const conditionTemplateHTML = document.getElementById("__ds_condition-template").innerHTML;
+                const conditionHTML = conditionTemplateHTML.replace(/__guid__/g, guid).replace(/__condition_html__/g, self.getConditionBeautyHTML(conditionData));
 
-                self.conditional_fields.forEach(field => {
-                    field.value = fieldValues[field.id];
+                const tr = document.createElement("tr");
+                tr.innerHTML = conditionHTML;
+                tr.id = (guid + "-tr");
+                tr.setAttribute("data-guid", guid);
 
-                    let field_guid = AdminLTEHelper.generateGUID("field");
+                conditionContainer.appendChild(tr);
 
-                    let trHTML = trTemplateHTML
-                        .replace(/__field_guid__/g, field_guid)
-                        .replace(/__label__/g, field.label)
-                        .replace(/__value_html__/g, self.getFieldValueHTML(field))
-                        .replace(/__field_json__/g, JSON.stringify(field));
-                        
-                    tbodyHTML += trHTML;
-                });
+                $(document.getElementById(guid + "-tr")).data("condition_data", conditionData);
 
-                var tableHTML = tableTemplateHTML
-                    .replace(/__guid__/g, guid)
-                    .replace(/__condition_json__/g, conditionJSON)
-                    .replace(/__condition_html__/g, self.getConditionBeautyHTML(conditionJSON))
-                    .replace(/__conditional_fields_html__/g, tbodyHTML);
-
-                document.getElementById(instance_id + "-conditionlist").innerHTML += tableHTML;
-
-                $(".btn-edit-condition").off("click").on("click", function () {
+                $(".btn-edit-condition", conditionContainer).off("click").on("click", function () {
                     self.doEditCondition(this);
                 });
 
-                $(".btn-remove-condition").off("click").on("click", function () {
+                $(".btn-remove-condition", conditionContainer).off("click").on("click", function () {
                     self.doRemoveCondition(this);
                 });
 
-                $(".btn-edit-field").off("click").on("click", function () {
+                $(".btn-edit-field", conditionContainer).off("click").on("click", function () {
                     self.doEditField(this);
                 });
             } else {
-                document.getElementById(guid + "-table").setAttribute("data-condition-json", conditionJSON);
-                document.getElementById(guid + "-condition-html").innerHTML = self.getConditionBeautyHTML(conditionJSON);
+                $(document.getElementById(guid + "-tr")).data("condition_data", conditionData);
+                document.getElementById(guid + "-html").innerHTML = self.getConditionBeautyHTML(conditionData);
             }
 
-            $(".file_download").off("click").on("click", function(e){
-                self.downloadFile(this.getAttribute("data-file-id"));
-            });
-
-            $("#divConditionDialog").modal("hide");
+            $("#__ds_conditionDialog").modal("hide");
         },
         doEditCondition: function(elButton) {
             var guid = elButton.getAttribute("data-guid");
 
             document.getElementById("button_save__ds_condition").setAttribute("data-guid", guid);
 
-            var conditionJSON = document.getElementById(guid + "-table").getAttribute("data-condition-json");
-            this.initializeJSQueryBuilder(document.getElementById("__ds_condition_builder_container"), JSON.parse(conditionJSON));
+            var conditionData = $(document.getElementById(guid + "-tr")).data("condition_data");
+            this.initializeJSQueryBuilder(document.getElementById("__ds_condition_builder_container"), conditionData);
 
-            $("#divConditionDialog").modal();
+            $("#__ds_conditionDialog").modal();
         },
         doRemoveCondition: function(elButton) {
             var guid = elButton.getAttribute("data-guid");
-            document.getElementById(guid + "-table").remove();
+            document.getElementById(guid + "-tr").remove();
         },
-        show_array_dialog: function(btnEditField, objectField) {
+
+        getCurrentFieldVariableIds: function() {
+            var ids = [];
+
             var instance_id = window.mainLayoutInstance.current_editing_widget_instance_id;
 
-            if (!(objectField.hasOwnProperty("get_items_function"))) {
-                return;
-            }
-
-            document.getElementById("conditional_items_dialog-title").innerHTML = objectField.label;
-
-            var get_items_function = objectField.get_items_function;
-            var edit_item_values_function = objectField.edit_item_values_function;
-
-            var items = [];
-
-            var fieldHasItems = false;
-            if (objectField.hasOwnProperty("items") && ("" != objectField.items)) {
-                items = objectField.items;
-                fieldHasItems = true;
-            } else {
-                items = window.mainLayoutInstance.pageWidgets[instance_id].content_settings[get_items_function]();
-            }
-
-            var itemLabelField = objectField.item_label_field;
-
-            var liTemplate = document.getElementById("conditional-item-row-template").innerHTML;
-            var ulInnerHTML = "";
-            var liHTML = "";
-
-            for (let index = 0; index < items.length; index++) {
-                const item_guid = AdminLTEHelper.generateGUID("item");
-                const item = items[index];
-                const itemJSON = JSON.stringify(item)
-
-                liHTML = liTemplate
-                    .replace(/__data_json__/g, itemJSON)
-                    .replace(/__guid__/g, item_guid)
-                    .replace(/__label__/g, item[itemLabelField]);
-                ulInnerHTML += liHTML;
-            }
-
-            if (!fieldHasItems) {
-                objectField.items = items;
-            }
-
-            btnEditField.setAttribute("data-field-json", JSON.stringify(objectField));
-
-            var columnsContainer = document.getElementById("conditionalItemList");
-            columnsContainer.innerHTML = ulInnerHTML;
-
-            $(".btn-edit-item", columnsContainer).off("click").on("click", function () {
-                window.mainLayoutInstance.pageWidgets[instance_id].content_settings[edit_item_values_function](
-                    this.parentNode.parentNode.getAttribute("data-guid"), 
-                    JSON.parse(this.parentNode.parentNode.getAttribute("data-json")),
-                    this.getAttribute("data-conditional-edit")
-                );
-            });
-
-            document.getElementById("button_save__ds_conditionalItems").setAttribute("data-field-guid" , btnEditField.getAttribute("data-field-guid"));
-            $("#button_save__ds_conditionalItems").data("field_data", objectField);
-
-            $("#div_conditional_items_dialog").modal();
-
-        },
-        doSaveConditionalItems: function() {
-            var guid = document.getElementById("button_save__ds_conditionalItems").getAttribute("data-field-guid");
-            var field_data = $("#button_save__ds_conditionalItems").data("field_data");
-
-            var itemList = $("#conditionalItemList > tr");
-            var items = [];
-
-            for (let index = 0; index < itemList.length; index++) {
-                const tr = itemList[index];
-                items.push(JSON.parse(tr.getAttribute("data-json")))
-            }
-
-            field_data["items"] = items;
-
-            document.getElementById(guid + "-btn").setAttribute("data-field-json", JSON.stringify(field_data));
-
-            $("#div_conditional_items_dialog").modal("hide");
-        },
-        doEditField: function(elButton) {
-            console.log("doEditfield")
-            var guid = elButton.getAttribute("data-field-guid");
-
-            document.getElementById("buttonSaveField").setAttribute("data-field-guid", guid);
-
-            var fieldJSON = elButton.getAttribute("data-field-json");
-            var objectField = JSON.parse(fieldJSON);
-            var fieldType = objectField.type;
-
-            if ("array" == fieldType) {
-                this.show_array_dialog(elButton, objectField);
-                return;
-            }
-
-            $(".cv-field-container").addClass("d-none");
-            $(document.getElementById("__cv_field_container__" + fieldType)).removeClass("d-none");
-            document.getElementById("__cv_field_label__" + fieldType).innerHTML = objectField.label;
-
-            this.setFieldValue(objectField);
-
-            $("#divEditFieldDialog").modal();
-        },
-        setFieldValue: function(objectField) {
-            var self = this;
-            var fieldInput = document.getElementById("__cv_field__" + objectField.type);
-            var fieldType = objectField.type;
-            var val = objectField.value;
-
-            if ("checkbox" == fieldType) {
-                if ("on" == val) {
-                    fieldInput.checked = true;
-                }
-            } else if (("colorpicker" == fieldType ) && ("" != val)) {
-                var colorPicker = fieldInput;
-                $(colorPicker).val(val);
-                $(colorPicker).trigger('change');
-            } else if ("datepicker" == fieldType) {
-                fieldInput.value = val;
-            } else if ("datetimepicker" == fieldType) {
-                fieldInput.value = val;
-            } else if ("file" == fieldType) {
-                if (undefined !== val) {
-                    $("#__cv_field__file").val(val.split(",")).trigger('change');
-                }
-            } else if ("selection" == fieldType) {
-                self.setDropdownOptions(objectField);
-
-                if (undefined !== val) {
-                    if (objectField.input_data.multiple) {
-                        $("#__cv_field__selection").val(val.split(",")).trigger('change');
-                    } else {
-                        $("#__cv_field__selection").val(val).trigger('change');
-                    }
-                }
-            } else if ("htmleditor" == fieldType) {
-                $(fieldInput).summernote("code", val);
-            } else if ("iconpicker" == fieldType) {
-                if ("" == val || undefined === val) {
-                    console.log("empty icon")
-                    /* $(document.getElementById(elementKey)).iconpicker('setIcon', 'empty'); */
-                } else{
-                    $(fieldInput).iconpicker('setIcon', val);
-                }
-            } else if ("integer" == fieldType) {
-                fieldInput.value = val;
-            } else if ("number" == fieldType) {
-                fieldInput.value = val;
-            } else if ("password" == fieldType) {
-                fieldInput.value = val;
-            } else if ("shorttext" == fieldType) {
-                fieldInput.value = val;
-            } else if ("textarea" == fieldType) {
-                $(fieldInput).val(val);
-            } else if ("timepicker" == fieldType) {
-                fieldInput.value = val;
-            }
-        },
-        setDropdownOptions(objectField) {
-            var select = document.getElementById("__cv_field__selection");
-            select.innerHTML = "";
-            
-            var options = objectField.input_data.options;
-
-            for (var key in options) {
-                select.innerHTML += '<option value="' + key + '">' + options[key] + '</option>'
-            }
-
-            if (objectField.input_data.multiple) {
-                $("#__cv_field__selection").select2({multiple: true});
-            } else {
-                $("#__cv_field__selection").select2({multiple: false});
-            }
-        },
-        saveField: function() {
-            var self = this;
-            var guid = document.getElementById("buttonSaveField").getAttribute("data-field-guid");
-            var elEditButton = document.getElementById(guid + "-btn");
-
-            var fieldJSON = elEditButton.getAttribute("data-field-json");
-            var objectField = JSON.parse(fieldJSON);
-            var fieldType = objectField.type;
-            var fieldInput = document.getElementById("__cv_field__" + objectField.type);
-
-            if ("checkbox" == fieldType) {
-                objectField.value = fieldInput.checked ? 'on' : 'off';
-            } else if ("colorpicker" == fieldType) {
-                objectField.value = fieldInput.value;
-            } else if ("file" == fieldType) {
-                objectField.value = $("#__cv_field__file").val().join(",");
-            } else if ("htmleditor" == fieldType) {
-                objectField.value = $(fieldInput).summernote('code');
-            } else if ("iconpicker" == fieldType) {
-                objectField.value = document.getElementById("__cv_field__iconpicker-value").value;
-            } else if ("selection" == fieldType) {
-                objectField.value = $("#__cv_field__selection").val();
-                   
-                var attr = $("#__cv_field__selection").attr('multiple');
-                if (typeof attr !== 'undefined' && attr !== false) {
-                    objectField.value = objectField.value.join(",");
-                }
-            } else {
-                objectField.value = fieldInput.value;
+            if (undefined === instance_id || "" == instance_id) {
+                return ids;
             }
             
-            fieldJSON = JSON.stringify(objectField);
-            elEditButton.setAttribute("data-field-json", fieldJSON);
+            var arrTR = $("tr", document.getElementById(instance_id + "__ds_simple_fields"));
+            var ids = [];
 
-            document.getElementById(guid + "-html").innerHTML = self.getFieldValueHTML(objectField);
+            for (let index = 0; index < arrTR.length; index++) {
+                let field_data = $(arrTR[index]).data("field_data");
+                ids.push(parseInt(field_data.customvariable));
+            }
 
-            $(".file_download").off("click").on("click", function(e){
-                self.downloadFile(this.getAttribute("data-file-id"));
-            });
-
-            $("#divEditFieldDialog").modal("hide");
+            return ids;
         },
         
         // Helpers
@@ -564,19 +326,22 @@ export default {
             ];
 
             // Custom Variables
+            var currentFieldVariableIds = self.getCurrentFieldVariableIds();
             options = self.custom_variable_options;
             var variableCount = options.length;
             for (var i = 0; i < variableCount; i++) {
-                filters.push({
-                    "id": options[i]["id"],
-                    "label": options[i]["text"],
-                    "type": "string",
-                    "operators": operators,
-                    "input": self.inputJSQueryBuilder,
-                    "valueSetter": self.setJSQueryBuilderInputValue,
-                    "valueGetter": self.getJSQueryBuilderInputValue,
-                    "input_event": ""
-                });
+                if (currentFieldVariableIds.includes(options[i]["database_id"])) {
+                    filters.push({
+                        "id": options[i]["database_id"],
+                        "label": options[i]["text"],
+                        "type": "string",
+                        "operators": operators,
+                        "input": self.inputJSQueryBuilder,
+                        "valueSetter": self.setJSQueryBuilderInputValue,
+                        "valueGetter": self.getJSQueryBuilderInputValue,
+                        "input_event": ""
+                    });
+                }
             }
             
             if ($(container).queryBuilder != undefined) {
@@ -623,7 +388,7 @@ export default {
 
             for (var i = 0; i < variableCount; i++) {
                 variableOptionsHTML += "<option value=\""
-                        + options[i]["id"]
+                        + options[i]["database_id"]
                         + "\">"
                         + options[i]["text"]
                         + "</option>";
@@ -749,73 +514,9 @@ export default {
         showCustomVariableList: function() {
             $("#modalCustomVariableList").modal();
         },
-        renderConditionList: function(instance_id, conditionalData) {
-            var self = this;
-            var listHTML = "";
-            var tableHTML = "";
-
-            conditionalData.forEach(conditionData => {
-                tableHTML = self.getConditionTableHTML(conditionData);
-                listHTML += tableHTML;
-            });
-
-            document.getElementById(instance_id + "-conditionlist").innerHTML = listHTML;
-
-            $(".btn-edit-condition").off("click").on("click", function () {
-                self.doEditCondition(this);
-            });
-
-            $(".btn-remove-condition").off("click").on("click", function () {
-                self.doRemoveCondition(this);
-            });
-
-            $(".btn-edit-field").off("click").on("click", function () {
-                self.doEditField(this);
-            });
-
-            $(".file_download").off("click").on("click", function(e){
-                self.downloadFile(this.getAttribute("data-file-id"));
-            });
-        },
-        getConditionTableHTML: function(conditionData) {
-            var self = this;
-            var tableTemplateHTML = document.getElementById("condition-table-template").innerHTML;
-            var tbodyHTML = "";
-            var trTemplateHTML = document.getElementById("conditional-field-row-template").innerHTML;
-            var guid = conditionData.guid;
-
-            var condition = conditionData.condition_json;
-            var conditionJSON = JSON.stringify(condition);
-
-            var conditionalFields = conditionData.conditional_fields;
-
-            for (let index = 0; index < conditionalFields.length; index++) {
-                const field = conditionalFields[index];
-
-                let field_guid = AdminLTEHelper.generateGUID("field");
-
-                let trHTML = trTemplateHTML
-                    .replace(/__field_guid__/g, field_guid)
-                    .replace(/__label__/g, field.label)
-                    .replace(/__value_html__/g, self.getFieldValueHTML(field))
-                    .replace(/__field_json__/g, JSON.stringify(field));
-                    
-                tbodyHTML += trHTML;
-            }
-
-            var tableHTML = tableTemplateHTML
-                .replace(/__guid__/g, guid)
-                .replace(/__condition_json__/g, conditionJSON)
-                .replace(/__condition_html__/g, self.getConditionBeautyHTML(conditionJSON))
-                .replace(/__conditional_fields_html__/g, tbodyHTML);
-
-            return tableHTML;
-        },
-        getConditionBeautyHTML: function(condition_json) {
+        getConditionBeautyHTML: function(conditionRule) {
             var conditionHTML = "";
-
-            var conditionData = JSON.parse(condition_json);
-            var rules = conditionData.rules;
+            var rules = conditionRule.rules;
             var rule = rules[0];
             var leftSide = rule.field;
             var operator = rule.operator;
@@ -1074,10 +775,57 @@ export default {
 
             return conditionHTML;                
         },
+        getConditionData: function(instance_id) {
+            var arrTR = $("tr", document.getElementById(instance_id + "__ds_simple_conditions"));
+            var conditions = [];
+
+            for (let index = 0; index < arrTR.length; index++) {
+                let condition_data = $(arrTR[index]).data("condition_data");
+
+                let conditionData = {
+                    "guid" : arrTR[index].getAttribute("data-guid"),
+                    "condition" : condition_data
+                }
+
+                conditions.push(conditionData);
+            }
+
+            return conditions;
+        },
+        renderConditions: function(instance_id, conditions) {
+            var self = this;
+            var conditionsContainer = document.getElementById(instance_id + "__ds_simple_conditions");
+            conditionsContainer.innerHTML = "";
+            var conditionTemplateHTML = document.getElementById("__ds_condition-template").innerHTML;
+
+            for (let index = 0; index < conditions.length; index++) {
+                const condition_data = conditions[index];
+                const guid = condition_data.guid;
+                const condition = condition_data.condition;
+
+                const conditionHTML = conditionTemplateHTML.replace(/__guid__/g, guid).replace(/__condition_html__/g, self.getConditionBeautyHTML(condition));
+                const tr = document.createElement("tr");
+                tr.innerHTML = conditionHTML;
+                tr.id = (guid + "-tr");
+                tr.setAttribute("data-guid", guid);
+
+                conditionsContainer.appendChild(tr);
+
+                $(document.getElementById(guid + "-tr")).data("condition_data", condition);
+            }
+
+            $(".btn-edit-condition", conditionsContainer).off("click").on("click", function () {
+                self.doEditCondition(this);
+            });
+
+            $(".btn-remove-condition", conditionsContainer).off("click").on("click", function () {
+                self.doRemoveCondition(this);
+            });
+        }
     },
     mounted() {
         this.processLoadQueue();
-        window.__ds_condition = this;
+        window.__ds_simple__condition = this;
         AdminLTEHelper.loadExternalFiles(this.page.external_files);
     }
 }
