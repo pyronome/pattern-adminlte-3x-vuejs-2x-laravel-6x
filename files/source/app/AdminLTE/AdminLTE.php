@@ -198,6 +198,14 @@ class AdminLTE
 	    return $strReturnValue;
 	}
 	
+	public function generateGUID($strPrefix = '') {
+		$strCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$strToken0 = date('YmdHis');
+		$strToken1 = substr(str_shuffle(str_repeat($strCharacters, ceil(4 / strlen($strCharacters)))), 1, 4);
+		$strToken2 = substr(str_shuffle(str_repeat($strCharacters, ceil(4 / strlen($strCharacters)))), 1, 4);
+		return ($strPrefix . $strToken0 . $strToken1 . $strToken2);
+	}
+
 	public function validateEmailAddress($email)
 	{
 
@@ -2178,7 +2186,7 @@ class AdminLTE
 				$column->type = 'integer';
 				$column->title = 'Id';
 				$column->name = 'id';
-				$column->value = '{{QueryResultFields/id}}';
+				$column->value = '{{CustomVariables/' . $modelLowerCase . '_id}}';
 				$column->style = '';
 
 				$metaData['columns'][$column_index] = $column;
@@ -2189,7 +2197,7 @@ class AdminLTE
 				$column->type = 'date';
 				$column->title = 'Created At';
 				$column->name = 'created_at';
-				$column->value = '{{QueryResultFields/created_at}}';
+				$column->value = '{{CustomVariables/' . $modelLowerCase . '_created_at}}';
 				$column->style = '';
 
 				$metaData['columns'][$column_index] = $column;
@@ -2200,7 +2208,7 @@ class AdminLTE
 				$column->type = 'date';
 				$column->title = 'Updated At';
 				$column->name = 'updated_at';
-				$column->value = '{{QueryResultFields/updated_at}}';
+				$column->value = '{{CustomVariables/' . $modelLowerCase . '_updated_at}}';
 				$column->style = '';
 
 				$metaData['columns'][$column_index] = $column;
@@ -2211,7 +2219,7 @@ class AdminLTE
 				$column->type = 'button';
 				$column->title = '<a class="btn btn-primary btn-xs btn-on-table" href="' . $modelLowerCase . '/edit/new"><i class="fa fa-plus"></i> <span class="hidden-xxs">Add</span></a>';
 				$column->name = 'buttons';
-				$column->value = '<a class="btn btn-outline-primary btn-xs btn-on-table" href="' . $modelLowerCase . '/detail/{{QueryResultFields/id}}"><i class="fa fa-info-circle"></i> <span class="hidden-xxs">Detail</span></a>';
+				$column->value = '<a class="btn btn-outline-primary btn-xs btn-on-table" href="' . $modelLowerCase . '/detail/{{CustomVariables/' . $modelLowerCase . '_id}}"><i class="fa fa-info-circle"></i> <span class="hidden-xxs">Detail</span></a>';
 				$column->style = 'width:130px;';
 
 				$metaData['columns'][$column_index] = $column;
@@ -2220,10 +2228,13 @@ class AdminLTE
 				$encodedData = json_encode($metaData);
 				$AdminLTELayout->meta_data_json = $encodedData;
 
+				$this->updateModelCustomVariables($model);
+
 				$data_source = new \stdClass();
 				$data_source->calculation_type = 'advanced';
 				$meta_data = new \stdClass();
 				$meta_data->query = 'select * from ' . $modelLowerCase . 'table where deleted=0;';
+				$meta_data->fields = $this->getModelQueryFields($model);
 				$data_source->meta_data = $meta_data;
 				$AdminLTELayout->data_source_json = json_encode($data_source, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 				
@@ -2261,7 +2272,7 @@ class AdminLTE
 			$column->type = 'integer';
 			$column->title = 'Id';
 			$column->name = 'id';
-			$column->value = '{{QueryResultFields/id}}';
+			$column->value = '{{CustomVariables/adminlteusergroup_id}}';
 			$column->style = '';
 
 			$metaData['columns'][$column_index] = $column;
@@ -2272,7 +2283,7 @@ class AdminLTE
 			$column->type = 'date';
 			$column->title = 'Title';
 			$column->name = 'title';
-			$column->value = '{{QueryResultFields/title}}';
+			$column->value = '{{CustomVariables/adminlteusergroup_title}}';
 			$column->style = '';
 
 			$metaData['columns'][$column_index] = $column;
@@ -2283,7 +2294,7 @@ class AdminLTE
 			$column->type = 'boolean';
 			$column->title = 'Admin';
 			$column->name = 'admin';
-			$column->value = '<span class="text-success spanIcon spanIconEnabled{{QueryResultFields/admin}}"><i class="far fa-check-circle"></i></span>';
+			$column->value = '<span class="text-success spanIcon spanIconEnabled{{CustomVariables/adminlteusergroup_admin}}"><i class="far fa-check-circle"></i></span>';
 			$column->style = '';
 
 			$metaData['columns'][$column_index] = $column;
@@ -2294,7 +2305,7 @@ class AdminLTE
 			$column->type = 'boolean';
 			$column->title = 'Enabled';
 			$column->name = 'enabled';
-			$column->value = '<span class="text-success spanIcon spanIconEnabled{{QueryResultFields/enabled}}"><i class="far fa-check-circle"></i></span>';
+			$column->value = '<span class="text-success spanIcon spanIconEnabled{{CustomVariables/adminlteusergroup_enabled}}"><i class="far fa-check-circle"></i></span>';
 			$column->style = '';
 
 			$metaData['columns'][$column_index] = $column;
@@ -2305,7 +2316,7 @@ class AdminLTE
 			$column->type = 'button';
 			$column->title = '<a class="btn btn-primary btn-xs btn-on-table" href="adminlteusergroup/edit/new"><i class="fa fa-plus"></i> <span class="hidden-xxs">Add</span></a>';
 			$column->name = 'buttons';
-			$column->value = '<a class="btn btn-outline-primary btn-xs btn-on-table" href="adminlteusergroup/detail/{{QueryResultFields/id}}"><i class="fa fa-info-circle"></i> <span class="hidden-xxs">Detail</span></a>';
+			$column->value = '<a class="btn btn-outline-primary btn-xs btn-on-table" href="adminlteusergroup/detail/{{CustomVariables/adminlteusergroup_id}}"><i class="fa fa-info-circle"></i> <span class="hidden-xxs">Detail</span></a>';
 			$column->style = 'width:130px;';
 
 			$metaData['columns'][$column_index] = $column;
@@ -2318,6 +2329,10 @@ class AdminLTE
 			$data_source->calculation_type = 'advanced';
 			$meta_data = new \stdClass();
 			$meta_data->query = 'select * from adminlteusergrouptable where deleted=0;';
+
+			$this->updateModelCustomVariables('AdminLTEUserGroup');
+			$meta_data->fields = $this->getModelQueryFields('AdminLTEUserGroup');
+
 			$data_source->meta_data = $meta_data;
 			$AdminLTELayout->data_source_json = json_encode($data_source, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 			
@@ -2354,7 +2369,7 @@ class AdminLTE
 			$column->type = 'integer';
 			$column->title = 'Id';
 			$column->name = 'id';
-			$column->value = '{{QueryResultFields/id}}';
+			$column->value = '{{CustomVariables/adminlteuser_id}}';
 			$column->style = '';
 
 			$metaData['columns'][$column_index] = $column;
@@ -2365,7 +2380,7 @@ class AdminLTE
 			$column->type = 'text';
 			$column->title = 'Name';
 			$column->name = 'fullname';
-			$column->value = '{{QueryResultFields/fullname}}';
+			$column->value = '{{CustomVariables/adminlteuser_fullname}}';
 			$column->style = '';
 
 			$metaData['columns'][$column_index] = $column;
@@ -2376,7 +2391,7 @@ class AdminLTE
 			$column->type = 'boolean';
 			$column->title = 'User Group';
 			$column->name = 'usergroup_title';
-			$column->value = '{{QueryResultFields/usergroup_title}}';
+			$column->value = '{{CustomVariables/adminlteuser_usergroup_title}}';
 			$column->style = '';
 
 			$metaData['columns'][$column_index] = $column;
@@ -2387,7 +2402,7 @@ class AdminLTE
 			$column->type = 'boolean';
 			$column->title = 'Enabled';
 			$column->name = 'enabled';
-			$column->value = '<span class="text-success spanIcon spanIconEnabled{{QueryResultFields/enabled}}"><i class="far fa-check-circle"></i></span>';
+			$column->value = '<span class="text-success spanIcon spanIconEnabled{{CustomVariables/adminlteuser_enabled}}"><i class="far fa-check-circle"></i></span>';
 			$column->style = '';
 
 			$metaData['columns'][$column_index] = $column;
@@ -2398,7 +2413,7 @@ class AdminLTE
 			$column->type = 'button';
 			$column->title = '<a class="btn btn-primary btn-xs btn-on-table" href="adminlteuser/edit/new"><i class="fa fa-plus"></i> <span class="hidden-xxs">Add</span></a>';
 			$column->name = 'buttons';
-			$column->value = '<a class="btn btn-outline-primary btn-xs btn-on-table" href="adminlteuser/detail/{{QueryResultFields/id}}"><i class="fa fa-info-circle"></i> <span class="hidden-xxs">Detail</span></a>';
+			$column->value = '<a class="btn btn-outline-primary btn-xs btn-on-table" href="adminlteuser/detail/{{CustomVariables/adminlteuser_id}}"><i class="fa fa-info-circle"></i> <span class="hidden-xxs">Detail</span></a>';
 			$column->style = 'width:130px;';
 
 			$metaData['columns'][$column_index] = $column;
@@ -2411,6 +2426,23 @@ class AdminLTE
 			$data_source->calculation_type = 'advanced';
 			$meta_data = new \stdClass();
 			$meta_data->query = 'select *, (select title from adminlteusergrouptable where id=aut.adminlteusergroup_id) as usergroup_title FROM `adminlteusertable` as aut where deleted=0;';
+			
+			
+			$this->updateModelCustomVariables('AdminLTEUser');
+			$this->setModelCustomVariable('adminlteuser_usergroup_title', 'AdminLTEUserGroup Title');
+
+			$fields = $this->getModelQueryFields('AdminLTEUser');
+
+			$field_index = count($fields);
+			$fields[$index]['guid'] = $this->generateGUID('dsqf');
+			$fields[$index]['field'] = 'usergroup_title';
+			$variableName = 'adminlteuser_usergroup_title';
+			$objCustomVariable = $objectAdminLTEWidgetHelper->getCustomVariableByName($variableName);
+			$fields[$index]['customvariable'] = $objCustomVariable->id;
+			$fields[$index]['label'] = $objCustomVariable->title;
+
+			$meta_data->fields = $fields;
+
 			$data_source->meta_data = $meta_data;
 			$AdminLTELayout->data_source_json = json_encode($data_source, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
 			
@@ -2419,6 +2451,72 @@ class AdminLTE
 		}
 
 		return;
+	}
+
+	public function updateModelCustomVariables($model) {
+		$property_list = $this->getModelPropertyList($model);
+	    $countProperty = count($property_list);
+
+	    for ($j=0; $j < $countProperty; $j++) { 
+	        $variableName = strtolower($model) . '_' . $property_list[$j]['name'];
+			$variableTitle = $property_list[$j]['title'];
+			
+			$this->setModelCustomVariable($variableName, $variableTitle);
+	    } // for ($j=0; $j < $countProperty; $j++) {
+	}
+
+	public function setModelCustomVariable($variableName, $variableTitle) {
+		DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+		$object = AdminLTECustomVariable::where('__system', 1)
+			->where('deleted', 0)
+			->where('name', $variableName)
+			->first();
+
+		if (null === $object) {
+			$object = new AdminLTECustomVariable();
+			$object->created_by = 0;
+			$object->updated_by = 0;
+			$object->__system = 1;
+			$object->adminlteusergroup_id = 0;
+			$object->group = '';
+			$object->name = $variableName;
+			$object->title = $variableTitle;
+			$object->value = '';
+			$object->default_value = '';
+			$object->remember = 0;
+			$object->remember_type = '';
+			$object->__order = 0;
+			$object->save();
+		}
+
+		DB::statement('SET FOREIGN_KEY_CHECKS=1');
+	}
+
+	public function getModelQueryFields($model) {
+		$modelLowerCase = strtolower($model);
+		$objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
+		
+		$fields = [];
+		$index = 0;
+
+		$property_list = $this->getModelPropertyList($model);
+	    $countProperty = count($property_list);
+
+	    for ($j=0; $j < $countProperty; $j++) {
+			$property = $property_list[$j]['name'];
+
+			$variableName = strtolower($model) . '_' . $property;
+			$objCustomVariable = $objectAdminLTEWidgetHelper->getCustomVariableByName($variableName);
+
+			$fields[$index]['guid'] = $this->generateGUID('dsqf');
+			$fields[$index]['field'] = $property;
+			$fields[$index]['customvariable'] = $objCustomVariable->id;
+			$fields[$index]['label'] = $objCustomVariable->title;
+			$index++;
+		}
+
+		return $fields;
 	}
 	
 	public function setAdminLTECustomVariables() {
@@ -2723,7 +2821,7 @@ class AdminLTE
     
 	public function getModel_DisplayTexts($model) {
 		$displayTexts = array();
-	    $property_list = getModelPropertyList($model);
+	    $property_list = $this->getModelPropertyList($model);
 	    $countProperty = count($property_list);
 
 	    for ($j=0; $j < $countProperty; $j++) { 

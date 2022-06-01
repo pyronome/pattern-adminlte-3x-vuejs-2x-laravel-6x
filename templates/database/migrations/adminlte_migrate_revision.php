@@ -270,6 +270,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->string('icon')->nullable();
                 $table->text('meta_data_json');
                 $table->text('data_source_json');
+                $table->text('variable_mapping_json');
                 $table->text('conditional_data_json');
             });
         } else {
@@ -331,6 +332,12 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->text('data_source_json')->change();
                 } else {
                     $table->text('data_source_json');
+                }
+
+                if (Schema::hasColumn('adminltelayouttable', 'variable_mapping_json')) { 
+                    $table->text('variable_mapping_json')->change();
+                } else {
+                    $table->text('variable_mapping_json');
                 }
 
                 if (Schema::hasColumn('adminltelayouttable', 'conditional_data_json')) { 

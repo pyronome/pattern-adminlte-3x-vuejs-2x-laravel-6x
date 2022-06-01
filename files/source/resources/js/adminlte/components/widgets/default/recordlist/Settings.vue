@@ -48,6 +48,7 @@
                     </div>
                 </div>
                 <data-source :instance_id="instance_id"></data-source>
+                <variable-mapping-list :instance_id="instance_id" :local_variables="local_variables"></variable-mapping-list>
                 <widget-conditional-settings :instance_id="instance_id" :conditional_fields="conditional_fields"></widget-conditional-settings>
             </div>
         </widget-settings-dialog>
@@ -93,7 +94,7 @@
                                 <label :for="instance_id + 'title'" class="detail-label">
                                     Title
                                     <insert-variable-button 
-                                        :variable_options="['query_result_fields','custom_variables','global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                        :variable_options="['custom_variables']" 
                                         :target="instance_id + 'title'">
                                     </insert-variable-button>
                                 </label>
@@ -111,7 +112,7 @@
                                 <label :for="instance_id + 'value'" class="detail-label">
                                     Value
                                     <insert-variable-button 
-                                        :variable_options="['query_result_fields','custom_variables','global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                        :variable_options="['custom_variables']" 
                                         :target="instance_id + 'value'">
                                     </insert-variable-button>
                                 </label>
@@ -188,6 +189,12 @@
                         "items": "",
                         "get_items_function": "getItems",
                         "edit_item_values_function": "doEditColumn"
+                    }
+                ],
+                local_variables: [
+                    {
+                        "id" : "__list_search_box_value",
+                        "label" : "Search Box Value"
                     }
                 ],
                 page: {

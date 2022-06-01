@@ -61,6 +61,13 @@
                                         name="__iv__custom_variable"
                                         :options="custom_variable_options">
                                     </select2-element>
+                                    <!-- select id="__iv__custom_variable"  class="form-control">
+                                        <option v-for="(property, index) in custom_variable_options" :key="index" :value="property.id">
+                                            {{property.text}}
+                                        </option>
+                                    </select-->
+
+
                                 </div>
                             </div>
 

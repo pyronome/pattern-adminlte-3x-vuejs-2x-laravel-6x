@@ -29,6 +29,7 @@ class AdminLTELayout extends Model
         'icon',
 		'meta_data_json',
         'data_source_json',
+        'variable_mapping_json',
 		'conditional_data_json'
 	];
 
@@ -91,6 +92,10 @@ class AdminLTELayout extends Model
         ],
         [
             'name' => 'data_source_json',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'variable_mapping_json',
             'type' => 'text'
         ],
         [

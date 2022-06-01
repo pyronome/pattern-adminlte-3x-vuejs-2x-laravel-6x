@@ -51,6 +51,20 @@
                                 </option>
                             </select>
                         </div>
+
+                        <div class="form-group col-lg-12">
+                            <div class="">
+                                <div class="icheck-primary d-inline">
+                                    <input type="checkbox"
+                                        id="__ds_field__searchable"
+                                        name="__ds_field__searchable"
+                                        class="item-menu">
+                                    <label for="__ds_field__searchable" class="">
+                                        {{ $t('Searchable') }}  
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -224,6 +238,7 @@ export default {
                 "property" : "",
                 "function" : "",
                 "customvariable" : "",
+                "searchable": 0,
             }
 
             if (undefined === field_data.model) {
@@ -267,6 +282,10 @@ export default {
             } else {
                 document.getElementById("__ds_field__guid").value = AdminLTEHelper.generateGUID("__ds_field__");
             }
+
+            if (undefined !== field_data.searchable) {
+                document.getElementById("__ds_field__searchable").checked = (1 == field_data.searchable);
+            }
             
             document.getElementById("__ds_field__buttonSave").setAttribute("data-instance-id", instance_id);  
         },
@@ -302,6 +321,7 @@ export default {
                 "model": document.getElementById(instance_id + "__ds_simple_model").value,
                 "function" : functionName,
                 "property" : property,
+                "searchable": document.getElementById("__ds_field__searchable").checked,
                 "customvariable" : customvariable,
                 "label": self.getFieldLabel(functionName, selectedProperty.getAttribute("name"), selectedCustomVariable.getAttribute("title"))
             }
@@ -310,15 +330,7 @@ export default {
                 // edit field
                 document.getElementById(guid + "-label").innerHTML = fieldData.label;
                 $(document.getElementById(guid + "-tr")).data("field_data", fieldData);
-
-                document.getElementById(guid + "-__fo__asc-label").innerHTML = fieldData.label;
-                document.getElementById(guid + "-__fo__desc-label").innerHTML = fieldData.label;
-
-                if (document.getElementById(guid + "__selected_fo__-asc"))
-                    document.getElementById(guid + "__selected_fo__-asc").innerHTML = fieldData.label + " <b>ASC</b>";
-
-                if (document.getElementById(guid + "__selected_fo__-desc"))
-                    document.getElementById(guid + "__selected_fo__-desc").innerHTML = fieldData.label + " <b>DESC</b>";
+                window.__ds__order_dialog.updateOrderFieldOptions(guid, fieldData.label);
             } else {
                 var fieldsContainer = document.getElementById(instance_id + "__ds_simple_fields");
 
@@ -345,18 +357,7 @@ export default {
                 });
 
                 // Order
-                var ordersContainer = document.getElementById(instance_id + "__ds_simple_orders");
-
-                var __fo__trTemplateHTML = document.getElementById("__ds__fo__rowtemplate").innerHTML;
-                var __fo__trHTML = __fo__trTemplateHTML.replace(/__guid__/g, guid).replace(/__label__/g, fieldData.label);
-
-                const __fo__tr = document.createElement("tr");
-                __fo__tr.innerHTML = __fo__trHTML;
-                __fo__tr.id = (guid + "-__fo__-tr");
-                __fo__tr.setAttribute("data-instance-id", instance_id);
-                __fo__tr.setAttribute("data-guid", guid);
-
-                ordersContainer.appendChild(__fo__tr);
+                window.__ds__order_dialog.insertOrderFieldOptions(guid, fieldData.label);
             }
 
             $("#__ds_fields").modal("hide");
@@ -368,15 +369,7 @@ export default {
             sender.parentNode.parentNode.remove();
 
             // field order
-            document.getElementById(field_guid + "-__fo__-tr").remove();
-
-            // selected field
-            if (document.getElementById(field_guid + "__selected_fo__-asc")) {
-                document.getElementById(field_guid + "__selected_fo__-asc").remove();
-            }
-            if (document.getElementById(field_guid + "__selected_fo__-desc")) {
-                document.getElementById(field_guid + "__selected_fo__-desc").remove();
-            }
+            window.__ds__order_dialog.removeOrderFieldOptions(field_guid);
         },
         getFieldLabel: function (functionName, property, customvariable_name) {
             var label = "";
@@ -402,6 +395,7 @@ export default {
                     "model" : field_data.model,
                     "function" : field_data.function,
                     "property" : field_data.property,
+                    "searchable" : field_data.searchable,
                     "customvariable" : field_data.customvariable,
                     "label" : field_data.label
                 }
@@ -417,9 +411,13 @@ export default {
             fieldsContainer.innerHTML = "";
             var trTemplateHTML = document.getElementById("__ds_field__rowtemplate").innerHTML;
 
-            var ordersContainer = document.getElementById(instance_id + "__ds_simple_orders");
-            ordersContainer.innerHTML = "";
-            var __fo__trTemplateHTML = document.getElementById("__ds__fo__rowtemplate").innerHTML;
+            var order_fields = [];
+            var option = {
+                "id": "",
+                "text": "Please select"
+            };
+
+            order_fields.push(option);
 
             for (let index = 0; index < fields.length; index++) {
                 let field_data = fields[index];
@@ -438,16 +436,23 @@ export default {
                 $(document.getElementById(field_guid + "-tr")).data("field_data", field_data);
 
                 // Order
-                let __fo__trHTML = __fo__trTemplateHTML.replace(/__guid__/g, field_guid).replace(/__label__/g, field_data.label);
+                option = {
+                    "id": field_guid + "-asc",
+                    "text": field_data.label + " ASC"
+                };
 
-                const __fo__tr = document.createElement("tr");
-                __fo__tr.innerHTML = __fo__trHTML;
-                __fo__tr.id = (field_guid + "-__fo__-tr");
-                __fo__tr.setAttribute("data-instance-id", instance_id);
-                __fo__tr.setAttribute("data-guid", field_guid);
+                order_fields.push(option);
 
-                ordersContainer.appendChild(__fo__tr);
+                option = {
+                    "id": field_guid + "-desc",
+                    "text": field_data.label + " DESC"
+                };
+
+                order_fields.push(option);
             }
+            
+            window.__ds__order_dialog.order_fields = order_fields;
+            window.__ds__order_dialog.refreshOrderFieldsOptions();
 
             $(".btn-edit-field", fieldsContainer).off("click").on("click", function () {
                 self.doEditField(this.parentNode.parentNode.getAttribute("data-guid"), this.parentNode.parentNode.getAttribute("data-instance-id"));

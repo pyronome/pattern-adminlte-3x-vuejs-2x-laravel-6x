@@ -7,7 +7,10 @@
         <impersonation-dialog></impersonation-dialog>
         <custom-variable-list></custom-variable-list>
         <data-source-fields></data-source-fields>
+        <data-source-query-fields></data-source-query-fields>
+        <data-source-order-dialog></data-source-order-dialog>
         <data-source-condition></data-source-condition>
+        <variable-mapping-edit></variable-mapping-edit>
         <widget-condition-dialog></widget-condition-dialog>
         <insert-variable-dialog></insert-variable-dialog>
     </div>

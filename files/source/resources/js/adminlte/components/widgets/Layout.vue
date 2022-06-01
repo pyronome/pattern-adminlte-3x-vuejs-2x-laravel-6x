@@ -137,7 +137,8 @@ export default {
                         "data": {
                             "general": activeWidget,
                             "content": JSON.parse(activeWidget["meta_data_json"]),
-                            "data_source": ("" == activeWidget["data_source_json"]) ? [] : JSON.parse(activeWidget["data_source_json"])
+                            "data_source": ("" == activeWidget["data_source_json"]) ? [] : JSON.parse(activeWidget["data_source_json"]),
+                            "variable_mapping": ("" == activeWidget["variable_mapping_json"]) ? [] : JSON.parse(activeWidget["variable_mapping_json"])
                         },
                         "grid_class": self.getWidgetGridClass(activeWidget["grid_size"]) + " " + (activeWidget.enabled ? "" : " widget-disabled")
                     }
@@ -323,7 +324,8 @@ export default {
                 "data": {
                     "general": general_data,
                     "content": copy_data.content,
-                    "data_source": copy_data.data_source
+                    "data_source": copy_data.data_source,
+                    "variable_mapping": copy_data.variable_mapping
                 },
                 "grid_class": self.getWidgetGridClass(general_data.grid_size)
             };

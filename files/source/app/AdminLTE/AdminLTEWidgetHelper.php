@@ -174,6 +174,19 @@ class AdminLTEWidgetHelper
 		return $resultValue;
 	}
 
+	public function getCustomVariableById($id) {
+		return AdminLTECustomVariable::where('id', $id)->first();
+	}
+
+	public function getCustomVariableByName($variableName, $adminlteusergroup_id) {
+		$object = AdminLTECustomVariable::where('deleted', 0)
+            ->where('adminlteusergroup_id', $adminlteusergroup_id)
+            ->where('name', $variableName)
+            ->first();
+
+		return $object;
+	}
+
 	public function getVariableCalculatedValue($objCV, $queryResult, $url_parameters, $request_parameters) {
 		$customvariable_key = 'customvariable' . $objCV->id;
 		$remember_type = $objCV->remember_type;
@@ -725,7 +738,7 @@ class AdminLTEWidgetHelper
 		return $code;
 	}
 
-	public function __setWhereSQL(&$where_SQL, $conditions) {
+	/* public function __setWhereSQL(&$where_SQL, $conditions) {
 		$history = [];
 		$sql = '';
 
@@ -747,6 +760,45 @@ class AdminLTEWidgetHelper
 			$where_SQL = ' HAVING ' . $sql;
 		}
 		
+		return;
+	} */
+
+	public function __setWhereSQL(&$where_SQL, $searchSQL, $conditions) {
+		$history = [];
+		$sql = '';
+
+		if (!empty($conditions)) {
+			foreach ($conditions as $condition_data) {
+				$condition = (object) $condition_data['condition'];
+
+				if ('' != $sql) {
+					$sql = $sql . ' AND ';
+				}
+
+				$sql = $sql . $this->__sql__generateWhereConditionCode($where_SQL, $condition, $history);
+			}
+		}
+
+		// no search no condition
+		if (('' == $searchSQL) && ('' == $sql)) {
+			$where_SQL = ' WHERE 1';
+			return;
+		}
+
+		// both search and condition
+		if (('' != $searchSQL) && ('' != $sql)) {
+			$where_SQL = ' HAVING ((' . $searchSQL . ') AND ' . $sql . ')';
+			return;
+		}
+		
+		// only search
+		if (('' != $searchSQL) && ('' == $sql)) {
+			$where_SQL = ' HAVING (' . $searchSQL . ')';
+			return;
+		}
+
+		// only condition
+		$where_SQL = ' HAVING (' . $sql . ')';
 		return;
 	}
 
@@ -1068,6 +1120,64 @@ class AdminLTEWidgetHelper
 		}
 
 		return $code;
+	}
+
+	public function convertCustomVariableNameToIdSyntax($text) {
+		$objectAdminLTE = new AdminLTE();
+        $parsed = $objectAdminLTE->getStringBetween($text, '{{', '}}');
+
+		while (strlen($parsed) > 0) {
+            $parsedWithMustache = '{{' . $parsed . '}}';
+			$mas = '{{' . $parsed . '}}';
+			$partResult = '';
+
+			$textPart = explode('/', $parsed);
+
+            if ('CustomVariables' == $textPart[0]) {
+                $__key = $textPart[1];
+                $customVariableId = $this->getCustomVariableId($__key);
+                
+				$idSyntaxMasked = '#_#__#___#' . $parsed . '#___#__#_#'; // aynı kalsın
+				if (0 != $customVariableId) {
+					$idSyntaxMasked = '#_#__#___#__custom_variable__/' . $customVariableId . '#___#__#_#';
+				}
+            }
+
+            $text = str_replace($parsedWithMustache, $idSyntaxMasked, $text);
+			$temp_text = $text;
+			$parsed = $objectAdminLTE->getStringBetween($temp_text, '{{', '}}');
+		} // while (strlen($parsed) > 0) {
+
+		$text = str_replace('#_#__#___#', '{{', $text);
+		$text = str_replace('#___#__#_#', '}}', $text);
+
+        return htmlspecialchars_decode($text);
+	}
+
+	public function getCustomVariableId($variableName) {
+		$currentUser = auth()->guard('adminlteuser')->user();
+
+		$variableId = 0;
+
+		$object = AdminLTECustomVariable::where('deleted', 0)
+            ->where('adminlteusergroup_id', 0)
+            ->where('name', $variableName)
+            ->first();
+
+        if (null !== $object) {
+            $variableId = $object->id;
+        } else {
+			$object = AdminLTECustomVariable::where('deleted', 0)
+				->where('adminlteusergroup_id', $currentUser->adminlteusergroup_id)
+				->where('name', $variableName)
+				->first();
+
+			if (null !== $object) {
+				$variableId = $object->id;
+			}
+		}
+
+		return $variableId;
 	}
 }
 /* {{@snippet:end_class}} */

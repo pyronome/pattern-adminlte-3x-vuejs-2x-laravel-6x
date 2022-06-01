@@ -322,8 +322,16 @@ export default {
                 window.__ds_simple__fields.load_customvariables(this.lastAddedVariableId);
             }
 
+            if (window.__ds_query__fields) {
+                window.__ds_query__fields.load_customvariables(this.lastAddedVariableId);
+            }
+
             if (window.__ds_simple__condition) {
                 window.__ds_simple__condition.load_custom_variable_options();
+            }
+
+            if (window.__variable_mapping_edit__) {
+                window.__variable_mapping_edit__.load_custom_variable_options(this.lastAddedVariableId);
             }
 
             if (window.__condition_dialog) {
@@ -561,6 +569,64 @@ export default {
                     }
                 });
         },
+        getLocalVariableMatch: function(instance_id, local_variableId) {
+            var local_variables = [];
+
+            if (undefined !== window.mainLayoutInstance.pageWidgets[instance_id]) {
+                if (undefined !== window.mainLayoutInstance.pageWidgets[instance_id].data) {
+                    if (undefined !== window.mainLayoutInstance.pageWidgets[instance_id].data.variable_mapping) {
+                        local_variables = window.mainLayoutInstance.pageWidgets[instance_id].data.variable_mapping;
+                    }
+                }
+            }
+
+            var custom_variableId = 0;
+
+            local_variables.forEach(element => {
+                if (local_variableId == element.local_variable) {
+                    custom_variableId = element.custom_variable;
+                }
+            });
+
+            return parseInt(custom_variableId);
+        },
+        setValue: function(custom_variableId, value) {
+            var self = this;
+
+            if (0 != custom_variableId) {
+                window.__custom_variables.values[custom_variableId] = value;
+                /* var element = self.getItemById(custom_variableId);
+
+                self.variableForm.id = element.id;
+                self.variableForm.name = element.name;
+                self.variableForm.title = element.title;
+                self.variableForm.value = value;
+                self.variableForm.default_value = element.default_value;
+                self.variableForm.remember = element.remember;
+                self.variableForm.remember_type = element.remember_type;
+                
+                self.$Progress.start();
+
+                self.variableForm.post(AdminLTEHelper.getAPIURL("adminlte/post_custom_variable"))
+                    .then(({ data }) => {
+                        self.$Progress.finish();
+                        self.page.has_post_error = data.has_error;
+                        self.page.post_error_msg = data.error_msg;
+                        self.lastAddedVariableId = data.id;
+                        self.page.has_server_error = false;
+                    }).catch(({ data }) => {
+                        self.$Progress.fail();
+                        let errors = (self.variableForm.errors.errors);
+                        if (undefined !== errors.error) {
+                            self.page.has_server_error = true;
+                        }
+                    }).finally(function() {
+                        if (!self.page.has_server_error) {
+                            self.load_variables();
+                        }
+                    }); */
+            }
+        }
     },
     mounted() {
         window.__custom_variables = this;

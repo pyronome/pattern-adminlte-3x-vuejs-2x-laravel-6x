@@ -166,6 +166,10 @@ export default {
             if (window.mainLayoutInstance.pageWidgets[instance_id].data_source) {
                 window.mainLayoutInstance.pageWidgets[instance_id].data_source.setValues(data.data_source);
             }
+
+            if (window.__variable_mapping_edit__) {
+                window.__variable_mapping_edit__.renderVariableMappingList(instance_id, data.variable_mapping);
+            }
         },
         saveWidget: function() {
             var instance_id = this.instance_id;
@@ -192,6 +196,13 @@ export default {
                 data_source = window.mainLayoutInstance.pageWidgets[instance_id].data_source.getValues();
             }
             data.data_source = data_source;
+
+            // Variable Mapping
+            var variable_mapping_data = {};
+            if (window.__variable_mapping_edit__) {
+                variable_mapping_data = window.__variable_mapping_edit__.getVariableMappingData(instance_id);
+            }
+            data.variable_mapping = variable_mapping_data;
             
             window.mainLayoutInstance.pageWidgets[instance_id].data = data;
 

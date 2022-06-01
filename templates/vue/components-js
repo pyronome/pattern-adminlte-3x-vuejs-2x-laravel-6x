@@ -25,13 +25,18 @@ Vue.component('widget-list', require('./components/elements/default/WidgetList.v
 Vue.component('widget-header', require('./components/elements/default/WidgetHeader.vue').default);
 Vue.component('data-source', require('./components/elements/default/DataSource.vue').default);
 Vue.component('data-source-fields', require('./components/elements/default/DataSourceFields.vue').default);
+Vue.component('data-source-query-fields', require('./components/elements/default/DataSourceQueryFields.vue').default);
+Vue.component('data-source-order-dialog', require('./components/elements/default/DataSourceOrderDialog.vue').default);
 Vue.component('data-source-condition', require('./components/elements/default/DataSourceCondition.vue').default);
 Vue.component('widget-conditional-settings', require('./components/elements/default/WidgetConditionalSettings.vue').default);
 Vue.component('widget-condition-dialog', require('./components/elements/default/WidgetConditionDialog.vue').default);
 Vue.component('insert-variable-button', require('./components/elements/default/InsertVariableButton.vue').default);
 Vue.component('insert-variable-dialog', require('./components/elements/default/InsertVariableDialog.vue').default);
 Vue.component('custom-variable-list', require('./components/elements/default/CustomVariableList.vue').default);
+Vue.component('variable-mapping-list', require('./components/elements/default/VariableMappingList.vue').default);
+Vue.component('variable-mapping-edit', require('./components/elements/default/VariableMappingEdit.vue').default);
 Vue.component('impersonation-dialog', require('./components/elements/default/ImpersonationDialog.vue').default);
+
 
 /* {{@snippet:end_elements}} */
 /* Elements EOF */

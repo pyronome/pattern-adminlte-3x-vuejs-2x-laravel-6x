@@ -33,9 +33,9 @@ export default {
                 if ($(this.$el).children().length > 1) {
                     $(this.$el).children().detach();
                   
-                    if (!this.$el.hasAttribute("multiple")) {
+                    /* if (!this.$el.hasAttribute("multiple")) {
                         this.$el.innerHTML = "<option></option>";
-                    }
+                    } */
                 }
 
                 $(this.$el).select2({ data: options, allowClear: this.allowClear }).trigger('change');
