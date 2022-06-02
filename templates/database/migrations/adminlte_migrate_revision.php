@@ -31,9 +31,9 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->bigInteger('updated_by')->default(0);
                 $table->smallInteger('__system')->default(0);
                 $table->string('title');
-                $table->string('group');
+                $table->string('group')->nullable();
                 $table->string('name');
-                $table->string('value');
+                $table->string('value')->nullable();
                 $table->string('default_value')->nullable();
                 $table->smallInteger('remember')->default(0);
                 $table->string('remember_type')->nullable();

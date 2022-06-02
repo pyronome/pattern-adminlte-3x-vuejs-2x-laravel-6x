@@ -2434,12 +2434,15 @@ class AdminLTE
 			$fields = $this->getModelQueryFields('AdminLTEUser');
 
 			$field_index = count($fields);
-			$fields[$index]['guid'] = $this->generateGUID('dsqf');
-			$fields[$index]['field'] = 'usergroup_title';
+			$fields[$field_index]['guid'] = $this->generateGUID('dsqf');
+			$fields[$field_index]['field'] = 'usergroup_title';
+
 			$variableName = 'adminlteuser_usergroup_title';
-			$objCustomVariable = $objectAdminLTEWidgetHelper->getCustomVariableByName($variableName);
-			$fields[$index]['customvariable'] = $objCustomVariable->id;
-			$fields[$index]['label'] = $objCustomVariable->title;
+			$objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
+			$objCustomVariable = $objectAdminLTEWidgetHelper->getCustomVariableByName($variableName, 0);
+			$fields[$field_index]['customvariable'] = $objCustomVariable->id;
+			$fields[$field_index]['label'] = $objCustomVariable->title;
+
 
 			$meta_data->fields = $fields;
 
@@ -2459,7 +2462,7 @@ class AdminLTE
 
 	    for ($j=0; $j < $countProperty; $j++) { 
 	        $variableName = strtolower($model) . '_' . $property_list[$j]['name'];
-			$variableTitle = $property_list[$j]['title'];
+			$variableTitle = $model . ' / ' . $$property_list[$j]['title'];
 			
 			$this->setModelCustomVariable($variableName, $variableTitle);
 	    } // for ($j=0; $j < $countProperty; $j++) {
@@ -2507,7 +2510,7 @@ class AdminLTE
 			$property = $property_list[$j]['name'];
 
 			$variableName = strtolower($model) . '_' . $property;
-			$objCustomVariable = $objectAdminLTEWidgetHelper->getCustomVariableByName($variableName);
+			$objCustomVariable = $objectAdminLTEWidgetHelper->getCustomVariableByName($variableName, 0);
 
 			$fields[$index]['guid'] = $this->generateGUID('dsqf');
 			$fields[$index]['field'] = $property;
@@ -2626,6 +2629,72 @@ class AdminLTE
 			$object->title = 'AdminLTE Timezone';
 			$object->value = '{{GlobalParameters/adminlte.generalsettings.timezone}}';
 			$object->default_value = '{{GlobalParameters/adminlte.generalsettings.timezone}}';
+			$object->remember = 0;
+			$object->remember_type = '';
+			$object->__order = 0;
+			$object->save();
+		}
+
+		$object = AdminLTECustomVariable::where('__system', 1)
+			->where('deleted', 0)
+			->where('name', 'search_text')
+			->first();
+
+		if (null === $object) {
+			$object = new AdminLTECustomVariable();
+			$object->created_by = 0;
+			$object->updated_by = 0;
+			$object->__system = 1;
+			$object->adminlteusergroup_id = 0;
+			$object->group = '';
+			$object->name = 'search_text';
+			$object->title = 'Search Text';
+			$object->value = '';
+			$object->default_value = '';
+			$object->remember = 0;
+			$object->remember_type = '';
+			$object->__order = 0;
+			$object->save();
+		}
+
+		$object = AdminLTECustomVariable::where('__system', 1)
+			->where('deleted', 0)
+			->where('name', 'page_number')
+			->first();
+
+		if (null === $object) {
+			$object = new AdminLTECustomVariable();
+			$object->created_by = 0;
+			$object->updated_by = 0;
+			$object->__system = 1;
+			$object->adminlteusergroup_id = 0;
+			$object->group = '';
+			$object->name = 'page_number';
+			$object->title = 'Page Number';
+			$object->value = '';
+			$object->default_value = '0';
+			$object->remember = 0;
+			$object->remember_type = '';
+			$object->__order = 0;
+			$object->save();
+		}
+
+		$object = AdminLTECustomVariable::where('__system', 1)
+			->where('deleted', 0)
+			->where('name', 'records_per_page')
+			->first();
+
+		if (null === $object) {
+			$object = new AdminLTECustomVariable();
+			$object->created_by = 0;
+			$object->updated_by = 0;
+			$object->__system = 1;
+			$object->adminlteusergroup_id = 0;
+			$object->group = '';
+			$object->name = 'records_per_page';
+			$object->title = 'Records Per Page';
+			$object->value = '';
+			$object->default_value = '50';
 			$object->remember = 0;
 			$object->remember_type = '';
 			$object->__order = 0;
