@@ -605,11 +605,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->unsignedBigInteger('adminlteusergroup_id')->nullable()->unsigned();
                 }
     
-                $foreignKeys = $this->listTableForeignKeys('adminlteusertable');
+                /* $foreignKeys = $this->listTableForeignKeys('adminlteusertable');
     
                 if (!in_array('adminlteusertable_adminlteusergroup_id_foreign', $foreignKeys)) {
                     $table->foreign('adminlteusergroup_id')->references('id')->on('adminlteusergrouptable'); 
-                }     
+                }   */   
             });
     
             DB::table('adminlteusertable')->insert(
@@ -637,11 +637,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->unsignedBigInteger('adminlteusergroup_id')->nullable()->unsigned();
                 }
     
-                $foreignKeys = $this->listTableForeignKeys('adminltelayouttable');
+                /* $foreignKeys = $this->listTableForeignKeys('adminltelayouttable');
     
                 if (!in_array('adminltelayouttable_adminlteusergroup_id_foreign', $foreignKeys)) {
                     $table->foreign('adminlteusergroup_id')->references('id')->on('adminlteusergrouptable'); 
-                }     
+                }  */    
             });
 
             Schema::table('adminltecustomvariabletable', function(Blueprint $table) {
@@ -651,11 +651,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->unsignedBigInteger('adminlteusergroup_id')->nullable()->unsigned();
                 }
     
-                $foreignKeys = $this->listTableForeignKeys('adminltecustomvariabletable');
+                /* $foreignKeys = $this->listTableForeignKeys('adminltecustomvariabletable');
     
                 if (!in_array('adminltecustomvariabletable_adminlteusergroup_id_foreign', $foreignKeys)) {
                     $table->foreign('adminlteusergroup_id')->references('id')->on('adminlteusergrouptable'); 
-                }     
+                } */     
             });
 
             Schema::table('adminltecustomvariablevaluetable', function(Blueprint $table) {
@@ -671,7 +671,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->unsignedBigInteger('customvariable_id')->nullable()->unsigned();
                 }
     
-                $foreignKeys = $this->listTableForeignKeys('adminltecustomvariablevaluetable');
+                /* $foreignKeys = $this->listTableForeignKeys('adminltecustomvariablevaluetable');
     
                 if (!in_array('adminltecustomvariablevaluetable_adminlteusergroup_id_foreign', $foreignKeys)) {
                     $table->foreign('adminlteusergroup_id')->references('id')->on('adminlteusergrouptable'); 
@@ -679,7 +679,7 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 
                 if (!in_array('adminltecustomvariablevaluetable_customvariable_id_foreign', $foreignKeys)) {
                     $table->foreign('customvariable_id')->references('id')->on('adminltecustomvariabletable'); 
-                }
+                } */
             });
         } else {
             Schema::table('adminlteusergrouptable', function (Blueprint $table) {
@@ -1088,11 +1088,11 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->unsignedBigInteger('owner_group')->nullable()->unsigned();
             }
 
-            $foreignKeys = $this->listTableForeignKeys('adminlteuserconfigtable');
+            /* $foreignKeys = $this->listTableForeignKeys('adminlteuserconfigtable');
 
             if (!in_array('adminlteuserconfigtable_owner_group_foreign', $foreignKeys)) {
                 $table->foreign('owner_group')->references('id')->on('adminlteusergrouptable'); 
-            }     
+            }  */    
         });
         /* {{@snippet:end_adminlteuserconfigtable_migration}} */
 
