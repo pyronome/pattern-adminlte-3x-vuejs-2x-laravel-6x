@@ -7,8 +7,12 @@ use App\AdminLTE\AdminLTECustomVariable;
 use App\AdminLTE\AdminLTECustomVariableValue;
 use App\AdminLTE\AdminLTELayout;
 
+/* {{@snippet:begin_class}} */
+
 class AdminLTEWidgetHelper
 {	
+	/* {{@snippet:begin_methods}} */
+
 	public function __construct()
 	{
 	}
@@ -183,6 +187,13 @@ class AdminLTEWidgetHelper
             ->where('adminlteusergroup_id', $adminlteusergroup_id)
             ->where('name', $variableName)
             ->first();
+
+        if (null == $object) {
+			$object = AdminLTECustomVariable::where('deleted', 0)
+				->where('adminlteusergroup_id', 0)
+				->where('name', $variableName)
+				->first();
+		}
 
 		return $object;
 	}
@@ -1179,5 +1190,6 @@ class AdminLTEWidgetHelper
 
 		return $variableId;
 	}
+	/* {{@snippet:end_methods}} */
 }
 /* {{@snippet:end_class}} */

@@ -259,7 +259,7 @@ export default {
                 post_error_msg: '',
                 is_variables_loading: false,
                 is_variables_loaded: false
-            }
+            },
         };
     },
     methods: {
@@ -287,7 +287,7 @@ export default {
 
             
         },
-        load_variables: function(callback) {
+        load_variables: function() {
             var self = this;
             if (self.page.is_variables_loading) {
                 return;
@@ -595,36 +595,42 @@ export default {
 
             if (0 != custom_variableId) {
                 window.__custom_variables.values[custom_variableId] = value;
-                /* var element = self.getItemById(custom_variableId);
+                self.refreshDependantWidgets(custom_variableId);
+            }
+        },
+        registerWidgetCustomVariableDependancy: function(dependant_customvariables, instance_id) {
+            var dependant_widgets = window.__custom_variables.dependant_widgets;
+            var length = dependant_customvariables.length;
 
-                self.variableForm.id = element.id;
-                self.variableForm.name = element.name;
-                self.variableForm.title = element.title;
-                self.variableForm.value = value;
-                self.variableForm.default_value = element.default_value;
-                self.variableForm.remember = element.remember;
-                self.variableForm.remember_type = element.remember_type;
+            for (let index = 0; index < length; index++) {
+                let custom_variableId = dependant_customvariables[index];
                 
-                self.$Progress.start();
+                if (undefined !== dependant_widgets[custom_variableId]) {
+                    dependant_widgets[custom_variableId] = dependant_widgets[custom_variableId] + "," + instance_id;
+                } else {
+                    dependant_widgets[custom_variableId] = instance_id;
+                }
+            }
 
-                self.variableForm.post(AdminLTEHelper.getAPIURL("adminlte/post_custom_variable"))
-                    .then(({ data }) => {
-                        self.$Progress.finish();
-                        self.page.has_post_error = data.has_error;
-                        self.page.post_error_msg = data.error_msg;
-                        self.lastAddedVariableId = data.id;
-                        self.page.has_server_error = false;
-                    }).catch(({ data }) => {
-                        self.$Progress.fail();
-                        let errors = (self.variableForm.errors.errors);
-                        if (undefined !== errors.error) {
-                            self.page.has_server_error = true;
+            window.__custom_variables.dependant_widgets = dependant_widgets;
+        },
+        refreshDependantWidgets: function(custom_variableId) {
+            if (window.__custom_variables.dependant_widgets[custom_variableId]) {
+                var dependant_widgets = window.__custom_variables.dependant_widgets[custom_variableId].split(",");
+                
+                for (let index = 0; index < dependant_widgets.length; index++) {
+                    let instance_id = dependant_widgets[index];
+                    
+                    if (undefined !== window.mainLayoutInstance.pageWidgets[instance_id]) {
+                        let widget = window.mainLayoutInstance.pageWidgets[instance_id];
+                        if (undefined !== widget.main) {
+                            let widgetInstance = widget.main;
+                            if (undefined !== widgetInstance.refresh()) {
+                                widgetInstance.refresh()
+                            }
                         }
-                    }).finally(function() {
-                        if (!self.page.has_server_error) {
-                            self.load_variables();
-                        }
-                    }); */
+                    }
+                }
             }
         }
     },
@@ -632,6 +638,8 @@ export default {
         window.__custom_variables = this;
         window.__custom_variables.list = [];
         window.__custom_variables.values = {};
+        window.__custom_variables.dependant_widgets = {};
+
         this.$Progress.start();
         this.page.is_ready = false;
         this.processLoadQueue();

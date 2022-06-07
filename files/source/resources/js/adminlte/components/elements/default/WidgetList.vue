@@ -192,7 +192,7 @@ export default {
                 window.mainLayoutInstance.pageWidgets[instance_id] = [];
 
                 let general_data = {
-                    "enabled" : 0,
+                    "enabled" : 1,
                     "__order" : 0,
                     "title" : windowWidget.title,
                     "widget" : widgetname,

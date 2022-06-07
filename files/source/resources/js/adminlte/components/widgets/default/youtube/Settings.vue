@@ -3,7 +3,7 @@
         <widget-settings-dialog :instance_id="instance_id">
             <div class="row">
                 <div class="form-group col-lg-12">
-                    <label :for="instance_id + 'youtubecode'" class="detail-label">{{ $t('Youtube Code') }}</label>
+                    <label :for="instance_id + 'youtubecode'" class="detail-label">{{ $t('Youtube Embed SRC') }}</label>
                     <input type="text"
                         class="form-control "
                         :id="instance_id + 'youtubecode'">
@@ -30,7 +30,7 @@
                 document.getElementById(instance_id + "youtubecode").value = data.content.youtubecode;
                 document.getElementById(instance_id + "width").value = data.content.width;
             },
-            collectWidgetFormValues: function() {
+            getWidgetFormValues: function() {
                 var instance_id = this.instance_id;
 
                 return {

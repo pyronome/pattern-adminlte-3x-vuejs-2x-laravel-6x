@@ -27,6 +27,20 @@
                                 </div>
 
                                 <div class="form-group col-lg-12">
+                                    <div class="">
+                                        <div class="icheck-primary d-inline">
+                                            <input type="checkbox"
+                                                :id="instance_id + 'show_pagination'"
+                                                :name="instance_id + 'show_pagination'"
+                                                class="item-menu">
+                                            <label :for="instance_id + 'show_pagination'" class="">
+                                                {{ $t('Pagination') }}  
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-12">
                                     <input type="hidden" :id="instance_id + 'columns'" class="item-widget">
                                     <table class="table table-bordered table-hover table-sm condition-table">
                                         <thead>
@@ -195,6 +209,10 @@
                     {
                         "id" : "__list_search_box_value",
                         "label" : "Search Box Value"
+                    },
+                    {
+                        "id" : "__list_page_number",
+                        "label" : "Page Number"
                     }
                 ],
                 page: {
@@ -255,6 +273,10 @@
                 var data = window.mainLayoutInstance.pageWidgets[instance_id].data;
 
                 document.getElementById(instance_id + "record_list_title").value = data.content.record_list_title;
+
+                if (undefined !== data.content.show_pagination) {
+                    document.getElementById(instance_id + "show_pagination").checked = (1 == data.content.show_pagination);
+                }
 
                 if (data.content.columns.length > 0) {
                     self.renderColumnList(data.content.columns);
@@ -534,6 +556,7 @@
                 // content
                 return {
                     "record_list_title" : document.getElementById(instance_id + "record_list_title").value,
+                    "show_pagination": document.getElementById(instance_id + "show_pagination").checked,
                     "columns" : self.collectColumnData(),
                 };
             }

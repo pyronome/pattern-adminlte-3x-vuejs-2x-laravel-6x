@@ -28,6 +28,7 @@
         data() {
             return {
                 "content": this.data.content,
+                "dependant_customvariables": []
             };
         },
         methods: {
@@ -39,7 +40,11 @@
                 axios.get(AdminLTEHelper.getAPIURL("__layout/get_infobox_data/" + parameters))
                     .then(({ data }) => {
                         if (data) {
-                            this.content = data;
+                            if (data.infobox_data)
+                                this.content = data.infobox_data;
+
+                            if (data.dependant_customvariables)
+                                this.dependant_customvariables = data.dependant_customvariables;
                         }
 
                         this.$Progress.finish();

@@ -38,7 +38,6 @@
                         </div>
                     </div>
                 </div>
-                <data-source :instance_id="instance_id"></data-source>
             </div>
         </widget-settings-dialog>
     </div>

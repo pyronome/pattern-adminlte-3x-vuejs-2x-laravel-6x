@@ -215,9 +215,15 @@ export default {
             }, 1000);
         },
         getConditionalDataJSON: function() {
-            var instance_id = this.instance_id;
-            var conditionTables = $(".condition-table", document.getElementById(instance_id + "-conditionlist"));
             var arrConditionalData = [];
+            var instance_id = this.instance_id;
+
+            if (!document.getElementById(instance_id + "-conditionlist")) {
+                return "";
+            }
+
+            var conditionTables = $(".condition-table", document.getElementById(instance_id + "-conditionlist"));
+            
 
             for (let i = 0; i < conditionTables.length; i++) {
                 const table = conditionTables[i];

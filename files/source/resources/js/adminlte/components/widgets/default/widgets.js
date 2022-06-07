@@ -1,4 +1,3 @@
-import widgetA from './a/Main.vue';
 import filebox from './filebox/Main.vue';
 import spacer from './spacer/Main.vue';
 import infobox from './infobox/Main.vue';
@@ -6,20 +5,6 @@ import recordlist from './recordlist/Main.vue';
 import youtubeVideo from './youtube/Main.vue';
 
 export default {
-    "widgetA": {
-        "component": widgetA,
-        "enabled": true,
-        "name": "widgetA",
-        "title": "Widget A",
-        "has_preview": true,
-        "grid_size": "12,12,12",
-        "icon": "",
-        "description": "",
-        "metadata" : {
-            "css" : "padding:20px,background:white",
-            "text" : "New A",
-        },
-    },
     "filebox": {
         "component": filebox,
         "enabled": true,
@@ -60,7 +45,7 @@ export default {
             "title" : "",
             "icon" : "fas fa-cog",
             "iconbackground" : "#17a2b8",
-            "redirectURL": "",
+            "redirectURL": "home",
             "calculation_type" : "simple",
             "function" : "",
             "model" : "",

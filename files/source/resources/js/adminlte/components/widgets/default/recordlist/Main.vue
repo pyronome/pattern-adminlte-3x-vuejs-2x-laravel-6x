@@ -34,6 +34,12 @@
                     </tbody>
                 </table>
             </div>
+            <div style="min-height:60px;">
+                <pagination v-if="data_pagination.show_pagination" :data="data_pagination" :limit="1" align="right" :show-disabled="false" @pagination-change-page="paginate">
+                    <span slot="prev-nav">&lt;</span>
+                    <span slot="next-nav">&gt;</span>
+                </pagination>
+            </div>
         </div>
         <div class="widget-settings-dialog-container">
             <settingsDialog :instance_id="instance_id"></settingsDialog>
@@ -54,11 +60,15 @@
         data() {
             return {
                 search_text: "",
+                current_page: 1,
+                show_pagination: false,
                 content: this.data.content,
                 record_list_title: '',
                 titles: [],
                 variables: [],
                 list: [],
+                data_pagination: [],
+                dependant_customvariables: [],
             };
         },
         computed: {
@@ -72,20 +82,11 @@
                 }
                 return pair;
             },
-            /* value_pairs() {
-                const pair = [];
-                for (let i = 0; i < this.list.; i++) {
-                    pair.push({
-                        display_text: this.titles[i],
-                        style: this.variables[i]
-                    });
-                }
-                return pair;
-            } */
         },
         methods: {
             refresh: function () {
                 this.data = window.mainLayoutInstance.pageWidgets[this.instance_id].data;
+                this.loadData(function(){});
             },
             loadData: function (callback) {
                 var self = this;
@@ -95,9 +96,12 @@
                     .then(({ data }) => {
                         if (data) {
                             self.record_list_title = data.record_list_title;
+                            self.show_pagination = data.show_pagination;
                             self.titles = data.table_header.titles;
                             self.variables = data.table_header.variables;
                             self.list = data.list;
+                            self.data_pagination = data.data_pagination;
+                            self.dependant_customvariables = data.dependant_customvariables;
                         }
 
                         self.$Progress.finish();
@@ -109,22 +113,14 @@
                         }
                     });
             },
-            /* search_list: _.debounce(function (e) {
-                var search_input = e.target;
-                
-                AdminLTEHelper.activateSearchLoader(search_input);
-
-                this.search_text = search_input.value;
-                this.current_page = 1;
-
-                this.loadData(function(){
-                    AdminLTEHelper.deactivateSearchLoader(search_input)
-                });
-            }, 1000), */
-
             search_list: _.debounce(function (e) {
                 var self = this;
                 var search_input = e.target;
+
+                var per_page = 50;
+                if (undefined !== self.data_pagination.per_page) {
+                    per_page = self.data_pagination.per_page;
+                }
 
                 var custom_variableId = window.__custom_variables.getLocalVariableMatch(self.instance_id, "__list_search_box_value");
 
@@ -133,27 +129,50 @@
                     self.search_text = search_input.value;
 
                     window.__custom_variables.setValue(custom_variableId, self.search_text);
+
+                    custom_variableId = window.__custom_variables.getLocalVariableMatch(self.instance_id, "__list_page_number");
+                    
+                    if (0 != custom_variableId) {
+                        window.__custom_variables.setValue(custom_variableId, 0);
+                    }
                     
                     self.loadData(function(){
                         AdminLTEHelper.deactivateSearchLoader(search_input)
                     });
                 }
             }, 1000),
-            /* dosearch_text_variable_change: function(variable_name, old_value, new_value) {
-                this.refresh();
-            }, */
+            paginate: function (page = 1) {
+                var self = this;
+                var per_page = 50;
+                if (undefined !== self.data_pagination.per_page) {
+                    per_page = self.data_pagination.per_page;
+                }
+
+                var custom_variableId = window.__custom_variables.getLocalVariableMatch(self.instance_id, "__list_page_number");
+                
+                if (0 != custom_variableId) {
+                    window.__custom_variables.setValue(custom_variableId, ((page-1) * per_page));
+                    
+                    self.loadData(function(){
+                    });
+                }
+            },
+            registerWidgetCustomVariableDependancy: function() {
+                if (this.dependant_customvariables.length > 0) {
+                    window.__custom_variables.registerWidgetCustomVariableDependancy(this.dependant_customvariables, this.instance_id);
+                }
+            }
         },
         mounted() {
-            this.loadData();
-            window.mainLayoutInstance.pageWidgets[this.instance_id].main = this;
+            var self = this;
 
-            /* this.registerVariableChangeFunctions(); */
+            self.loadData(
+                function() {
+                    self.registerWidgetCustomVariableDependancy();
+                }
+            );
 
-            /* window.__custom_variables.watch(this.search_text_variable, this.refresh);
-            window.__custom_variables.watch(this.page_number_variable, this.refresh); */
-
-            /* window.__custom_variables.setValue()
-            window.__custom_variables.getValue() */
+            window.mainLayoutInstance.pageWidgets[self.instance_id].main = self;
         }
     }
 </script>

@@ -31,7 +31,7 @@
                                     <label :for="instance_id + 'title'" class="detail-label">
                                         {{ $t('Title') }}
                                         <insert-variable-button 
-                                            :variable_options="['query_result_fields','custom_variables','global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                            :variable_options="['custom_variables']" 
                                             :target="instance_id + 'title'">
                                         </insert-variable-button>
                                     </label>
@@ -41,7 +41,7 @@
                                     <label :for="instance_id + 'infobox_value'" class="detail-label">
                                         {{ $t('Infobox Value') }}
                                         <insert-variable-button 
-                                            :variable_options="['query_result_fields','global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                            :variable_options="['custom_variables']" 
                                             :target="instance_id + 'infobox_value'">
                                         </insert-variable-button>
                                     </label>

@@ -343,55 +343,6 @@ export default {
                 self.load_property_options(this.value);
             });
         },
-        setWidgetFormValues: function() {
-            var self = this;
-            var instance_id = self.instance_id;
-            var data = window.mainLayoutInstance.pageWidgets[instance_id].data;
-
-            // Style
-            document.getElementById(instance_id + "title").value = data.content.title;
-
-            var iconVal = data.content.icon;
-            if ("" == iconVal || undefined === iconVal) {
-                $(document.getElementById(instance_id + "icon_picker")).iconpicker('setIcon', 'empty');
-            } else{
-                $(document.getElementById(instance_id + "icon_picker")).iconpicker('setIcon', iconVal);
-            }
-
-            var colorPicker = document.getElementById(instance_id + "iconbackground");
-            $(colorPicker).val(data.content.iconbackground);
-            $(colorPicker).trigger('change');
-
-            document.getElementById(instance_id + "redirectURL").value = data.content.redirectURL;
-
-            // Value
-            var selectorText = 'input[name="' + instance_id + 'calculation_type"][value="' + data.content.calculation_type + '"]';
-            $(selectorText).prop('checked', true);
-
-            self.show_calculation_type_simple = ("simple" == data.content.calculation_type);
-
-            $(document.getElementById(instance_id + "model")).val(data.content.model).trigger('change');
-            $(document.getElementById(instance_id + "property")).val(data.content.property).trigger('change');
-            document.getElementById(instance_id + "property").setAttribute("val", data.content.property);
-            $(document.getElementById(instance_id + "function")).val(data.content.function).trigger('change');
-            document.getElementById(instance_id + "query").value = data.content.query;
-        },
-        getWidgetFormValues: function() {
-            var instance_id = this.instance_id;
-            let radioSelectorText = 'input[name="' + instance_id + 'calculation_type"]:checked';
-
-            return {
-                "title" : document.getElementById(instance_id + "title").value,
-                "icon" : document.getElementById(instance_id + "icon").value,
-                "iconbackground" : document.getElementById(instance_id + "iconbackground").value,
-                "redirectURL" : document.getElementById(instance_id + "redirectURL").value,
-                "calculation_type" : $(radioSelectorText).val(),
-                "model" : document.getElementById(instance_id + "model").value,
-                "property" : document.getElementById(instance_id + "property").value,
-                "function" : document.getElementById(instance_id + "function").value,
-                "query" : document.getElementById(instance_id + "query").value,
-            };
-        },
         insertAtCursor: function(inputField, variableText) {
             //IE support
             if (document.selection) {

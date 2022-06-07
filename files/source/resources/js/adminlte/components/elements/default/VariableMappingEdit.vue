@@ -219,8 +219,13 @@ export default {
                 return label;
             },
             getVariableMappingData: function(instance_id) {
-                var arrTR = $("tr", document.getElementById(instance_id + "__variable_mapping_list__"));
                 var mappings = [];
+
+                if (!document.getElementById(instance_id + "__variable_mapping_list__")) {
+                    return mappings;
+                }
+
+                var arrTR = $("tr", document.getElementById(instance_id + "__variable_mapping_list__"));
 
                 for (let index = 0; index < arrTR.length; index++) {
                     let mapping_data = $(arrTR[index]).data("mapping_data");
@@ -239,6 +244,11 @@ export default {
             },
             renderVariableMappingList: function(instance_id, variable_mapping_data) {
                 var self = this;
+
+                if (!document.getElementById(instance_id + "__variable_mapping_list__")) {
+                    return;
+                }
+
                 var mappingContainer = document.getElementById(instance_id + "__variable_mapping_list__");
                 mappingContainer.innerHTML = "";
 

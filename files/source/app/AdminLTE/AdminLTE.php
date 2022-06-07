@@ -2512,11 +2512,13 @@ class AdminLTE
 			$variableName = strtolower($model) . '_' . $property;
 			$objCustomVariable = $objectAdminLTEWidgetHelper->getCustomVariableByName($variableName, 0);
 
-			$fields[$index]['guid'] = $this->generateGUID('dsqf');
-			$fields[$index]['field'] = $property;
-			$fields[$index]['customvariable'] = $objCustomVariable->id;
-			$fields[$index]['label'] = $objCustomVariable->title;
-			$index++;
+			if (null !== $objCustomVariable) {
+				$fields[$index]['guid'] = $this->generateGUID('dsqf');
+				$fields[$index]['field'] = $property;
+				$fields[$index]['customvariable'] = $objCustomVariable->id;
+				$fields[$index]['label'] = $objCustomVariable->title;
+				$index++;
+			}
 		}
 
 		return $fields;

@@ -183,31 +183,6 @@ export default {
             this.refreshFilters();
 
             return;
-
-            var self = this;
-            if (self.page.is_custom_variable_options_loading) {
-                return;
-            }
-
-            self.page.is_custom_variable_options_loading = true;
-            
-            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_custom_variable_options"))
-                .then(({ data }) => {
-                    self.page.is_custom_variable_options_loaded = true;
-                    self.page.is_custom_variable_options_loading = false;
-                    self.custom_variable_options = data.list;
-                    self.processLoadQueue();
-                }).catch(({ data }) => {
-                    self.page.is_custom_variable_options_loaded = true;
-                    self.page.is_custom_variable_options_loading = false;
-                    self.$Progress.fail();
-                    self.page.has_server_error = true;
-                    self.processLoadQueue();
-                }).finally(function() {
-                    if (!self.page.has_server_error) {
-                        callback();
-                    }
-                });
         },
         showConditionDialog: function() {
             document.getElementById("button_save__ds_condition").setAttribute("data-guid", "");

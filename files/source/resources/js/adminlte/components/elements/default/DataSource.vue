@@ -140,7 +140,7 @@
                             <label :for="instance_id + 'query'" class="detail-label">
                                 {{ $t('SQL Query') }}
                                 <insert-variable-button 
-                                    :variable_options="['global_parameters','user_parameters','url_parameters','request_parameters']" 
+                                    :variable_options="['custom_variables']" 
                                     :target="instance_id + 'query'">
                                 </insert-variable-button>
                             </label>
