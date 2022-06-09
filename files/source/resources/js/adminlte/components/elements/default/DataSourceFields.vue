@@ -188,7 +188,6 @@ export default {
                 });
         },
         load_customvariables: function(customvariable) {
-            console.log("customvariable:" + customvariable)
             var self = this;
             self.customvariables = window.__custom_variables.list
             self.selected_customvariable_id = customvariable;
@@ -198,27 +197,6 @@ export default {
             } */
             
             return;
-
-
-            if (self.is_customvariables_loading) {
-                return;
-            }
-
-            self.is_customvariables_loading = true;
-
-            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_custom_variables"))
-                .then(({ data }) => {
-                    self.is_customvariables_loaded = true;
-                    self.is_customvariables_loading = false;
-                    self.customvariables = data.list;
-                }).catch(({ data }) => {
-                    self.is_customvariables_loaded = true;
-                    self.is_customvariables_loading = false;
-                }).finally(function() {
-                    if (undefined !== field_data.customvariable) {
-                        document.getElementById("__ds_field__customvariable").value = field_data.customvariable;
-                    }
-                });
         },
         show_swal_error: function(error_msg) {
             Vue.swal.fire({

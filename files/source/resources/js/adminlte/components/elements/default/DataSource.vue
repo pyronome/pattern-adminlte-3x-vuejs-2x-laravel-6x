@@ -104,10 +104,7 @@
                         <div class="form-group col-lg-12">
                             <label :for="instance_id + '__ds_simple__searchtext'" class="detail-label">
                                 {{ $t('Search Text') }}
-                                <insert-variable-button 
-                                    :variable_options="['custom_variables']" 
-                                    :target="instance_id + '__ds_simple__searchtext'">
-                                </insert-variable-button>
+                                <insert-custom-variable-button :target="instance_id + '__ds_simple__searchtext'"></insert-custom-variable-button>
                             </label>
                             <input type="text" class="form-control " :id="instance_id + '__ds_simple__searchtext'">
                         </div>
@@ -116,20 +113,14 @@
                         <div class="form-group col-lg-6">
                             <label :for="instance_id + '__ds_simple__records_per_page'" class="detail-label">
                                 {{ $t('Records per Page') }}
-                                <insert-variable-button 
-                                    :variable_options="['custom_variables']" 
-                                    :target="instance_id + '__ds_simple__records_per_page'">
-                                </insert-variable-button>
+                                <insert-custom-variable-button :target="instance_id + '__ds_simple__records_per_page'"></insert-custom-variable-button>
                             </label>
                             <input type="text" class="form-control " :id="instance_id + '__ds_simple__records_per_page'">
                         </div>
                         <div class="form-group col-lg-6">
                             <label :for="instance_id + '__ds_simple__page'" class="detail-label">
                                 {{ $t('Page') }}
-                                <insert-variable-button 
-                                    :variable_options="['custom_variables']" 
-                                    :target="instance_id + '__ds_simple__page'">
-                                </insert-variable-button>
+                                <insert-custom-variable-button :target="instance_id + '__ds_simple__page'"></insert-custom-variable-button>
                             </label>
                             <input type="text" class="form-control " :id="instance_id + '__ds_simple__page'">
                         </div>
@@ -139,10 +130,7 @@
                         <div class="form-group col-lg-12 col-md-12 col-sm-12">
                             <label :for="instance_id + 'query'" class="detail-label">
                                 {{ $t('SQL Query') }}
-                                <insert-variable-button 
-                                    :variable_options="['custom_variables']" 
-                                    :target="instance_id + 'query'">
-                                </insert-variable-button>
+                                <insert-custom-variable-button :target="instance_id + 'query'"></insert-custom-variable-button>
                             </label>
                             <textarea rows="5"
                                 :id="instance_id + 'query'"

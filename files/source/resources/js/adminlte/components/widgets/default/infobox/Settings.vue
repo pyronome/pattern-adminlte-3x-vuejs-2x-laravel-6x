@@ -30,20 +30,14 @@
                                 <div class="form-group col-lg-12">
                                     <label :for="instance_id + 'title'" class="detail-label">
                                         {{ $t('Title') }}
-                                        <insert-variable-button 
-                                            :variable_options="['custom_variables']" 
-                                            :target="instance_id + 'title'">
-                                        </insert-variable-button>
+                                        <insert-custom-variable-button :target="instance_id + 'title'"></insert-custom-variable-button>
                                     </label>
                                     <input type="text" class="form-control " :id="instance_id + 'title'">
                                 </div>
                                 <div class="form-group col-lg-12">
                                     <label :for="instance_id + 'infobox_value'" class="detail-label">
                                         {{ $t('Infobox Value') }}
-                                        <insert-variable-button 
-                                            :variable_options="['custom_variables']" 
-                                            :target="instance_id + 'infobox_value'">
-                                        </insert-variable-button>
+                                        <insert-custom-variable-button :target="instance_id + 'infobox_value'"></insert-custom-variable-button>
                                     </label>
                                     <input type="text" class="form-control " :id="instance_id + 'infobox_value'">
                                 </div>

@@ -18,10 +18,6 @@
                                 <div class="form-group col-lg-12">
                                     <label :for="instance_id + 'title'" class="detail-label">
                                         {{ $t('Record List Title') }}
-                                        <!-- <insert-variable-button 
-                                            :variable_options="['query_result_fields','custom_variables','global_parameters','user_parameters','url_parameters','request_parameters']" 
-                                            :target="instance_id + 'title'">
-                                        </insert-variable-button> -->
                                     </label>
                                     <input type="text" class="form-control " :id="instance_id + 'record_list_title'">
                                 </div>
@@ -107,10 +103,7 @@
                             <div class="form-group col-lg-12">
                                 <label :for="instance_id + 'title'" class="detail-label">
                                     Title
-                                    <insert-variable-button 
-                                        :variable_options="['custom_variables']" 
-                                        :target="instance_id + 'title'">
-                                    </insert-variable-button>
+                                    <insert-custom-variable-button :target="instance_id + 'title'"></insert-custom-variable-button>
                                 </label>
                                 <textarea class="textarea vue-editor" :id="instance_id + 'title'" rows="5"></textarea>
                             </div>
@@ -125,10 +118,7 @@
                             <div class="form-group col-lg-12">
                                 <label :for="instance_id + 'value'" class="detail-label">
                                     Value
-                                    <insert-variable-button 
-                                        :variable_options="['custom_variables']" 
-                                        :target="instance_id + 'value'">
-                                    </insert-variable-button>
+                                    <insert-custom-variable-button :target="instance_id + 'value'"></insert-custom-variable-button>
                                 </label>
                                 <textarea class="textarea vue-editor" :id="instance_id + 'value'" rows="5"></textarea>
                             </div>

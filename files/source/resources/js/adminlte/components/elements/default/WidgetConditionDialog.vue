@@ -243,10 +243,7 @@
                             <div class="form-group col-lg-12">
                                 <label for="__cv_field__shorttext" class="detail-label">
                                     <span id="__cv_field_label__shorttext"></span>
-                                    <insert-variable-button 
-                                        :variable_options="['query_result_fields','global_parameters','user_parameters','url_parameters','request_parameters']" 
-                                        target="__cv_field__shorttext">
-                                    </insert-variable-button>
+                                    <insert-custom-variable-button target="__cv_field__shorttext"></insert-custom-variable-button>
                                 </label>
                                 <input type="text" class="form-control " id="__cv_field__shorttext">
                             </div>
@@ -255,10 +252,7 @@
                         <div class="row cv-field-container d-none" id="__cv_field_container__textarea">
                             <label for="__cv_field__textarea" class="detail-label">
                                 <span id="__cv_field_label__textarea"></span>
-                                <insert-variable-button 
-                                    :variable_options="['query_result_fields','global_parameters','user_parameters','url_parameters','request_parameters']" 
-                                    target="__cv_field__textarea">
-                                </insert-variable-button>
+                                <insert-custom-variable-button target="__cv_field__textarea"></insert-custom-variable-button>
                             </label>
                             <textarea rows="5"
                                 id="__cv_field__textarea"

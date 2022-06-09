@@ -41,6 +41,10 @@ export default {
                 $(this.$el).select2({ data: options, allowClear: this.allowClear }).trigger('change');
                 this.options_initialized = true;
 
+                if (undefined !== this.$el.getAttribute("initial-value")) {
+                    this.setValue(this.$el.getAttribute("initial-value"));
+                }
+
                 if ((!this.value_initialized) && (undefined !== this.initial_value)) {
                     this.setValue(this.initial_value);
                 }

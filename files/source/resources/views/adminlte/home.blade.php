@@ -12,7 +12,7 @@
         <data-source-condition></data-source-condition>
         <variable-mapping-edit></variable-mapping-edit>
         <widget-condition-dialog></widget-condition-dialog>
-        <insert-variable-dialog></insert-variable-dialog>
+        <insert-custom-variable-dialog></insert-custom-variable-dialog>
     </div>
     
     <div>

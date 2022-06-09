@@ -12,10 +12,10 @@
 
 <script>
 export default {
-    props: ["variable_options", "target"],
+    props: ["target"],
     methods: {
         showInsertVariableDialog: function () {
-            window.__insert_variable_dialog.showInsertVariableDialog(this.variable_options, this.target);
+            window.__insert_custom_variable_dialog.showDialog(this.target);
         }
     },
     mounted() {

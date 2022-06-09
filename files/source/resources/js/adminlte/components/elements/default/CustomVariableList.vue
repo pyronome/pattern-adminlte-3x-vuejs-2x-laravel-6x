@@ -91,7 +91,7 @@
             </div>
         </div>
 
-        <div class="modal level4 fade" id="modalAddCustomVariable" tabindex="-1" role="dialog">
+        <div class="modal level5 fade" id="modalAddCustomVariable" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form>
@@ -119,20 +119,21 @@
                                 <div class="form-group col-lg-12">
                                     <label for="__cv_default_value" class="detail-label">
                                         {{ $t('Default Value') }}
-                                        <insert-variable-button 
-                                            :variable_options="['global_parameters','user_parameters','url_parameters','request_parameters']" 
-                                            target="__cv_default_value">
-                                        </insert-variable-button>
+                                        <button type="button"
+                                            class="btn-icon btn-icon-primary"
+                                            @click="showInsertVariableDialog"
+                                            style="float:right;"
+                                            title="Insert Variable">
+                                            <span class="btn-label btn-label-right">
+                                                <i class="fas fa-database"></i>
+                                            </span>                    
+                                        </button>
                                     </label>
                                     <input type="text" class="form-control " id="__cv_default_value" v-model="variableForm.default_value">
                                 </div>
                                 <div class="form-group col-lg-12 d-none">
                                     <label for="__cv_value" class="detail-label">
                                         {{ $t('Value') }}
-                                        <insert-variable-button 
-                                            :variable_options="['query_result_fields','global_parameters','user_parameters','url_parameters','request_parameters']" 
-                                            target="__cv_value">
-                                        </insert-variable-button>
                                     </label>
                                     <input type="text" class="form-control " id="__cv_value" v-model="variableForm.value">
                                 </div>
@@ -185,6 +186,95 @@
                                     <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal" style="margin-right:10px;">
                                         {{ $t('Cancel') }}
                                     </button>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal level6 fade" id="divInsertVariableDialog" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{ $t('Insert Variable') }}</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row mt-1">
+                                <div class="form-group col-lg-12">
+                                    <label for="__cv__variable_type" class="detail-label">{{ $t('Variable Type') }}</label>
+                                    <select id="__cv__variable_type" v-model="insertForm.variable_type" class="form-control">
+                                        <option value="">Please Select</option>
+                                        <option value="global_parameters">{{ $t('Global Parameters') }}</option>
+                                        <option value="user_parameters">{{ $t('User Parameters') }}</option>
+                                        <option value="url_parameters">{{ $t('URL Parameters') }}</option>
+                                        <option value="request_parameters">{{ $t('Request Parameters') }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div v-show="('global_parameters' == insertForm.variable_type)" class="row">
+                                <div class="form-group col-lg-12">
+                                    <label for="__cv__global_parameter" class="detail-label">{{ $t('Config Parameter') }}</label>
+                                    <select2-element class="select2-element"
+                                        id="__cv__global_parameter"
+                                        name="__cv__global_parameter"
+                                        :options="global_parameter_options">
+                                    </select2-element>
+                                </div>
+                            </div>
+
+                            <div v-show="('user_parameters' == insertForm.variable_type)" class="row">
+                                <div class="form-group col-lg-12">
+                                    <label for="__cv__user_parameter" class="detail-label">{{ $t('Config Parameter') }}</label>
+                                    <select2-element class="select2-element"
+                                        id="__cv__user_parameter"
+                                        name="__cv__user_parameter"
+                                        :options="user_parameter_options">
+                                    </select2-element>
+                                </div>
+                            </div>
+
+                            <div v-show="('url_parameters' == insertForm.variable_type)" class="row">
+                                <div class="form-group col-lg-12">
+                                    <label for="__cv__url_parameter" class="detail-label">{{ $t('Parameter Index') }}</label>
+                                    <select id="__cv__url_parameter"  class="form-control">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div v-show="('request_parameters' == insertForm.variable_type)" class="row">
+                                <div class="form-group col-lg-12">
+                                    <label for="__cv__request_parameter" class="detail-label">{{ $t('Parameter Name') }}</label>
+                                    <input type="text" class="form-control " id="__cv__request_parameter">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modalfooter justify-content-between">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="button"
+                                        id="buttonInsertVariableToTarget"
+                                        class="btn btn-success btn-md btn-on-table float-right"
+                                        @click="insertVariableToTarget">
+                                        {{ $t('Insert') }}
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary float-right" data-dismiss="modal" style="margin-right:10px;">{{ $t('Cancel') }}</button>                                    
                                 </div>
                             </div>
                         </div>
@@ -251,6 +341,7 @@ export default {
                 error_msg: ''
             },
             lastAddedVariableId: 0,
+            lastAddedVariableName: "",
             page: {
                 is_ready: false,
                 has_server_error: false,
@@ -260,6 +351,12 @@ export default {
                 is_variables_loading: false,
                 is_variables_loaded: false
             },
+            insertForm: new Form({
+                variable_type: "",
+                variable_text: "",
+            }),
+            global_parameter_options: [],
+            user_parameter_options: []
         };
     },
     methods: {
@@ -270,6 +367,14 @@ export default {
                 self.$Progress.finish();
                 self.page.is_ready = true;
                 return;
+            }
+
+            if (!self.page.is_global_parameter_options_loaded) {
+                self.load_global_parameter_options();
+            }
+
+            if (!self.page.is_user_parameter_options_loaded) {
+                self.load_user_parameter_options();
             }
 
             if (!self.page.is_variables_loaded) {
@@ -314,8 +419,8 @@ export default {
         refreshRelatedWithCustomVariableList: function() {
             this.renderCustomVariableValues();
 
-            if (window.__insert_variable_dialog) {
-                window.__insert_variable_dialog.load_custom_variable_options();
+            if (window.__insert_custom_variable_dialog) {
+                window.__insert_custom_variable_dialog.load_custom_variable_options("CustomVariables/" + this.lastAddedVariableName);
             }
 
             if (window.__ds_simple__fields) {
@@ -477,6 +582,8 @@ export default {
                 return false;
             }
 
+            self.lastAddedVariableName = document.getElementById("__cv_name").value;
+
             self.variableForm.default_value = document.getElementById("__cv_default_value").value;
             self.variableForm.value = document.getElementById("__cv_value").value;
             self.variableForm.remember = document.getElementById("__cv_remember").checked;
@@ -632,6 +739,190 @@ export default {
                     }
                 }
             }
+        },
+        // Insert Variable
+        showInsertVariableDialog: function() {
+            $("#divInsertVariableDialog").off("shown.bs.modal").on("shown.bs.modal", function (e) { 
+                $(document).off("focusin.modal"); 
+            });
+
+            $("#divInsertVariableDialog").modal();
+        },
+        load_global_parameter_options: function() {
+            var self = this;
+            if (self.page.is_global_parameter_options_loading) {
+                return;
+            }
+
+            self.page.is_global_parameter_options_loading = true;
+            
+            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_global_parameter_options"))
+                .then(({ data }) => {
+                    self.page.is_global_parameter_options_loaded = true;
+                    self.page.is_global_parameter_options_loading = false;
+                    self.global_parameter_options = data.list;
+                    self.processLoadQueue();
+                }).catch(({ data }) => {
+                    self.page.is_global_parameter_options_loaded = true;
+                    self.page.is_global_parameter_options_loading = false;
+                    self.$Progress.fail();
+                    self.page.has_server_error = true;
+                    self.processLoadQueue();
+                });
+        },
+        load_user_parameter_options: function() {
+            var self = this;
+            if (self.page.is_user_parameter_options_loading) {
+                return;
+            }
+
+            self.page.is_user_parameter_options_loading = true;
+            
+            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_user_parameter_options"))
+                .then(({ data }) => {
+                    self.page.is_user_parameter_options_loaded = true;
+                    self.page.is_user_parameter_options_loading = false;
+                    self.user_parameter_options = data.list;
+                    self.processLoadQueue();
+                }).catch(({ data }) => {
+                    self.page.is_user_parameter_options_loaded = true;
+                    self.page.is_user_parameter_options_loading = false;
+                    self.$Progress.fail();
+                    self.page.has_server_error = true;
+                    self.processLoadQueue();
+                });
+        },
+        insertAtCursor: function(inputField, variableText) {
+            //IE support
+            if (document.selection) {
+                inputField.focus();
+                sel = document.selection.createRange();
+                sel.text = variableText;
+            }
+            //MOZILLA and others
+            else if (inputField.selectionStart || inputField.selectionStart == '0') {
+                var startPos = inputField.selectionStart;
+                var endPos = inputField.selectionEnd;
+                inputField.value = inputField.value.substring(0, startPos)
+                    + variableText
+                    + inputField.value.substring(endPos, inputField.value.length);
+            } else {
+                inputField.value += variableText;
+            }
+        },
+        insertVariableToTarget: function () {
+            var self = this;
+            var variableType = self.insertForm.variable_type;
+            var data = {};
+
+            switch (variableType) {
+                case "global_parameters":
+                    data = self.getGlobalParameterVariable();
+                    break;   
+                case "user_parameters":
+                    data = self.getUserParameterVariable();
+                    break; 
+                case "url_parameters":
+                    data = self.getURLParameterVariable();
+                    break;  
+                case "request_parameters":
+                    data = self.getRequestParameterVariable();
+                    break;      
+            }
+
+            if (data.has_error) {
+                Vue.swal.fire({
+                    position: 'top-end',
+                    title: data.msg,
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    onClose: () => {}
+                });
+
+                return;
+            }
+            
+            self.insertAtCursor(document.getElementById("__cv_default_value"), data.variable);
+
+            $("#divInsertVariableDialog").modal("hide");
+        },
+        getGlobalParameterVariable: function () {
+            var result = {
+                "has_error": false,
+                "msg": "",
+                "variable": ""
+            };
+
+            var configParameter = $("#__cv__global_parameter").val();
+
+            if (("" == configParameter) || (null === configParameter)) {
+                result.has_error = true;
+                result.msg = this.$t("Please select a global config parameter.");
+                return result;
+            }
+
+            result.variable = "{{" + configParameter + "}}";
+
+            return result;
+        },
+        getUserParameterVariable: function () {
+            var result = {
+                "has_error": false,
+                "msg": "",
+                "variable": ""
+            };
+
+            var configParameter = $("#__cv__user_parameter").val();
+
+            if (("" == configParameter) || (null === configParameter)) {
+                result.has_error = true;
+                result.msg = this.$t("Please select a user config parameter.");
+                return result;
+            }
+
+            result.variable = "{{" + configParameter + "}}";
+
+            return result;
+        },
+        getURLParameterVariable: function () {
+            var result = {
+                "has_error": false,
+                "msg": "",
+                "variable": ""
+            };
+
+            var urlParameterIndex = $("#__cv__url_parameter").val();
+
+            if (("" == urlParameterIndex) || (null === urlParameterIndex)) {
+                result.has_error = true;
+                result.msg = this.$t("Please select a URL parameter index.");
+                return result;
+            }
+
+            result.variable = "{{URLParameters/" + urlParameterIndex + "}}";
+
+            return result;
+        },
+        getRequestParameterVariable: function () {
+            var result = {
+                "has_error": false,
+                "msg": "",
+                "variable": ""
+            };
+
+            var requestParameterName = $("#__cv__request_parameter").val();
+
+            if ("" == requestParameterName) {
+                result.has_error = true;
+                result.msg = this.$t("Please enter a request parameter name.");
+                return result;
+            }
+
+            result.variable = "{{RequestParameters/" + requestParameterName + "}}";
+
+            return result;
         }
     },
     mounted() {

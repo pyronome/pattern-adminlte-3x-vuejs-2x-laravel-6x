@@ -397,7 +397,7 @@ export default {
         this.page.is_ready = false;
         AdminLTEHelper.loadExternalFiles(
                 this.page.external_files,
-                this.processLoadQueue);
+                this.processLoadQueue());
     }
 }
 </script>
