@@ -4,7 +4,6 @@
 import { Widgets } from './components/widgets/widgets';
 window.Widgets = Widgets;
 
-Vue.component('widgets', require('./components/widgets/Widgets.vue').default);
 Vue.component('select2-element', require('./components/elements/default/Select2Element.vue').default);
 Vue.component('dropzone', require('./components/elements/default/Dropzone.vue').default);
 Vue.component('location-display', require('./components/elements/default/LocationDisplay.vue').default);
@@ -12,7 +11,6 @@ Vue.component('image-display', require('./components/elements/default/ImageDispl
 Vue.component('media-list', require('./components/elements/default/MediaList.vue').default);
 Vue.component('file-select', require('./components/elements/default/FileSelect.vue').default);
 Vue.component('file-content', require('./components/elements/default/FileContent.vue').default);
-Vue.component('widget-editor', require('./components/elements/default/WidgetEditor.vue').default);
 Vue.component('body-loader', require('./components/elements/default/BodyLoader.vue').default);
 Vue.component('permission-error', require('./components/elements/default/PermissionError.vue').default);
 Vue.component('server-error', require('./components/elements/default/ServerError.vue').default);

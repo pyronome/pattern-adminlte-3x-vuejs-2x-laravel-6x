@@ -43,6 +43,19 @@ Route::namespace('API')
         Route::get('/get_source_widgets/{source_group_id}', 'AdminLTEController@get_source_widgets');
         Route::post('/post_copy_widgets', 'AdminLTEController@post_copy_widgets');
     });
+
+    Route::prefix('__layout')->group(function () {
+        Route::get('/get_recordgraph/{pageName}/{model}', 'AdminLTELayoutController@get_recordgraph');
+        Route::get('/get_layout_page_options', 'AdminLTELayoutController@get_layout_page_options');
+        Route::get('/get_page_layout/{pagename}', 'AdminLTELayoutController@get_page_layout');
+        Route::get('/get_widgets/{pagename}', 'AdminLTELayoutController@get_widgets');
+        Route::post('/post_layout', 'AdminLTELayoutController@post_layout');
+        Route::get('/get_filter_options/{pagename}', 'AdminLTELayoutController@get_filter_options');
+        Route::get('/get_model_list', 'AdminLTELayoutController@get_model_list');
+        Route::get('/get_model_properties/{model}', 'AdminLTELayoutController@get_model_properties');
+        Route::get('/get_infobox_data/{parameters}', 'AdminLTELayoutController@get_infobox_data');
+        Route::get('/get_recordlist_data/{parameters}', 'AdminLTELayoutController@get_recordlist_data');
+    });
     
     Route::prefix('register')->group(function () {
         Route::get('/get_brand_data', 'RegisterController@get_brand_data');
@@ -145,25 +158,6 @@ Route::namespace('API')
     Route::prefix('adminltelogs')->group(function () {
         Route::get('/get_filter_options', 'AdminLTELogController@get_filter_options');
         Route::get('/get_recordlist', 'AdminLTELogController@get_recordlist');
-    });
-
-    Route::prefix('__layout')->group(function () {
-        Route::get('/get/{pageName}', 'AdminLTELayoutController@get_widgetconfig');
-        Route::get('/get_attributes', 'AdminLTELayoutController@get_attributes');
-        Route::post('/post/{pageName}', 'AdminLTELayoutController@post_widgetconfig');
-        Route::get('/get_recordgraph/{pageName}/{model}', 'AdminLTELayoutController@get_recordgraph');
-        Route::get('/get_recordlist/{pageName}/{model}', 'AdminLTELayoutController@get_recordlist');
-        Route::get('/get_layout_page_options', 'AdminLTELayoutController@get_layout_page_options');
-        Route::get('/get_page_layout/{pagename}', 'AdminLTELayoutController@get_page_layout');
-        Route::get('/get_widgets/{pagename}', 'AdminLTELayoutController@get_widgets');
-        Route::get('/get_active_widgets/{pagename}', 'AdminLTELayoutController@get_active_widgets');
-        Route::post('/post_layout', 'AdminLTELayoutController@post_layout');
-        Route::get('/get_filter_options/{pagename}', 'AdminLTELayoutController@get_filter_options');
-        Route::get('/get_page_widgets/{pagename}', 'AdminLTELayoutController@get_page_widgets');
-        Route::get('/get_model_list', 'AdminLTELayoutController@get_model_list');
-        Route::get('/get_model_properties/{model}', 'AdminLTELayoutController@get_model_properties');
-        Route::get('/get_infobox_data/{parameters}', 'AdminLTELayoutController@get_infobox_data');
-        Route::get('/get_recordlist_data/{parameters}', 'AdminLTELayoutController@get_recordlist_data');
     });
 
     Route::prefix('__modeldisplaytext')->group(function () {
