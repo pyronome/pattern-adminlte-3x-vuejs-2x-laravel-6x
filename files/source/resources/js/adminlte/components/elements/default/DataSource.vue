@@ -269,28 +269,40 @@ export default {
                 }
 
                 // Value
-                var selectorText = 'input[name="' + instance_id + 'calculation_type"][value="' + data_source.calculation_type + '"]';
+                var calculation_type = 'simple';
+                if ((undefined !== data_source.calculation_type) && ("" != data_source.calculation_type)) {
+                    calculation_type = data_source.calculation_type;
+                }
+
+                var selectorText = 'input[name="' + instance_id + 'calculation_type"][value="' + calculation_type + '"]';
                 $(selectorText).prop('checked', true);
 
-                self.calculation_type = data_source.calculation_type;
+                self.calculation_type = calculation_type;
 
-                 if ("simple" == data_source.calculation_type) {
-                    $(document.getElementById(instance_id + "__ds_simple_model")).val(data_source.meta_data.model).trigger('change');
+                if ("simple" == calculation_type) {
+                    if (undefined !== data_source.meta_data) {
+                        var model = "";
+                        if ((undefined !== data_source.meta_data.model) && ("" != data_source.meta_data.model)) {
+                            model = data_source.meta_data.model;
+                        }
 
-                    if (data_source.meta_data.fields.length > 0) {
-                        window.__ds_simple__fields.renderFields(instance_id, data_source.meta_data.fields);
+                        $(document.getElementById(instance_id + "__ds_simple_model")).val(model).trigger('change');
+
+                        if (data_source.meta_data.fields.length > 0) {
+                            window.__ds_simple__fields.renderFields(instance_id, data_source.meta_data.fields);
+                        }
+
+                        if (data_source.meta_data.conditions.length > 0) {
+                            window.__ds_simple__condition.renderConditions(instance_id, data_source.meta_data.conditions);
+                        }
+
+                        self.setOrderFields(data_source.meta_data.order_fields);
+
+                        document.getElementById(instance_id + "__ds_simple__searchtext").value = data_source.meta_data.searchtext;
+                        document.getElementById(instance_id + "__ds_simple__page").value = data_source.meta_data.pagination.page;
+                        document.getElementById(instance_id + "__ds_simple__records_per_page").value = data_source.meta_data.pagination.records_per_page;
                     }
-
-                    if (data_source.meta_data.conditions.length > 0) {
-                        window.__ds_simple__condition.renderConditions(instance_id, data_source.meta_data.conditions);
-                    }
-
-                    self.setOrderFields(data_source.meta_data.order_fields);
-
-                    document.getElementById(instance_id + "__ds_simple__searchtext").value = data_source.meta_data.searchtext;
-                    document.getElementById(instance_id + "__ds_simple__page").value = data_source.meta_data.pagination.page;
-                    document.getElementById(instance_id + "__ds_simple__records_per_page").value = data_source.meta_data.pagination.records_per_page;
-                } else if ("advanced" == data_source.calculation_type) {
+                } else if ("advanced" == calculation_type) {
                     document.getElementById(instance_id + "query").value = data_source.meta_data.query;
 
                     if (undefined !== data_source.meta_data.fields) {

@@ -34,7 +34,7 @@ Vue.component('custom-variable-list', require('./components/elements/default/Cus
 Vue.component('variable-mapping-list', require('./components/elements/default/VariableMappingList.vue').default);
 Vue.component('variable-mapping-edit', require('./components/elements/default/VariableMappingEdit.vue').default);
 Vue.component('impersonation-dialog', require('./components/elements/default/ImpersonationDialog.vue').default);
-
+Vue.component('widget-container', require('./components/elements/default/WidgetContainer.vue').default);
 
 /* {{@snippet:end_elements}} */
 /* Elements EOF */

@@ -264,6 +264,8 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                 $table->boolean('enabled')->default(0);
                 $table->bigInteger('__order')->default(0);
                 $table->string('pagename');
+                $table->bigInteger('container_index')->default(0);
+                $table->string('container_title')->nullable();
                 $table->string('widget');
                 $table->string('title')->nullable();
                 $table->string('grid_size');
@@ -296,6 +298,17 @@ class AdminLTEMigrateRevision{{$ __globals__/PYRONOME_CURRENT_DATE}}{{$ __global
                     $table->string('pagename')->change();
                 } else {
                     $table->string('pagename');
+                }
+
+                if (Schema::hasColumn('adminltelayouttable', 'container_index')) { 
+                    $table->bigInteger('container_index')->default(0)->change();
+                } else {
+                    $table->bigInteger('container_index')->default(0);
+                }
+                if (Schema::hasColumn('adminltelayouttable', 'container_title')) { 
+                    $table->string('container_title')->nullable()->change();
+                } else {
+                    $table->string('container_title')->nullable();
                 }
 
                 if (Schema::hasColumn('adminltelayouttable', 'widget')) { 

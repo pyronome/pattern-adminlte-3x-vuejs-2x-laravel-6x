@@ -1622,6 +1622,7 @@ button.copyKey {
 .widget-main-container {
     width: 100%;
     box-sizing: border-box;
+    display: inline-block;
 }
 
 .widget-container.widget-edit-mode > .widget-main-container {
@@ -1656,7 +1657,8 @@ button.copyKey {
 .widget-header-wrapper .widget-sortable-handle,
 .widget-header-wrapper .widget-header-text,
 .widget-header-wrapper .widget-settings-menu-container,
-.widget-header-wrapper .widget-remove-button-container {
+.widget-header-wrapper .widget-remove-button-container,
+.widget-header-wrapper .widget-addnew-button-container {
     height: auto;
     overflow: hidden;
     white-space: nowrap;

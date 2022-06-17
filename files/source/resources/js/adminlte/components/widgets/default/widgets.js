@@ -3,8 +3,22 @@ import spacer from './spacer/Main.vue';
 import infobox from './infobox/Main.vue';
 import recordlist from './recordlist/Main.vue';
 import youtubeVideo from './youtube/Main.vue';
+import container from './container/Main.vue';
 
 export default {
+    "container": {
+        "component": container,
+        "enabled": true,
+        "name": "container",
+        "title": "Container",
+        "has_preview": false,
+        "grid_size": "12,12,12",
+        "icon": "",
+        "description": "",
+        "metadata" : {
+            "css" : ""
+        }
+    },
     "filebox": {
         "component": filebox,
         "enabled": true,
@@ -17,7 +31,7 @@ export default {
         "metadata" : {
             "css" : "padding:20px,background:white",
             "text" : "Files",
-        },
+        }
     },
     "spacer": {
         "component": spacer,
@@ -30,7 +44,7 @@ export default {
         "description": "",
         "metadata" : {
             "css" : "",
-        },
+        }
     },
     "infobox": {
         "component": infobox,
@@ -51,7 +65,7 @@ export default {
             "model" : "",
             "property" : "",
             "query" : "",
-        },
+        }
     },
     "recordlist": {
         "component": recordlist,
@@ -69,7 +83,7 @@ export default {
             "model" : "",
             "property" : "",
             "query" : "",
-        },
+        }
     },
     "youtubeVideo": {
         "component": youtubeVideo,
@@ -83,6 +97,6 @@ export default {
         "metadata" : {
             "youtubecode" : "",
             "width" : 560,
-        },
+        }
     },
 };

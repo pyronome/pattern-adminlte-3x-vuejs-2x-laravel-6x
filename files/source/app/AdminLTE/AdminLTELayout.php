@@ -23,6 +23,8 @@ class AdminLTELayout extends Model
         '__order',
         'adminlteusergroup_id',
 		'pagename',
+        'container_index',
+        'container_title',
         'widget',
 		'title',
 		'grid_size',
@@ -68,6 +70,14 @@ class AdminLTELayout extends Model
         ],
 		[
             'name' => 'pagename',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'container_index',
+            'type' => 'text'
+        ],
+        [
+            'name' => 'container_title',
             'type' => 'text'
         ],
         [

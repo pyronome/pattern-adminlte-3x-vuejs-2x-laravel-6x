@@ -1,5 +1,5 @@
 <template>
-    <div class="widget-header-wrapper">
+    <div class="widget-header-wrapper" :parent_instance_id="parent_instance_id">
         <div class="widget-sortable-handle widget-move-handle">
             <span><i class="fa fa-ellipsis-v" aria-hidden="true"></i><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span>
         </div>
@@ -42,13 +42,62 @@
 
 <script>
 export default {
-    props: ["instance_id", "data"],
+    props: ["instance_id", "data", "parent_instance_id"],
     data() {
         return {
             state: this.data.general.enabled
         };
     },
     methods: {
+        addNewWidgets: function() {
+            $(".select_widget").prop("checked", false);
+            document.getElementById("buttonSaveSelectedWidgets").setAttribute("parent-instance-id", this.instance_id);
+            $("#modalWidgetList").modal();
+
+            /* var self = this;
+
+            for (let index = 0; index < selectedWidgets.length; index++) {
+                let widgetData = selectedWidgets[index];
+                widgetData["parent_instance_id"] = self.parent_instance_id;
+                let widgetname = widgetData.general.widget;
+
+                if (null !== window.Widgets[widgetname]) {
+                    let winWidget = window.Widgets[widgetname];
+                    
+                    let instance_id = AdminLTEHelper.generateGUID("widget");
+                    window.mainLayoutInstance.pageWidgets[instance_id] = [];
+
+                    widgetData["instance_id"] = instance_id;
+
+                    let child = {
+                        "instance_id": instance_id,
+                        "is_container": winWidget.is_container,
+                        "widget": winWidget,
+                        "data": widgetData,
+                        "grid_class": self.getWidgetGridClass(widgetData.general.grid_size)
+                    }
+
+                    self.pageWidgets.push(child);
+                }
+            }
+
+            $("#divWidgetContainer").sortable({
+                handle: ".widget-move-handle",
+                cancel: '',
+                change: function( event, ui ) {
+                    $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
+                }
+            }).disableSelection();
+
+            self.body_loader_active = true;
+
+            setTimeout(function(){
+                self.setWidgetsFormData();
+                $(".widget-editable").addClass("widget-edit-mode")
+                $("html, body").animate({ scrollTop: $(document).height() }, 1500);
+                self.body_loader_active = false;
+            }, 500); */
+        },
         toggleWidget: function () {
             $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
 

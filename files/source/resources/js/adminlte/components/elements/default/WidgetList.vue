@@ -88,6 +88,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <button type="button"
+                                        id="buttonSaveSelectedWidgets"
                                         class="btn btn-success btn-md btn-on-table float-right"
                                         @click="addWidgets">
                                         {{ $t('Add') }}
@@ -153,7 +154,6 @@ export default {
                     ("/js/adminlte/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"),
                     ("/js/adminlte/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"),
                 ],
-                editor: null
             }
         };
     },
@@ -237,6 +237,10 @@ export default {
         },
         load_selectedPageWidgets: function(page) {
             var self = this;
+
+            if ((undefined === page) || ('' == page) || (null === page)) {
+                return;
+            }
 			
 			axios.get(AdminLTEHelper.getAPIURL("__layout/get_widgets/" + page))
                 .then(({ data }) => {
@@ -267,7 +271,8 @@ export default {
                             "grid_size" : page_widget.grid_size,
                             "icon" : page_widget.icon
                         },
-                        "content": JSON.parse(page_widget.meta_data_json)
+                        "content": JSON.parse(page_widget.meta_data_json),
+                        "data_source": JSON.parse(page_widget.data_source_json)
                     };
                     
                     selectedPageWidgetList[index] = [];

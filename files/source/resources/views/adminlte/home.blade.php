@@ -16,6 +16,7 @@
     </div>
     
     <div>
+        <input type="hidden" id="is_current_user_admin" value="{{ $user['admin'] }}">
         <div id="widgetModalTitleDefault" class="d-none">{{ __('Widget Item') }}</div>
         <div id="widgetModalTitleinfobox" class="d-none">{{ __('Infobox Widget') }}</div>
         <div id="widgetModalTitlerecordlist" class="d-none">{{ __('Record List Widget') }}</div>

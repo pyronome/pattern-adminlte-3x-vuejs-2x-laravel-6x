@@ -44,20 +44,39 @@ class AdminLTELayoutController extends Controller
         $pagename = $request->input('pagename');
         $layoutdata = $request->input('layoutdata');
 
-        AdminLTELayout::query()->where('adminlteusergroup_id', $currentGroupId)
-            ->where('pagename', $pagename)
-            ->delete();
+        /* echo '<div style="display:block">';
+        echo '<pre>';
+        print_r($layoutdata);
+        echo '</pre>';
+        echo '</div>';
+        die(); */
+
+        $this->deletePageWidgets($pagename);
+
+        $instanceIdHistory = [];
 
         foreach ($layoutdata as $__order => $data) {
+            $instance_id = $data['instance_id'];
+            $parent_instance_id = $data['parent_instance_id'];
+            $container_index = isset($data['container_index']) ? $data['container_index'] : '';
+            $container_title = isset($data['container_title']) ? $data['container_title'] : '';
+
+            if (isset($instanceIdHistory[$parent_instance_id])) {
+                // has parent
+                $pagename = $instanceIdHistory[$parent_instance_id] . '-' . $container_index;
+            }
+            
             $general_data = $data['general'];
             $content_data = $data['content'];
-            $data_source = $data['data_source'];
+            $data_source = isset($data['data_source']) ? $data['data_source'] : '';
 
             $object = new AdminLTELayout();
             $object->enabled = $general_data['enabled'];
             $object->__order = $__order;
             $object->adminlteusergroup_id = $currentGroupId;
             $object->pagename = $pagename;
+            $object->container_index = $container_index;
+            $object->container_title = $container_title;
             $object->widget = $general_data['widget'];
             $object->title = $general_data['title'];
             $object->grid_size = $general_data['grid_size'];
@@ -72,12 +91,43 @@ class AdminLTELayoutController extends Controller
                 : '[]';
             $object->save();
 
+            $instanceIdHistory[$instance_id] = $object->id;
+
             $conditional_data = json_decode($object->conditional_data_json);
 
             if (json_last_error() === JSON_ERROR_NONE) {
                 $objectAdminLTE->saveLayoutConditionalData($object->id, $conditional_data);
             }
         }
+    }
+
+    public function deletePageWidgets($pagename) {
+        $objectAdminLTE = new AdminLTE();
+        $widgets = $objectAdminLTE->getUserWidgets($pagename);
+
+        foreach($widgets as $widget) {
+            // delete subwidgets
+            $this->deletePageWidgetsById($widget->id);
+
+            $widget->delete();
+        }
+
+        return;
+    }
+
+    public function deletePageWidgetsById($layoutId) {
+        $widgets = AdminLTELayout::where('deleted', false)
+            ->where('pagename', 'like', ($layoutId . '-%'))
+            ->get();
+
+        foreach($widgets as $widget) {
+            // delete subwidgets
+            $this->deletePageWidgetsById($widget->id);
+
+            $widget->delete();
+        }
+
+        return;
     }
 
     public function getFormattedDataSource($data_source) {
@@ -291,6 +341,19 @@ class AdminLTELayoutController extends Controller
             if ($pagename != $object->pagename) {
                 $list[$index]['id'] = $object->pagename;
                 $list[$index]['text'] = $object->pagename . ' | ' . 'Widgets';
+
+                if (false !== strpos($object->pagename, '-')) {
+                    $parts = explode('-', $object->pagename);
+
+                    if (isset($parts[0])) {
+                        $parentLayoutId = intval($parts[0]);
+                        $list[$index]['text'] = $this->getFilterOptionTitleByParentId($parentLayoutId) 
+                            . ' | '  
+                            . $object->container_title 
+                            . ' | Widgets';
+                    }
+                }
+
                 $index++;
             }
         } // foreach ($objectList as $object)
@@ -300,6 +363,17 @@ class AdminLTELayoutController extends Controller
         return [
             'options' => $data
         ];
+    }
+
+    public function getFilterOptionTitleByParentId($layoutId) {
+        $option_title = '';
+
+        if (0 != $layoutId) {
+            $objectLayout = AdminLTELayout::where('id', $layoutId)->first();
+            $option_title = $objectLayout->pagename . ' | ' . $objectLayout->title;
+        }
+
+        return $option_title;
     }
 
     public function get_model_list(Request $request) {    
@@ -767,11 +841,11 @@ class AdminLTELayoutController extends Controller
         ];
     }
 
-    public function getDependantVariables($objLayout) {
+    public function getDependantVariables($objectLayout) {
         $variables = [];
         $variableIds = [];
 
-        $content = $objLayout->meta_data_json . ' ' . $objLayout->data_source_json . ' ' . $objLayout->conditional_data_json;
+        $content = $objectLayout->meta_data_json . ' ' . $objectLayout->data_source_json . ' ' . $objectLayout->conditional_data_json;
         $currentUser = auth()->guard('adminlteuser')->user();
         $objectAdminLTEWidgetHelper = new AdminLTEWidgetHelper();
         $objectAdminLTE = new AdminLTE();
