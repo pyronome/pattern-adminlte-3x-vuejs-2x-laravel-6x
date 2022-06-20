@@ -2462,7 +2462,7 @@ class Wisilo
 
 	    for ($j=0; $j < $countProperty; $j++) { 
 	        $variableName = strtolower($model) . '_' . $property_list[$j]['name'];
-			$variableTitle = $model . ' / ' . $$property_list[$j]['title'];
+			$variableTitle = $model . ' / ' . $property_list[$j]['title'];
 			
 			$this->setModelCustomVariable($variableName, $variableTitle);
 	    } // for ($j=0; $j < $countProperty; $j++) {
