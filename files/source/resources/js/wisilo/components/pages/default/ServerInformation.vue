@@ -108,8 +108,6 @@
                 </div>
             </section>
         </div>
-
-        <layout :pagename="pagename" :pagevariables="page.variables"></layout>
         <input type="hidden" id="controller" value="server_information">
     </div>
 </template>

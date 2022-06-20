@@ -51,7 +51,6 @@
                     </div>
                 </div>
             </section>
-        
             <div class="modal fade" id="modal-ModelDisplayTextList" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">

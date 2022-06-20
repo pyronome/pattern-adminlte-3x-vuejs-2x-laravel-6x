@@ -50,7 +50,6 @@
                                 <div v-for="(btn,index) in filter_buttons" :key="index" v-html="btn" style="display:inline-block;">
                                 </div>                
                             </div>
-
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover table-sm">
                                     <thead>

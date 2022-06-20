@@ -242,7 +242,6 @@ export default {
         },
         loadPageVariables: function () {
             var self = this;
-
             if (self.page.is_variables_loading) {
                 return;
             }

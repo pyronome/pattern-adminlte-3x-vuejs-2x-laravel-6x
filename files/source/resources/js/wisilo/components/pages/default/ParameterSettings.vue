@@ -139,7 +139,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="form-group col-lg-12">
                                         <label for="__parent">{{ $t('Parent') }}</label>
                                         <select2-element class="select2-element item-menu"

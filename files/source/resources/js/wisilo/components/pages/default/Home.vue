@@ -1,34 +1,5 @@
 <template>
     <div class="content-wrapper">
-        <!--server-error v-if="page.has_server_error" ></server-error>
-        <permission-error v-else-if="!page.authorization.status" :authorization="page.authorization"></permission-error>
-        <div v-else>
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>{{ $t("Home") }}</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item active">{{ $t("Home") }}</li>
-                        </ol>
-                    </div>
-                    </div>
-                </div>
-            </section>
-            <section class="content">
-                <div class="container-fluid">
-                    <page-layout :pagename="pagename"></page-layout>
-                </div>
-            </section>
-        </div>
-
-        
-
-        <input type="hidden" id="controller" :value="pagename">
-        <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader-->
-
         <layout :pagename="pagename" :pagevariables="page.variables"></layout>
     </div>
 </template>

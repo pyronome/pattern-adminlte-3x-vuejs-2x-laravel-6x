@@ -31,9 +31,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <!-- <div class="form-group col-lg-12">
-                                                <h6>{{ $t("Copy Widgets") }}</h6>
-                                            </div> -->
+                                           
                                             <div class="form-group col-lg-6 col-md-6 col-xs-12">
                                                 <label for="LayoutForm_source_group_id" class="detail-label">{{  $t('Source User Group') }}  </label>
                                                 <select id="LayoutForm_source_group_id">
@@ -52,19 +50,6 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <!-- <div class="form-group col-lg-12">
-                                                <div class="input-group input-group-md">
-                                                    <input type="search"
-                                                        id="searchSourceWidget" name="searchSourceWidget"
-                                                        class="form-control float-right inputSearchBar"
-                                                        v-bind:placeholderr="$t('Search')">
-                                                    <div class="input-group-append labelSearchBar">
-                                                        <button type="button" class="btn btn-default">
-                                                            <i class="fas fa-search text-primary"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div> -->
                                             <div class="form-group col-lg-12">
                                                 <table class="table table-striped table-bordered table-hover table-sm">
                                                     <thead>
