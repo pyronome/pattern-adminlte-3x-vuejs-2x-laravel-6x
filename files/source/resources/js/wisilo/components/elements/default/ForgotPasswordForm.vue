@@ -1,7 +1,7 @@
 <template>
     <div class="login-box">
         <div class="login-logo">
-            <img :src="brand_data.logo" alt="Wisilo Logo" class="brand-login-logo img-circle elevation-3" style="opacity: .8">
+            <img :src="brand_data.logo" alt="Wisilo  Logo" class="brand-login-logo img-circle elevation-3" style="opacity: .8">
             <span class="brand-login-name font-weight-light" v-html="brand_data.name"></span>
         </div>
         <div class="card">
