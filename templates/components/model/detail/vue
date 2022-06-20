@@ -127,7 +127,7 @@ export default {
 
             self.page.is_variables_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_page_variables/" + self.pagename))
+            axios.get(WisiloHelper.getAPIURL("wisilo/get_page_variables/" + self.pagename))
                 .then(({ data }) => {
                     self.page.is_variables_loaded = true;
                     self.page.is_variables_loading = false;
@@ -139,8 +139,8 @@ export default {
                     self.page.has_server_error = true;
                     self.processLoadQueue();
                 }).finally(function() {
-                   AdminLTEHelper.initializePermissions(self.page.variables, false);
-                   self.page.authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'read');
+                   WisiloHelper.initializePermissions(self.page.variables, false);
+                   self.page.authorization = WisiloHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'read');
                    self.processLoadQueue();
                 });
         },
@@ -153,7 +153,7 @@ export default {
 			
 			var self = this;
 
-            axios.get(AdminLTEHelper.getAPIURL("{{$ __value__/__lowercase_text__}}/get/" + this.id))
+            axios.get(WisiloHelper.getAPIURL("{{$ __value__/__lowercase_text__}}/get/" + this.id))
                 .then(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
@@ -179,8 +179,8 @@ export default {
     mounted() {
         var self = this;
         self.body_loader_active = true;
-        self.main_folder = AdminLTEHelper.getMainFolder();
-        self.pagename = AdminLTEHelper.getPagename();
+        self.main_folder = WisiloHelper.getMainFolder();
+        self.pagename = WisiloHelper.getPagename();
         self.id = self.$route.params.id;
         self.processLoadQueue();
     }

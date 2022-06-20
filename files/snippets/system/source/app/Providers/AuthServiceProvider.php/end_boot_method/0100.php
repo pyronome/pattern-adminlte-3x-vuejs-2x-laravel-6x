@@ -1,7 +1,7 @@
-        Auth::shouldUse('adminlteuser');
+        Auth::shouldUse('wisilouser');
 		
 		Gate::define('isAdmin', function($user) {
-            if (0 != $user->adminlteusergroup_id) {
+            if (0 != $user->wisilousergroup_id) {
                 return $user->is_admin();
             }
             
@@ -9,7 +9,7 @@
         });
 
         Gate::guessPolicyNamesUsing(function ($modelClass) {
-            return Str::startsWith($modelClass, 'App\AdminLTE')
-                ? 'App\Policies\\' . str_replace('App\AdminLTE\\', '', $modelClass) . 'Policy'
+            return Str::startsWith($modelClass, 'App\Wisilo')
+                ? 'App\Policies\\' . str_replace('App\Wisilo\\', '', $modelClass) . 'Policy'
                 : 'App\Policies\\' . class_basename($modelClass) . 'Policy';
         });

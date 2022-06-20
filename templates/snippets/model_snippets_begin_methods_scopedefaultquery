@@ -1,5 +1,5 @@
 	public function scopeDefaultQuery($query, $search_text, $sort_variable, $sort_direction) {
-		$objectAdminLTE = new AdminLTE();
-		$query = $objectAdminLTE->getQuery($query, '{{$ __value__}}', $this::$property_list, $search_text, $sort_variable, $sort_direction);
+		$objectWisilo = new Wisilo();
+		$query = $objectWisilo->getQuery($query, '{{$ __value__}}', $this::$property_list, $search_text, $sort_variable, $sort_direction);
 		return $query;
 	}

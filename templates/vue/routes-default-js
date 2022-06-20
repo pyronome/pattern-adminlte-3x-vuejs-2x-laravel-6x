@@ -6,18 +6,18 @@ import Configuration from "./components/pages/default/Configuration.vue";
 import ParameterSettings from "./components/pages/default/ParameterSettings.vue";
 import ServerInformationPage from "./components/pages/default/ServerInformation.vue";
 import MenuConfigurationPage from "./components/pages/default/MenuConfiguration.vue";
-import AdminLTEModelDisplayTextPage from "./components/pages/default/AdminLTEModelDisplayText.vue";
-import AdminLTEUserList from "./components/pages/default/adminlteuser/list.vue";
-import AdminLTEUserEdit from "./components/pages/default/adminlteuser/edit.vue";
-import AdminLTEUserConfiguration from "./components/pages/default/adminlteuser/configuration.vue";
-import AdminLTEUserGroupList from "./components/pages/default/adminlteusergroup/list.vue";
-import AdminLTEUserGroupEdit from "./components/pages/default/adminlteusergroup/edit.vue";
-import AdminLTEUserGroupLayout from "./components/pages/default/adminlteusergroup/layout.vue";
-import AdminLTEUserParameterSettings from "./components/pages/default/adminlteusergroup/parametersettings.vue";
-import AdminLTEUserGroupConfiguration from "./components/pages/default/adminlteusergroup/configuration.vue";
+import WisiloModelDisplayTextPage from "./components/pages/default/WisiloModelDisplayText.vue";
+import WisiloUserList from "./components/pages/default/wisilouser/list.vue";
+import WisiloUserEdit from "./components/pages/default/wisilouser/edit.vue";
+import WisiloUserConfiguration from "./components/pages/default/wisilouser/configuration.vue";
+import WisiloUserGroupList from "./components/pages/default/wisilousergroup/list.vue";
+import WisiloUserGroupEdit from "./components/pages/default/wisilousergroup/edit.vue";
+import WisiloUserGroupLayout from "./components/pages/default/wisilousergroup/layout.vue";
+import WisiloUserParameterSettings from "./components/pages/default/wisilousergroup/parametersettings.vue";
+import WisiloUserGroupConfiguration from "./components/pages/default/wisilousergroup/configuration.vue";
 import Administration from "./components/pages/default/Administration.vue";
-import AdminLTELogs from "./components/pages/default/AdminLTELogs.vue";
-import AdminLTEMedia from "./components/pages/default/AdminLTEMedia.vue";
+import WisiloLogs from "./components/pages/default/WisiloLogs.vue";
+import WisiloMedia from "./components/pages/default/WisiloMedia.vue";
 {{ROUTES_MODEL_DEFAULT_IMPORT_DEFINITONS}}
 /* {{@snippet:import_files}} */
 
@@ -31,19 +31,19 @@ export default {
     "/parameter_settings": ParameterSettings,
     "/server_information": ServerInformationPage,
     "/menu_configuration": MenuConfigurationPage,
-    "/adminltemodeldisplaytext": AdminLTEModelDisplayTextPage,
-    "/adminlteuser": AdminLTEUserList,
-    "/adminlteuser/detail/:current_id": AdminLTEUserConfiguration,
-    "/adminlteuser/edit/:id": AdminLTEUserEdit,
-    "/adminlteuser/configuration/:current_id": AdminLTEUserConfiguration,
-    "/adminlteusergroup": AdminLTEUserGroupList,
-    "/adminlteusergroup/detail/:current_id": AdminLTEUserGroupConfiguration,
-    "/adminlteusergroup/edit/:id": AdminLTEUserGroupEdit,
-    "/adminlteusergroup/layout/:id": AdminLTEUserGroupLayout,
-    "/adminlteusergroup/parametersettings/:owner_group": AdminLTEUserParameterSettings,
+    "/wisilomodeldisplaytext": WisiloModelDisplayTextPage,
+    "/wisilouser": WisiloUserList,
+    "/wisilouser/detail/:current_id": WisiloUserConfiguration,
+    "/wisilouser/edit/:id": WisiloUserEdit,
+    "/wisilouser/configuration/:current_id": WisiloUserConfiguration,
+    "/wisilousergroup": WisiloUserGroupList,
+    "/wisilousergroup/detail/:current_id": WisiloUserGroupConfiguration,
+    "/wisilousergroup/edit/:id": WisiloUserGroupEdit,
+    "/wisilousergroup/layout/:id": WisiloUserGroupLayout,
+    "/wisilousergroup/parametersettings/:owner_group": WisiloUserParameterSettings,
     "/administration": Administration,
-    "/adminltelogs": AdminLTELogs,
-    "/adminlte_media": AdminLTEMedia,
+    "/wisilologs": WisiloLogs,
+    "/wisilo_media": WisiloMedia,
 {{ROUTES_MODEL_DEFAULT_EXPORT_DEFINITONS}}
 /* {{@snippet:export_files}} */
 };

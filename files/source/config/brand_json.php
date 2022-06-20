@@ -1,3 +1,3 @@
 <?php
-return '{"name": "AdminLTE 3", "logo": "/img/adminlte/AdminLTELogo.png"}';
+return '{"name": "Wisilo", "logo": "/img/wisilo/WisiloLogo.png"}';
 ?>

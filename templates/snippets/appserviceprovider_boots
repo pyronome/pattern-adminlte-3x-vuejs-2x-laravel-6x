@@ -1,5 +1,5 @@
-        AdminLTECustomVariable::observe(AdminLTECustomVariableObserver::class);
-        AdminLTEMedia::observe(AdminLTEMediaObserver::class);
-        AdminLTEUser::observe(AdminLTEUserObserver::class);
-        AdminLTEUserGroup::observe(AdminLTEUserGroupObserver::class);
+        WisiloCustomVariable::observe(WisiloCustomVariableObserver::class);
+        WisiloMedia::observe(WisiloMediaObserver::class);
+        WisiloUser::observe(WisiloUserObserver::class);
+        WisiloUserGroup::observe(WisiloUserGroupObserver::class);
 {{APPSERVICEPROVIDER_MODEL_BOOTS}}

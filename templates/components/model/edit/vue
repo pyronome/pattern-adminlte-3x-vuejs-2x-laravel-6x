@@ -127,7 +127,7 @@ export default {
                 is_data_loading: false,
                 is_data_loaded: false,
                 external_files: [
-                    ("/js/adminlte/bootstrap-switch/js/bootstrap-switch.js")
+                    ("/js/wisilo/bootstrap-switch/js/bootstrap-switch.js")
                 ],
             },
             body_loader_active: false,
@@ -190,7 +190,7 @@ export default {
 
             self.page.is_variables_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_page_variables/" + self.pagename))
+            axios.get(WisiloHelper.getAPIURL("wisilo/get_page_variables/" + self.pagename))
                 .then(({ data }) => {
                     self.page.is_variables_loaded = true;
                     self.page.is_variables_loading = false;
@@ -202,15 +202,15 @@ export default {
                     self.page.has_server_error = true;
                     self.processLoadQueue();
                 }).finally(function() {
-                   AdminLTEHelper.initializePermissions(self.page.variables, false);
+                   WisiloHelper.initializePermissions(self.page.variables, false);
 
                    let authorization = {};
                    if ("new" == self.id) {
-                       authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'create');
+                       authorization = WisiloHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'create');
                    } else {
-                       authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'read');
+                       authorization = WisiloHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'read');
                        if (authorization.status) {
-                           authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'update');
+                           authorization = WisiloHelper.isUserAuthorized(self.page.variables, self.pagename, '{{$ __value__/__lowercase_text__}}', 'update');
                        }
                    }
 
@@ -227,7 +227,7 @@ export default {
 
             this.page.is_files_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("{{$ __value__/__lowercase_text__}}/get_files/" + this.id))
+            axios.get(WisiloHelper.getAPIURL("{{$ __value__/__lowercase_text__}}/get_files/" + this.id))
                 .then(({ data }) => {
                     this.page.is_files_loaded = true;
                     this.page.is_files_loading = false;
@@ -248,7 +248,7 @@ export default {
 
             this.page.is_data_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("{{$ __value__/__lowercase_text__}}/get/" + this.id))
+            axios.get(WisiloHelper.getAPIURL("{{$ __value__/__lowercase_text__}}/get/" + this.id))
                 .then(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
@@ -267,19 +267,19 @@ export default {
 		initializePage: function () {
             var self = this;
 
-            AdminLTEHelper.initializeTextEditor();
+            WisiloHelper.initializeTextEditor();
                     
             var locationInputs = self.$el.querySelectorAll(".vue-location");
             locationInputs.forEach(locationInput => {
-                AdminLTEHelper.updateLocationPicker(locationInput);
+                WisiloHelper.updateLocationPicker(locationInput);
             });
 
             var switchInputs = self.$el.querySelectorAll(".vue-switch");
             switchInputs.forEach(switchInput => {
-                AdminLTEHelper.updateSwitch(switchInput);
+                WisiloHelper.updateSwitch(switchInput);
             });
 
-			AdminLTEHelper.initializePageFiles(self.files);
+			WisiloHelper.initializePageFiles(self.files);
 
             setTimeout(function() {
                 self.body_loader_active = false;
@@ -288,7 +288,7 @@ export default {
         submitForm: function () {
             var self = this;
             self.$Progress.start();
-            self.{{$ __value__}}Form.post(AdminLTEHelper.getAPIURL("{{$ __value__/__lowercase_text__}}/post"))
+            self.{{$ __value__}}Form.post(WisiloHelper.getAPIURL("{{$ __value__/__lowercase_text__}}/post"))
                 .then(({ data }) => {
                     self.$Progress.finish();
                     self.id = data.id;
@@ -333,11 +333,11 @@ export default {
     },
     mounted() {
         this.body_loader_active = true;
-        this.main_folder = AdminLTEHelper.getMainFolder();
-        this.pagename = AdminLTEHelper.getPagename();
+        this.main_folder = WisiloHelper.getMainFolder();
+        this.pagename = WisiloHelper.getPagename();
         this.id = this.$route.params.id;
         this.page.is_ready = false;
-        AdminLTEHelper.loadExternalFiles(this.page.external_files, this.processLoadQueue());
+        WisiloHelper.loadExternalFiles(this.page.external_files, this.processLoadQueue());
     }
 }
 </script>

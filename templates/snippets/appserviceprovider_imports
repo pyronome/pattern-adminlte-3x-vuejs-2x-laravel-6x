@@ -1,9 +1,9 @@
-use App\AdminLTE\AdminLTECustomVariable;
-use App\Observers\AdminLTECustomVariableObserver;
-use App\AdminLTE\AdminLTEMedia;
-use App\Observers\AdminLTEMediaObserver;
-use App\AdminLTE\AdminLTEUser;
-use App\Observers\AdminLTEUserObserver;
-use App\AdminLTE\AdminLTEUserGroup;
-use App\Observers\AdminLTEUserGroupObserver;
+use App\Wisilo\WisiloCustomVariable;
+use App\Observers\WisiloCustomVariableObserver;
+use App\Wisilo\WisiloMedia;
+use App\Observers\WisiloMediaObserver;
+use App\Wisilo\WisiloUser;
+use App\Observers\WisiloUserObserver;
+use App\Wisilo\WisiloUserGroup;
+use App\Observers\WisiloUserGroupObserver;
 {{APPSERVICEPROVIDER_MODEL_IMPORTS}}

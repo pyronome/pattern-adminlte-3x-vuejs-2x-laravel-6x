@@ -6,7 +6,7 @@
 
             this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading = true;
 			
-			axios.get(AdminLTEHelper.getAPIURL("adminltemodeloption/get_dropdown_option_list/{{$ ../../../name/__value__}}/{{$ ../name/__value__/__lowercase_text__}}"))
+			axios.get(WisiloHelper.getAPIURL("wisilomodeloption/get_dropdown_option_list/{{$ ../../../name/__value__}}/{{$ ../name/__value__/__lowercase_text__}}"))
                 .then(({ data }) => {
                     this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loaded = true;
                     this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading = false;
@@ -27,7 +27,7 @@
 
             this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("adminltemodeloption/get_dropdown_option_list/{{$ ../../../name/__value__}}/{{$ ../name/__value__/__lowercase_text__}}"))
+            axios.get(WisiloHelper.getAPIURL("wisilomodeloption/get_dropdown_option_list/{{$ ../../../name/__value__}}/{{$ ../name/__value__/__lowercase_text__}}"))
                 .then(({ data }) => {
                     this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loaded = true;
                     this.page.is_{{$ ../name/__value__/__lowercase_text__}}_options_loading = false;

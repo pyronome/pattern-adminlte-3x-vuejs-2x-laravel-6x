@@ -1,2 +1,2 @@
-mix.js('resources/js/adminlte/app.js', 'public/js/adminlte')
-    .sass('resources/sass/adminlte/app.scss', 'public/css/adminlte');
+mix.js('resources/js/wisilo/app.js', 'public/js/wisilo')
+    .sass('resources/sass/wisilo/app.scss', 'public/css/wisilo');

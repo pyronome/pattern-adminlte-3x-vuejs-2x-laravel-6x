@@ -1,6 +1,6 @@
 <?php
 
-use App\AdminLTE\AdminLTE;
+use App\Wisilo\Wisilo;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,46 +17,46 @@ class DatabaseSeeder extends Seeder
     {
     	/* {{@snippet:begin_run_method}} */
 
-        $this->updateAdminLTEConfigParameters();
-        $this->updateAdminLTEUserConfigParameters();
-        $this->updateAdminLTEModelMenu();
-        $this->updateAdminLTEPluginMenu();
+        $this->updateWisiloConfigParameters();
+        $this->updateWisiloUserConfigParameters();
+        $this->updateWisiloModelMenu();
+        $this->updateWisiloPluginMenu();
         $this->updateLayout();
         $this->updateCustomVariables();
 
     	/* {{@snippet:end_run_method}} */         
     }
 
-    public function updateAdminLTEConfigParameters() {
+    public function updateWisiloConfigParameters() {
         /* {{@snippet:begin_update_config_parameters_method}} */
 
         require(__DIR__ . '/ConfigParameters.php');
-        $adminLTE = new AdminLTE();
-        $adminLTE->updateAdminLTEConfig($config);
+        $wisilo = new Wisilo();
+        $wisilo->updateWisiloConfig($config);
 
         /* {{@snippet:end_update_config_parameters_method}} */
     }
 
-    public function updateAdminLTEUserConfigParameters() {
+    public function updateWisiloUserConfigParameters() {
         /* {{@snippet:begin_update_user_config_parameters_method}} */
 
         require(__DIR__ . '/UserConfigParameters.php');
-        $adminLTE = new AdminLTE();
-        $adminLTE->updateAdminLTEUserConfig($config);
+        $wisilo = new Wisilo();
+        $wisilo->updateWisiloUserConfig($config);
 
         /* {{@snippet:end_update_user_config_parameters_method}} */
     }
 
-    public function updateAdminLTEModelMenu() {
+    public function updateWisiloModelMenu() {
         $menu = [];
 
         /* {{@snippet:model_menu_definitions}} */ 
 
-        $adminLTE = new AdminLTE();
-        $adminLTE->updateAdminLTEMenu($menu);
+        $wisilo = new Wisilo();
+        $wisilo->updateWisiloMenu($menu);
     }
 
-    public function updateAdminLTEPluginMenu() {
+    public function updateWisiloPluginMenu() {
         $menu = [];
 
         /* {{@snippet:begin_plugin_menu_definitions}} */
@@ -65,13 +65,13 @@ class DatabaseSeeder extends Seeder
     }
 
     public function updateLayout() {
-		$AdminLTE = new AdminLTE();
-		$AdminLTE->setAdminLTEDefaultLayout();
+		$Wisilo = new Wisilo();
+		$Wisilo->setWisiloDefaultLayout();
     }
 
     public function updateCustomVariables() {
-		$AdminLTE = new AdminLTE();
-		$AdminLTE->setAdminLTECustomVariables();
+		$Wisilo = new Wisilo();
+		$Wisilo->setWisiloCustomVariables();
     }
 
     /* {{@snippet:end_methods}} */

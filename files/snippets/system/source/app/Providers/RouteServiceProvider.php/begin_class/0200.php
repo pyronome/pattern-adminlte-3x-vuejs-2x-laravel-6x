@@ -1,2 +1,2 @@
 
-use App\Http\Middleware\AdminLTEMiddleware;
+use App\Http\Middleware\WisiloMiddleware;

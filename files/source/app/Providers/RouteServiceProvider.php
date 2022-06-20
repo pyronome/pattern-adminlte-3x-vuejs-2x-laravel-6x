@@ -5,8 +5,8 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
-use App\AdminLTE\AdminLTE;
-use App\Http\Middleware\AdminLTEMiddleware;
+use App\Wisilo\Wisilo;
+use App\Http\Middleware\WisiloMiddleware;
 
 
 
@@ -58,7 +58,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
 
 
-        $this->mapAdminLTERoutes();
+        $this->mapWisiloRoutes();
 
     }
 
@@ -93,24 +93,24 @@ class RouteServiceProvider extends ServiceProvider
 
 
     /**
-     * Define the "adminlte" routes for the application.
+     * Define the "wisilo" routes for the application.
      *
      * These routes are typically stateless.
      *
      * @return void
      */
-    protected function mapAdminLTERoutes()
+    protected function mapWisiloRoutes()
     {
-        $adminLTEFolder = 'adminlte';
-        if (Schema::hasTable('adminlteconfigtable')) {
-            $adminLTE = new AdminLTE();
-            $adminLTEFolder =  $adminLTE->getConfigParameterValue('adminlte.generalsettings.mainfolder');
+        $wisiloFolder = 'wisilo';
+        if (Schema::hasTable('wisiloconfigtable')) {
+            $wisilo = new Wisilo();
+            $wisiloFolder =  $wisilo->getConfigParameterValue('wisilo.generalsettings.mainfolder');
         }
 
-        Route::prefix($adminLTEFolder)
-                ->middleware(['web', AdminLTEMiddleware::class])
-                ->namespace('App\Http\Controllers\AdminLTE')
-                ->group(base_path('routes/adminlte.php'));
+        Route::prefix($wisiloFolder)
+                ->middleware(['web', WisiloMiddleware::class])
+                ->namespace('App\Http\Controllers\Wisilo')
+                ->group(base_path('routes/wisilo.php'));
     }
 
 }

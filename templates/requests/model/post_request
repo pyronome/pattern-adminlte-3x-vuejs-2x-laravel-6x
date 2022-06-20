@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\AdminLTE\API;
+namespace App\Http\Requests\Wisilo\API;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\AdminLTE\AdminLTE;
-use App\AdminLTE\AdminLTEUser;
+use App\Wisilo\Wisilo;
+use App\Wisilo\WisiloUser;
 
 class {{$ __value__}}POSTRequest extends FormRequest
 {

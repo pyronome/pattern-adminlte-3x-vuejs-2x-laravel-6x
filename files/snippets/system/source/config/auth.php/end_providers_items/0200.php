@@ -1,5 +1,5 @@
 
-		'adminlteusers' => [
+		'wisilousers' => [
 			'driver' => 'eloquent',
-			'model' => App\AdminLTE\AdminLTEUser::class,
+			'model' => App\Wisilo\WisiloUser::class,
 		],

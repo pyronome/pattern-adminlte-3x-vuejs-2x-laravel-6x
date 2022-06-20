@@ -1,0 +1,12 @@
+{
+    "wisilo.project_title": "{{wisilo.project_title}}",
+    "wisilo.main_folder": "{{wisilo.main_folder}}",
+    "wisilo.landing_page": "{{wisilo.landing_page}}",
+    "wisilo.default_language": "{{wisilo.default_language}}",
+    "wisilo.timezone": "{{wisilo.timezone}}",
+    "wisilo.date_format": "{{wisilo.date_format}}",
+    "wisilo.time_format": "{{wisilo.time_format}}",
+    "wisilo.year_month_format": "{{wisilo.year_month_format}}",
+    "wisilo.number_format": "{{wisilo.number_format}}",
+    "wisilo.google_maps_api_key": "{{wisilo.google_maps_api_key}}"
+}

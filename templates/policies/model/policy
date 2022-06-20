@@ -3,8 +3,8 @@
 namespace App\Policies;
 
 use Illuminate\Support\Facades\Gate;
-use App\AdminLTE\AdminLTE;
-use App\AdminLTE\AdminLTEUser;
+use App\Wisilo\Wisilo;
+use App\Wisilo\WisiloUser;
 use App\{{$ __value__}};
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -15,10 +15,10 @@ class {{$ __value__}}Policy
     /**
      * Determine whether the user can view any {{$ __value__/__lowercase_text__}}.
      *
-     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\Wisilo\WisiloUser  $user
      * @return mixed
      */
-    public function viewAny(AdminLTEUser $user)
+    public function viewAny(WisiloUser $user)
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -26,8 +26,8 @@ class {{$ __value__}}Policy
 
         $has_permission = false;
         
-        $objectAdminLTE = new AdminLTE();
-        $menu_permissions = $objectAdminLTE->getUserMenuPermissions();
+        $objectWisilo = new Wisilo();
+        $menu_permissions = $objectWisilo->getUserMenuPermissions();
 
         if (isset($menu_permissions['{{$ __value__/__lowercase_text__}}']))
         {
@@ -40,11 +40,11 @@ class {{$ __value__}}Policy
     /**
      * Determine whether the user can view the {{$ __value__/__lowercase_text__}}.
      *
-     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\Wisilo\WisiloUser  $user
      * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
      * @return mixed
      */
-    public function view(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function view(WisiloUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -52,8 +52,8 @@ class {{$ __value__}}Policy
 
         $has_permission = false;
         
-        $objectAdminLTE = new AdminLTE();
-        $model_permissions = $objectAdminLTE->getUserModelPermissions();
+        $objectWisilo = new Wisilo();
+        $model_permissions = $objectWisilo->getUserModelPermissions();
 
         if (isset($model_permissions['{{$ __value__/__lowercase_text__}}']))
         {
@@ -67,10 +67,10 @@ class {{$ __value__}}Policy
     /**
      * Determine whether the user can create {{$ __value__/__lowercase_text__}}.
      *
-     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\Wisilo\WisiloUser  $user
      * @return mixed
      */
-    public function create(AdminLTEUser $user)
+    public function create(WisiloUser $user)
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -78,8 +78,8 @@ class {{$ __value__}}Policy
 
         $has_permission = false;
         
-        $objectAdminLTE = new AdminLTE();
-        $model_permissions = $objectAdminLTE->getUserModelPermissions();
+        $objectWisilo = new Wisilo();
+        $model_permissions = $objectWisilo->getUserModelPermissions();
 
         if (isset($model_permissions['{{$ __value__/__lowercase_text__}}']))
         {
@@ -93,11 +93,11 @@ class {{$ __value__}}Policy
     /**
      * Determine whether the user can update the {{$ __value__/__lowercase_text__}}.
      *
-     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\Wisilo\WisiloUser  $user
      * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
      * @return mixed
      */
-    public function update(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function update(WisiloUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -105,8 +105,8 @@ class {{$ __value__}}Policy
 
         $has_permission = false;
         
-        $objectAdminLTE = new AdminLTE();
-        $model_permissions = $objectAdminLTE->getUserModelPermissions();
+        $objectWisilo = new Wisilo();
+        $model_permissions = $objectWisilo->getUserModelPermissions();
 
         if (isset($model_permissions['{{$ __value__/__lowercase_text__}}']))
         {
@@ -120,11 +120,11 @@ class {{$ __value__}}Policy
     /**
      * Determine whether the user can delete the {{$ __value__/__lowercase_text__}}.
      *
-     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\Wisilo\WisiloUser  $user
      * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
      * @return mixed
      */
-    public function delete(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function delete(WisiloUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
     {
         if (Gate::allows('isAdmin')) {
             return true;
@@ -132,8 +132,8 @@ class {{$ __value__}}Policy
         
         $has_permission = false;
         
-        $objectAdminLTE = new AdminLTE();
-        $model_permissions = $objectAdminLTE->getUserModelPermissions();
+        $objectWisilo = new Wisilo();
+        $model_permissions = $objectWisilo->getUserModelPermissions();
 
         if (isset($model_permissions['{{$ __value__/__lowercase_text__}}']))
         {
@@ -147,11 +147,11 @@ class {{$ __value__}}Policy
     /**
      * Determine whether the user can restore the {{$ __value__/__lowercase_text__}}.
      *
-     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\Wisilo\WisiloUser  $user
      * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
      * @return mixed
      */
-    public function restore(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function restore(WisiloUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
     {
         //
     }
@@ -159,11 +159,11 @@ class {{$ __value__}}Policy
     /**
      * Determine whether the user can permanently delete the {{$ __value__/__lowercase_text__}}.
      *
-     * @param  \App\AdminLTE\AdminLTEUser  $user
+     * @param  \App\Wisilo\WisiloUser  $user
      * @param  \App\{{$ __value__}}  ${{$ __value__/__lowercase_text__}}
      * @return mixed
      */
-    public function forceDelete(AdminLTEUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
+    public function forceDelete(WisiloUser $user, {{$ __value__}} ${{$ __value__/__lowercase_text__}})
     {
         //
     }

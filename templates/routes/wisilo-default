@@ -1,0 +1,193 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Admin Default Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+/* {{@snippet:begin_routes}} */
+
+Route::get('/register', 'RegisterController@index');
+Route::get('/login', 'LoginController@index');
+Route::get('/logout', 'LogoutController@index');
+Route::get('/forgotpassword', 'ForgotPasswordController@index');
+Route::get('/', 'HomeController@index');
+Route::get('/home', 'HomeController@index');
+
+/* {{@snippet:end_routes}} */
+
+Route::namespace('API')
+        ->middleware(\App\Http\Middleware\WisiloAPIMiddleware::class)
+        ->prefix('api')
+        ->group(function () {
+
+    /* {{@snippet:begin_api_routes}} */
+    Route::prefix('wisilo')->group(function () {
+        Route::get('/get_page_variables/{componentName}', 'WisiloController@get_page_variables');
+        Route::get('/get_custom_variables', 'WisiloController@get_custom_variables');
+        Route::post('/post_custom_variable', 'WisiloController@post_custom_variable');
+        Route::post('/delete_custom_variable', 'WisiloController@delete_custom_variable');
+        Route::get('/get_global_parameter_options', 'WisiloController@get_global_parameter_options');
+        Route::get('/get_user_parameter_options', 'WisiloController@get_user_parameter_options');
+        Route::get('/get_custom_variable_options', 'WisiloController@get_custom_variable_options');
+        Route::get('/get_impersonation_users', 'WisiloController@get_impersonation_users');
+        Route::get('/get_impersonation_data', 'WisiloController@get_impersonation_data');
+        Route::post('/post_impersonation_data', 'WisiloController@post_impersonation_data');
+        Route::post('/remove_impersonation', 'WisiloController@remove_impersonation');
+        Route::get('/get_source_widgets/{source_group_id}', 'WisiloController@get_source_widgets');
+        Route::post('/post_copy_widgets', 'WisiloController@post_copy_widgets');
+    });
+
+    Route::prefix('__layout')->group(function () {
+        Route::get('/get_recordgraph/{pageName}/{model}', 'WisiloLayoutController@get_recordgraph');
+        Route::get('/get_layout_page_options', 'WisiloLayoutController@get_layout_page_options');
+        Route::get('/get_page_layout/{pagename}', 'WisiloLayoutController@get_page_layout');
+        Route::get('/get_widgets/{pagename}', 'WisiloLayoutController@get_widgets');
+        Route::post('/post_layout', 'WisiloLayoutController@post_layout');
+        Route::get('/get_filter_options/{pagename}', 'WisiloLayoutController@get_filter_options');
+        Route::get('/get_model_list', 'WisiloLayoutController@get_model_list');
+        Route::get('/get_model_properties/{model}', 'WisiloLayoutController@get_model_properties');
+        Route::get('/get_infobox_data/{parameters}', 'WisiloLayoutController@get_infobox_data');
+        Route::get('/get_recordlist_data/{parameters}', 'WisiloLayoutController@get_recordlist_data');
+    });
+    
+    Route::prefix('register')->group(function () {
+        Route::get('/get_brand_data', 'RegisterController@get_brand_data');
+        Route::post('/post', 'RegisterController@post');
+    });
+    
+    Route::prefix('login')->group(function () {
+        Route::get('/get_brand_data', 'LoginController@get_brand_data');
+        Route::post('/post', 'LoginController@post');
+    });
+
+    Route::post('forgotpassword', 'ForgotPasswordController@post');
+
+    Route::prefix('wisiloconfig')->group(function () {
+        Route::get('/get_json', 'WisiloConfigController@get_json');
+        Route::get('/getlist', 'WisiloConfigController@getlist');
+        Route::get('/get_recordlist', 'WisiloConfigController@get_recordlist');
+        Route::get('/download_file/{type}/{key}', 'WisiloConfigController@download');
+        Route::get('/get_parentlist', 'WisiloConfigController@get_parentlist');
+        Route::get('/get_toggle_elements_options/{id}', 'WisiloConfigController@get_toggle_elements_options');
+        Route::post('/delete', 'WisiloConfigController@delete');
+        Route::post('/post_config_data', 'WisiloConfigController@post_config_data');
+        Route::post('/post_json', 'WisiloConfigController@post_json');
+        Route::post('/validate_item', 'WisiloConfigController@validate_item');
+    });
+
+    Route::prefix('profile')->group(function () {
+        Route::get('/get', 'ProfileController@get');
+        Route::get('/get_files', 'ProfileController@get_files');
+        Route::post('/post', 'ProfileController@post');
+        Route::get('/get_config_data', 'ProfileController@get_config_data');
+        Route::post('/post_config_data', 'ProfileController@post_config_data');
+        Route::get('/download_file/{type}/{key}', 'ProfileController@download_file');
+    });
+
+    Route::prefix('server_information')->group(function () {
+        Route::get('/', 'ServerInformationController@get');
+    });
+
+	Route::prefix('preferences')->group(function () {
+        Route::get('/get', 'PreferencesController@get');
+        Route::post('/post', 'PreferencesController@post');
+    });
+
+    Route::prefix('general_settings')->group(function () {
+        Route::get('/', 'GeneralSettingsController@get');
+        Route::post('/post', 'GeneralSettingsController@post');
+        Route::get('/get_languages', 'GeneralSettingsController@get_languages');
+        Route::get('/get_timezones', 'GeneralSettingsController@get_timezones');
+        Route::get('/get_date_format_options', 'GeneralSettingsController@get_date_format_options');
+        Route::get('/get_year_month_format_options', 'GeneralSettingsController@get_year_month_format_options');
+        Route::get('/get_time_format_options', 'GeneralSettingsController@get_time_format_options');
+        Route::get('/get_number_format_options', 'GeneralSettingsController@get_number_format_options');
+    });
+	
+	Route::prefix('branding')->group(function () {
+        Route::get('/get', 'BrandingController@get');
+        Route::post('/post', 'BrandingController@post');
+    });
+
+    Route::prefix('email_server')->group(function () {
+        Route::get('/', 'EmailServerController@get');
+        Route::post('/post', 'EmailServerController@post');
+    });
+
+	Route::prefix('menu_configuration')->group(function () {
+        Route::get('/', 'MenuConfigurationController@get');
+        Route::post('/post', 'MenuConfigurationController@post');
+    });
+
+    Route::prefix('wisilousergroup')->group(function () {
+        Route::get('/get/{id}', 'WisiloUserGroupController@get');
+        Route::post('/delete', 'WisiloUserGroupController@delete');
+        Route::post('/post', 'WisiloUserGroupController@post');
+        Route::get('/get_layout_data/{id}', 'WisiloUserGroupController@get_layout_data');
+        Route::post('/post_layout_data', 'WisiloUserGroupController@post_layout_data');
+        Route::get('/get_config_data', 'WisiloUserGroupController@get_config_data');
+        Route::post('/post_config_data', 'WisiloUserGroupController@post_config_data');
+        Route::get('/download_file/{type}/{key}/{current_id}', 'WisiloUserGroupController@download_file');
+    });
+
+    Route::prefix('wisilouser')->group(function () {
+        Route::get('/get/{id}', 'WisiloUserController@get');
+        Route::get('/get_files/{id}', 'WisiloUserController@get_files');
+        Route::post('/delete', 'WisiloUserController@delete');
+        Route::post('/post', 'WisiloUserController@post');
+        Route::get('/get_config_data', 'WisiloUserController@get_config_data');
+        Route::post('/post_config_data', 'WisiloUserController@post_config_data');
+        Route::get('/download_file/{type}/{key}/{current_id}', 'WisiloUserController@download_file');
+    });
+
+    Route::prefix('wisilouserconfig')->group(function () {
+        Route::get('/get_json/{owner_group}', 'WisiloUserConfigController@get_json');
+        Route::get('/get_recordlist/{owner_group}', 'WisiloUserConfigController@get_recordlist');
+        Route::get('/download_file/{type}/{key}', 'WisiloUserConfigController@download_file');
+        Route::post('/post_json', 'WisiloUserConfigController@post_json');
+        Route::post('/validate_item', 'WisiloUserConfigController@validate_item');
+    });
+
+    Route::prefix('wisilologs')->group(function () {
+        Route::get('/get_filter_options', 'WisiloLogController@get_filter_options');
+        Route::get('/get_recordlist', 'WisiloLogController@get_recordlist');
+    });
+
+    Route::prefix('__modeldisplaytext')->group(function () {
+        Route::get('/get', 'WisiloModelDisplayTextController@get');
+        Route::get('/get_model_property_list', 'WisiloModelDisplayTextController@get_model_property_list');
+        Route::post('/post', 'WisiloModelDisplayTextController@post');
+    });
+
+    Route::prefix('__services')->group(function () {
+        Route::get('/get', 'WisiloServiceController@get');
+        Route::get('/get_directories', 'WisiloServiceController@get_directories');
+    });
+	
+	Route::prefix('wisilomedia')->group(function () {
+        Route::get('/get_recordlist', 'WisiloMediaController@get_recordlist');
+        Route::get('/get_file_select_options', 'WisiloMediaController@get_file_select_options');
+        Route::post('/post_media', 'WisiloMediaController@post_media');
+        Route::post('/post_bulkupload', 'WisiloMediaController@post_bulkupload');
+        Route::post('/delete_files', 'WisiloMediaController@delete_files');
+        Route::get('/download_file/{file_id}', 'WisiloMediaController@download_file');
+        Route::get('/get_file_contents/{idcsv}', 'WisiloMediaController@get_file_contents');
+    });
+
+	Route::prefix('wisilomodeloption')->group(function () {
+        Route::get('/get_dropdown_option_list/{model}/{property}', 'WisiloModelOptionController@get_dropdown_option_list');
+		Route::get('/get_model_option_list/{model}/{display_property}', 'WisiloModelOptionController@get_model_option_list');
+    });
+
+{{WISILO_MODEL_API_ROUTES}}
+
+/* {{@snippet:end_api_routes}} */
+
+});

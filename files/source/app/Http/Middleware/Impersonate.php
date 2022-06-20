@@ -16,7 +16,7 @@ class Impersonate
      */
     public function handle($request, Closure $next)
     {
-        $key = sha1('adminlte_impersonate');
+        $key = sha1('wisilo_impersonate');
 
         if(session()->has($key)){
             Auth::onceUsingID(session($key));

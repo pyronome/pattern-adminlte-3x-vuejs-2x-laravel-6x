@@ -1,8 +1,8 @@
 	public function seedModelOptions() {
-		$AdminLTE = new AdminLTE();
+		$Wisilo = new Wisilo();
 		$option_data_list = [];
 
 {{SNIPPET_SEED_MODEL_OPTIONS}}
 		
-		$AdminLTE->seedModelDropdownOptions($option_data_list);
+		$Wisilo->seedModelDropdownOptions($option_data_list);
     }

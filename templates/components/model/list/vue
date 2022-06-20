@@ -63,7 +63,7 @@ export default {
 
             self.page.is_variables_loading = true;
 
-            axios.get(AdminLTEHelper.getAPIURL("adminlte/get_page_variables/" + self.pagename))
+            axios.get(WisiloHelper.getAPIURL("wisilo/get_page_variables/" + self.pagename))
                 .then(({ data }) => {
                     self.page.is_variables_loaded = true;
                     self.page.is_variables_loading = false;
@@ -75,8 +75,8 @@ export default {
                     self.page.has_server_error = true;
                     self.processLoadQueue();
                 }).finally(function() {
-                   AdminLTEHelper.initializePermissions(self.page.variables, true);
-                   self.page.authorization = AdminLTEHelper.isUserAuthorized(self.page.variables, self.pagename);
+                   WisiloHelper.initializePermissions(self.page.variables, true);
+                   self.page.authorization = WisiloHelper.isUserAuthorized(self.page.variables, self.pagename);
                    self.processLoadQueue();
                 });
         }
@@ -84,8 +84,8 @@ export default {
     mounted() {
         var self = this;
 
-        self.main_folder = AdminLTEHelper.getMainFolder();
-        self.pagename = AdminLTEHelper.getPagename();
+        self.main_folder = WisiloHelper.getMainFolder();
+        self.pagename = WisiloHelper.getPagename();
         self.page.is_ready = false;
         self.processLoadQueue();
     }
