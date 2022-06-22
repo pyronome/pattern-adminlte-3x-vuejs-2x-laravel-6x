@@ -4,6 +4,7 @@ import infobox from './infobox/Main.vue';
 import recordlist from './recordlist/Main.vue';
 import youtubeVideo from './youtube/Main.vue';
 import container from './container/Main.vue';
+import productlist from './productlist/Main.vue';
 
 export default {
     "container": {
@@ -97,6 +98,24 @@ export default {
         "metadata" : {
             "youtubecode" : "",
             "width" : 560,
+        }
+    },
+    "productlist": {
+        "component": productlist,
+        "enabled": true,
+        "name": "productlist",
+        "title": "Product List",
+        "has_preview": true,
+        "grid_size": "12,12,12",
+        "icon": "",
+        "description": "",
+        "metadata" : {
+            "columns" : [],
+            "calculation_type" : "simple",
+            "function" : "",
+            "model" : "",
+            "property" : "",
+            "query" : "",
         }
     },
 };

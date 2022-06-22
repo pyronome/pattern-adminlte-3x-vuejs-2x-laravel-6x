@@ -198,52 +198,69 @@ class WisiloLayoutController extends Controller
         $current_field = array_shift($propertyParts);
 
         $current_field_multiple_selection = $this->is_field_multiple_selection($current_model, $current_field);
+        $current_field_file = $this->is_field_file($current_model, $current_field);
 
-        if (empty($propertyParts)) {
+        if ($current_field_file) {
+            $relation_table_name = strtolower($current_model) . '__filetable';
+            $final_alias_table = $relation_table_name . '_alias';
+
             $fields_SQL = $fields_SQL . ', ';
-            $fields_SQL = $fields_SQL . $function . '(' . $final_alias_table . '.' . $current_field . ') as ' . $field_alias;
-        } else {
-            $next_model = $propertyParts[0];
+            $fields_SQL = $fields_SQL . $function . '(' . $final_alias_table . '.path) as ' . $field_alias;
 
-            if ($current_field_multiple_selection) {
-                // multiple selection
-                $relation_table_name = strtolower($current_model) . '_' . strtolower($current_field);
-                $final_alias_table = $relation_table_name . '_' . strtolower($next_model) . 's';
+            if (!isset($join_alias_names[$final_alias_table])) {
+                $join_alias_names[$final_alias_table] = 1;
 
-                if (!isset($join_alias_names[$final_alias_table])) {
-                    $join_alias_names[$final_alias_table] = 1;
-    
-                    $join_SQL = $join_SQL
-                        . ' LEFT JOIN ' . $relation_table_name . ' as ' . $final_alias_table
-                        . ' on ' . $first_alias_table . '.id' . '=' . $final_alias_table . '.' . (strtolower($current_model).'_id');
-                }
-
-                $first_alias_table = $final_alias_table;
-                $nextmodel_table_name = strtolower($next_model) . 'table';
-                $final_alias_table = $relation_table_name . '_' . strtolower($next_model);
-
-                if (!isset($join_alias_names[$final_alias_table])) {
-                    $join_alias_names[$final_alias_table] = 1;
-
-                    $join_SQL = $join_SQL
-                        . ' LEFT JOIN ' . $nextmodel_table_name . ' as ' . $final_alias_table
-                        . ' on ' . $first_alias_table . '.' . (strtolower($next_model).'_id') . '=' . $final_alias_table . '.id';
-                }
-            } else {
-                // single selection
-                $nextmodel_table_name = strtolower($next_model) . 'table';
-                $final_alias_table = strtolower($current_model) . '_' . strtolower($current_field) . '_' . strtolower($next_model);
-
-                if (!isset($join_alias_names[$final_alias_table])) {
-                    $join_alias_names[$final_alias_table] = 1;
-
-                    $join_SQL = $join_SQL
-                        . ' LEFT JOIN ' . $nextmodel_table_name . ' as ' . $final_alias_table
-                        . ' on ' . $first_alias_table . '.' . $current_field . '=' . $final_alias_table . '.id';
-                }
+                $join_SQL = $join_SQL
+                    . ' LEFT JOIN ' . $relation_table_name . ' as ' . $final_alias_table
+                    . ' on ' . $first_alias_table . '.id' . '=' . $final_alias_table . '.object_id';
             }
+        } else {
+            if (empty($propertyParts)) {
+                $fields_SQL = $fields_SQL . ', ';
+                $fields_SQL = $fields_SQL . $function . '(' . $final_alias_table . '.' . $current_field . ') as ' . $field_alias;
+            } else {
+                $next_model = $propertyParts[0];
 
-            $this->setFieldsAndJoinSQL($fields_SQL, $join_SQL, $join_alias_names, $final_alias_table, $final_alias_table, $function, $propertyParts, $field_alias);
+                if ($current_field_multiple_selection) {
+                    // multiple selection
+                    $relation_table_name = strtolower($current_model) . '_' . strtolower($current_field);
+                    $final_alias_table = $relation_table_name . '_' . strtolower($next_model) . 's';
+
+                    if (!isset($join_alias_names[$final_alias_table])) {
+                        $join_alias_names[$final_alias_table] = 1;
+        
+                        $join_SQL = $join_SQL
+                            . ' LEFT JOIN ' . $relation_table_name . ' as ' . $final_alias_table
+                            . ' on ' . $first_alias_table . '.id' . '=' . $final_alias_table . '.' . (strtolower($current_model).'_id');
+                    }
+
+                    $first_alias_table = $final_alias_table;
+                    $nextmodel_table_name = strtolower($next_model) . 'table';
+                    $final_alias_table = $relation_table_name . '_' . strtolower($next_model);
+
+                    if (!isset($join_alias_names[$final_alias_table])) {
+                        $join_alias_names[$final_alias_table] = 1;
+
+                        $join_SQL = $join_SQL
+                            . ' LEFT JOIN ' . $nextmodel_table_name . ' as ' . $final_alias_table
+                            . ' on ' . $first_alias_table . '.' . (strtolower($next_model).'_id') . '=' . $final_alias_table . '.id';
+                    }
+                } else {
+                    // single selection
+                    $nextmodel_table_name = strtolower($next_model) . 'table';
+                    $final_alias_table = strtolower($current_model) . '_' . strtolower($current_field) . '_' . strtolower($next_model);
+
+                    if (!isset($join_alias_names[$final_alias_table])) {
+                        $join_alias_names[$final_alias_table] = 1;
+
+                        $join_SQL = $join_SQL
+                            . ' LEFT JOIN ' . $nextmodel_table_name . ' as ' . $final_alias_table
+                            . ' on ' . $first_alias_table . '.' . $current_field . '=' . $final_alias_table . '.id';
+                    }
+                }
+
+                $this->setFieldsAndJoinSQL($fields_SQL, $join_SQL, $join_alias_names, $final_alias_table, $final_alias_table, $function, $propertyParts, $field_alias);
+            }
         }
     }
 
@@ -254,6 +271,25 @@ class WisiloLayoutController extends Controller
         foreach ($property_list as $property_data) {
             if ($property == $property_data['name']) {
                 if ('class_selection_multiple' == $property_data['type']) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function is_field_file($model, $property) {
+        $objectWisilo = new Wisilo();
+        $property_list = $objectWisilo->getModelPropertyList($model);
+        
+        foreach ($property_list as $property_data) {
+            if ($property == $property_data['name']) {
+                if ('image' == $property_data['type']) {
+                    return true;
+                }
+
+                if ('file' == $property_data['type']) {
                     return true;
                 }
             }
@@ -1004,7 +1040,12 @@ class WisiloLayoutController extends Controller
 
             } else if ('GlobalParameters' == $textPart[0]) {
                 $__key = $textPart[1];
-                $partResult = $objectWisilo->getConfigParameterValue($__key);
+                if ($__key == '__storage_url') {
+                    $partResult = asset('storage/')/*  . '/' */;
+                } else {
+                    $partResult = $objectWisilo->getConfigParameterValue($__key);
+                }
+                
             } else if ('UserParameters' == $textPart[0]) {
                 $__key = $textPart[1];
                 $partResult = $objectWisilo->getUserConfigParameterValue($__key, 'user', $currentUser->id);

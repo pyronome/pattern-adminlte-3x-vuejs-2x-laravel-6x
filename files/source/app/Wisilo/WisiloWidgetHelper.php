@@ -231,7 +231,11 @@ class WisiloWidgetHelper
 
 				if ('GlobalParameters' == $textPart[0]) {
 					$__key = $textPart[1];
-					$partResult = $objectWisilo->getConfigParameterValue($__key);
+					if ($__key == '__storage_url') {
+						$partResult = asset('storage/')/*  . '/' */;
+					} else {
+						$partResult = $objectWisilo->getConfigParameterValue($__key);
+					}
 				} else if ('UserParameters' == $textPart[0]) {
 					$__key = $textPart[1];
 					$partResult = $objectWisilo->getUserConfigParameterValue($__key, 'user', $currentUser->id);
