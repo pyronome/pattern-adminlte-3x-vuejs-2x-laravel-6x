@@ -118,7 +118,7 @@
                         </div>
                     </div>
                 </div>
-                <dropzone upload-url="/api/media/post" style="display:none;"></dropzone>
+                <dropzone upload-url="/api/wisilomedia/post" style="display:none;"></dropzone>
 
                 <div class="container-fluid"  id="WisiloUserConfigFormContainer" style="padding-bottom:100px;">
                 </div>

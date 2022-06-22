@@ -63,19 +63,19 @@ export default {
             return;
         },
         insertOrderFieldOptions: function(guid, label) {
-            var option = {
+            var optionASC = {
                 "id": guid + "-asc",
                 "text": label + " ASC"
             };
 
-            window.__ds__order_dialog.order_fields.push(option);
+            window.__ds__order_dialog.order_fields.push(optionASC);
 
-            option = {
+            var optionDESC = {
                 "id": guid + "-desc",
                 "text": label + " DESC"
             };
 
-            window.__ds__order_dialog.order_fields.push(option);
+            window.__ds__order_dialog.order_fields.push(optionDESC);
 
             this.order_fields_options = window.__ds__order_dialog.order_fields;
         },
@@ -271,6 +271,7 @@ export default {
     mounted() {
         window.__ds__order_dialog = this;
         window.__ds__order_dialog.list = [];
+        window.__ds__order_dialog.order_fields = [];
     }
 }
 </script>

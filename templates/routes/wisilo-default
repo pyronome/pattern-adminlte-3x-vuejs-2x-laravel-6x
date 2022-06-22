@@ -172,6 +172,8 @@ Route::namespace('API')
     });
 	
 	Route::prefix('wisilomedia')->group(function () {
+        Route::get('/get', 'WisiloMediaController@get');
+        Route::post('/post', 'WisiloMediaController@post');
         Route::get('/get_recordlist', 'WisiloMediaController@get_recordlist');
         Route::get('/get_file_select_options', 'WisiloMediaController@get_file_select_options');
         Route::post('/post_media', 'WisiloMediaController@post_media');

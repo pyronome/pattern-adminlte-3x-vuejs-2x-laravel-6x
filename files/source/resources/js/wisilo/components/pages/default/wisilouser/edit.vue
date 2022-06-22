@@ -172,7 +172,7 @@
                     </div>
                 </div>
             </section>
-            <dropzone upload-url="/api/media/post" style="display:none;"></dropzone>
+            <dropzone upload-url="/api/wisilomedia/post" style="display:none;"></dropzone>
         </div>
         <input type="hidden" id="controller" value="wisilouser">
     </div>

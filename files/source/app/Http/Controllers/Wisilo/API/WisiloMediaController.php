@@ -12,6 +12,132 @@ use Storage;
 
 class WisiloMediaController extends Controller
 {
+    function get(Request $request)
+    {
+        
+        /*
+        ::must_update:: servis izinleri nasıl kontrol ediliyor ?
+        // start: check user get permission
+        $directoryName = basename(dirname(__FILE__));
+        $fileName = basename(__FILE__);
+    
+        includeLibrary('adminlte/checkUserGetPermission');
+        $permissionResult = checkUserGetPermission($directoryName, $fileName);
+    
+        if ($permissionResult['error']) {
+            $controller->errorCount = 1;
+            $controller->lastError = $permissionResult['error_msg'];
+            return false;
+        }
+        // end: check user get permission
+        */
+ 
+        $list = array();
+        
+        $parameters = $request->route()->parameters();
+
+        $model = '';
+        if (!isset($parameters['model'])) {
+            $objectHTMLDB = new HTMLDB();
+            $objectHTMLDB->list = $list;
+            $objectHTMLDB->columns = $this->columns;
+            $objectHTMLDB->printHTMLDBList();
+            return;
+        } // if (!isset($parameters['model'])) {
+            
+        $object_id = '';
+        if (!isset($parameters['object_id'])) {
+            $objectHTMLDB = new HTMLDB();
+            $objectHTMLDB->list = $list;
+            $objectHTMLDB->columns = $this->columns;
+            $objectHTMLDB->printHTMLDBList();
+            return;
+        } // if (!isset($parameters['object_id'])) {
+
+        $model = htmlspecialchars($parameters['model']);
+        $object_id = intval($parameters['object_id']);
+
+        if (0 == $object_id) {
+            $objectHTMLDB = new HTMLDB();
+            $objectHTMLDB->list = $list;
+            $objectHTMLDB->columns = $this->columns;
+            $objectHTMLDB->printHTMLDBList();
+            return;
+        } // if (0 == $object_id) {
+    
+        $tablename = strtolower($model) . "__filetable";
+        
+        $list = array();
+        $index = 0;
+    
+        try {
+            $connection = DB::connection()->getPdo();
+        } catch (PDOException $e) {
+            print($e->getMessage());
+        }
+                
+        $selectSQL = "SELECT * FROM `". $tablename . "` WHERE `object_id`=:object_id ORDER BY file_index;";
+        $objPDO = $connection->prepare($selectSQL);
+        $objPDO->bindParam(':object_id', $object_id, PDO::PARAM_INT);
+        
+        $objPDO->execute();
+        $data = $objPDO->fetchAll();
+    
+        foreach($data as $row) {
+            $list[$index]["id"] = $row["id"];
+            $list[$index]["object_property"] = $row["object_property"];
+            $list[$index]["file_name"] = $row["file_name"];
+            $list[$index]["path"] = $row["path"];
+            $list[$index]["media_type"] = $row["media_type"];
+    
+            $fileNameTokens = explode('.', $row["file_name"]);
+            $list[$index]["extension"] = strtolower(end($fileNameTokens));
+    
+            $index++;
+        }
+
+        $objectHTMLDB = new HTMLDB();
+        $objectHTMLDB->list = $list;
+        $objectHTMLDB->columns = $this->columns;
+        $objectHTMLDB->printHTMLDBList();
+        return;
+    }
+
+    public function post(MediaPOSTRequest $request)
+    {   
+        /* ::must_update:: need validation */
+
+        $target = isset($request['target'])
+            ? htmlspecialchars($request['target'])
+            : '';
+
+        $target_path = 'public/' . strtolower($target);
+
+        $media_type = isset($request['media_type'])
+            ? intval($request['media_type'])
+            : 1;
+
+
+        $file = $request->file('file');
+        $fileOriginalName = $file->getClientOriginalName();
+        $extension = $file->extension();
+
+        $fileRealName = str_replace('.' . $extension, '', $fileOriginalName);
+
+        $objectWisilo = new Wisilo();
+        $filename = $objectWisilo->convertNameToFileName($fileRealName) . '_' . time()  . '.' . $extension;
+        
+        $path = Storage::putFileAs($target_path, $file, $filename);
+
+        $real_path = str_replace('public/', '', $path);
+
+        $lastInsertedId = $objectWisilo->insertModelPropertyFile($target, $media_type, $filename, $real_path);
+
+        $lastMessage = $lastInsertedId . '#' . $filename . '#' . $real_path;
+
+        return response()->json(['lastMessage'=>$lastMessage, 'errorCount'=>0, 'lastError'=>'']);
+    }
+
     public function get_recordlist(Request $request)
     {
         $User = auth()->guard('wisilouser')->user();

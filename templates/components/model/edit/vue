@@ -91,7 +91,7 @@
                 </div>
             </section>
             <input type="hidden" id="controller" value="{{$ __value__/__lowercase_text__}}">
-            <dropzone upload-url="/api/media/post" style="display:none;"></dropzone>
+            <dropzone upload-url="/api/wisilomedia/post" style="display:none;"></dropzone>
         </div>
         <body-loader :body_loader_active="body_loader_active" class="content-wrapper bodyLoader"></body-loader>
     </div>
