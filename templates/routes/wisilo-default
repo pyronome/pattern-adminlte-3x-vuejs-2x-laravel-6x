@@ -55,6 +55,7 @@ Route::namespace('API')
         Route::get('/get_model_properties/{model}', 'WisiloLayoutController@get_model_properties');
         Route::get('/get_infobox_data/{parameters}', 'WisiloLayoutController@get_infobox_data');
         Route::get('/get_recordlist_data/{parameters}', 'WisiloLayoutController@get_recordlist_data');
+        Route::get('/get_query_result/{parameters}', 'WisiloLayoutController@get_query_result');
     });
     
     Route::prefix('register')->group(function () {

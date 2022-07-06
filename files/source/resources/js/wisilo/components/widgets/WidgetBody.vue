@@ -8,7 +8,8 @@ export default {
             {
                 props: {
                     "instance_id": this.element.instance_id,
-                    "data": this.element.data
+                    "data": this.element.data,
+                    "container_guid": this.element.container_guid
                 }
             }
         );

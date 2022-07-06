@@ -3,11 +3,13 @@
         <widget-settings-dialog :instance_id="instance_id">
             <div class="row">
                 <div class="form-group col-lg-12">
-                    <label :for="instance_id + 'css'" class="detail-label">{{ $t('CSS') }}</label>
-                    <input type="text"
-                        class="form-control "
-                        :id="instance_id + 'css'">
+                    <label :for="instance_id + 'html'" class="detail-label">
+                        HTML Content
+                        <insert-custom-variable-button :target="instance_id + 'html'"></insert-custom-variable-button>
+                    </label>
+                    <textarea class="textarea vue-editor" :id="instance_id + 'html'" rows="5"></textarea>
                 </div>
+
             </div>
         </widget-settings-dialog>
     </div>
@@ -21,13 +23,13 @@
                 var instance_id = this.instance_id;
                 var data = window.mainLayoutInstance.pageWidgets[this.instance_id].data;
                 
-                document.getElementById(instance_id + "css").value = data.content.css;
+                $(document.getElementById(instance_id + "html")).summernote("code", data.content.html);
             },
             getWidgetFormValues: function() {
                 var instance_id = this.instance_id;
 
                 return {
-                    "css" : document.getElementById(instance_id + "css").value,
+                    "html" : $(document.getElementById(instance_id + "html")).summernote("code"),
                 };
             }
         },

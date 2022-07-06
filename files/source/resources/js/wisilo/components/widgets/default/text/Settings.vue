@@ -3,10 +3,11 @@
         <widget-settings-dialog :instance_id="instance_id">
             <div class="row">
                 <div class="form-group col-lg-12">
-                    <label :for="instance_id + 'css'" class="detail-label">{{ $t('CSS') }}</label>
+                    <label :for="instance_id + 'text'" class="detail-label">{{ $t('Text') }}</label>
+                    <insert-custom-variable-button :target="instance_id + 'text'"></insert-custom-variable-button>
                     <input type="text"
                         class="form-control "
-                        :id="instance_id + 'css'">
+                        :id="instance_id + 'text'">
                 </div>
             </div>
         </widget-settings-dialog>
@@ -21,13 +22,13 @@
                 var instance_id = this.instance_id;
                 var data = window.mainLayoutInstance.pageWidgets[this.instance_id].data;
                 
-                document.getElementById(instance_id + "css").value = data.content.css;
+                document.getElementById(instance_id + "text").value = data.content.text;
             },
             getWidgetFormValues: function() {
                 var instance_id = this.instance_id;
 
                 return {
-                    "css" : document.getElementById(instance_id + "css").value,
+                    "text" : document.getElementById(instance_id + "text").value,
                 };
             }
         },

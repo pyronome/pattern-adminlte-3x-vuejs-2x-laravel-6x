@@ -128,6 +128,7 @@ export default {
 
                     let child = {
                         "instance_id": instance_id,
+                        "container_guid": "",
                         "widget": window.Widgets[widgetname],
                         "data": {
                             "instance_id": instance_id,
@@ -162,18 +163,47 @@ export default {
             var editModeActive = btn.getAttribute("on-edit-mode");
             
             if (0 == editModeActive) {
-                btn.setAttribute("on-edit-mode", 1);
+                editModeActive = 1;
+                btn.setAttribute("on-edit-mode", editModeActive);
                 $("#btnToggleEditMode").removeClass("btn-default").addClass("btn-primary");
 
                 $(".show-on-edit-mode").removeClass("d-none")
                 $(".widget-editable").addClass("widget-edit-mode")
 
             } else {
-                btn.setAttribute("on-edit-mode", 0);
+                editModeActive = 0;
+                btn.setAttribute("on-edit-mode", editModeActive);
                 $("#btnToggleEditMode").addClass("btn-default").removeClass("btn-primary");
 
                 $(".show-on-edit-mode").addClass("d-none")
                 $(".widget-editable").removeClass("widget-edit-mode")
+            }
+
+            this.setWidgetContainers(editModeActive)
+        },
+        setWidgetContainers: function(editModeActive) {
+            var active_widget_containers = [];
+            var widgetContainers = $(".widget-container-element.widget-container", document.getElementById("divWidgetContainer"));
+            var widgetContainer = null;
+            var parent_instance_id = "";
+            var widgetContainerGUID = "";
+
+            for (let index = 0; index < widgetContainers.length; index++) {
+                widgetContainer = widgetContainers[index];
+                parent_instance_id = widgetContainer.getAttribute("parent_instance_id");
+                widgetContainerGUID = widgetContainer.getAttribute("data-container-guid");
+
+                if (1 == editModeActive) {
+                    if (undefined ===active_widget_containers[parent_instance_id]) {
+                        active_widget_containers[parent_instance_id] = widgetContainerGUID;
+                    } else {
+                        $(widgetContainer).addClass("d-none");
+                        $(".widget-container.widget-editable", widgetContainer).addClass("d-none");
+                    }
+                } else {
+                    $(widgetContainer).removeClass("d-none");
+                    $(".widget-container.widget-editable", widgetContainer).removeClass("d-none");
+                }
             }
         },
         getActiveWidgets: function () {
@@ -249,9 +279,9 @@ export default {
                             showConfirmButton: false,
                             timer: 2000,
                             timerProgressBar: true,
-                            onClose: () => {
+                            /* onClose: () => {
                                 window.location.reload()
-                            }
+                            } */
                         });
                     }
                 }
@@ -262,8 +292,12 @@ export default {
             
             var widgetContainers = $(".widget-container.widget-editable:not(.widget-container-element)");
             for (let index = 0; index < widgetContainers.length; index++) {
-                let instance_id = widgetContainers[index].getAttribute("data-instance-id");
-                layoutData.push(window.mainLayoutInstance.pageWidgets[instance_id].data);
+                if (widgetContainers[index].classList.contains("d-none")) {
+                    continue;
+                } else {
+                    let instance_id = widgetContainers[index].getAttribute("data-instance-id");
+                    layoutData.push(window.mainLayoutInstance.pageWidgets[instance_id].data);
+                }
             }
 
             return layoutData;
@@ -299,6 +333,7 @@ export default {
 
                     let child = {
                         "instance_id": instance_id,
+                        "container_guid": "",
                         "widget": winWidget,
                         "data": widgetData,
                         "grid_class": self.getWidgetGridClass(widgetData.general.grid_size)
@@ -361,6 +396,7 @@ export default {
 
             var child = {
                 "instance_id": instance_id,
+                "container_guid": "",
                 "widget": winWidget,
                 "data": {
                     "instance_id": instance_id,

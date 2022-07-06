@@ -107,7 +107,7 @@ class WisiloWidgetHelper
 		}
 	}
 
-	public function calculateConditionVariablesValue($variables, $queryResult, $url_parameters, $request_parameters) {
+	public function calculateConditionVariablesValue($variables, $queryResult, $url_parameters, $request_parameters, $external_parameters) {
 		$objectWisilo = new Wisilo();
 		$currentUser = auth()->guard('wisilouser')->user();
 
@@ -137,7 +137,7 @@ class WisiloWidgetHelper
                     : $__key;
             }  else if ('CustomVariables' == $keyPart[0]) {
                 $__key = $keyPart[1];
-				$customVariableValue = $this->getCustomVariableValue($currentUser->wisilousergroup_id, $__key, $queryResult, $url_parameters, $request_parameters);
+				$customVariableValue = $this->getCustomVariableValue($currentUser->wisilousergroup_id, $__key, $queryResult, $url_parameters, $request_parameters, $external_parameters);
 				$partResult = ('' != $customVariableValue)
                     ? $customVariableValue
                     : $__key;
@@ -154,7 +154,7 @@ class WisiloWidgetHelper
 		return $variables;
 	}
 
-	public function getCustomVariableValue($wisilousergroup_id, $variableName, $queryResult, $url_parameters, $request_parameters) {
+	public function getCustomVariableValue($wisilousergroup_id, $variableName, $queryResult, $url_parameters, $request_parameters, $external_parameters) {
 		$resultValue = '';
 
 		$object = WisiloCustomVariable::where('deleted', 0)
@@ -163,7 +163,7 @@ class WisiloWidgetHelper
             ->first();
 
         if (null !== $object) {
-            $resultValue = $this->getVariableCalculatedValue($object, $queryResult, $url_parameters, $request_parameters);
+            $resultValue = $this->getVariableCalculatedValue($object, $queryResult, $url_parameters, $request_parameters, $external_parameters);
         } else {
 			$object = WisiloCustomVariable::where('deleted', 0)
 				->where('wisilousergroup_id', $wisilousergroup_id)
@@ -171,7 +171,7 @@ class WisiloWidgetHelper
 				->first();
 
 			if (null !== $object) {
-				$resultValue = $this->getVariableCalculatedValue($object, $queryResult, $url_parameters, $request_parameters);
+				$resultValue = $this->getVariableCalculatedValue($object, $queryResult, $url_parameters, $request_parameters, $external_parameters);
 			}
 		}
 
@@ -198,7 +198,7 @@ class WisiloWidgetHelper
 		return $object;
 	}
 
-	public function getVariableCalculatedValue($objCV, $queryResult, $url_parameters, $request_parameters) {
+	public function getVariableCalculatedValue($objCV, $queryResult, $url_parameters, $request_parameters, $external_parameters) {
 		$customvariable_key = 'customvariable' . $objCV->id;
 		$remember_type = $objCV->remember_type;
 		$defaultValue = $objCV->default_value;
@@ -248,6 +248,11 @@ class WisiloWidgetHelper
 					$__key = $textPart[1];
 					$partResult = isset($request_parameters[$__key]) 
 						? $request_parameters[$__key]
+						: $__key;
+				} else if ('ExternalParameters' == $textPart[0]) {
+					$__key = $textPart[1];
+					$partResult = isset($external_parameters[$__key]) 
+						? $external_parameters[$__key]
 						: $__key;
 				} else if ('QueryResultFields' == $textPart[0]) {
 					$__key = $textPart[1];
@@ -1140,9 +1145,11 @@ class WisiloWidgetHelper
 	public function convertCustomVariableNameToIdSyntax($text) {
 		$objectWisilo = new Wisilo();
         $parsed = $objectWisilo->getStringBetween($text, '{{', '}}');
+		$breakWhile = false;
 
-		while (strlen($parsed) > 0) {
+		while (!$breakWhile && (strlen($parsed) > 0)) {
             $parsedWithMustache = '{{' . $parsed . '}}';
+			$idSyntaxMasked = $parsedWithMustache;
 			$mas = '{{' . $parsed . '}}';
 			$partResult = '';
 
@@ -1161,6 +1168,10 @@ class WisiloWidgetHelper
             $text = str_replace($parsedWithMustache, $idSyntaxMasked, $text);
 			$temp_text = $text;
 			$parsed = $objectWisilo->getStringBetween($temp_text, '{{', '}}');
+
+			if (!strpos($temp_text, '{{CustomVariables')) {
+				$breakWhile = true;
+			}
 		} // while (strlen($parsed) > 0) {
 
 		$text = str_replace('#_#__#___#', '{{', $text);

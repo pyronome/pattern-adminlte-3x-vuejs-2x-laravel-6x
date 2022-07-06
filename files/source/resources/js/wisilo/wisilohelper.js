@@ -131,6 +131,7 @@ var WisiloHelper = {
             "layout_id": layoutId,
             "url_parameters": [],
             "request_parameters": {},
+            "external_parameters": {},
             "custom_variables": window.__custom_variables.values
         };
 
@@ -141,7 +142,14 @@ var WisiloHelper = {
         var urlSearchParams = new URLSearchParams(window.location.search);
         widgetParameter.request_parameters = Object.fromEntries(urlSearchParams.entries());
 
-        return btoa(JSON.stringify(widgetParameter));
+        // external_parameters
+        if ("" != container_guid && undefined !== window.mainLayoutInstance.widgetContainers[container_guid].external_data) {
+            widgetParameter.external_parameters = window.mainLayoutInstance.widgetContainers[container_guid].external_data;
+        }
+
+        return btoa(unescape(encodeURIComponent(JSON.stringify(widgetParameter))));
+        
+        /* return btoa(JSON.stringify(widgetParameter)); */
     },
     "getLandingPage": function () {
         if (document.body.getAttribute("data-landing-page")) {

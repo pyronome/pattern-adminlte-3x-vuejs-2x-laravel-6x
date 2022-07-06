@@ -15,6 +15,7 @@ use App\Wisilo\WisiloCustomVariableValue;
 use App\Wisilo\WisiloConfig;
 use App\Wisilo\WisiloUserConfig;
 use App\Wisilo\WisiloLayout;
+use App\Wisilo\WisiloWidgetHelper;
 
 class WisiloController extends Controller
 {
@@ -120,6 +121,7 @@ class WisiloController extends Controller
 		$defaultValue = $objCV->default_value;
 		$variableValue = $defaultValue;
 		$remember = (1 == $objCV->remember);
+        $foundValue = false;
 
         if ($remember) {
             if ('session' == $remember_type) {
@@ -135,6 +137,18 @@ class WisiloController extends Controller
                 if (null !== $object) {
                     $variableValue = $object->value;
                 }
+            }
+        }
+
+        if (!$foundValue) {
+            $objectWisiloWidgetHelper = new WisiloWidgetHelper();
+
+            if (false !== strpos($defaultValue, '{{GlobalParameters')) {
+                $variableValue = $objectWisiloWidgetHelper->getVariableCalculatedValue($objCV, [], [], [], []);
+            } else if (false !== strpos($defaultValue, '{{UserParameters')) {
+                $variableValue = $objectWisiloWidgetHelper->getVariableCalculatedValue($objCV, [], [], [], []);
+            } else if (false !== strpos($defaultValue, '{{CurrentUser')) {
+                $variableValue = $objectWisiloWidgetHelper->getVariableCalculatedValue($objCV, [], [], [], []);
             }
         }
 

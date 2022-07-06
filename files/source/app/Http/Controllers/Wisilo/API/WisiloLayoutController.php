@@ -12,6 +12,8 @@ use App\Wisilo\WisiloLayout;
 use App\Wisilo\WisiloUser;
 use App\Wisilo\WisiloUserGroup;
 use App\Wisilo\WisiloUserLayout;
+use App\Wisilo\WisiloCustomVariable;
+use App\Wisilo\WisiloCustomVariableValue;
 use App\Wisilo\WisiloWidgetHelper;
 use App\Http\Requests\Wisilo\API\WisiloLayoutPOSTRequest;
 
@@ -609,19 +611,69 @@ class WisiloLayoutController extends Controller
         $data = $objPDO->fetchAll();
 
         if (isset($data)) {
+            $last_row_index = count($data) - 1;
+
             foreach ($data as $index => $row_data) {
                 foreach ($fields as $field_data) {
-                    $variable_name = 'customvariable' . $field_data['customvariable'];
+                    $customVariableId = $field_data['customvariable'];
+                    $variable_name = 'customvariable' . $customVariableId;
                     $column_name = $field_data['field'];
 
                     $calculationResult[$index][$variable_name] = isset($row_data[$column_name])
                         ? $row_data[$column_name]
                         : '';
+
+                    if ($last_row_index == $index) {
+                        $this->setCustomVariableLastValue($customVariableId, $calculationResult[$index][$variable_name]);
+                    }
                 }
+
+                $calculationResult[$index]['id'] = isset($row_data['id'])
+                        ? $row_data['id']
+                        : $index;
             }
         }
 
         return array($calculationResult, $data_pagination);
+    }
+
+    public function setCustomVariableLastValue($customVariableId, $variableValue) {
+        $customvariable_key = 'customvariable' . $customVariableId;
+        $remember = false;
+        $remember_type = '';
+
+        $objectVariable = WisiloCustomVariable::where('deleted', 0)
+            ->where('id', $customVariableId)
+            ->first();
+
+        if (null !== $objectVariable) {
+            $remember = true;
+            $remember_type = $objectVariable->remember_type;
+        }
+
+        if ($remember) {
+            if ('session' == $remember_type) {
+                session()->put($customvariable_key, $variableValue);
+            } else if ('database' == $remember_type) {
+                $object = WisiloCustomVariableValue::where('deleted', 0)
+                    ->where('customvariable_id', $objectVariable->id)
+                    ->where('wisilousergroup_id', $objectVariable->wisilousergroup_id)
+                    ->first();
+    
+                if (null !== $object) {
+                    $object->value = $variableValue;
+                    $object->save();
+                } else {
+                    $object = new WisiloCustomVariableValue();
+                    $object->customvariable_id = $objectVariable->id;
+                    $object->wisilousergroup_id = $objectVariable->wisilousergroup_id;
+                    $object->value = $variableValue;
+                    $object->save();
+                }
+            }
+        }
+
+        return;
     }
 
     public function get_infobox_data(Request $request)
@@ -643,6 +695,7 @@ class WisiloLayoutController extends Controller
         $layoutId = $widgetParameters['layout_id'];
         $url_parameters = $widgetParameters['url_parameters'];
         $request_parameters = $widgetParameters['request_parameters'];
+        $external_parameters = isset($widgetParameters['external_parameters']) ? $widgetParameters['external_parameters'] : [];
         $custom_variables = $widgetParameters['custom_variables'];
 
         $objectLayout = WisiloLayout::where('id', $layoutId)->first();
@@ -657,7 +710,7 @@ class WisiloLayoutController extends Controller
 
             if ('simple' == $data_source['calculation_type']) {
                 $meta_data = $data_source['meta_data'];
-                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters, $custom_variables);
+                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters, $external_parameters, $custom_variables);
                 /* list($queryResult, $data_pagination) = $this->get_queryresult_by_simple_calculation($query); */
                 list($queryResult, $data_pagination) = $this->get_queryresult_by_simple_calculation($query);
                 $data_pagination['show_pagination'] = isset($metaData['show_pagination']) ? intval($metaData['show_pagination']) : 0;
@@ -665,7 +718,7 @@ class WisiloLayoutController extends Controller
             } else if ('advanced' == $data_source['calculation_type']) {
                 $meta_data = $data_source['meta_data'];
                 $query = $objectWisiloWidgetHelper->convertCustomVariableNameToIdSyntax($meta_data['query']);
-                $query = $this->getParsedValue($query, '', $url_parameters, $request_parameters, $custom_variables);
+                $query = $this->getParsedValue($query, '', $url_parameters, $request_parameters, $external_parameters, $custom_variables);
                 $fields = isset($meta_data['fields']) ? $meta_data['fields'] : [];
                 /* $queryResult = $this->get_queryresult_by_advanced_calculation($query, $fields); */
                 list($queryResult, $data_pagination) = $this->get_queryresult_by_advanced_calculation($query, $fields);
@@ -684,7 +737,7 @@ class WisiloLayoutController extends Controller
                 }
 
                 foreach ($metaData as $key => $value) {
-                    $infobox_data[$key] = $this->getParsedValue($value, $row, $url_parameters, $request_parameters, $custom_variables);
+                    $infobox_data[$key] = $this->getParsedValue($value, $row, $url_parameters, $request_parameters, $external_parameters, $custom_variables);
                 }
 
                 foreach ($conditionalData as $conditionData) {
@@ -697,7 +750,7 @@ class WisiloLayoutController extends Controller
                     if ($conditionResultData['success']) {
                         $conditionalFields = $conditionResultData['data'];
                         foreach ($conditionalFields as $index => $fieldData) {
-                            $infobox_data[$fieldData->id] = $this->getParsedValue($fieldData->value, $queryResult, $url_parameters, $request_parameters, $custom_variables);
+                            $infobox_data[$fieldData->id] = $this->getParsedValue($fieldData->value, $queryResult, $url_parameters, $request_parameters, $external_parameters, $custom_variables);
                         }
                     }
                 }
@@ -744,6 +797,7 @@ class WisiloLayoutController extends Controller
         $layoutId = $widgetParameters['layout_id'];
         $url_parameters = $widgetParameters['url_parameters'];
         $request_parameters = $widgetParameters['request_parameters'];
+        $external_parameters = isset($widgetParameters['external_parameters']) ? $widgetParameters['external_parameters'] : [];
         $custom_variables = $widgetParameters['custom_variables'];
 
         $objectLayout = WisiloLayout::where('id', $layoutId)->first();
@@ -762,21 +816,22 @@ class WisiloLayoutController extends Controller
 
             if ('simple' == $data_source['calculation_type']) {
                 $meta_data = $data_source['meta_data'];
-                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters, $custom_variables);
+                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters, $external_parameters, $custom_variables);
                 /* $queryResult = $this->get_queryresult_by_simple_calculation($query); */
                 list($queryResult, $data_pagination) = $this->get_queryresult_by_simple_calculation($query);
                 $data_pagination['show_pagination'] = isset($metaData['show_pagination']) ? intval($metaData['show_pagination']) : 0;
             } else if ('advanced' == $data_source['calculation_type']) {
                 $meta_data = $data_source['meta_data'];
                 $query = $objectWisiloWidgetHelper->convertCustomVariableNameToIdSyntax($meta_data['query']);
-                $query = $this->getParsedValue($query, '', $url_parameters, $request_parameters, $custom_variables);
+                $query = $this->getParsedValue($query, '', $url_parameters, $request_parameters, $external_parameters, $custom_variables);
+
                 $fields = isset($meta_data['fields']) ? $meta_data['fields'] : [];
                 /* $queryResult = $this->get_queryresult_by_advanced_calculation($query, $fields); */
                 list($queryResult, $data_pagination) = $this->get_queryresult_by_advanced_calculation($query, $fields);
                 $data_pagination['show_pagination'] = isset($metaData['show_pagination']) ? intval($metaData['show_pagination']) : 0;
             }
 
-            $record_list_title = $this->getParsedValue($metaData['record_list_title'], $queryResult, $url_parameters, $request_parameters, $custom_variables);
+            $record_list_title = $this->getParsedValue($metaData['record_list_title'], $queryResult, $url_parameters, $request_parameters, $external_parameters, $custom_variables);
 
             $columns = $metaData['columns'];
             $index = 0;
@@ -801,7 +856,7 @@ class WisiloLayoutController extends Controller
 
             foreach ($queryResult as $row) {
                 $list[$index] = [];
-                /* $list[$index]['id'] = $row['id']; */
+                $list[$index]['id'] = $row['id'];
                 $list[$index]['displaytexts'] = [];
                 $list[$index]['styles'] = [];
 
@@ -812,12 +867,12 @@ class WisiloLayoutController extends Controller
                 }
                 
                 foreach ($column_titles as $title_index => $column_title) {
-                    $column_titles[$title_index] = $this->getParsedValue($column_title, $row, $url_parameters, $request_parameters, $custom_variables);
+                    $column_titles[$title_index] = $this->getParsedValue($column_title, $row, $url_parameters, $request_parameters, $external_parameters, $custom_variables);
                 }
 
                 foreach ($column_variables as $column_name) {
                     $objectColumn = $visible_columns[$column_name];
-                    $list[$index]['displaytexts'][] = $this->getParsedValue($objectColumn->value, $row, $url_parameters, $request_parameters, $custom_variables);
+                    $list[$index]['displaytexts'][] = $this->getParsedValue($objectColumn->value, $row, $url_parameters, $request_parameters, $external_parameters, $custom_variables);
                     $list[$index]['styles'][] = $objectColumn->style;
                 }
 
@@ -833,7 +888,7 @@ class WisiloLayoutController extends Controller
     
                         foreach ($conditionalFields as $fieldData) {
                             if ('record_list_title' == $fieldData->id) {
-                                $record_list_title = $this->getParsedValue($fieldData->value, $row, $url_parameters, $request_parameters, $custom_variables);
+                                $record_list_title = $this->getParsedValue($fieldData->value, $row, $url_parameters, $request_parameters, $external_parameters, $custom_variables);
                             } else if ('array' == $fieldData->type) {
                                 $list[$index]['displaytexts'] = [];
                                 $list[$index]['styles'] = [];
@@ -843,7 +898,7 @@ class WisiloLayoutController extends Controller
                                 foreach ($columns as $column) {
                                     $column_name = $column->name;
                                     if (isset($visible_columns[$column_name])) {
-                                        $list[$index]['displaytexts'][] = $this->getParsedValue($column->value, $row, $url_parameters, $request_parameters, $custom_variables);
+                                        $list[$index]['displaytexts'][] = $this->getParsedValue($column->value, $row, $url_parameters, $request_parameters, $external_parameters, $custom_variables);
                                         $list[$index]['styles'][] = $column->style;
                                     }
                                 }
@@ -912,6 +967,92 @@ class WisiloLayoutController extends Controller
         }
         
         return $variables;
+    }
+
+    public function get_query_result(Request $request)
+    {
+        $data_pagination = [
+            'current_page' => 0,
+            'last_page' => 0,
+            'per_page' => 0,
+            'from' => 0,
+            'to' => 0,
+            'total' => 0,
+            'next_page_url' => '',
+            'prev_page_url' => '',
+            'show_pagination' => false,
+        ];
+
+        $dependant_customvariables = [];
+
+        $parameters = $request->route()->parameters();
+
+        $widgetParametersEncoded = isset($parameters['parameters'])
+                ? htmlspecialchars($parameters['parameters'])
+                : '';
+
+        $objectWisiloWidgetHelper = new WisiloWidgetHelper();
+        $widgetParameters = json_decode(base64_decode($widgetParametersEncoded), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+
+        if (!isset($widgetParameters['layout_id'])) {
+            return [];
+        }/* echo '<div style="display:block">';
+        echo '<pre>';
+        print_r($widgetParameters);
+        echo '</pre>';
+        echo '</div>';
+        die(); */
+        
+
+        $layoutId = $widgetParameters['layout_id'];
+        $url_parameters = $widgetParameters['url_parameters'];
+        $request_parameters = $widgetParameters['request_parameters'];
+        $external_parameters = isset($widgetParameters['external_parameters']) ? $widgetParameters['external_parameters'] : [];
+        $custom_variables = $widgetParameters['custom_variables'];
+
+        $objectLayout = WisiloLayout::where('id', $layoutId)->first();
+
+        $record_list_title = '';
+        $column_titles = [];
+        $column_variables = [];
+        $visible_columns = [];
+        $list = [];
+
+        if (null !== $objectLayout) {
+            $dependant_customvariables = $this->getDependantVariables($objectLayout);
+
+            $metaData = json_decode($objectLayout->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $data_source = json_decode($objectLayout->data_source_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+
+            if ('simple' == $data_source['calculation_type']) {
+                $meta_data = $data_source['meta_data'];
+                $query = $this->getParsedValue($meta_data['query'], '', $url_parameters, $request_parameters, $external_parameters, $custom_variables);
+                /* echo $query;
+                die(); */
+                /* $queryResult = $this->get_queryresult_by_simple_calculation($query); */
+                list($queryResult, $data_pagination) = $this->get_queryresult_by_simple_calculation($query);
+                $data_pagination['show_pagination'] = isset($metaData['show_pagination']) ? intval($metaData['show_pagination']) : 0;
+            } else if ('advanced' == $data_source['calculation_type']) {
+                $meta_data = $data_source['meta_data'];
+                $query = $objectWisiloWidgetHelper->convertCustomVariableNameToIdSyntax($meta_data['query']);
+                $query = $this->getParsedValue($query, '', $url_parameters, $request_parameters, $external_parameters, $custom_variables);
+
+                $fields = isset($meta_data['fields']) ? $meta_data['fields'] : [];
+                /* $queryResult = $this->get_queryresult_by_advanced_calculation($query, $fields); */
+                list($queryResult, $data_pagination) = $this->get_queryresult_by_advanced_calculation($query, $fields);
+                $data_pagination['show_pagination'] = isset($metaData['show_pagination']) ? intval($metaData['show_pagination']) : 0;
+            }
+
+            foreach ($queryResult as $index => $row) {
+                $list[$index] = $row;
+            } // foreach ($queryResult as $index => $row) {
+        }
+
+        return [
+            'list' => $list,
+            'data_pagination' => $data_pagination,
+            'dependant_customvariables' => $dependant_customvariables
+        ];
     }
 
     public function get_recordgraph(Request $request)
@@ -1005,7 +1146,7 @@ class WisiloLayoutController extends Controller
         ];
     }
 
-    public function getParsedValue($display_text, $queryResult, $url_parameters, $request_parameters, $custom_variables)
+    public function getParsedValue($display_text, $queryResult, $url_parameters, $request_parameters, $external_parameters, $custom_variables)
     {
         $currentUser = auth()->guard('wisilouser')->user();
         $objectWisiloWidgetHelper = new WisiloWidgetHelper();
@@ -1031,6 +1172,7 @@ class WisiloLayoutController extends Controller
                         $queryResult, 
                         $url_parameters, 
                         $request_parameters,
+                        $external_parameters,
                         $custom_variables
                 );
                 
@@ -1058,6 +1200,11 @@ class WisiloLayoutController extends Controller
                 $__key = $textPart[1];
                 $partResult = isset($request_parameters[$__key]) 
                     ? $request_parameters[$__key]
+                    : $__key;
+            } else if ('ExternalParameters' == $textPart[0]) {
+                $__key = $textPart[1];
+                $partResult = isset($external_parameters[$__key]) 
+                    ? $external_parameters[$__key]
                     : $__key;
             } else if ('QueryResultFields' == $textPart[0]) {
                 $__key = $textPart[1];

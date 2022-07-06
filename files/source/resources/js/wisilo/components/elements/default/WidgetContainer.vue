@@ -1,9 +1,10 @@
 <template>
-    <div :id="this.container_guid" 
+    <div :id="container_guid" 
         :class="'widget-container-element widget-container widget-editable ' + container_class" 
         :style="container_css" 
         :parent_instance_id="parent_instance_id"
-        :data-container-guid="this.container_guid">
+        :data-container-guid="container_guid"
+        :container-index="container_index">
         <div class="widget-main-container">
             <div class="widget-header widget-editable">
                 <div class="widget-header-wrapper" :parent_instance_id="parent_instance_id">
@@ -17,27 +18,26 @@
                 </div>
             </div>
             <div class="widget-body">
-                <section class="container-fluid mt-3">
-                    <div class="row divContainerContainer" :id="'container-' + container_guid">
-                        <div v-for="(pageWidget, index) in pageWidgets" :key="index" 
-                            :class="'widget-container ' + widget_admin_class + ' ' + pageWidget.grid_class" 
-                            :id="'container-' + pageWidget.instance_id"
-                            :data-instance-id="pageWidget.instance_id">
-                            <div class="widget-main-container">
-                                <div :class="'widget-header ' + widget_admin_class">
-                                    <widget-header 
-                                        :instance_id="pageWidget.instance_id" 
-                                        :data="pageWidget.data"
-                                        :parent_instance_id="pageWidget.data.parent_instance_id">
-                                    </widget-header>
-                                </div>
-                                <div class="widget-body">
-                                    <widget-body :element="pageWidget"></widget-body>
-                                </div>
+                <div class="row divContainerContainer" :id="'container-' + container_guid">
+                    <div v-for="(pageWidget, index) in pageWidgets" :key="index" 
+                        :class="'widget-container ' + widget_admin_class + ' ' + pageWidget.grid_class" 
+                        :id="'container-' + pageWidget.instance_id"
+                        :data-instance-id="pageWidget.instance_id"
+                        :data-container-guid="container_guid">
+                        <div class="widget-main-container">
+                            <div :class="'widget-header ' + widget_admin_class">
+                                <widget-header 
+                                    :instance_id="pageWidget.instance_id" 
+                                    :data="pageWidget.data"
+                                    :parent_instance_id="pageWidget.data.parent_instance_id">
+                                </widget-header>
+                            </div>
+                            <div class="widget-body">
+                                <widget-body :element="pageWidget"></widget-body>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
             </div>
         </div>
     </div>
@@ -69,23 +69,7 @@ export default {
             container_index: 0,
         };
     },
-    props: ["pagename", "parent_instance_id", "container_title", "container_class", "container_css"],
-    watch: {
-        pagename: function (pagename) {
-            var self = this;
-
-            if (undefined === pagename || 0 == parseInt(pagename)) {
-                return;
-            }
-            
-            self.layoutForm.pagename = pagename;
-            self.body_loader_active = true;
-            self.main_folder = WisiloHelper.getMainFolder();
-            self.page.is_ready = false;
-            self.processLoadQueue();
-        }
-    },
-    
+    props: ["pagename", "parent_instance_id", "container_title", "container_class", "container_css", "external_data", "repeater"],   
     methods: {
         processLoadQueue: function () {
             var self = this;
@@ -130,12 +114,13 @@ export default {
 
                     let child = {
                         "instance_id": instance_id,
+                        "container_guid": self.container_guid,
                         "widget": window.Widgets[widgetname],
                         "data": {
                             "instance_id": instance_id,
                             "parent_instance_id": self.parent_instance_id,
                             "container_index": self.container_index,
-                            "container_title": self.container_title,
+                            "container_title": "",
                             "general": activeWidget,
                             "content": JSON.parse(activeWidget["meta_data_json"]),
                             "data_source": ("" == activeWidget["data_source_json"]) ? [] : JSON.parse(activeWidget["data_source_json"]),
@@ -168,8 +153,17 @@ export default {
                 return;
             }
 
+            if (0 == self.pagename) {
+                console.log("pagename 0 return")
+                return
+            }
 
-            self.container_index = self.findContainerIndex();
+            if (self.repeater) {
+                self.container_index = 0;
+            } else {
+                self.container_index = self.findContainerIndex();
+            }
+            
             self.container_id = (self.pagename + "-" + self.container_index);
 
             self.page.is_active_widgets_loading = true;
@@ -249,6 +243,7 @@ export default {
 
                     let child = {
                         "instance_id": instance_id,
+                        "container_guid": self.container_guid,
                         /* "parent_instance_id": self.parent_instance_id, */
                         "widget": winWidget,
                         "data": widgetData,
@@ -295,6 +290,7 @@ export default {
 
             var child = {
                 "instance_id": instance_id,
+                "container_guid": self.container_guid,
                 "widget": winWidget,
                 "data": {
                     "instance_id": instance_id,
@@ -371,9 +367,12 @@ export default {
     mounted() {
         if (1 == document.getElementById("is_current_user_admin").value) {
             this.widget_admin_class = "widget-editable";
+            this.container_index = this.findContainerIndex();
         }
 
         window.mainLayoutInstance.widgetContainers[this.container_guid] = this;
+
+        this.processLoadQueue();
     }
 }
 </script>

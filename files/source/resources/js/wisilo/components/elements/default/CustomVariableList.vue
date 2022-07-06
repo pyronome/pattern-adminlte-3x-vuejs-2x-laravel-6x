@@ -697,12 +697,15 @@ export default {
 
             return parseInt(custom_variableId);
         },
-        setValue: function(custom_variableId, value) {
+        setValue: function(custom_variableId, value, silent = false) {
             var self = this;
 
             if (0 != custom_variableId) {
                 window.__custom_variables.values[custom_variableId] = value;
-                self.refreshDependantWidgets(custom_variableId);
+
+                if (!silent) {
+                    self.refreshDependantWidgets(custom_variableId);
+                }
             }
         },
         registerWidgetCustomVariableDependancy: function(dependant_customvariables, instance_id) {
@@ -739,6 +742,111 @@ export default {
                     }
                 }
             }
+        },
+        setCustomVariableValues: function(instance_id, callback) {
+            var self = this;
+
+            if (document.getElementById("container-" + instance_id)) {
+                var widgetContainer = document.getElementById("container-" + instance_id);
+                if (widgetContainer.hasAttribute("data-container-guid")) {
+                    var container_guid = widgetContainer.getAttribute("data-container-guid");
+
+                    if ("" != container_guid) {
+                        var external_data = window.mainLayoutInstance.widgetContainers[container_guid].external_data;
+                        if (Object.keys(external_data).length > 0) {
+                            window.__custom_variables.setCustomVariableValues(external_data);
+                        }
+
+                        for (const key in external_data) {
+                            if (key.includes("customvariable")) {
+                                if (external_data.hasOwnProperty.call(external_data, key)) {
+                                    const value = external_data[key];
+                                    const custom_variableId = key.replace("customvariable", "");
+                                    self.setValue(custom_variableId, value, true);
+                                }   
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (undefined !== callback) {
+                callback();
+            }
+        },
+        replaceCustomVariables: function(expression) {
+            var self = this;
+            var returnValue;
+            var tokens = String(expression).split("{{");
+            var subTokens = null;
+            var content = "";
+            var tokenCount = 0;
+            var customVariableName = "";
+            var customVariableId = 0;
+            var text = "";
+            var position = 0;
+
+            if (tokens.length <= 1) {
+                return expression;
+            }
+
+            tokenCount = tokens.length;
+            var value = "";
+
+            for (var i = 1; (i < tokenCount); i++) {
+                content = tokens[i];
+                position = 1;
+
+                while (("}" != content[position - 1])
+                        && ("}" != content[position])) {
+                    position++;
+                }
+
+                subTokens = (String(content).substr(0, (position))).split("/");
+
+                if (subTokens.length > 1) {
+                    if ("CustomVariables" == subTokens[0]) {
+                        customVariableName = subTokens[1];
+                        customVariableId = self.getCustomVariableIdByName(customVariableName);
+                        if (0 != customVariableId) {
+                            value = window.__custom_variables.values[customVariableId];
+                        }
+                    }
+                }
+
+                /* if (object[column] !== undefined) {
+                    value = object[column];
+                } else {
+                    value = ("{{" + column + "}}");
+                } */
+
+                text = String(content).substr(position + 2);
+                text = String(text).replace(/(?:\r\n|\r|\n)/g, "");
+
+                content = (value + text);
+
+                tokens[i] = content;
+            }
+
+            if (tokens.length > 1) {
+                returnValue = tokens.join("");
+            }
+
+            return returnValue;           
+        },
+        getCustomVariableIdByName: function(customVariableName) {
+            var customVariableId = 0;
+            var length = window.__custom_variables.list.length;
+
+            for (let index = 0; index < length; index++) {
+                const element = window.__custom_variables.list[index];
+                if (customVariableName == element.name) {
+                    customVariableId = element.id;
+                    break;
+                }
+            }
+
+            return customVariableId;
         },
         // Insert Variable
         showInsertVariableDialog: function() {

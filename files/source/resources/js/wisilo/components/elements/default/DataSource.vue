@@ -311,6 +311,8 @@ export default {
                         }
                     }
                 }
+
+                document.getElementById("__ds__orders__buttonSave").setAttribute("data-instance-id", this.instance_id);
             },
             getValues: function() {
                 var instance_id = this.instance_id;
@@ -362,7 +364,6 @@ export default {
                 $("#__ds__order_dialog").modal();
             },
             setOrderFields: function(order_fields) {
-                document.getElementById("__ds__orders__buttonSave").setAttribute("data-instance-id", this.instance_id);
                 window.__ds__order_dialog.setOrderFields(this.instance_id, order_fields);
             },
             collectOrderFieldsData: function() {

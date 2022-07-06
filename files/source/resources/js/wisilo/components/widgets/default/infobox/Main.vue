@@ -36,7 +36,7 @@
                 this.data = window.mainLayoutInstance.pageWidgets[this.instance_id].data;
             },
             loadData: function () {
-                var parameters = WisiloHelper.getWidgetParameter(this.data.general.id);
+                var parameters = WisiloHelper.getWidgetParameter(this.data.general.id, "");
                 axios.get(WisiloHelper.getAPIURL("__layout/get_infobox_data/" + parameters))
                     .then(({ data }) => {
                         if (data) {

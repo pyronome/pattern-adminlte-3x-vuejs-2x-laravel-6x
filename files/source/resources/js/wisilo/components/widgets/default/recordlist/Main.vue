@@ -91,7 +91,7 @@
             loadData: function (callback) {
                 var self = this;
 
-                var parameters = WisiloHelper.getWidgetParameter(self.data.general.id);
+                var parameters = WisiloHelper.getWidgetParameter(self.data.general.id, "");
                 axios.get(WisiloHelper.getAPIURL("__layout/get_recordlist_data/" + parameters))
                     .then(({ data }) => {
                         if (data) {
@@ -166,9 +166,13 @@
         mounted() {
             var self = this;
 
-            self.loadData(
-                function() {
-                    self.registerWidgetCustomVariableDependancy();
+            window.__custom_variables.setCustomVariableValues(self.instance_id, 
+                function () {
+                    self.loadData(
+                        function() {
+                            self.registerWidgetCustomVariableDependancy();
+                        }
+                    );
                 }
             );
 

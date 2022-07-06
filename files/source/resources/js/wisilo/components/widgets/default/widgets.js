@@ -4,7 +4,9 @@ import infobox from './infobox/Main.vue';
 import recordlist from './recordlist/Main.vue';
 import youtubeVideo from './youtube/Main.vue';
 import container from './container/Main.vue';
-import productlist from './productlist/Main.vue';
+import repeater from './repeater/Main.vue';
+import text from './text/Main.vue';
+import html from './html/Main.vue';
 
 export default {
     "container": {
@@ -100,22 +102,43 @@ export default {
             "width" : 560,
         }
     },
-    "productlist": {
-        "component": productlist,
+    "repeater": {
+        "component": repeater,
         "enabled": true,
-        "name": "productlist",
-        "title": "Product List",
-        "has_preview": true,
+        "name": "repeater",
+        "title": "Repeater",
+        "has_preview": false,
         "grid_size": "12,12,12",
         "icon": "",
         "description": "",
         "metadata" : {
-            "columns" : [],
-            "calculation_type" : "simple",
-            "function" : "",
-            "model" : "",
-            "property" : "",
-            "query" : "",
+            "css" : "",
+        }
+    },
+    "text": {
+        "component": text,
+        "enabled": true,
+        "name": "text",
+        "title": "text",
+        "has_preview": false,
+        "grid_size": "12,12,12",
+        "icon": "",
+        "description": "",
+        "metadata" : {
+            "text" : "",
+        }
+    },
+    "html": {
+        "component": html,
+        "enabled": true,
+        "name": "html",
+        "title": "html",
+        "has_preview": false,
+        "grid_size": "12,12,12",
+        "icon": "",
+        "description": "",
+        "metadata" : {
+            "html" : "",
         }
     },
 };

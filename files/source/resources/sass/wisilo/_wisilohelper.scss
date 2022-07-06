@@ -1650,8 +1650,11 @@ button.copyKey {
     width: 100%;
     height: auto;
     background-color: transparent;
-    padding: 5px;
     box-sizing: border-box;
+}
+
+.widget-container.widget-edit-mode > .widget-main-container .widget-body {
+    padding: 5px;
 }
 
 .widget-header-wrapper .widget-sortable-handle,
