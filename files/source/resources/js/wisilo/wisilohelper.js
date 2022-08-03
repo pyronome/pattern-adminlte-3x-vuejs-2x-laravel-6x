@@ -126,7 +126,7 @@ var WisiloHelper = {
             document.getElementById("btnToggleEditMode").click();
         }
     },
-    "getWidgetParameter": function(layoutId) {
+    "getWidgetParameter": function(layoutId, container_guid = "") {
         var widgetParameter = {
             "layout_id": layoutId,
             "url_parameters": [],
