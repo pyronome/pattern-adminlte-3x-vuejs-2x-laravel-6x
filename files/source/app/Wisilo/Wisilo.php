@@ -2529,6 +2529,28 @@ class Wisilo
 
 		$object = WisiloCustomVariable::where('__system', 1)
 			->where('deleted', 0)
+			->where('name', '__wisilo_mainfolder')
+			->first();
+
+		if (null === $object) {
+			$object = new WisiloCustomVariable();
+			$object->created_by = 0;
+			$object->updated_by = 0;
+			$object->__system = 1;
+			$object->wisilousergroup_id = 0;
+			$object->group = '';
+			$object->name = '__wisilo_mainfolder';
+			$object->title = 'Wisilo Main Folder';
+			$object->value = '{{GlobalParameters/__wisilo_mainfolder}}';
+			$object->default_value = '{{GlobalParameters/__wisilo_mainfolder}}';
+			$object->remember = 0;
+			$object->remember_type = '';
+			$object->__order = 0;
+			$object->save();
+		}
+
+		$object = WisiloCustomVariable::where('__system', 1)
+			->where('deleted', 0)
 			->where('name', '__storage_url')
 			->first();
 

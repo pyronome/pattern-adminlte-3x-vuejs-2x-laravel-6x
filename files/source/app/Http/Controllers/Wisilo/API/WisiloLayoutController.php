@@ -842,7 +842,16 @@ class WisiloLayoutController extends Controller
                     $column_name = $objectColumn->name;
 
                     $visible_columns[$column_name] = $objectColumn;
-                    $column_titles[$index] = $objectColumn->title;
+                    
+                    $column_titles[$index] = $this->getParsedValue(
+                        $objectColumn->title, 
+                        $queryResult, 
+                        $url_parameters, 
+                        $request_parameters, 
+                        $external_parameters, 
+                        $custom_variables
+                    );
+                    
                     $column_variables[$index] = $column_name;
 
                     $index++;

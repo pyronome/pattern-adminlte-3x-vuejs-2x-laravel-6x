@@ -279,9 +279,9 @@ export default {
                             showConfirmButton: false,
                             timer: 2000,
                             timerProgressBar: true,
-                            /* onClose: () => {
+                            onClose: () => {
                                 window.location.reload()
-                            } */
+                            }
                         });
                     }
                 }
