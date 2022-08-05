@@ -1000,8 +1000,10 @@ class WisiloConfigController extends Controller
 			$WisiloConfig->save();
 
             if ('file' == $WisiloConfig->type) {
-                if ($request->hasFile($WisiloConfig->__key)) {
-                    $file = $request->file($WisiloConfig->__key);
+                $convertedKey = str_replace('.', '_', $WisiloConfig->__key);
+
+                if ($request->hasFile($convertedKey)) {
+                    $file = $request->file($convertedKey);
                     $this->saveDefaultFile($WisiloConfig->__key, $file);
                 }
             }
@@ -1066,8 +1068,10 @@ class WisiloConfigController extends Controller
 			$WisiloConfig->save();
 
             if ('file' == $WisiloConfig->type) {
-                if ($request->hasFile($WisiloConfig->__key)) {
-                    $file = $request->file($WisiloConfig->__key);
+                $convertedKey = str_replace('.', '_', $WisiloConfig->__key);
+
+                if ($request->hasFile($convertedKey)) {
+                    $file = $request->file($convertedKey);
                     $this->saveDefaultFile($WisiloConfig->__key, $file);
                 }
             }
