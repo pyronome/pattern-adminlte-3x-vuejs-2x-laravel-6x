@@ -2486,7 +2486,7 @@ class Wisilo
 			$object->name = $variableName;
 			$object->title = $variableTitle;
 			$object->value = '';
-			$object->default_value = '';
+			$object->default_value = '-';
 			$object->remember = 0;
 			$object->remember_type = '';
 			$object->__order = 0;

@@ -1949,7 +1949,7 @@ export default {
             self.list.forEach(element => {
                 elementKey = element.__key;
 
-                val = ("" != element.value) ? element.value : element.default_value;
+                val = ((null != element.value) && ("" != element.value)) ? element.value : element.default_value;
 
                 if ("checkbox" == element.type) {
                     if ("on" == val) {
