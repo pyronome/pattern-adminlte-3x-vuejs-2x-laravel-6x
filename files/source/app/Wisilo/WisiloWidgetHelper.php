@@ -158,15 +158,15 @@ class WisiloWidgetHelper
 		$resultValue = '';
 
 		$object = WisiloCustomVariable::where('deleted', 0)
-            ->where('wisilousergroup_id', 0)
-            ->where('name', $variableName)
-            ->first();
+			->where('wisilousergroup_id', $wisilousergroup_id)
+			->where('name', $variableName)
+			->first();
 
-        if (null !== $object) {
-            $resultValue = $this->getVariableCalculatedValue($object, $queryResult, $url_parameters, $request_parameters, $external_parameters);
-        } else {
+		if (null !== $object) {
+			$resultValue = $this->getVariableCalculatedValue($object, $queryResult, $url_parameters, $request_parameters, $external_parameters);
+		} else {
 			$object = WisiloCustomVariable::where('deleted', 0)
-				->where('wisilousergroup_id', $wisilousergroup_id)
+				->where('wisilousergroup_id', 0)
 				->where('name', $variableName)
 				->first();
 
