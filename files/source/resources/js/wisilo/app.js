@@ -11,8 +11,7 @@ require('./bootstrap');
 /* {{@snippet:require}} */
 
 /* vue Declaration BOF */
-window.Vue = require('vue');
-Vue.config.devtools = true;
+window.Vue = require('vue/dist/vue');
 /* vue Declaration EOF */
 
 import _ from 'lodash';
