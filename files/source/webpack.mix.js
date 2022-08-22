@@ -13,7 +13,12 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.webpackConfig({
+ mix.webpackConfig({
+    resolve: {
+        alias: {
+           jQuery: 'jquery',
+        },
+    },
     stats: {
         children: true,
     },
