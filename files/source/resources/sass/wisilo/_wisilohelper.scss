@@ -1793,10 +1793,6 @@ select.condition-rule-type {
     display: inline-block !important;
 }
 
-.query-builder .rule-container .rule-value-container {
-    display: block !important;
-}
-
 input.condition-rule-constant,
 select.condition-rule-variable {
     width: calc(100% - 110px) !important;
