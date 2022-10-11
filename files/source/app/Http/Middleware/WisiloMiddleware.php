@@ -49,8 +49,6 @@ class WisiloMiddleware
 
     private function isPagePublic($request, $wisiloFolder) {
 
-        $wisiloFolder = config('wisilo.main_folder');
-
         $publicPages = [
             'register',
             'login',
