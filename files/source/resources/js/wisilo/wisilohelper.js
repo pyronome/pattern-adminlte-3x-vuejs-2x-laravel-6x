@@ -122,8 +122,10 @@ var WisiloHelper = {
         });
     },
     "doRouteChanged": function(to, from) {
-        if (1 == document.getElementById("btnToggleEditMode").getAttribute("on-edit-mode")) {
-            document.getElementById("btnToggleEditMode").click();
+        if (document.getElementById("btnToggleEditMode")) {
+            if (1 == document.getElementById("btnToggleEditMode").getAttribute("on-edit-mode")) {
+                document.getElementById("btnToggleEditMode").click();
+            }
         }
     },
     "getWidgetParameter": function(layoutId, container_guid = "") {
