@@ -29,7 +29,6 @@
         },
         methods: {
             refresh: function () {
-                console.log("refresh container")
                 this.data = window.mainLayoutInstance.pageWidgets[this.instance_id].data;
             }
         },

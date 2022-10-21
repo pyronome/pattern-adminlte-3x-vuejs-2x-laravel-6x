@@ -154,7 +154,6 @@ export default {
             }
 
             if (0 == self.pagename) {
-                console.log("pagename 0 return")
                 return
             }
 

@@ -699,7 +699,6 @@ export default {
             $("#div_conditional_items_dialog").modal("hide");
         },
         doEditField: function(elButton) {
-            console.log("doEditfield")
             var guid = elButton.getAttribute("data-field-guid");
 
             document.getElementById("buttonSaveField").setAttribute("data-field-guid", guid);

@@ -83,10 +83,10 @@ class WisiloLayoutController extends Controller
             $object->title = $general_data['title'];
             $object->grid_size = $general_data['grid_size'];
             $object->icon = $general_data['icon'];
-            $object->meta_data_json = json_encode($content_data);
+            $object->meta_data_json = json_encode($content_data, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
             $object->data_source_json = $this->getFormattedDataSource($data_source);
             $object->variable_mapping_json = isset($data['variable_mapping']) 
-                ? json_encode($data['variable_mapping'])
+                ? json_encode($data['variable_mapping'], (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS))
                 : '[]';
             $object->conditional_data_json = isset($general_data['conditional_data_json']) 
                 ? $general_data['conditional_data_json']
@@ -705,8 +705,8 @@ class WisiloLayoutController extends Controller
         if (null !== $objectLayout) {
             $dependant_customvariables = $this->getDependantVariables($objectLayout);
 
-            $metaData = json_decode($objectLayout->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
-            $data_source = json_decode($objectLayout->data_source_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $metaData = json_decode($objectLayout->meta_data_json, true);
+            $data_source = json_decode($objectLayout->data_source_json, true);
 
             if ('simple' == $data_source['calculation_type']) {
                 $meta_data = $data_source['meta_data'];
@@ -725,7 +725,7 @@ class WisiloLayoutController extends Controller
                 $data_pagination['show_pagination'] = isset($metaData['show_pagination']) ? intval($metaData['show_pagination']) : 0;
             }
 
-            $conditionalData = json_decode($objectLayout->conditional_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $conditionalData = json_decode($objectLayout->conditional_data_json, true);
             $index = 0;
             $last_row_index = count($queryResult) - 1;
 
@@ -788,7 +788,7 @@ class WisiloLayoutController extends Controller
                 : '';
 
         $objectWisiloWidgetHelper = new WisiloWidgetHelper();
-        $widgetParameters = json_decode(base64_decode($widgetParametersEncoded), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+        $widgetParameters = json_decode(base64_decode($widgetParametersEncoded), true);
 
         if (!isset($widgetParameters['layout_id'])) {
             return [];
@@ -811,8 +811,8 @@ class WisiloLayoutController extends Controller
         if (null !== $objectLayout) {
             $dependant_customvariables = $this->getDependantVariables($objectLayout);
 
-            $metaData = json_decode($objectLayout->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
-            $data_source = json_decode($objectLayout->data_source_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $metaData = json_decode($objectLayout->meta_data_json, true);
+            $data_source = json_decode($objectLayout->data_source_json, true);
 
             if ('simple' == $data_source['calculation_type']) {
                 $meta_data = $data_source['meta_data'];
@@ -858,7 +858,7 @@ class WisiloLayoutController extends Controller
                 }
             }
 
-            $conditionalData = json_decode($objectLayout->conditional_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $conditionalData = json_decode($objectLayout->conditional_data_json, true);
 
             $index = 0;
             $last_row_index = count($queryResult) - 1;
@@ -1001,7 +1001,7 @@ class WisiloLayoutController extends Controller
                 : '';
 
         $objectWisiloWidgetHelper = new WisiloWidgetHelper();
-        $widgetParameters = json_decode(base64_decode($widgetParametersEncoded), (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS));
+        $widgetParameters = json_decode(base64_decode($widgetParametersEncoded), true);
 
         if (!isset($widgetParameters['layout_id'])) {
             return [];
@@ -1030,8 +1030,8 @@ class WisiloLayoutController extends Controller
         if (null !== $objectLayout) {
             $dependant_customvariables = $this->getDependantVariables($objectLayout);
 
-            $metaData = json_decode($objectLayout->meta_data_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
-            $data_source = json_decode($objectLayout->data_source_json, (JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP| JSON_HEX_APOS));
+            $metaData = json_decode($objectLayout->meta_data_json, true);
+            $data_source = json_decode($objectLayout->data_source_json, true);
 
             if ('simple' == $data_source['calculation_type']) {
                 $meta_data = $data_source['meta_data'];
@@ -1282,12 +1282,7 @@ class WisiloLayoutController extends Controller
         if (count($objectWisiloMetas) > 0) {
             $objectWisiloMeta = $objectWisiloMetas[0];
             
-            $metaData = json_decode(
-                $objectWisilo->base64Decode($objectWisiloMeta->meta_value),
-                (JSON_HEX_QUOT
-                | JSON_HEX_TAG
-                | JSON_HEX_AMP
-                | JSON_HEX_APOS));
+            $metaData = json_decode($objectWisilo->base64Decode($objectWisiloMeta->meta_value), true);
 
             $iframeData = isset($metaData['iframes']) ? $metaData['iframes'] : [];
 
