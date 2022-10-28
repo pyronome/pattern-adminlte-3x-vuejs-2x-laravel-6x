@@ -8,7 +8,13 @@
                         class="form-control "
                         :id="instance_id + 'youtubecode'">
                 </div>
-                <div class="form-group col-lg-12">
+                <div class="form-group col-lg-6">
+                    <label :for="instance_id + 'height'" class="detail-label">{{ $t('Iframe Height') }}</label>
+                    <input type="text"
+                        class="form-control "
+                        :id="instance_id + 'height'">
+                </div>
+                <div class="form-group col-lg-6">
                     <label :for="instance_id + 'width'" class="detail-label">{{ $t('Iframe Width') }}</label>
                     <input type="text"
                         class="form-control "
@@ -28,6 +34,7 @@
                 var data = window.mainLayoutInstance.pageWidgets[instance_id].data;
                 
                 document.getElementById(instance_id + "youtubecode").value = data.content.youtubecode;
+                document.getElementById(instance_id + "height").value = data.content.height;
                 document.getElementById(instance_id + "width").value = data.content.width;
             },
             getWidgetFormValues: function() {
@@ -35,6 +42,7 @@
 
                 return {
                     "youtubecode" : document.getElementById(instance_id + "youtubecode").value,
+                    "height" : document.getElementById(instance_id + "height").value,
                     "width" : document.getElementById(instance_id + "width").value
                 };
             }

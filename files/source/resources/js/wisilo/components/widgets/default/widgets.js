@@ -99,6 +99,7 @@ export default {
         "description": "",
         "metadata" : {
             "youtubecode" : "",
+            "height" : 315,
             "width" : 560,
         }
     },

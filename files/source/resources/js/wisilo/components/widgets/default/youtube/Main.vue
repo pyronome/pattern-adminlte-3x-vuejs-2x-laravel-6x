@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="widget-inner-container">
-            <iframe :width="data.content.width" height="315"
+            <iframe :width="data.content.width" :height="data.content.height"
                  :src="data.content.youtubecode" 
                  title="YouTube video player" 
                  frameborder="0" 
