@@ -69,7 +69,13 @@ export default {
             container_index: 0,
         };
     },
-    props: ["pagename", "parent_instance_id", "container_title", "container_class", "container_css", "external_data", "repeater"],   
+    props: ["pagename", "parent_instance_id", "container_title", "container_class", "container_css", "external_data", "repeater"],  
+    watch: {
+        pagename: function(pagename) {
+            this.pagename = pagename;
+            this.processLoadQueue();
+        }
+    }, 
     methods: {
         processLoadQueue: function () {
             var self = this;
@@ -79,7 +85,7 @@ export default {
                 self.page.is_ready = true;
                 return;
             }
-
+        
             if (!self.page.is_active_widgets_loaded) {
                 self.$Progress.start();
                 self.getActiveWidgets();
@@ -166,7 +172,7 @@ export default {
             self.container_id = (self.pagename + "-" + self.container_index);
 
             self.page.is_active_widgets_loading = true;
-
+console.log("saaaaaaaaaaaa")
             axios.get(WisiloHelper.getAPIURL("__layout/get_widgets/" + self.container_id))
                 .then(({ data }) => {
                     self.page.is_active_widgets_loaded = true;
@@ -370,8 +376,7 @@ export default {
         }
 
         window.mainLayoutInstance.widgetContainers[this.container_guid] = this;
-
-        this.processLoadQueue();
+        /* this.processLoadQueue(); */
     }
 }
 </script>

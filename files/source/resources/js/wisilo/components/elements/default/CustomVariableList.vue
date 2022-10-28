@@ -753,17 +753,20 @@ export default {
 
                     if ("" != container_guid) {
                         var external_data = window.mainLayoutInstance.widgetContainers[container_guid].external_data;
-                        if (Object.keys(external_data).length > 0) {
-                            window.__custom_variables.setCustomVariableValues(external_data);
-                        }
 
-                        for (const key in external_data) {
-                            if (key.includes("customvariable")) {
-                                if (external_data.hasOwnProperty.call(external_data, key)) {
-                                    const value = external_data[key];
-                                    const custom_variableId = key.replace("customvariable", "");
-                                    self.setValue(custom_variableId, value, true);
-                                }   
+                        if (undefined !== external_data && null !== external_data) {
+                            if (Object.keys(external_data).length > 0) {
+                                window.__custom_variables.setCustomVariableValues(external_data);
+                            }
+
+                            for (const key in external_data) {
+                                if (key.includes("customvariable")) {
+                                    if (external_data.hasOwnProperty.call(external_data, key)) {
+                                        const value = external_data[key];
+                                        const custom_variableId = key.replace("customvariable", "");
+                                        self.setValue(custom_variableId, value, true);
+                                    }   
+                                }
                             }
                         }
                     }

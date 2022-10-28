@@ -2,10 +2,8 @@
     <div>
         <div class="widget-inner-container">
             <div :style="data.content.css">
-                <widget-container :pagename="layout_id"  container_title="PartA" :parent_instance_id="instance_id" :data="data"
-                    container_class="" container_css="width:50%;display:inline-block;float:left"></widget-container>
-                <widget-container :pagename="layout_id"  container_title="PartB" :parent_instance_id="instance_id" :data="data"
-                    container_class="" container_css="width:50%;display:inline-block;"></widget-container>
+                <widget-container :pagename="layout_id"  container_title="Widget Container" :parent_instance_id="instance_id" :data="data"
+                    container_class="" ></widget-container>
             </div>
         </div>
         <div class="widget-settings-dialog-container">
@@ -23,8 +21,7 @@
         props: ["instance_id","data"],
         data() {
             return {
-                layout_id: 0,
-                pagename: '',
+                layout_id: 0
             }
         },
         methods: {
@@ -34,7 +31,7 @@
         },
         mounted() {
             window.mainLayoutInstance.pageWidgets[this.instance_id].main = this;
-            this.pagename = "colorcategory";
+
             var layout_id = 0;
 
             if (undefined !== this.data
@@ -43,6 +40,7 @@
                 layout_id = this.data.general.id;
             }
 
+            console.log("layout_id:" + layout_id)
             this.layout_id = layout_id;
         }
     }
