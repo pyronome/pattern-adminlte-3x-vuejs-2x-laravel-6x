@@ -56,7 +56,7 @@
                                         <tr>
                                             <th>
                                                 <button type="button"
-                                                    id="button_sort_WisiloLog_updated_at"
+                                                    id="button_sort_WisiloLog_created_at"
                                                     class="button-table-sort"
                                                     @click="sort('created_at')">
                                                     <span>{{ $t("Time") }}</span>&nbsp;

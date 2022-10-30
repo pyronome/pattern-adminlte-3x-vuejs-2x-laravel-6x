@@ -344,6 +344,8 @@ class WisiloLogController extends Controller
             $list[$object->id] = $object->fullname;
         } // foreach ($objectList as $object)
 
+        $list[0] = 'System';
+        
         return $list;
     }
 
