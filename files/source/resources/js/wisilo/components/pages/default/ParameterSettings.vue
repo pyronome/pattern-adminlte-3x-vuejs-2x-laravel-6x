@@ -1108,7 +1108,9 @@ export default {
 
             var iconPicker = $(".icon-picker").iconpicker(iconPickerOptions);
             iconPicker.on("change", function (e) {
-                document.getElementById("default_value_iconpicker").value = e.icon;
+                if (document.getElementById("default_value_iconpicker")) {
+                    document.getElementById("default_value_iconpicker").value = e.icon;
+                }
             });
 
             $("#btn-file-trigger").on('click', function(e){
