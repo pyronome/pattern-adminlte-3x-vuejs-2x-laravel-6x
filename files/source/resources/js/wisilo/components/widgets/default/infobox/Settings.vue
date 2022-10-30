@@ -208,7 +208,9 @@
 
                 var iconPicker = $(document.getElementById(instance_id + "icon_picker")).iconpicker(iconPickerOptions);
                 iconPicker.on("change", function (e) {
-                    document.getElementById(instance_id + "icon").value = e.icon;
+                    if (document.getElementById(instance_id + "icon")) {
+                        document.getElementById(instance_id + "icon").value = e.icon;
+                    }
                 });
 
                 $(document.getElementById(instance_id + "iconbackground")).colorpicker();

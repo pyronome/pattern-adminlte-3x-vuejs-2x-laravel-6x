@@ -1194,7 +1194,9 @@ export default {
 
             var iconPicker = $(".icon-picker").iconpicker(iconPickerOptions);
             iconPicker.on("change", function (e) {
-                document.getElementById(this.id + "-value").value = e.icon;
+                if (document.getElementById(this.id + "-value")) {
+                    document.getElementById(this.id + "-value").value = e.icon;
+                }
             });
 
             $(".btn-file-trigger").on('click', function(e){

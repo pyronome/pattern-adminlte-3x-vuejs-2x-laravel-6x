@@ -1483,7 +1483,9 @@ export default {
 
             var iconPicker = $(".icon-picker").iconpicker(iconPickerOptions);
             iconPicker.on("change", function (e) {
-                document.getElementById(this.current_id + "-value").value = e.icon;
+                if (document.getElementById(this.current_id + "-value")) {
+                    document.getElementById(this.current_id + "-value").value = e.icon;
+                }
             });
 
             $(".btn-file-trigger").on('click', function(e){

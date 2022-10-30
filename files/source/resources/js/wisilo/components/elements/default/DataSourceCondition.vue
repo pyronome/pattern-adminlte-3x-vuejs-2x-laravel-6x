@@ -160,7 +160,9 @@ export default {
 
             var iconPicker = $(".icon-picker").iconpicker(iconPickerOptions);
             iconPicker.on("change", function (e) {
-                document.getElementById("__cv_field__iconpicker-value").value = e.icon;
+                if (document.getElementById("__cv_field__iconpicker-value")) {
+                    document.getElementById("__cv_field__iconpicker-value").value = e.icon;
+                }
             });
         },
         load_custom_variable_options: function() {
