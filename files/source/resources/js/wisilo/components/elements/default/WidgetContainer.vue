@@ -33,7 +33,7 @@
                                 </widget-header>
                             </div>
                             <div class="widget-body">
-                                <widget-body :element="pageWidget"></widget-body>
+                                <widget-body :element="pageWidget" catalog="0"></widget-body>
                             </div>
                         </div>
                     </div>

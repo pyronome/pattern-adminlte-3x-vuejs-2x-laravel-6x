@@ -116,7 +116,7 @@
                             </widget-header>
                         </div>
                         <div class="widget-body">
-                            <widget-body :element="winWidget"></widget-body>
+                            <widget-body :element="winWidget" catalog="1"></widget-body>
                         </div>
                     </div>
                 </div>

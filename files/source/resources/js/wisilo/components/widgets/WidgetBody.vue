@@ -1,6 +1,6 @@
 <script>
 export default {
-    props: ['element'],
+    props: ['element', 'catalog'],
 
     render(createElement) {
         return createElement(
@@ -9,7 +9,8 @@ export default {
                 props: {
                     "instance_id": this.element.instance_id,
                     "data": this.element.data,
-                    "container_guid": this.element.container_guid
+                    "container_guid": this.element.container_guid,
+                    "catalog": this.catalog
                 }
             }
         );
