@@ -1070,7 +1070,6 @@ export default {
             });
 
             $( "#ulConfigEditor" ).sortable();
-            $( "#ulConfigEditor" ).disableSelection();
 
             var summernoteOptions = {
                 "font-styles": false,

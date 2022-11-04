@@ -1186,7 +1186,6 @@ function WidgetEditor(idSelector, options) {
                 TOpener($prev);
 
                 $ul.sortable();
-                $ul.disableSelection();
             }
         }
         WidgetEditor.updateButtons($main);
@@ -1572,7 +1571,6 @@ function WidgetEditor(idSelector, options) {
         });
 
         $elem.sortable();
-        $elem.disableSelection();
         return $elem;
     }
 

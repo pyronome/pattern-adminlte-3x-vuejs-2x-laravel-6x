@@ -307,40 +307,6 @@
                 });
 
                 $(columnsContainer).sortable();
-                $(columnsContainer).disableSelection();
-
-
-
-                /* var liTemplate = document.getElementById("column-row-template").innerHTML;
-                var ulInnerHTML = "";
-                var liHTML = "";
-
-                for (let index = 0; index < columns.length; index++) {
-                    const columnJSON = columns[index];
-                    const column = JSON.parse(columnJSON);
-                    const column_guid = WisiloHelper.generateGUID("column");
-                    const style = ("on" == column["visible"]) ? "" : "opacity:0.5";
-                    liHTML = liTemplate
-                        .replace(/__data_column_json__/g, columnJSON)
-                        .replace(/__guid__/g, column_guid)
-                        .replace(/__label__/g, column["title"])
-                        .replace(/__style__/g, style);
-                    ulInnerHTML += liHTML;
-                }
-
-                var columnsContainer = document.getElementById(instance_id + "columnList");
-                columnsContainer.innerHTML = ulInnerHTML;
-
-                $(".btn-edit-column", columnsContainer).off("click").on("click", function () {
-                    self.doEditColumn(this.parentNode.parentNode.getAttribute("data-guid"), this.getAttribute("data-conditional-edit"));
-                });
-
-                $(".btn-remove-column", columnsContainer).off("click").on("click", function () {
-                    self.doRemoveColumn(this);
-                });
-
-                $(columnsContainer).sortable();
-                $(columnsContainer).disableSelection(); */
             },
             addNewColumn: function() {
                 var instance_id = this.instance_id;
@@ -448,7 +414,6 @@
                     });
 
                     $(columnsContainer).sortable();
-                    $(columnsContainer).disableSelection();
                 }
 
                 $(document.getElementById(instance_id + "column_dialog")).modal("hide");

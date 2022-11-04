@@ -1204,7 +1204,6 @@ function MenuEditor(idSelector, options) {
                 TOpener($prev);
 
                 $ul.sortable();
-                $ul.disableSelection();
             }
         }
         MenuEditor.updateButtons($main);
@@ -1306,7 +1305,6 @@ function MenuEditor(idSelector, options) {
         });
 
         $elem.sortable();
-        $elem.disableSelection();
         return $elem;
     }
 

@@ -198,7 +198,6 @@ export default {
             });
 
             $(ordersContainer).sortable();
-            $(ordersContainer).disableSelection();
 
             $("#__ds__order_dialog").modal("hide");
         },
@@ -244,7 +243,6 @@ export default {
             });
 
             $(ordersContainer).sortable();
-            $(ordersContainer).disableSelection();
         },
         doRemoveOrder: function(sender) {
             sender.parentNode.parentNode.remove();

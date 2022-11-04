@@ -146,7 +146,7 @@ export default {
                 change: function( event, ui ) {
                     $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
                 }
-            }).disableSelection();
+            });
 
             setTimeout(function() {
                 self.setWidgetsFormData();
@@ -266,7 +266,7 @@ console.log("saaaaaaaaaaaa")
                 change: function( event, ui ) {
                     $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
                 }
-            }).disableSelection();
+            });
 
             self.body_loader_active = true;
 
@@ -319,7 +319,7 @@ console.log("saaaaaaaaaaaa")
                 change: function( event, ui ) {
                     $("#btnSaveWidgets").removeClass("btn-default").addClass("btn-success");
                 }
-            }).disableSelection();
+            });
 
             self.body_loader_active = true;
 

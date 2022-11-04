@@ -341,8 +341,6 @@ var WisiloHelper = {
                             WisiloHelper.updateFileListInput(this);
                         }
                 });
-                
-                $(target).disableSelection();
     
                 target.style.display = "block";
             }
@@ -439,7 +437,6 @@ var WisiloHelper = {
                     }
             });
             
-            $(targetFileList).disableSelection();
         } else {
             targetFileList.style.display = "none";
         }

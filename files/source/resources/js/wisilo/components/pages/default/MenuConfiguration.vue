@@ -387,7 +387,6 @@ export default {
             });
 
             $( "#ulMenuEditor" ).sortable();
-            $( "#ulMenuEditor" ).disableSelection();
         },
     },
     mounted() {

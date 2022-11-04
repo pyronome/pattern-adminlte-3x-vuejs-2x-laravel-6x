@@ -1261,7 +1261,6 @@ function MenuEditor(idSelector, options) {
                 TOpener($prev);
 
                 $ul.sortable();
-                $ul.disableSelection();
             }
         }
         MenuEditor.updateButtons($main);
@@ -1412,7 +1411,6 @@ function MenuEditor(idSelector, options) {
                 TOpener($parent);
 
                 $ul.sortable();
-                $ul.disableSelection();
             }
         }
 
@@ -1508,7 +1506,6 @@ function MenuEditor(idSelector, options) {
                     TOpener($parent);
     
                     $ul.sortable();
-                    $ul.disableSelection();
                 }
             }
     
@@ -1697,7 +1694,6 @@ function MenuEditor(idSelector, options) {
         });
 
         $elem.sortable();
-        $elem.disableSelection();
         return $elem;
     }
 
@@ -1883,7 +1879,6 @@ function MenuEditor(idSelector, options) {
                 TOpener($parent);
 
                 $ul.sortable();
-                $ul.disableSelection();
             }
         }
 
@@ -2033,7 +2028,6 @@ function MenuEditor(idSelector, options) {
                 TOpener($parent);
 
                 $ul.sortable();
-                $ul.disableSelection();
             }
             
             subchildren = (typeof element["children"] === 'undefined') ? [] : element["children"];
@@ -2131,7 +2125,6 @@ function MenuEditor(idSelector, options) {
                 TOpener($parent);
 
                 $ul.sortable();
-                $ul.disableSelection();
             }
         }
 

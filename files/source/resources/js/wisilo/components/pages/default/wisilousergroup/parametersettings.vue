@@ -1122,7 +1122,6 @@ export default {
             });
 
             $( "#ulConfigEditor" ).sortable();
-            $( "#ulConfigEditor" ).disableSelection();
 
             $(".textarea.vue-editor").summernote({
                 "font-styles": false,
