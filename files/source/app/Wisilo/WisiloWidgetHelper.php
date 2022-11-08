@@ -68,7 +68,7 @@ class WisiloWidgetHelper
 
         if (0 == count($objectWisiloLayouts)) {
             $objectWisiloLayouts = WisiloLayout::where('deleted', false)
-				->where('wisilousergroup_id', null)
+				->where('wisilousergroup_id', 0)
 				->where('pagename', $pagename)
 				->orderBy('__order','asc')
 				->get();
@@ -90,7 +90,7 @@ class WisiloWidgetHelper
 
         if (0 == count($objectWisiloLayouts)) {
             $objectWisiloLayouts = WisiloLayout::where('deleted', false)
-				->where('wisilousergroup_id', null)
+				->where('wisilousergroup_id', 0)
 				->where('pagename', $pagename)
 				->orderBy('__order','asc')
 				->get();
