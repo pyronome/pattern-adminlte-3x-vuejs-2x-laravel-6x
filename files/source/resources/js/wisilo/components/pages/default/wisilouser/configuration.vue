@@ -932,6 +932,7 @@ export default {
             pagename: '',
             wisilousergroup_id_options: [],
             files: [],
+            modelData: {},
             WisiloUserForm: new Form({
                 'debug_mode': false,
                 'id': this.current_id,
@@ -1045,6 +1046,7 @@ export default {
                 } else {
                     self.loadData(
                         function() {
+                            self.loadModelForm();
                             WisiloHelper.initializePermissions(self.page.variables, true);
                             self.renderForm();
                             if (!self.has_config_parameter) {
@@ -2101,7 +2103,7 @@ export default {
                 .then(({ data }) => {
                     this.page.is_data_loaded = true;
                     this.page.is_data_loading = false;
-                    this.WisiloUserForm.fill(data.object);
+                    this.modelData = data.object;
                     this.has_config_parameter = data.has_config_parameter;
                     this.processLoadQueue();
                 }).catch(({ data }) => {
@@ -2111,6 +2113,9 @@ export default {
                     this.page.has_server_error = true;
                     this.processLoadQueue();
                 });
+        },
+        loadModelForm: function() {
+            this.WisiloUserForm.fill(this.modelData);
         },
         submitForm: function () {
             var self = this;
