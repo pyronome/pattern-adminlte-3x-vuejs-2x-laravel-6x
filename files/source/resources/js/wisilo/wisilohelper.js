@@ -127,6 +127,8 @@ var WisiloHelper = {
                 document.getElementById("btnToggleEditMode").click();
             }
         }
+
+        WisiloHelper.customRouteChangeFunctions(to, from);
     },
     "getWidgetParameter": function(layoutId, container_guid = "") {
         var widgetParameter = {
@@ -1513,6 +1515,10 @@ var WisiloHelper = {
     },
     "eraseCookie": function (name) {   
         document.cookie = name+'=; Max-Age=-99999999;';  
+    },
+    "customRouteChangeFunctions": function(to, from) {
+        /* {{@snippet:begin_custom_route_change_functions}} */
+        /* {{@snippet:end_custom_route_change_functions}} */
     },
     "initializeOtherPermissions": function(page_variables) {
         if ('undefined' !== typeof page_variables.plugins_permissions) {
