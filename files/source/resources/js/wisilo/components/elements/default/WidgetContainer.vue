@@ -172,7 +172,7 @@ export default {
             self.container_id = (self.pagename + "-" + self.container_index);
 
             self.page.is_active_widgets_loading = true;
-console.log("saaaaaaaaaaaa")
+
             axios.get(WisiloHelper.getAPIURL("__layout/get_widgets/" + self.container_id))
                 .then(({ data }) => {
                     self.page.is_active_widgets_loaded = true;

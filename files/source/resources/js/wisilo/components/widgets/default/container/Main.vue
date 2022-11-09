@@ -40,7 +40,6 @@
                 layout_id = this.data.general.id;
             }
 
-            console.log("layout_id:" + layout_id)
             this.layout_id = layout_id;
         }
     }

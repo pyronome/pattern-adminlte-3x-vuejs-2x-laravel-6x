@@ -98,5 +98,11 @@
     @if('' != $google_maps_api_key)
     <script type="text/javascript" src="//maps.google.com/maps/api/js?key={{ $google_maps_api_key }}&libraries=places"></script>
     @endif
+    <script src="/js/wisilo/jsquerybuilder/js/query-builder.standalone.min.js"></script>
+    <script src="/js/wisilo/bootstrap-switch/js/bootstrap-switch.js"></script>
+    <script src="/js/wisilo/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"></script>
+    <script src="/js/wisilo/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"></script>
+    <script src="/js/wisilo/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+    <script src="/js/wisilo/select2/dist/js/select2.min.js"></script>
 </body>
 </html>

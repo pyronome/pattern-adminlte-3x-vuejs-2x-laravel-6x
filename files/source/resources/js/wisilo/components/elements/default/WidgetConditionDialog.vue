@@ -384,18 +384,7 @@ export default {
                 is_custom_variable_options_loading: false,
                 is_custom_variable_options_loaded: false,
                 is_file_options_loading: false,
-                is_file_options_loaded: false,
-                external_files: [
-                    ("/js/wisilo/jsquerybuilder/css/query-builder.default.min-custom.css"),
-                    ("/js/wisilo/jsquerybuilder/js/query-builder.standalone.min.js"),
-                    ("/js/wisilo/bootstrap-switch/js/bootstrap-switch.js"),
-                    ("/js/wisilo/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
-                    ("/js/wisilo/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
-                    ("/js/wisilo/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"),
-                    ("/js/wisilo/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"),
-                    ("/js/wisilo/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"),
-                    ("/js/wisilo/select2/dist/js/select2.min.js"),
-                ],
+                is_file_options_loaded: false
             }
         };
     },
@@ -480,33 +469,6 @@ export default {
             this.custom_variable_options = options;
 
             this.refreshFilters();
-
-            return;
-
-            var self = this;
-            if (self.page.is_custom_variable_options_loading) {
-                return;
-            }
-
-            self.page.is_custom_variable_options_loading = true;
-            
-            axios.get(WisiloHelper.getAPIURL("wisilo/get_custom_variable_options"))
-                .then(({ data }) => {
-                    self.page.is_custom_variable_options_loaded = true;
-                    self.page.is_custom_variable_options_loading = false;
-                    self.custom_variable_options = data.list;
-                    self.processLoadQueue();
-                }).catch(({ data }) => {
-                    self.page.is_custom_variable_options_loaded = true;
-                    self.page.is_custom_variable_options_loading = false;
-                    self.$Progress.fail();
-                    self.page.has_server_error = true;
-                    self.processLoadQueue();
-                }).finally(function() {
-                    if (!self.page.has_server_error) {
-                        callback();
-                    }
-                });
         },
         load_file_options: function(callback) {
             var self = this;
@@ -1050,7 +1012,19 @@ export default {
                 });
             }
 
-            $("#widgetConditionBuilderContainer").queryBuilder("setFilters", filters);
+            if ($("#widgetConditionBuilderContainer").queryBuilder != undefined) {
+                $("#widgetConditionBuilderContainer").queryBuilder("destroy");
+                $("#widgetConditionBuilderContainer").html("");
+            }
+
+            $("#widgetConditionBuilderContainer").queryBuilder({
+                plugins: [],
+                validation: {
+                    allow_empty_value: true
+                },
+                filters: filters,
+                rules: null
+            });
         },
         showCustomVariableList: function() {
             $("#modalCustomVariableList").modal();
@@ -1485,9 +1459,10 @@ export default {
         },
     },
     mounted() {
-        this.processLoadQueue();
-        window.__condition_dialog = this;
-        WisiloHelper.loadExternalFiles(this.page.external_files);
+        var self = this;
+        window.__condition_dialog = self;
+
+        self.processLoadQueue()
 
         $("#divEditFieldDialog").off("shown.bs.modal").on('shown.bs.modal', function (e) { 
             $(document).off('focusin.modal'); 

@@ -147,13 +147,6 @@ export default {
                 is_post_success: false,
                 is_widget_page_options_loading: false,
                 is_widget_page_options_loaded: false,
-                external_files: [
-                    ("/js/wisilo/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
-                    ("/js/wisilo/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
-                    ("/js/wisilo/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"),
-                    ("/js/wisilo/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"),
-                    ("/js/wisilo/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"),
-                ],
             }
         };
     },
@@ -358,7 +351,6 @@ export default {
     mounted() {
         this.$Progress.start();
         this.page.is_ready = false;
-        WisiloHelper.loadExternalFiles(this.page.external_files);
     }
 }
 </script>

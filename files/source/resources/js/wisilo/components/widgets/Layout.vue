@@ -43,16 +43,7 @@ export default {
                 is_ready: false,
                 has_server_error: false,
                 is_active_widgets_loading: false,
-                is_active_widgets_loaded: false,
-                external_files: [
-                    ("/js/wisilo/bootstrap-switch/js/bootstrap-switch.js"),
-                    ("/js/wisilo/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
-                    ("/js/wisilo/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
-                    ("/js/wisilo/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"),
-                    ("/js/wisilo/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"),
-                    ("/js/wisilo/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"),
-                    ("/js/wisilo/select2/dist/js/select2.min.js"),
-                ],
+                is_active_widgets_loaded: false
             },
             active_widgets: [],
             body_loader_active: false,
@@ -70,7 +61,7 @@ export default {
             self.body_loader_active = true;
             self.main_folder = WisiloHelper.getMainFolder();
             self.page.is_ready = false;
-            WisiloHelper.loadExternalFiles(self.page.external_files, self.processLoadQueue());
+            self.processLoadQueue();
         }
     },
     

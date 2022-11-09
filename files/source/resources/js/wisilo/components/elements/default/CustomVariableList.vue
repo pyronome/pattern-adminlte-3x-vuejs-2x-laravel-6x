@@ -406,7 +406,13 @@ export default {
                     self.page.is_variables_loading = false;
                     self.variableList = data.list;
                     window.__custom_variables.list = data.list;
-                    self.refreshRelatedWithCustomVariableList();
+
+                    setTimeout(function() {
+                        self.refreshRelatedWithCustomVariableList();
+                    }, 1000);
+                    
+                    
+
                     self.processLoadQueue();
                 }).catch(({ data }) => {
                     self.page.is_variables_loaded = true;
@@ -436,7 +442,7 @@ export default {
             }
 
             if (window.__variable_mapping_edit__) {
-                window.__variable_mapping_edit__.load_custom_variable_options(this.lastAddedVariableId);
+                window.__variable_mapping_edit__.load_custom_variables(this.lastAddedVariableId);
             }
 
             if (window.__condition_dialog) {

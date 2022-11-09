@@ -18,4 +18,7 @@
         
         <script>var __publicAssetsURL = "{{ URL::asset('/') }}";</script>
         <script>var __storageURL = "{{ URL::asset('/storage/') }}/";</script>
+        <link rel="stylesheet" href="/js/wisilo/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css">
+        <link rel="stylesheet" href="/js/wisilo/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+        <link rel="stylesheet" href="/js/wisilo/jsquerybuilder/css/query-builder.default.min-custom.css">
     </head>

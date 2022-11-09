@@ -50,7 +50,6 @@ export default {
                     self.is_file_options_loaded = true;
                     self.is_file_options_loading = false;
                     self.file_options = data.list;
-                    self.processLoadQueue();
                 }).catch(({ data }) => {
                     self.is_file_options_loaded = true;
                     self.is_file_options_loading = false;

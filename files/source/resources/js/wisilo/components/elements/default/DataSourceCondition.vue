@@ -94,18 +94,7 @@ export default {
                 has_server_error: false,
                 is_post_success: false,
                 is_custom_variable_options_loading: false,
-                is_custom_variable_options_loaded: false,
-                external_files: [
-                    ("/js/wisilo/jsquerybuilder/css/query-builder.default.min-custom.css"),
-                    ("/js/wisilo/jsquerybuilder/js/query-builder.standalone.min.js"),
-                    ("/js/wisilo/bootstrap-switch/js/bootstrap-switch.js"),
-                    ("/js/wisilo/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"),
-                    ("/js/wisilo/bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"),
-                    ("/js/wisilo/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"),
-                    ("/js/wisilo/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"),
-                    ("/js/wisilo/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"),
-                    ("/js/wisilo/select2/dist/js/select2.min.js"),
-                ],
+                is_custom_variable_options_loaded: false
             }
         };
     },
@@ -167,6 +156,11 @@ export default {
         },
         load_custom_variable_options: function() {
             var custom_variables = window.__custom_variables.list
+
+            if (0 == custom_variables.length) {
+                return;
+            }
+
             var options = [];
 
             for (let index = 0; index < custom_variables.length; index++) {
@@ -486,7 +480,19 @@ export default {
                 });
             }
 
-            $("#__ds_condition_builder_container").queryBuilder("setFilters", filters);
+            if ($("#__ds_condition_builder_container").queryBuilder != undefined) {
+                $("#__ds_condition_builder_container").queryBuilder("destroy");
+                $("#__ds_condition_builder_container").html("");
+            }
+
+            $("#__ds_condition_builder_container").queryBuilder({
+                plugins: [],
+                validation: {
+                    allow_empty_value: true
+                },
+                filters: filters,
+                rules: null
+            });
         },
         showCustomVariableList: function() {
             $("#modalCustomVariableList").modal();
@@ -801,9 +807,8 @@ export default {
         }
     },
     mounted() {
-        this.processLoadQueue();
         window.__ds_simple__condition = this;
-        WisiloHelper.loadExternalFiles(this.page.external_files);
+        this.processLoadQueue();
     }
 }
 </script>
