@@ -36,7 +36,7 @@
                                                 <label for="LayoutForm_source_group_id" class="detail-label">{{  $t('Source User Group') }}  </label>
                                                 <select id="LayoutForm_source_group_id">
                                                     <option value="0">{{ $t("Please select..") }}</option>
-                                                    <option v-for="(data,index) in impersonation_users" :key="index" :value="data.group_id" v-html="data.group_title">
+                                                    <option v-for="group in user_groups" :key="group.id" :value="group.id" v-html="group.title">
                                                     </option>
                                                 </select>
                                             </div>
@@ -44,7 +44,7 @@
                                                 <label for="LayoutForm_target_group_id" class="detail-label">{{  $t('Target User Group') }}  </label>
                                                 <select id="LayoutForm_target_group_id">
                                                     <option value="0">{{ $t("Please select..") }}</option>
-                                                    <option v-for="(data,index) in impersonation_users" :key="index" :value="data.group_id" v-html="data.group_title">
+                                                    <option v-for="group in user_groups" :key="group.id" :value="group.id" v-html="group.title">
                                                     </option>
                                                 </select>
                                             </div>
@@ -121,6 +121,7 @@ export default {
         return {
             main_folder: '',
             pagename: '',
+            user_groups: [],
             source_widgets: [],
             LayoutForm: new Form({
                 'source_group_id': 0,
@@ -140,6 +141,8 @@ export default {
                 },
                 is_variables_loading: false,
                 is_variables_loaded: false,
+                is_user_groups_loading: false,
+                is_user_groups_loaded: false,
                 is_source_widgets_loading: false,
                 is_source_widgets_loaded: false,
                 external_files: [
@@ -166,14 +169,17 @@ export default {
             }
 
             if (!self.page.is_variables_loaded 
-                && !self.page.is_source_widgets_loaded) {
+                && !self.page.is_source_widgets_loaded
+                && !self.page.is_user_groups_loaded) {
                 self.$Progress.start();
             }
 
             if (!self.page.is_variables_loaded) {
                 self.loadPageVariables();
             } else {
-                if (!self.page.is_source_widgets_loaded) {
+                if (!self.page.is_user_groups_loaded) {
+                    self.load_user_groups();
+                } else if (!self.page.is_source_widgets_loaded) {
                     self.load_source_widgets();
                 } else {
                     self.$nextTick(function () {
@@ -247,6 +253,29 @@ export default {
                    WisiloHelper.initializePermissions(self.page.variables, true);
                    self.page.authorization = WisiloHelper.isUserAuthorized(self.page.variables, self.pagename);
                    self.processLoadQueue();
+                });
+        },
+        load_user_groups: function () {
+            var self = this;
+
+            if (self.page.is_user_groups_loading) {
+                return;
+            }
+
+            self.page.is_user_groups_loading = true;
+            
+            axios.get(WisiloHelper.getAPIURL("wisilousergroup/get_list"))
+                .then(({ data }) => {
+                    self.page.is_user_groups_loaded = true;
+                    self.page.is_user_groups_loading = false;
+                    self.user_groups = data;
+                    self.processLoadQueue();
+                }).catch(({ data }) => {
+                    self.page.is_user_groups_loaded = true;
+                    self.page.is_user_groups_loading = false;
+                    self.$Progress.fail();
+                    self.page.has_server_error = true;
+                    self.processLoadQueue();
                 });
         },
         load_source_widgets: function () {

@@ -136,6 +136,7 @@ Route::namespace('API')
         Route::get('/get_config_data', 'WisiloUserGroupController@get_config_data');
         Route::post('/post_config_data', 'WisiloUserGroupController@post_config_data');
         Route::get('/download_file/{type}/{key}/{current_id}', 'WisiloUserGroupController@download_file');
+        Route::get('/get_list', 'WisiloUserGroupController@get_list');
     });
 
     Route::prefix('wisilouser')->group(function () {

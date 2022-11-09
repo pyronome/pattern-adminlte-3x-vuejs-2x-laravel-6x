@@ -16,6 +16,21 @@ use App\Http\Requests\Wisilo\API\WisiloUserGroupPOSTRequest;
 
 class WisiloUserGroupController extends Controller
 {
+    public function get_list(Request $request)
+    {
+        $objectList = WisiloUserGroup::where('deleted', 0)->orderBy('title', 'asc')->get();
+        $user_group_list = [];
+
+        foreach ($objectList as $index => $object)
+        {
+            $user_group_list[$index] = [];
+            $user_group_list[$index]['id'] = $object->id;
+            $user_group_list[$index]['title'] = $object->title;
+        } // foreach ($objectList as $object)
+
+        return $user_group_list;
+    }
+
     public function get(Request $request)
     {    
         $data = [];
